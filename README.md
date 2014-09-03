@@ -94,3 +94,33 @@ For developers, the latest source code is available from our SVN repository.
 If you have questions or need additional help, please contact the PRIDE Helpdesk at the EBI: pride-support at ebi.ac.uk (replace at with @).
 
 Please send us your feedback, including error reports, improvement suggestions, new feature requests and any other things you might want to suggest to the PRIDE team.
+
+# Screenshots
+
+Protein View
+
+![Protein View](https://github.com/PRIDE-Toolsuite/pride-inspector/wiki/protein_tab.png)
+
+Peptide View
+
+![Peptide View](https://github.com/PRIDE-Toolsuite/pride-inspector/wiki/peptide_tab.png)
+
+Spectrum View
+
+![Spectrum View](https://github.com/PRIDE-Toolsuite/pride-inspector/wiki/spectrum_tab.png)
+
+Chart View
+
+![Chart View](https://github.com/PRIDE-Toolsuite/pride-inspector/wiki/chart_tab.png)
+
+Metadata View
+
+![Metadata View](https://github.com/PRIDE-Toolsuite/pride-inspector/wiki/general_tab.png)
+
+Quatification View
+
+![Quatification View](https://github.com/PRIDE-Toolsuite/pride-inspector/wiki/quatification_tab.png)
+
+
+
+
