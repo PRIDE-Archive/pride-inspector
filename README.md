@@ -99,27 +99,27 @@ Please send us your feedback, including error reports, improvement suggestions, 
 
 Protein View
 
-![Protein View](https://github.com/PRIDE-Toolsuite/pride-inspector/tree/master/wiki/protein_tab.png)
+![Protein View](https://raw.githubusercontent.com/PRIDE-Toolsuite/pride-inspector/master/wiki/protein_tab.png)
 
 Peptide View
 
-![Peptide View](https://github.com/PRIDE-Toolsuite/pride-inspector/tree/master/wiki/peptide_tab.png)
+![Peptide View](https://raw.githubusercontent.com/PRIDE-Toolsuite/pride-inspector/master/wiki/peptide_tab.png)
 
 Spectrum View
 
-![Spectrum View](https://github.com/PRIDE-Toolsuite/pride-inspector/tree/master/wiki/spectrum_tab.png)
+![Spectrum View](https://raw.githubusercontent.com/PRIDE-Toolsuite/pride-inspector/master/wiki/spectrum_tab.png)
 
 Chart View
 
-![Chart View](https://github.com/PRIDE-Toolsuite/pride-inspector/tree/master/wiki/chart_tab.png)
+![Chart View](https://raw.githubusercontent.com/PRIDE-Toolsuite/pride-inspector/master/wiki/chart_tab.png)
 
 Metadata View
 
-![Metadata View](https://github.com/PRIDE-Toolsuite/pride-inspector/tree/master/wiki/general_tab.png)
+![Metadata View](https://raw.githubusercontent.com/PRIDE-Toolsuite/pride-inspector/master/wiki/general_tab.png)
 
 Quatification View
 
-![Quatification View](https://github.com/PRIDE-Toolsuite/pride-inspector/tree/master/wiki/quatification_tab.png)
+![Quatification View](https://raw.githubusercontent.com/PRIDE-Toolsuite/pride-inspector/master/wiki/quatification_tab.png)
 
 
 
