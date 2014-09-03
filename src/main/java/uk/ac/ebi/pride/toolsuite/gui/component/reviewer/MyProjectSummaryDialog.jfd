@@ -1,0 +1,110 @@
+JFDML JFormDesigner: "5.1.1.0.120" Java: "1.6.0_65" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "dialogPane"
+				"border": new javax.swing.border.EmptyBorder( 12, 12, 12, 12 )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+					"$horizontalGroup": "par l {seq {par l {comp projectLabel:::p::p, seq {comp projectAccessionScrollPane:::p:127:p, space :p:12:p, comp panel1:::::x}}, space ::12:p}}"
+					"$verticalGroup": "par l {seq l {comp projectLabel:::p::p, space :::p, par l {comp panel1:::::x, comp projectAccessionScrollPane::::360:x}}}"
+				} ) {
+					name: "contentPanel"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "projectLabel"
+						"text": "Projects"
+					} )
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "projectAccessionScrollPane"
+						add( new FormComponent( "javax.swing.JList" ) {
+							name: "projectAccessionList"
+						} )
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+						"$horizontalGroup": "par l {seq {space :::p, par l {comp projectTitleScrollPane::l:::x, comp projectDescriptionScrollPane::l:::x, seq l {par l {comp projectTitleLabel:::p::p, comp projectDescriptionLabel::l:p::p, comp publicationDateLabel::l:p::p, comp publcationDateTextField::l:p:187:p}, space u:p::p, par l {seq {comp submissionTypeLabel:::p::p, space :0:0:x}, comp submissionTypeTextField:::::x}}}, space :::p}}"
+						"$verticalGroup": "par l {seq l {comp projectTitleLabel:::p::p, space :::p, comp projectTitleScrollPane:::p:50:p, space u:::p, comp projectDescriptionLabel:::p::p, space :::p, comp projectDescriptionScrollPane:::p:176:p, space :::p, par b {comp publicationDateLabel::b:p::p, comp submissionTypeLabel::b:p::p}, space :::p, par b {comp submissionTypeTextField::b:p::p, comp publcationDateTextField::b:p::p}, space ::14:x}}"
+					} ) {
+						name: "panel1"
+						"border": new javax.swing.border.EtchedBorder( 1, null, null )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "projectTitleLabel"
+							"text": "Project title"
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "projectDescriptionLabel"
+							"text": "Project description"
+						} )
+						add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+							name: "projectDescriptionScrollPane"
+							"horizontalScrollBarPolicy": 31
+							add( new FormComponent( "javax.swing.JTextArea" ) {
+								name: "projectDescriptionTextArea"
+								"lineWrap": true
+							} )
+						} )
+						add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+							name: "projectTitleScrollPane"
+							"horizontalScrollBarPolicy": 31
+							add( new FormComponent( "javax.swing.JTextArea" ) {
+								name: "projectTitleArea"
+								"lineWrap": true
+							} )
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "publicationDateLabel"
+							"text": "Publication date"
+						} )
+						add( new FormComponent( "javax.swing.JTextField" ) {
+							name: "publcationDateTextField"
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "submissionTypeLabel"
+							"text": "Submission type"
+						} )
+						add( new FormComponent( "javax.swing.JTextField" ) {
+							name: "submissionTypeTextField"
+						} )
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "0, 0:1.0, 80, 80, 80"
+					"$rowSpecs": "0"
+					"$hGap": 5
+					"$vGap": 5
+				} ) {
+					name: "controlBar"
+					"border": new javax.swing.border.EmptyBorder( 12, 0, 0, 0 )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "logoutButton"
+						"text": "Logout"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "cancelButton"
+						"text": "Cancel"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 3
+						"gridy": 0
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "viewFilesButton"
+						"text": "View files"
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 4
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "South"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 595, 470 )
+		} )
+	}
+}

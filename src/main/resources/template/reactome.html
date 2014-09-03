@@ -1,0 +1,23 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <script type="text/javascript">
+        function onLoad() {
+            document.getElementById('DataCollection').submit();
+        }
+
+    </script>
+</head>
+
+<body onload="onLoad();">
+
+<form method="post" name="DataCollection" id="DataCollection"
+      action="http://reactomedev.oicr.on.ca/ReactomeGWT/entrypoint/expressionDataUpload" enctype="multipart/form-data">
+    <input type="hidden" name="DISTRIBUTOR" value="1"/>
+    <input type="hidden" name="QUERY" value="[QUERY_VALUE]"/>
+    <input value="submit" type="submit"/>
+</form>
+
+</body>
+</html>

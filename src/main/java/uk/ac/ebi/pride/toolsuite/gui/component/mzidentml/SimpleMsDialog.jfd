@@ -1,0 +1,72 @@
+JFDML JFormDesigner: "5.1.1.0.120" Java: "1.7.0_21" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq {space :::p, par l {comp scrollPane1::::696:x, seq l {comp addButton:::p::p, space :::p, comp panelMessage:::::x}, seq t {space :0:544:x, comp cancelButton:::p::p, space :::p, comp setButton:::p:67:p}, comp separator1::t::696:x}, space :::p}}"
+			"$verticalGroup": "par l {seq t {space :::p, comp scrollPane1:::p:230:p, space :::p, par l {comp addButton:::p::p, comp panelMessage:::::x}, space :::p, comp separator1:::p::p, space :::p, par b {comp setButton::b:p::p, comp cancelButton::b:p::p}, space :p:13:p}}"
+		} ) {
+			name: "this"
+			"title": "Open Ms files for"
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				add( new FormComponent( "javax.swing.JTable" ) {
+					name: "msFileTable"
+					"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+					}, new java.util.Vector {
+						add( "Spectra File Source" )
+						add( "No. Spectras" )
+						add( "MS File" )
+						add( "Remove" )
+					}, new java.util.Vector {
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+					}, new java.util.Vector {
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+					}, new java.util.Vector {
+						add( new com.jformdesigner.model.SwingTableColumn( null, 130, 0, 0, true ) )
+						add( new com.jformdesigner.model.SwingTableColumn( null, 85, 0, 0, true ) )
+						add( new com.jformdesigner.model.SwingTableColumn( null, 175, 0, 0, true ) )
+						add( new com.jformdesigner.model.SwingTableColumn( null, 30, 0, 0, true ) )
+					} )
+				} )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "addButton"
+				"text": "Add Multiple Files"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addNewMsFile", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JSeparator" ) {
+				name: "separator1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "setButton"
+				"text": "Set"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "setMSFilesActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "cancelButton"
+				"text": "Cancel"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "cancelbuttonActionPerformed", true ) )
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "panelMessage"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 720, 335 )
+		} )
+	}
+}

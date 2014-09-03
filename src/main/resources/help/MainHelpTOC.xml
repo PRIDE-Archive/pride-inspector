@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='ISO-8859-1'  ?>
+
+<!DOCTYPE toc
+        PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 1.0//EN"
+        "http://java.sun.com/products/javahelp/toc_1_0.dtd">
+
+<toc version="1.0">
+    <tocitem text="PRIDE Inspector" target="help.index">
+
+        <tocitem text="Familiarize Yourself with User Interface" target="help.ui">
+            <tocitem text="Welcome Screen" target="help.ui.welcome"/>
+            <tocitem text="Menus and Toolbars" target="help.ui.menu"/>
+            <tocitem text="Navigation Bar" target="help.ui.nav"/>
+            <tocitem text="Status Bar" target="help.ui.status"/>
+        </tocitem>
+        <tocitem text="Familiarize Yourself with Browsing Data" target="help.browse">
+            <tocitem text="View General Descriptions" target="help.browse.general"/>
+            <tocitem text="View Protein Descriptions" target="help.browse.protein"/>
+            <tocitem text="View Peptide Descriptions" target="help.browse.peptide"/>
+            <tocitem text="View Spectrum/Chromatogram Descriptions" target="help.browse.mzgraph"/>
+            <tocitem text="View Quantification Descriptions" target="help.browse.quant"/>
+            <tocitem text="View Summary Charts" target="help.browse.chart"/>
+        </tocitem>
+        <tocitem text="Visualizing Spectra and Chromatogram" target="help.mzgraph">
+            <tocitem text="Spectra Browser" target="help.mzgraph.spectra"/>
+            <tocitem text="Fragmentation Table" target="help.mzgraph.fragmentation"/>
+            <tocitem text="Chromatogram Browser" target="help.mzgraph.chroma"/>
+        </tocitem>
+        <tocitem text="Showing Protein Details" target="help.protein">
+            <tocitem text="Obtain Protein Details" target="help.protein.details"/>
+            <tocitem text="Protein Sequence Viewer" target="help.protein.viewer"/>
+        </tocitem>
+        <tocitem text="Understanding Summary Charts" target="help.chart">
+            <tocitem text="Peak Intensity Distribution Chart" target="help.chart.1"/>
+            <tocitem text="Precursor Ion Charge Distribution Chart" target="help.chart.2"/>
+            <tocitem text="MS2 m/z Distribution Chart" target="help.chart.3"/>
+            <tocitem text="Distribution of Precursor Ion Masses Chart" target="help.chart.4"/>
+            <tocitem text="Number of Peptides Identified per Protein Chart" target="help.chart.5"/>
+            <tocitem text="Number of Peaks per Spectrum Chart" target="help.chart.6"/>
+            <tocitem text="Delta m/z Chart" target="help.chart.7"/>
+            <tocitem text="Number of Missed Tryptic Cleavages Chart" target="help.chart.8"/>
+        </tocitem>
+        <tocitem text="Opening mzML or PRIDE XML Files" target="help.openfile"/>
+        <tocitem text="Trying mzML or PRIDE XML Example Files" target="help.examples"/>
+        <tocitem text="Connecting to PRIDE Public Database Instance" target="help.pridedb"/>
+        <tocitem text="Review Project" target="help.review.project"/>
+        <tocitem text="Exporting Data from PRIDE Inspector" target="help.export"/>
+        <tocitem text="Exporting Quantification Data from PRIDE Inspector" target="help.export.quant"/>
+        <tocitem text="Quantification Principle" target="help.export.quant.principle"/>
+        <tocitem text="Theoretical Isoelectric Point" target="help.isoelectric.point"/>
+
+        <tocitem text="FAQ" target="help.faq">
+            <tocitem text="What is PRIDE?" target="help.faq.pride"/>
+            <tocitem text="What is PRIDE Public Instance?" target="help.faq.pridedb"/>
+            <tocitem text="What is PRIDE XML Format?" target="help.faq.pridexml"/>
+            <tocitem text="What is mzML Format?" target="help.faq.mzml"/>
+            <tocitem text="What is mzIdentMl Format?" target="help.faq.mzidentml"/>
+            <tocitem text="What to do when PRIDE Inspector run out of memory?" target="help.faq.memory"/>
+            <tocitem text="How does PRIDE Inspector calculate delta m/z?" target="help.faq.deltamz"/>
+            <tocitem text="The problem with shared peptides?" target="help.faq.shared.peptide"/>
+        </tocitem>
+
+        <tocitem text="Feedback Page" target="help.feedback"/>
+    </tocitem>
+</toc>

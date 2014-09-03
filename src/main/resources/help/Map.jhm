@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE map
+        PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 1.0//EN"
+        "http://java.sun.com/products/javahelp/map_1_0.dtd">
+
+<map version="1.0">
+    <mapID target="help_window_icon" url="../icon/16x16/help.gif"/>
+    <mapID target="toc_icon" url="../icon/16x16/toc.png"/>
+    <mapID target="index_icon" url="../icon/16x16/index.png"/>
+    <mapID target="search_icon" url="../icon/16x16/search.png"/>
+    <mapID target="previous_page_icon" url="../icon/24x24/previous_page.png"/>
+    <mapID target="next_page_icon" url="../icon/24x24/next_page.png"/>
+    <mapID target="home_page_icon" url="../icon/24x24/home_page.png"/>
+    <mapID target="print_icon" url="../icon/24x24/print.png"/>
+    <mapID target="print_setting_icon" url="../icon/24x24/print_settings.png"/>
+
+    <mapID target="help.index" url="html/index.html"/>
+    <mapID target="help.feedback" url="html/feedback.html"/>
+
+    <mapID target="help.ui" url="html/usage/user_interface.html"/>
+    <mapID target="help.ui.welcome" url="html/usage/ui/welcome.html"/>
+    <mapID target="help.ui.menu" url="html/usage/ui/menu_and_toolbar.html"/>
+    <mapID target="help.ui.nav" url="html/usage/ui/navigation.html"/>
+    <mapID target="help.ui.status" url="html/usage/ui/status_bar.html"/>
+
+    <mapID target="help.browse" url="html/usage/browse_data.html"/>
+    <mapID target="help.browse.general" url="html/usage/browse/general.html"/>
+    <mapID target="help.browse.protein" url="html/usage/browse/protein.html"/>
+    <mapID target="help.browse.peptide" url="html/usage/browse/peptide.html"/>
+    <mapID target="help.browse.mzgraph" url="html/usage/browse/mzgraph.html"/>
+    <mapID target="help.browse.quant" url="html/usage/browse/quant.html"/>
+    <mapID target="help.browse.chart" url="html/usage/browse/quality_chart.html"/>
+
+    <mapID target="help.mzgraph" url="html/usage/vis_mzgraph.html"/>
+    <mapID target="help.mzgraph.spectra" url="html/usage/mzgraph/spectra.html"/>
+    <mapID target="help.mzgraph.fragmentation" url="html/usage/mzgraph/fragmentation.html"/>
+    <mapID target="help.mzgraph.chroma" url="html/usage/mzgraph/chromatogram.html"/>
+
+    <mapID target="help.protein" url="html/usage/vis_protein.html"/>
+    <mapID target="help.protein.details" url="html/usage/protein/obtain_protein_details.html"/>
+    <mapID target="help.protein.viewer" url="html/usage/protein/protein_sequence_viewer.html"/>
+
+    <mapID target="help.chart" url="html/usage/view_chart.html"/>
+    <mapID target="help.chart.1" url="html/usage/chart/chart_1.html"/>
+    <mapID target="help.chart.2" url="html/usage/chart/chart_2.html"/>
+    <mapID target="help.chart.3" url="html/usage/chart/chart_3.html"/>
+    <mapID target="help.chart.4" url="html/usage/chart/chart_4.html"/>
+    <mapID target="help.chart.5" url="html/usage/chart/chart_5.html"/>
+    <mapID target="help.chart.6" url="html/usage/chart/chart_6.html"/>
+    <mapID target="help.chart.7" url="html/usage/chart/chart_7.html"/>
+    <mapID target="help.chart.8" url="html/usage/chart/chart_8.html"/>
+    <mapID target="help.chart.9" url="html/usage/chart/chart_9.html"/>
+
+    <mapID target="help.openfile" url="html/usage/open_file.html"/>
+
+    <mapID target="help.examples" url="html/usage/try_examples.html"/>
+
+    <mapID target="help.export" url="html/usage/export.html"/>
+
+    <mapID target="help.export.quant" url="html/usage/export_quant.html"/>
+
+    <mapID target="help.export.quant.principle" url="html/usage/quant_principle.html"/>
+
+    <mapID target="help.isoelectric.point" url="html/usage/isoelectric_point.html"/>
+
+    <mapID target="help.pridedb" url="html/usage/connect_pride_db.html"/>
+
+    <mapID target="help.review.project" url="html/usage/review_project.html"/>
+
+    <mapID target="help.ms.information" url="html/usage/ms_information.html"/>
+
+    <mapID target="help.faq" url="html/faq.html"/>
+    <mapID target="help.faq.pride" url="html/faq/pride.html"/>
+    <mapID target="help.faq.pridedb" url="html/faq/pride_db.html"/>
+    <mapID target="help.faq.pridexml" url="html/faq/pride_xml.html"/>
+    <mapID target="help.faq.mzml" url="html/faq/mzml.html"/>
+    <mapID target="help.faq.mzidentml" url="html/faq/mzidentml.html"/>
+    <mapID target="help.faq.memory" url="html/faq/memory.html"/>
+    <mapID target="help.faq.deltamz" url="html/faq/deltamz.html"/>
+    <mapID target="help.faq.shared.peptide" url="html/faq/shared_peptide.html"/>
+
+</map>

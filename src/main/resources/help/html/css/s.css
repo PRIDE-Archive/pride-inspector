@@ -1,0 +1,647 @@
+html body {
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: verdana, tahoma, arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    margin: 6px 2em 6px 2em;
+}
+
+/* ---------------------------------------------------------------------HEADER STYLES */
+#header {
+    height: 65px;
+    border: solid 1px #ffffff;
+    margin-left: -2em;
+    margin-right: -2em;
+    margin-bottom: 10px;
+}
+
+#header h1 {
+    color: #666666;
+    font-size: 14px;
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+#header h2 {
+    font-size: 16px;
+    font-weight: normal;
+}
+
+/* ---------------------------------------------------------------------INTRODUCTION STYLES */
+
+.introduction {
+    margin-top: 12px;
+    margin-bottom: 0px;
+    margin-left: 2px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    border-color: #EEEEEE;
+    border-style: solid;
+    border-width: thin;
+    background-color: #f1faff;
+    color: #000000;
+    font-size: 10px;
+}
+
+/* Headings generally not used in introduction, but are available */
+.introduction h2 {
+    background-color: inherit;
+    color: Navy;
+    font-size: 14px;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+
+.introduction h3 {
+    background-color: inherit;
+    color: Navy;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    font-size: 12px; /*clear: both;*/
+}
+
+.introduction p {
+    margin-top: 4px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+}
+
+/* --------------------------------------------------------------------- SECTION STYLES */
+.section {
+    margin-left: 5px;
+    margin-top: 12px;
+    background-color: #FFFFFF;
+    color: #000000;
+    font-size: 10px;
+}
+
+.section h1 {
+    margin: 16px 0 6px 0;
+    padding: 2px 12px;
+    background-color: #eeeeee;
+    color: #333333;
+    font-size: 16px;
+}
+
+.section h2, .section h3, .section h4 {
+    background-color: inherit;
+    color: #333333;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    padding: 0;
+}
+
+.section h2 {
+    font-size: 14px
+}
+
+.section h3 {
+    margin-top: 6px;
+    margin-left: 0px;
+    margin-right: 10px;
+    margin-bottom: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #0000DD;
+    font-size: 10px;
+}
+
+.section h4 {
+    margin-top: 6px;
+    margin-right: 0px;
+    margin-left: 0;
+    margin-bottom: 5px;
+    font-size: 10px;
+}
+
+.section p {
+    margin-left: 0px;
+    margin-right: 12px;
+    margin-bottom: 6px;
+}
+
+/* LIST & PROCEDURE STYLES */
+
+.section ul, introduction ul {
+    margin-left: 37px;
+    margin-top: 5px;
+    padding-left: 5px;
+}
+
+.section ol {
+    padding-left: 0px;
+    margin-left: 27px;
+}
+
+/* styles procedural steps: */
+.section .piProcedureSteps {
+    margin-left: 0px;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    background-color: #effded;
+    color: #333333;
+    border-color: #8FBC8F;
+    border-style: solid;
+    border-width: thin;
+}
+
+.section .piProcedureSteps ol {
+    padding-left: 0;
+    margin-left: 15px;
+}
+
+.section .piProcedureSteps ul {
+    padding-left: 0;
+    margin-left: 15px;
+}
+
+.section ul li {
+    padding-left: 5px;
+    margin-bottom: 4px;
+}
+
+.section .piProcedureSteps ol {
+    padding-bottom: 8px;
+}
+
+/* Procedure header: */
+.section .piProcedureSteps .procHeader {
+    font-family: "trebuchet ms", verdana, tahoma, arial, sans-serif;
+    font-weight: bold;
+    margin-bottom: 5px;
+    background-color: inherit;
+    font-size: 110%;
+    color: #004401;
+}
+
+/* <DIV> class for code examples. Put code examples inside such a DIV */
+
+.codeExa {
+    margin-left: 5px;
+    margin-right: 12px;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    color: #000000;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 10px;
+}
+
+.codeEx {
+    margin-left: 0px;
+    margin-right: 12px;
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    background-color: #eeeeee;
+    color: #000000;
+    border-color: #CCCCCC;
+    border-style: solid;
+    border-width: thin;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 10px;
+
+}
+
+/* Enclose actual code lines in <pre></pre>, indenting each line as nesc. */
+.codeExpre {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 11px;
+    background-color: #eeeeee;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+/* <SPAN> classes for syntax highlughting in code examples: */
+.keyword {
+    font-weight: bold;
+    background-color: inherit;
+    color: #000080;
+}
+
+.annotation {
+
+    background-color: inherit;
+    color: #808000;
+    font-weight: bold;
+
+}
+
+.value {
+    background-color: inherit;
+    color: #0000ff;
+}
+
+.comments {
+    background-color: inherit;
+    color: #808080;
+}
+
+.field {
+    background-color: inherit;
+    color: #660e7a;
+    font-weight: bold;
+}
+
+.string {
+    background-color: inherit;
+    color: #008000;
+    font-weight: bold;
+}
+
+.error {
+    background-color: inherit;
+    color: Red;
+    padding-bottom: 2px; /* Next line is ignored by JH but works in web browsers to show curly error underline image. Comment it out for JH useage, uncomment for Browser usage  */
+/*background: url(img/error_line.gif) bottom repeat-x fixed;*/
+
+/* Use next line for JH, but comment it out if making help for web browser use */
+    text-decoration: underline;
+}
+
+.highlighted {
+    background-color: #ffffd7;
+    color: inherit;
+}
+
+/* LINK STYLES */
+a:link {
+    color: blue;
+    text-decoration: none;
+    border-bottom: dashed 1px #0000ff;
+}
+
+a:visited {
+    color: blue;
+    text-decoration: none;
+    border-bottom: dashed 1px #267bee;
+}
+
+a:hover {
+    color: #fb7600;
+    text-decoration: none;
+    border-bottom: dashed 1px #fb7600;
+}
+
+/* ---------------------------------------------------------------------"SEE ALSO" STYLES*/
+
+#seealso {
+    margin-left: 2px;
+    margin-top:25px;
+    font-size: 10px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: white;
+    color: #F0F8FF;
+    border-color: #B0C4DE;
+    border-style: solid;
+    border-width: thin;
+    width: 60%;
+}
+
+#seealso h2 {
+    background-color: inherit;
+    color: #4A4A4A;
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 100%;
+}
+
+#seealso p {
+    margin-left: 10px;
+    color: #4A4A4A;
+    font-weight: bold;
+    margin-bottom: 2px;
+    margin-top: 0px;
+    font-size: 100%;
+    background-color: inherit;
+
+}
+
+#seealso b {
+    color: black;
+}
+
+#seealso ul {
+    list-style-type: none;
+    background-color: inherit;
+    color: #000000;
+    margin-left: 30px;
+    padding-bottom: 2px;
+    margin-top: 0px;
+
+}
+
+#seealso li {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-left: 0px;
+}
+
+#seealso a, #seealso a:link, #seealso a:visited, #seealso a:hover {
+    background-color: inherit;
+    color: #666699;
+    text-decoration: underline;
+    font-weight: normal;
+
+}
+
+/* ---------------------------------------------------------------------NOTE STYLES */
+
+/* Type-specific note styles */
+
+piNote a {
+    color: #191970;
+}
+
+.note {
+    background-color: #d9eefd;
+    color: #0075C9;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 15px;
+    margin-left: 0px;
+    margin-right: 12px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-color: #8CCFFF;
+    border-style: solid;
+    border-width: thin;
+
+}
+
+.note a {
+    color: #0075C9;
+}
+
+.note .keyword, .note .intelliJIDEA, .note .control, .note .menupath {
+    font-weight: bold;
+    color: #0075C9;
+}
+
+.warning .keyword, .warning .intelliJIDEA, .warning .control, ijWarning .menupath {
+    font-weight: bold;
+    color: #3C006A;
+}
+
+.tip .keyword, .tip .menupath, .tip .control, .tip .intelliJIDEA {
+    font-weight: bold;
+    color: olive;
+}
+
+.note .shortcut {
+    font-family: "Courier New", Courier, monospace;
+    font-weight: bold;
+    font-size: 110%;
+    color: #0075C9;
+}
+
+.tip .shortcut {
+    font-family: "Courier New", Courier, monospace;
+    font-weight: bold;
+    font-size: 110%;
+    color: olive;
+}
+
+.warning .shortcut {
+    font-family: "Courier New", Courier, monospace;
+    font-weight: bold;
+    font-size: 110%;
+    color: #3C006A;
+}
+
+.warning a {
+    color: #3C006A;
+}
+
+.warning {
+    background-color: #ffecfe;
+    color: #3C006A;
+    border-collapse: collapse;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 15px;
+    margin-left: 0px;
+    margin-right: 12px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-color: #E607BF;
+    border-style: solid;
+    border-width: thin;
+
+}
+
+.tip a {
+    color: olive;
+}
+
+.tip {
+    background-color: #fffae7;
+    color: olive;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 15px;
+    margin-left: 0px;
+    margin-right: 12px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-color: #FAE184;
+    border-style: solid;
+    border-width: thin;
+
+}
+
+/*Inline code styles*/
+
+code {
+    font-family: "Courier New", Courier, monospace;
+    font-size: inherit;
+}
+
+
+/* Style for keyboard shortcuts named in text */
+.shortcut {
+    font-family: "Courier New", Courier, monospace;
+    font-weight: bold;
+    font-size: 110%;
+    color: #b22c0d;
+}
+
+/* Style for GUI controls named in text */
+.control {
+    font-weight: bold;
+    font-size: inherit;
+    background-color: inherit;
+    color: #00008B;
+}
+
+/* Style for menu items and paths named in text */
+.menupath {
+/*font-family: "Courier New", Courier, monospace;*/
+    font-weight: bold;
+    font-size: inherit;
+    background-color: inherit;
+    color: #5B005B;
+}
+
+/* Style for property names in text and reference material */
+.property {
+    font-weight: bold;
+    background-color: inherit;
+    color: #6C006C;
+}
+
+/* ---------------------------------------------------------------------TABLE STYLES */
+
+.piTable {
+    margin-left: 0px;
+    margin-right: 12px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    border-bottom-style: solid;
+    border-left-width: thin;
+    border-bottom-color: #eeeeee;
+
+}
+
+.piTable th {
+    background-color: #999999;
+    color: #eeeeee;
+}
+
+.piTable td {
+    background-color: #f7f7f7;
+    vertical-align: text-top;
+    padding-left: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-right: 4px;
+}
+
+.piTable .piRowOdd td {
+    background-color: #dddddd;
+}
+
+.piTable .piRowHead td {
+    background-color: #999999;
+    color: #eeeeee;
+    font-weight: bold;
+}
+
+/* ---------------------------------------------------------------------FOOTER STYLES */
+
+#footer {
+    margin-top: 24px; /* Use px here, not em (for dumb JH) */
+    padding-left: 12px;
+    padding-bottom: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #cccccc; /* Ignored by JH */
+    background-color: #f1faff;
+}
+
+#footer p {
+    position: relative;
+    margin: 0 auto 50em auto;
+    font-family: verdana, arial, serif;
+    font-size: 90%;
+    background-color: inherit;
+    color: #999999;
+    text-align: left;
+}
+
+#footer a, #footer a:link, #footer a:visited {
+    font-weight: bold;
+    border-bottom: 1px #999999 solid;
+    color: #999999;
+    padding-right: 7px;
+}
+
+#footer a:hover {
+    padding-right: 7px;
+    text-decoration: none;
+}
+
+#footer hr {
+    clear: both;
+    margin-top: 3em;
+    border: 0;
+    border-top: none;
+
+}
+
+dl {
+
+    border-width: 1px;
+    background-color: #eeeeee;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+}
+
+dt {
+
+    margin-left: 10px;
+    font-weight: bold;
+    color: #666666;
+
+}
+
+dd {
+    margin-left: 20px;
+    margin-bottom: 5px;
+}
+
+.topicpath {
+    margin-left: 2px;
+    border-style: solid;
+    border-width: thin;
+    padding-left: 2px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 2px;
+    font-weight: bold;
+    font-size: 10px;
+    background-color: #f1faff;
+    color: #0075C9;
+    border-color: #EEEEEE;
+}
+
+.topicpath a {
+    color: #0075C9;
+    font-weight: bold;
+    font-size: 10px;
+}
+
+.topicpath td {
+    vertical-align: text-top;
+    padding-left: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 2px;
+}

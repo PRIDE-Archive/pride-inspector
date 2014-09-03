@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/s.css">
+    <title>Obtain Protein Details</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+<!-- header -->
+<div id="header">
+    <h1>Obtain Protein Details</h1>
+</div>
+
+<!-- navigation -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+    <tr>
+        <td align="left" class="topicpath">
+            <a href="../vis_protein.html">Previous</a> | <a href="protein_sequence_viewer.html">Next</a> | <a
+                href="#topicSeeAlsoTopicsList">See Also</a>
+        </td>
+        <td width="70%" class="topicpath"></td>
+    </tr>
+</table>
+
+<!-- table of contents -->
+<div class="introduction">
+    <p>
+        Extra protein related details can be downloaded from remote web services, such as: Uniprot, IPI, Ensembl and
+        NCBI. This feature can be accessed from the top right of the protein tab, the peptide tab and the
+        quantification
+        tab. In addition, it can be called from the Protein Sequence Viewer.
+    </p>
+
+    <p>
+        Four types of information will be donwloaded:
+    <ul>
+        <li><a href="#name">Protein Name</a> - protein name assigned to the mapped protein accession.
+        </li>
+        <li><a href="#status">Status</a> - the status of the protein accession according to the remote web service.
+        </li>
+        <li><a href="#sequence">Protein Sequence</a> - protein sequence related to the mapped protein accession.
+        </li>
+        <li><a href="#peptide">Fit in Sequence</a> - whether a given peptide can be found in the protein sequence.
+        </li>
+    </ul>
+    </p>
+
+    <div class="note">
+        <p>
+            Once clicked on the <span class="annotation"> Obtain Protein Details</span> button, a background task
+            will
+            start to downloaded protein details from remote web service. The speed of this task depends on your
+            Internet
+            connection speed and the speed of the remote web service.
+        </p>
+    </div>
+
+    <div class="note">
+        <p>
+            Once clicked on the <span class="annotation"> Obtain Protein Details</span> button, all tabs which will
+            use
+            the extra protein details will be updated, these include the protein tab, the peptide tab, the
+            quantification tab and the protein sequence viewer.
+        </p>
+    </div>
+
+    <div class="note">
+        <p>
+            Additional fields will also be added as the result of the download, for instance, the protein sequence
+            coverage, the theoretical isoelectric point will be calculated if the protein sequence is available.
+        </p>
+    </div>
+</div>
+
+<!-- content -->
+<div id="content">
+    <div class="section">
+        <div class="piProcedureSteps">
+            <a name="name"></a>
+
+            <h3>Protein Name</h3>
+
+            <p>
+                Protein names are downloaded using the mapped protein accession. There are cases where the protein
+                names will not be available, possible reasons are:
+            <ul>
+                <li>No valid mapped protein accession</li>
+                <li>Protein accession has been deleted from the original database</li>
+                <li>Protein accession is unknown to the original database</li>
+            </ul>
+            </p>
+        </div>
+
+        <div class="piProcedureSteps">
+            <a name="status"></a>
+
+            <h3>Status</h3>
+
+            <p>
+                In MS proteomics based experiments, potentially identified proteins are reported using the searched
+                database’s proprietary identifiers. These identifiers are unstable and can change or may even be
+                deleted over time. The latter happens if, for instance, hypothetical proteins are removed when gene
+                prediction algorithms are updated or new biological evidence is created.
+            </p>
+
+            <p>
+                In a recent paper we investigated the impact of changing protein identifiers on stored proteomics
+                data over time [1]. We found that in several cases 10-20% of the reported identifiers were no longer
+                valid after only a year after the experimental results had been published. To highlight this problem
+                to the user as well as to keep the reported data usable, PRIDE Inspector has a function to
+                automatically check the reported identification’s status. To do this we integrated specific
+                components that access the identifications source database and retrieve the current identifier
+                status. If the identifier was only updated, the new accession is automatically displayed in the
+                protein table and the updated sequence retrieved. In some cases, even though a protein’s identifier
+                did not change its underlying sequence was altered in the protein database. Therefore, PRIDE
+                Inspector automatically fetches a protein’s current sequence and checks whether the reported
+                peptides still fit this identification.
+            </p>
+
+            <p>
+                When using the “Obtain Protein Details” feature in the PRIDE Inspector, the status of the protein
+                according to the original database is downloaded in addition to protein name and protein sequence.
+                It could be one of the following cases:
+            <ul>
+                <li><b>Active</b>: the protein accession still exists in the original database, and the details
+                    remain unchanged.
+                </li>
+                <li><b>Unknown</b>: the protein accession does not exist in the original database.</li>
+                <li><b>Deleted</b>: the protein accession has been removed from the original database.</li>
+                <li><b>Merged</b>: the protein accession has been merged with other protein accession to form a new
+                    protein.
+                </li>
+                <li><b>Demerged</b>: the protein accession has been splited into two or more proteins.</li>
+                <li><b>Changed</b>: there has been some changes on this protein, but the type of the change is
+                    unknown.
+                </li>
+                <li><b>Error</b>: there is an error associated with this protein.</li>
+            </ul>
+            </p>
+
+            <p>
+                To summarize, there are three main results for a protein’s status: active, changed, and deleted. For
+                UniProtKB changed identifiers are subdivided in merged and demerged identifiers. The main reason for
+                the demerging of identifiers is that new identifiers were created for every species a protein was
+                identified in as well as new identifiers for the various genes a protein can come from. The merging
+                of identifiers mainly happens when based on new gene prediction algorithms proteins that were
+                previously believed to be distinct are then considered to actually come from the same gene.
+            </p>
+
+            <p>
+                The International Protein Index (IPI) database has been discontinued since September 2011.
+                Therefore, PRIDE Inspector can only report whether a given identifier was still active in the last
+                IPI release but cannot report on changed or deleted identifiers.
+            </p>
+
+            <h3>Reference</h3>
+
+            <p>
+                1. Griss, J., Cote, R. G., Gerner, C., Hermjakob, H. & Vizcaíno, J.A. Published and perished? The
+                influence of the searched protein database on the long-term storage of proteomics data. Mol Cell
+                Proteomics 10, M111 008490 (2011).
+            </p>
+        </div>
+
+        <div class="piProcedureSteps">
+            <a name="sequence"></a>
+
+            <h3>Protein Sequence</h3>
+
+            <p>
+                The latest protein sequence form the original database, this might be different from the original
+                sequences used for the search. In some cases, the protein sequence won't be available, for example,
+                when a protein accession is demerged into multiple proteins.
+            </p>
+        </div>
+
+        <div class="piProcedureSteps">
+            <a name="peptide"></a>
+
+            <h3>Fit in Sequence</h3>
+
+            <p>
+                This field indicates whether the peptide sequence can still be found in the latest protein sequence.
+                It could be one of the following status:
+            <ul>
+                <li><b>Fit</b>: both the peptide sequence and the start/stop position fits the protein sequence.
+                </li>
+                <li><b>Fuzzy Fit</b>: only the peptide sequence can be found in the protein sequence, this may
+                    indicates a change of the original protein sequence.
+                </li>
+                <li><b>No Fit</b>: the peptide sequence can not be found in the protein sequence.</li>
+                <li><b>Unknown</b>: When the protein sequence is not available.
+                </li>
+            </ul>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<div id="seealso">
+    <a name="topicSeeAlsoTopicsList"></a>
+
+    <h2>See Also</h2>
+
+    <ul>
+        <li><a href="protein_sequence_viewer.html">Protein Sequence Viewer</a></li>
+        <li><a href="decoy_filter.html">Decoy Filter</a></li>
+    </ul>
+</div>
+<div id="footer">
+    <p>Comments, questions, suggestions? See the
+        <a href="../../feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+    </p>
+</div>
+</div>
+</body>
+</html>

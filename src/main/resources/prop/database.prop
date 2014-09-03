@@ -1,0 +1,8 @@
+# pride database connection details
+pride.database.driver = ${database.driver}
+pride.database.protocol = ${database.protocol}
+pride.database.subprotocol = ${database.subprotocol}
+pride.database.alias = ${database.read.dbalias}
+pride.database.master.schema = ${database.read.master.schema}
+pride.database.user = ${database.read.user}
+pride.database.password = ${database.read.password}

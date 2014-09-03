@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/s.css">
+    <title>Menus and Toolbars</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+    <!-- header -->
+    <div id="header">
+        <h1>Menus and Toolbars</h1>
+    </div>
+
+    <!-- navigation -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+        <tr>
+            <td align="left" class="topicpath">
+                <a href="welcome.html">Previous</a> | <a href="navigation.html">Next</a> | <a
+                    href="#topicSeeAlsoTopicsList">See Also</a>
+            </td>
+            <td width="70%" class="topicpath"></td>
+        </tr>
+    </table>
+
+    <!-- table of contents -->
+    <div class="introduction">
+        <p>
+            PRIDE Inspector's menus and toolbars provide access to the main functions. The main menu and toolbar
+            contains
+            actions that affect the data content at the file or database level. Some of the actions are duplicated in
+            both the menus and toolbars for quick access.
+        </p>
+        <br>
+
+        <p>The main menus contains four sub menus: </p>
+        <ul>
+            <li><a href="#file_menu">File Menu</a></li>
+            <li><a href="#examples_menu">Examples Menu</a></li>
+            <li><a href="#export_menu">Export Menu</a></li>
+            <li><a href="#help_menu">Help Menu</a></li>
+        </ul>
+        <br>
+
+        <p>The main tool bar contains four buttons: </p>
+        <ul>
+            <li><a href="#toolbar">Open File Toolbar</a></li>
+            <li><a href="#toolbar">Connect to PRIDE Public Database Toolbar</a></li>
+            <li><a href="#toolbar">Private Download Toolbar</a></li>
+            <li><a href="#toolbar">Help Toolbar</a></li>
+        </ul>
+    </div>
+
+    <!-- content -->
+    <div id="content">
+        <div class="section">
+            <div class="piProcedureSteps">
+                <a name="file_menu"></a>
+
+                <h3>File Menu</h3>
+
+                <p>
+                    File Menu contains commands for opening and closing data sources.
+                <ul>
+                    <li><span class="keyword"><a href="../open_file.html">Open File</a></span> - opens single or
+                        multiple mzML/MzIdentML/PRIDE XML files.
+                    </li>
+                    <li><span class="keyword"><a href="../connect_pride_db.html">Connect PRIDE Database</a></span> -
+                        connects to the PRIDE public database,
+                        displays a list of available public experiments
+                    </li>
+                    <li><span class="keyword"><a href="../review_project.html">Private Download</a></span> -
+                        downloads private experiments from
+                        PRIDE.
+                    </li>
+                    <li><span class="keyword">Close</span> - closes the file or PRIDE experiment you are
+                        currently viewing.
+                    </li>
+                    <li><span class="keyword">Close All</span> - closes all currently open files and PRIDE experiments.
+                    </li>
+                    <li><span class="keyword">Exist</span> - exists PRIDE Inspector</li>
+                </ul>
+                </p>
+
+                <a name="examples_menu"></a>
+
+                <h3>Examples Menu</h3>
+
+                <p>
+                    Examples lists two examples to quickly try out PRIDE Inspector, one mzML and on PRIDE XML file.
+                    Details about these examples can be found at <a href="../try_examples.html">Trying mzML or PRIDE XML
+                    Example Files</a>
+                </p>
+
+                <a name="export_menu"></a>
+
+                <h3>Export Menu</h3>
+
+                <p>
+                    Export data from the data source in the current view into various file formats, you can export four
+                    different types of data:
+                <ul>
+                    <li><span class="keyword">PRIDE XML</span> - export an experiment into <a
+                            href="http://www.ebi.ac.uk/pride/schemaDocumentation.do">PRIDE XML format</a> file,
+                        this option is only available if you are viewing an experiment from PRIDE public instance.
+                    </li>
+                    <li><span class="keyword">Spectra (.mgf)</span> - exports all spectra into a <a
+                            href="http://www.matrixscience.com/help/data_file_help.html#GEN">Mascot Generic Format</a>
+                        file
+                    </li>
+                    <li><span class="keyword">Spectrum Details</span> - exports spectrum related information, such as:
+                        ms level, precursor charge,
+                        precursor m/z value and etc, into a tab delimited text file. This file can then be processed
+                        using programs like Microsoft Excel.
+                    </li>
+                    <li>
+                        <span class="keyword">Protein-Peptide Mappings</span> - exports all proteins together with their
+                        corresponding
+                        peptides into a tab delimited text file. No filtering of the data is done and duplicate peptide
+                        entries are exported as well.
+                    </li>
+                    <li>
+                        <span class="keyword">Protein Details</span> - exports all the protein related information, such
+                        as: protein accession, PRIDE
+                        protein b1Score, PRIDE protein threshold, number of peptides etc., into a tab delimited text
+                        file.
+                    </li>
+                    <li>
+                        <span class="keyword">Peptide Details</span> - exports all the peptide related information, such
+                        as: peptide sequence, precursor
+                        charge, delta m/z, etc. into a tab delimited text file.
+                    </li>
+                </ul>
+                </p>
+
+                <a name="help_menu"></a>
+
+                <h3>Help Menu</h3>
+
+                <p>
+                    Help Menu contains links to the help document. It provides additional information about PRIDE
+                    Inspector and
+                    contains a page to provide us with feedback.
+                </p>
+
+                <a name="toolbar"></a>
+
+                <p>
+                    The main toolbar contains four key commands:
+                <ul>
+                    <li><span class="keyword"><a href="../open_file.html">Open File Toolbar</a></span> - opens a single
+                        or
+                        multiple mzML/MzIdentML/PRIDE XML files.
+                    </li>
+                    <li><span class="keyword"><a href="../connect_pride_db.html">Connect PRIDE Public Database
+                        Toolbar</a></span> - connects to the PRIDE
+                        database,
+                        displays a list of public available experiments
+                    </li>
+                    <li><span class="keyword"><a href="../review_project.html">Private Download Toolbar</a></span> -
+                        downloads private experiments
+                        from
+                        PRIDE.
+                    </li>
+                    <li>
+                        <span class="keyword">Help</span> - gives quick access to help documents.
+                    </li>
+                </ul>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="seealso">
+        <a name="topicSeeAlsoTopicsList"></a>
+
+        <h2>See Also</h2>
+
+        <p><strong>Browse Data</strong></p>
+
+        <ul>
+            <li><a href="../browse_data.html">View data</a></li>
+        </ul>
+
+        <p><strong>Detailed Explanations:</strong></p>
+
+        <ul>
+            <li><a href="../open_file.html">Open File</a></li>
+            <li><a href="../connect_pride_db.html">Connect PRIDE Database</a></li>
+            <li><a href="../review_project.html">Private Download</a></li>
+        </ul>
+    </div>
+    <div id="footer">
+        <p>Comments, questions, suggestions? See the
+            <a href="../../feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+        </p>
+    </div>
+</div>
+</body>
+</html>

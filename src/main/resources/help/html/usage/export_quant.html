@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../css/s.css">
+    <title>Export Quantitative Data</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+    <!-- header -->
+    <div id="header">
+        <h1>Export Quantitative Data</h1>
+    </div>
+
+    <!-- navigation -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+        <tr>
+            <td align="left" class="topicpath">
+                <a href="export.html">Previous</a> | <a href="quant_principle.html">Next</a> | <a
+                    href="#topicSeeAlsoTopicsList">See Also</a>
+            </td>
+            <td width="70%" class="topicpath"></td>
+        </tr>
+    </table>
+
+    <!-- table of contents -->
+    <div class="introduction">
+        <p><span class="annotation">Export Quantitative Data</span> dialog can filter according to quantitative ratios,
+            all the filter results will be shown in the protein table, and you can choose to export these results.
+            <br>
+            There are three key features in this dialog:
+        <ul>
+            <li><a href="#filter">Filter</a> - use to set the filter parameters to restrict the results</li>
+            <li><a href="#export">Export</a> - export filtered results into an tab-delimited file</li>
+            <li><a href="#ensembl">Esemble View</a> - show all the filtered proteins in the Ensembl karyotype viewer.
+            </li>
+            <li><a href="#reactome">Reactome Pathway</a> - show all the filtered proteins with their quantitative ratios in the Reactome pathways.</li>
+        </ul>
+        </p>
+        <br>
+        <img src="../images/export_quant.png" alt="Export quantitative results"/>
+
+    </div>
+
+    <!-- content -->
+    <div id="content">
+        <div class="section">
+            <div class="piProcedureSteps">
+                <a name="filter"></a>
+
+                <h3>Filter</h3>
+
+                <p>
+                    Three parameters can be used for the filtering process:
+                <ul>
+                    <li><b>Reagent Ratio</b>: choose which type of the reagent ratio to filter, this is essentially an
+                        column in the protein table.
+                    </li>
+                    <li><b>Regulation</b>: choose whether it is up/down regulated, in the PRIDE Inspector, this means
+                        whether the value is above one or below one.
+                    </li>
+                    <li><b>Percentage</b>: choose the change percentage, for example, if set to 20% and up regulated,
+                        this means any value above or equal to 1.20.
+                    </li>
+                </ul>
+                </p>
+            </div>
+
+            <div class="piProcedureSteps">
+                <a name="Export"></a>
+
+                <h3>Export</h3>
+
+                <p>
+                    Clicking on this button will open an save to file dialog, this enables you to export the filtered
+                    quantitative results into tab-delimited file.
+                </p>
+            </div>
+
+            <div class="piProcedureSteps">
+                <a name="ensembl"></a>
+
+                <h3>Ensembl Viewer</h3>
+
+                <p>
+                    This will map all the proteins in the protein table to the Ensembl Karyotype Viewer,
+                    here is an <a href="http://www.ensembl.org/Mus_musculus/Location/Genome?type=ProteinAlignFeature;id=ATP5J_MOUSE;id=PROF2_MOUSE;id=COR1A_MOUSE;id=CHCH2_MOUSE;id=ECHA_MOUSE;id=ABCD3_MOUSE;id=MAL2_MOUSE">example</a>.
+                </p>
+            </div>
+
+            <div class="piProcedureSteps">
+                <a name="reactome"></a>
+
+                <h3>Reactome Pathway</h3>
+
+                <p>
+                    This will map all the proteins in the protein table to the Reactome pathways, please note that the time to calculate the results depends on the number of proteins and their quantitative values.
+                    The same feature can be found on <a href="http://www.reactome.org/ReactomeGWT/entrypoint.html#ExpressionDataUploadPage">Reactome's website</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="seealso">
+        <a name="topicSeeAlsoTopicsList"></a>
+
+        <h2>See Also</h2>
+
+        <p>
+            <strong>Other topics which will help you understand the data you are exporting:</strong>
+        </p>
+
+        <ul>
+            <li><a href="browse/quant.html">Quantification Data</a></li>
+        </ul>
+    </div>
+    <div id="footer">
+        <p>Comments, questions, suggestions? See the
+            <a href="feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+        </p>
+    </div>
+</div>
+</body>
+</html>

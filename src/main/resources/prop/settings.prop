@@ -1,0 +1,77 @@
+pride.inspector.name=${name}
+pride.inspector.version=${version}
+pride.inspector.jar.name=${name}-${version}.jar
+
+# pride helpdeskp email
+pride.helpdesk.email=pride-support@ebi.ac.uk
+
+# example files
+pride.inspector.pride.example.file=examples/pride-example.xml
+pride.inspector.mzml.example.file=examples/mzml-example.mzML
+pride.inspector.mzidentml.example.file=examples/mzidentml-example.mzid
+
+# pride website
+pride.website=http://www.ebi.ac.uk/pride
+
+# pride inspector website
+pride.inspector.download.website=http://www.ebi.ac.uk/pride/resources/tools/inspector/latest/desktop/pride-inspector.zip
+
+# pride inspector download website
+pride.inspector.update.website=http://www.ebi.ac.uk/pride/resources/tools/inspector
+
+# pride inspector example dataset
+pride.inspector.example.dataset.website=http://www.ebi.ac.uk/pride/resources/tools/inspector/latest/example/ExampleDataSets.zip
+
+# the size of each mzdata batch load
+mzdata.batch.load.size=100
+
+# threshold for file size (in M)
+# this will trigger a warning message if the file is bigger
+open.file.threshold = 500
+
+# threshold for mzidentml file size (in M)
+# if greater than the threshold, prescanning of the file won't be performed
+open.mzidentml.file.threshold = 200
+
+# Memory threshold for mzidentml file size (in M)
+# if greater than the threshold, the mzidentml file use the disk to retrieve the data
+memory.mzidentml.file.threshold = 100
+
+
+# threshold for download size (in M)
+# this will trigger a warning message if the download size is over this limit
+download.size.threshold = 200
+
+# public experiments to be ignored, this is too big to open in the PRIDE Inspector
+large.pride.experiments=9776
+
+# threshold to how many rows will be upload in tables
+open.threshold.table.peptide = 200
+open.threshold.table.protein = 200
+
+
+# URL for downloading pride experiments in xml file format
+prider.my.projects.metadata.url=http://www.ebi.ac.uk/pride/ws/archive/project/list/user
+prider.project.file.metadata.url=http://www.ebi.ac.uk/pride/ws/archive/file/list/project/{accession}
+prider.assay.file.metadata.url=http://www.ebi.ac.uk/pride/ws/archive/file/list/assay/{accession}
+prider.file.download.url=/pride/ws/archive/file/{accession}/{file}
+prider.host.url=www.ebi.ac.uk
+prider.host.port=80
+
+
+
+# URL for link to Ensembl Genome Browser
+ensembl.genome.browser.url=http://www.ensembl.org/%1$s/Location/Genome?type=ProteinAlignFeature
+
+# PRIDE Inspector publication
+pride.inspector.publication.title = Wang et al., Nat Biotechnol 2012; 30:130-132.
+pride.inspector.publication.url = http://www.nature.com/nbt/journal/v30/n2/full/nbt.2112.html
+pride.inspector.publication.pdf.url = http://www.nature.com/nbt/journal/v30/n2/pdf/nbt.2112.pdf
+pride.inspector.publication.pubmed.url = http://www.ncbi.nlm.nih.gov/pubmed/22318026
+
+# PRIDE Database Out
+pride.inspector.pride.out.message = Be aware that PRIDE public database instance is not updated since December 2013.\n A web service replacement will be in place in the near future.
+
+# Delta m/z limits
+delta.mz.max.limit = 4
+delta.mz.min.limit = -4

@@ -1,0 +1,30 @@
+<ehcache>
+    <diskStore path="user.home/.pride-inspector/cache"/>
+    <defaultCache
+            eternal = "false"
+            maxElementsInMemory = "100"
+            overflowToDisk = "false">
+    </defaultCache>
+
+    <cache name="proteinDetailsCache"
+           eternal="true"
+           maxElementsInMemory = "100"
+           maxElementsOnDisk = "10000"
+           overflowToDisk="true">
+    </cache>
+
+    <cache name="sequenceCoverageCache"
+           eternal="true"
+           maxElementsInMemory = "5000"
+           maxElementsOnDisk = "100000"
+           overflowToDisk="true">
+    </cache>
+
+    <cache name="peptideFitCache"
+           eternal="true"
+           maxElementsInMemory = "5000"
+           maxElementsOnDisk = "500000"
+           overflowToDisk="true">
+    </cache>
+
+</ehcache>

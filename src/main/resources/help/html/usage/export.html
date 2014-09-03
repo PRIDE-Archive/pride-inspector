@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../css/s.css">
+    <title>Export data</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+    <!-- header -->
+    <div id="header">
+        <h1>Exporting Data from PRIDE Inspector</h1>
+    </div>
+
+    <!-- navigation -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+        <tr>
+            <td align="left" class="topicpath">
+                <a href="review_project.html">Previous</a> | <a href="export_quant.html">Next</a> | <a
+                    href="#topicSeeAlsoTopicsList">See Also</a>
+            </td>
+            <td width="70%" class="topicpath"></td>
+        </tr>
+    </table>
+
+    <!-- table of contents -->
+    <div class="introduction">
+        <p>This chapter explains the export functionality in pride inspector for spectrum and peptide data.
+            <br>
+            You can access it from the <a href="ui/menu_and_toolbar.html">Export</a> menu once an experiment
+            is being viewed and contains spectrum and peptide data to
+            export, if there is no data, the export options are disabled.
+        </p>
+
+    </div>
+
+    <!-- content -->
+    <div id="content">
+        <div class="section">
+            <ul>
+                <li><span class="control">PRIDE XML</span> will export into a <span
+                        class="control">PRIDE XML format</span> file.
+                    Once this option is selected in the <span class="menupath">Export | PRIDE XML </span>, you will need
+                    to choose from the pop-up window the file where the PRIDE XML will be stored.
+                    <div class="warning">
+                        <div class="warningmark"></div>
+                        <img src="../images/notice_purple.gif"> As this will download the PRIDE XML from the PRIDE Web
+                        Servers, it might take a long time for larger files.
+                    </div>
+
+                </li>
+                <li><span class="control">Spectra (.mgf)</span> will export into a <span class="control">mgf (Mascot Generic File)</span>
+                    file,
+                    the mz and intensity data for the spectra in that experiment. Once this option is selected in
+                    the <span class="menupath">Export | Spectrum
+                    (.mgf) </span>, you will need to choose from the pop-up window the file where the spectrum data will
+                    be stored.
+                    <div class="warning">
+                        <div class="warningmark"></div>
+                        <img src="../images/notice_purple.gif"> It will create 1 file for all spectrum in the
+                        experiment, so can potentially
+                        create a file bigger than hundred MB.
+                    </div>
+
+                </li>
+                <li><span class="control">Spectrum Table</span> will export into a tab delimited file which contains all
+                    the values in the <span class="control">spectrum table.</span>
+                    When you select the <span class="menupath">Export | Spectrum Details, </span> a pop-up window will
+                    let you choose the location and name for the file to
+                    store all details.
+                </li>
+                <li><span class="control">Protein-Peptide Mappings</span> will export into a tab delimited file which
+                    contains the <span class="control">protein accession</span>
+                    and <span class="control">peptide sequence</span> mappings. When you select the <span
+                            class="menupath">Export | Protein-Peptide Mappings,
+                </span> a pop-up window will let you choose the location and name for the file to store the data
+                </li>
+                <li><span class="control">Protein Table</span> will export into a tab delimited file contains
+                    information about the proteins: <span class="control">
+                 Score, Threshold, Number of peptides, Number of distinct peptides and Number of PTMs and etc</span>.
+                    When you select the <span class="menupath">Export | Protein
+                 Table </span> option from the menu, a pop-up window will let you choose the location and name for the
+                    file to store the data.
+                </li>
+                <li><span class="control">Peptide Table</span> will export into a tab delimited file contains
+                    information about the peptides: <span class="control">
+                 Peptide Sequence, PTM List, and etc</span>. When you select the <span class="menupath">Export | Peptide
+                 Table </span> option from the menu, a pop-up window will let you choose the location and name for the
+                    file to store the data.
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div id="seealso">
+        <a name="topicSeeAlsoTopicsList"></a>
+
+        <h2>See Also</h2>
+
+        <p>
+            <strong>Other topics which will help you understand the data you are exporting:</strong>
+        </p>
+
+        <ul>
+            <li><a href="browse/mzgraph.html">Spectrum data</a></li>
+            <li><a href="browse/peptide.html">Peptide data</a></li>
+            <li><a href="browse/protein.html">Protein data</a></li>
+        </ul>
+    </div>
+    <div id="footer">
+        <p>Comments, questions, suggestions? See the
+            <a href="feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+        </p>
+    </div>
+</div>
+</body>
+</html>

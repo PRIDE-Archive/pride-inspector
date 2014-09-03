@@ -1,0 +1,464 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>uk.ac.ebi.pride.toolsuite</groupId>
+    <artifactId>pride-inspector</artifactId>
+    <packaging>jar</packaging>
+    <version>2.1.1</version>
+    <name>Pride Inspector Tool</name>
+    <url>http://code.google.com/p/pride-toolsuite/wiki/PRIDEInspector</url>
+
+
+    <!--
+        Build Note:
+
+        To build desktop version, you need
+        mvn -P pi-desktop-build,env-public clean package
+
+        To build web start version, you must use command and use:
+        mvn -P pi-webstart-build,,env-public,webstart clean package
+
+    -->
+
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>European Bioinformatics Institute</name>
+        <url>http://www.ebi.ac.uk</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>rwang</id>
+            <name>Rui Wang</name>
+            <organization>Proteomics Services Team, PANDA Group, EMBL-European Bioinformatics Institute</organization>
+            <organizationUrl>http://www.ebi.ac.uk/pride</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>0</timezone>
+        </developer>
+        <developer>
+            <id>ypriverol</id>
+            <name>Yasset Perez-Riverol</name>
+            <organization>Proteomics Services Team, PANDA Group, EMBL-European Bioinformatics Institute</organization>
+            <organizationUrl>http://www.ebi.ac.uk/pride</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>0</timezone>
+        </developer>
+    </developers>
+
+    <properties>
+        <assembly.dir>${name}-${version}</assembly.dir>
+        <junit.version>4.11</junit.version>
+        <slf4j-api.version>1.7.5</slf4j-api.version>
+        <logback-core.version>1.0.11</logback-core.version>
+        <ms-data-core-api.version>0.11.25-SNAPSHOT</ms-data-core-api.version>
+        <inspector-mzgraph-browser.version>2.0.0-SNAPSHOT</inspector-mzgraph-browser.version>
+        <inspector-quality-chart.version>2.0.0-SNAPSHOT</inspector-quality-chart.version>
+        <inspector-swing-utils.version>2.0.0-SNAPSHOT</inspector-swing-utils.version>
+        <javahelp.version>2.0.02</javahelp.version>
+        <pride-utilities.version>0.1.22</pride-utilities.version>
+        <jnlp-api.version>1.5.0</jnlp-api.version>
+        <commons-cli.version>1.2</commons-cli.version>
+        <eventbus.version>1.4</eventbus.version>
+        <swingx-all.version>1.6.5-1</swingx-all.version>
+        <ehcache.version>2.7.0</ehcache.version>
+        <balloontip.version>1.2.1</balloontip.version>
+        <protein-details-fetcher.version>1.0.4</protein-details-fetcher.version>
+        <accession-resolver.version>1.0.3</accession-resolver.version>
+        <prider-ws-model.version>0.1.6.1</prider-ws-model.version>
+        <jackson-mapper-asl.version>1.9.9</jackson-mapper-asl.version>
+        <httpcore.version>4.3.2</httpcore.version>
+        <spring-web.version>3.2.3.RELEASE</spring-web.version>
+        <prider-data-provider-api.version>1.0</prider-data-provider-api.version>
+        <httpclient.version>4.3.3</httpclient.version>
+        <spring-security-core.version>3.2.1.RELEASE</spring-security-core.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- logging dependencies -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback-core.version}</version>
+        </dependency>
+
+        <!--ms-core-api dependency-->
+        <dependency>
+            <groupId>uk.ac.ebi.pride.utilities</groupId>
+            <artifactId>ms-data-core-api</artifactId>
+            <version>${ms-data-core-api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>uk.ac.ebi.pride.toolsuite</groupId>
+            <artifactId>inspector-mzgraph-browser</artifactId>
+            <version>${inspector-mzgraph-browser.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>uk.ac.ebi.pride.toolsuite</groupId>
+            <artifactId>inspector-quality-chart</artifactId>
+            <version>${inspector-quality-chart.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>uk.ac.ebi.pride.toolsuite</groupId>
+            <artifactId>inspector-swing-utils</artifactId>
+            <version>${inspector-swing-utils.version}</version>
+        </dependency>
+
+
+        <!-- javaHelp -->
+        <dependency>
+            <groupId>javax.help</groupId>
+            <artifactId>javahelp</artifactId>
+            <version>${javahelp.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>uk.ac.ebi.pride</groupId>
+            <artifactId>pride-utilities</artifactId>
+            <version>${pride-utilities.version}</version>
+        </dependency>
+
+        <dependency>
+            <!--Use the following command to add jnlp.jar file to your local maven repository-->
+            <!--mvn install:install-file -Dfile="path\to\jdk\sample\jnlp\servlet\jnlp.jar" -DgroupId=javax.jnlp -DartifactId=jnlp-api -Dversion=1.5.0 =Dpackaging=jar-->
+            <groupId>javax.jnlp</groupId>
+            <artifactId>jnlp-api</artifactId>
+            <version>${jnlp-api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>${commons-cli.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bushe</groupId>
+            <artifactId>eventbus</artifactId>
+            <version>${eventbus.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.swinglabs.swingx</groupId>
+            <artifactId>swingx-all</artifactId>
+            <version>${swingx-all.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>${ehcache.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.java.balloontip</groupId>
+            <artifactId>balloontip</artifactId>
+            <version>${balloontip.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>uk.ac.ebi.pride.tools</groupId>
+            <artifactId>protein-details-fetcher</artifactId>
+            <version>${protein-details-fetcher.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>uk.ac.ebi.pride.tools</groupId>
+            <artifactId>accession-resolver</artifactId>
+            <version>${accession-resolver.version}</version>
+        </dependency>
+
+        <!-- PRIDE-R web service model-->
+        <dependency>
+            <groupId>uk.ac.ebi.pride.archive</groupId>
+            <artifactId>webservice-model</artifactId>
+            <version>${prider-ws-model.version}</version>
+        </dependency>
+
+        <!--json-->
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>${jackson-mapper-asl.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>${httpcore.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring-web.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring-security-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>uk.ac.ebi.pride.prider</groupId>
+            <artifactId>prider-data-provider-api</artifactId>
+            <version>${prider-data-provider-api.version}</version>
+        </dependency>
+
+        <!-- apache commons httpcomponents-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+
+        <!-- jsparklines for TableCellRender -->
+        <dependency>
+            <groupId>no.uib</groupId>
+            <artifactId>jsparklines</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+
+        <!-- Messages with ballontips -->
+        <dependency>
+            <groupId>net.java.balloontip</groupId>
+            <artifactId>balloontip</artifactId>
+            <version>1.2.4.1</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/db/*.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <!-- comment exclusion section out if want to run batch dbtest -->
+                    <excludes>
+                        <exclude>**/test</exclude>
+                        <exclude>**/test/*.class</exclude>
+                    </excludes>
+                    <archive>
+                        <manifest>
+                            <mainClass>uk.ac.ebi.pride.toolsuitegui.PrideInspectorBootstrap</mainClass>
+                            <!--use this if want to extract metadata from public mysql instance-->
+                            <!--<mainClass>uk.ac.ebi.pride.data.io.db.DBMetadataExtractor</mainClass>-->
+                            <!--use this if want to run batch dbtest-->
+                            <!--<mainClass>uk.ac.ebi.pride.dbtestst.FileControllerBatchTest</mainClass>-->
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib</classpathPrefix>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+
+        <profile>
+            <!-- To run this profile, you will have to use Maven command line -->
+            <id>pi-webstart-build</id>
+            <activation>
+                <property>
+                    <name>pi-webstart</name>
+                    <value>build</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo.webstart</groupId>
+                        <artifactId>webstart-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>jnlp-building</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jnlp</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!-- Include all the dependencies -->
+                            <excludeTransitive>false</excludeTransitive>
+                            <!-- The path where the libraries are stored -->
+                            <libPath>lib</libPath>
+                            <jnlp>
+                                <inputTemplate>webstart/jnlp-template.vm</inputTemplate>
+                                <outputFile>pride-inspector.jnlp</outputFile>
+
+                                <mainClass>uk.ac.ebi.pride.toolsuite.gui.PrideInspector</mainClass>
+                            </jnlp>
+                            <sign>
+                                <keystore>${keystore.path}</keystore>
+                                <alias>${keystore.alias}</alias>
+                                <storepass>${keystore.store.password}</storepass>
+                                <keypass>${keystore.key.password}</keypass>
+
+                                <keystoreConfig>
+                                    <delete>false</delete>
+                                    <gen>false</gen>
+                                </keystoreConfig>
+                            </sign>
+                            <!-- building process -->
+                            <pack200>false</pack200>
+                            <verbose>true</verbose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>pi-desktop-build</id>
+            <activation>
+                <property>
+                    <name>desktop</name>
+                    <value>build</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>${project.basedir}/assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <repositories>
+        <repository>
+            <id>PRIDE_SourceForge_Maven2_Repository</id>
+            <url>http://pride-proteome.sourceforge.net/maven2</url>
+        </repository>
+        <repository>
+            <id>genesis-maven2-repository</id>
+            <name>Genesis maven2 repository</name>
+            <url>http://genesis.UGent.be/maven2</url>
+        </repository>
+        <!-- EBI repo -->
+        <repository>
+            <id>nexus-ebi-repo</id>
+            <name>The EBI internal repository</name>
+            <url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo/</url>
+            <releases>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <!-- EBI SNAPSHOT repo -->
+        <repository>
+            <id>nexus-ebi-snapshot-repo</id>
+            <name>The EBI internal snapshot repository</name>
+            <url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+            </snapshots>
+        </repository>
+    </repositories>
+
+</project>

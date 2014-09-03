@@ -1,0 +1,400 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/s.css">
+    <title>Quantification Tab</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+<!-- header -->
+<div id="header">
+    <h1>Quantification Tab</h1>
+</div>
+
+<!-- navigation -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+    <tr>
+        <td align="left" class="topicpath">
+            <a href="mzgraph.html">Previous</a> | <a href="quality_chart.html">Next</a> | <a
+                href="#topicSeeAlsoTopicsList">See Also</a>
+        </td>
+        <td width="70%" class="topicpath"></td>
+    </tr>
+</table>
+
+<!-- table of contents -->
+<div class="introduction">
+    <p>
+        The Quantification Tab provides a view on quantitative data. It displays all identified proteins and peptides,
+        along with their quantitative values. Additionally, it provides visualization for comparing protein quantity and
+        spectrum.
+    </p>
+
+    <p>
+        From top to bottom, you can see three main areas of information:
+    <ul>
+        <li><a href="#protein">Protein Quantification</a> - a summary table on the protein quantification</li>
+        <li><a href="#peptide">Peptide Quantification</a> - displays the peptides identifying the currently selected
+            protein, and their quantification.
+        </li>
+        <li><a href="#sample">Samples</a> - show all the samples used in the experiment.
+        </li>
+        <li><a href="#compare">Protein Quantification Comparison</a> - histogram for comparing protein quantification.
+        </li>
+        <li><a href="#spectrum">Spectrum Browser</a> - shows the spectrum identifying the currently selected peptide.
+        </li>
+    </ul>
+    </p>
+
+    <div class="note">
+        <p>
+            You can get more information about the principles behind these quantitative data from:
+            <a href="../quant_principle.html">Quantification Principles</a>
+        </p>
+    </div>
+
+    <div class="note">
+        <p>
+            If you want to focus on just one section of the data, you can use the little arrows on the split bar to hide
+            and
+            show component.
+        </p>
+    </div>
+</div>
+
+<!-- content -->
+<div id="content">
+<div class="section">
+<div class="piProcedureSteps">
+    <a name="protein"></a>
+
+    <h3>Protein Quantification</h3>
+
+    <p>
+        To better illustrate the protein quantification information, a short summary is shown on top of the
+        protein table.
+        It shows the <span class="keyword">Method</span> of quantification technique, such as: ITRAQ.
+
+    <div class="note">
+        <p>
+            You can set the control sample by clicking on the <span class="annotation">Set Control Sample</span> button
+            on top of the protein quantification table. Every time a new control sample is set, the columns which
+            relates to quantification ratios will change both the headers and their contents. This action is also
+            synchronised to the peptide quantification table and the protein comparison histogram.
+        </p>
+    </div>
+
+    <div class="note">
+        <p>
+            Click on <span class="annotation">Decoy Filter</span> to set a filter to show or hide decoy protein
+            identifications
+        </p>
+
+        <p>
+            More information on <span class="annotation"><a href="../protein/decoy_filter.html">Decoy Filter</a></span>
+        </p>
+    </div>
+
+    <p>
+        You can click on <img src="../../images/show_column.png" alt="Show/Hide Icon"/> to show or hide columns, and the
+        table below gives a short description for every column in the protein table, most of them are hidden by
+        default, you can show them by clicking on the icon at the top-right corner of the table:
+
+    <div class="note">
+        <p>
+            The number of columns for showing quantification data depend on the input data, for
+            instance, for an ITRAQ 4-plex experiment using 114 as the control sample, three ratio can be shown: 115/114,
+            116/114 and 117/114.
+        </p>
+    </div>
+    <div class="note">
+        <p>
+            The column which contains a list of checkbox allows you to select the proteins of your interest to compare
+            them in the protein quantification comparison histogram.
+        </p>
+    </div>
+    <table class="piTable" width="100%" cellpadding="4" cellspacing="4">
+        <tr class="piRowHead">
+            <td width="20%">Column</td>
+            <td>Description</td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">Row Number</td>
+            <td>Displays the row number</td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">Submitted Protein Accession</td>
+            <td>This is the original protein accession in the file/PRIDE experiment.</td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">Mapped Protein Accession</td>
+            <td>As submitted protein accessions are sometimes
+                in none-standard formats PRIDE Inspector will try to convert it to a more
+                common format.
+            </td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">Protein Name</td>
+            <td>Protein name downloaded using the mapped protein accession
+            </td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">Status</td>
+            <td>Status of the protein accession, the accession could be active, unknown, deleted, merged, demerged,
+                changed.
+            </td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">Coverage</td>
+            <td>Protein sequence coverage calculated using protein sequence downloaded and its peptide identifications.
+            </td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">pI</td>
+            <td>Theoretical isoelectric point calculated using protein sequence.
+            </td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">Score</td>
+            <td>PRIDE protein b1Score</td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">Threshold</td>
+            <td>PRIDE protein threshold</td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">#Peptides</td>
+            <td>Number of peptides identifying this protein.</td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">#Distinct Peptides</td>
+            <td>Number of distinct peptides identifying this protein.</td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">#PTMs</td>
+            <td>The total number of post translational modifications identified in the protein.
+            </td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">Identification ID</td>
+            <td>unique protein identification id.
+            </td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">More</td>
+            <td>column to show all the additional params in an extra dialog.
+            </td>
+        </tr>
+    </table>
+
+    <div class="note">
+        A bar chart is drawn for each quantification value, this is to better illustrate the results. For values are
+        less than 1, a red bar is shown, for values are greater than 1, a blue bar is shown. The size of the bar
+        represents the change of the quantity.
+    </div>
+    </p>
+</div>
+
+<div class="piProcedureSteps">
+    <a name="peptide"></a>
+
+    <h3>Peptide</h3>
+
+    <p>
+        This table shows a list of peptides used to identify the selected protein, it also shows to the quantitative
+        results detected for these peptides.
+    </p>
+
+    <p>
+        You can click on <img src="../../images/show_column.png" alt="Show/Hide Icon"/> to show or hide columns, and the
+        table below gives a short description for every column in the peptide table, like the protein table, most of
+        these columns will be hidden by default, you can show them by clicking at the table control icon on the
+        top-right corner of the table.
+    </p>
+
+    <div class="note">
+        <p>
+            Clicking a row in the peptide quantification table selects a peptide, if the spectrum used to identify
+            this peptide is available, it will be shown in the <span class="annotation">Spectrum Browser </span> below.
+        </p>
+    </div>
+    <table class="piTable" width="100%" cellpadding="4" cellspacing="4">
+        <tr class="piRowHead">
+            <td width="20%">Column</td>
+            <td>Description</td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">Row Number</td>
+            <td>Displays the row number</td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">Peptide Sequence</td>
+            <td>The complete peptide sequence is shown with modified amino acids highlighted in red. If you
+                mouse
+                over the peptide sequence, a tooltip with PTM details will be displayed.
+            </td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">Fit In Sequence</td>
+            <td>whether the peptide sequence fits the protein sequence, it could be unknown when the protein sequence is
+                no available, or fit if the peptide sequence can be found at the given start and stop position of the
+                protein sequence, or fuzzy fit if the peptide position no longer fit, but the peptide sequence can still
+                be found in the protein sequence.
+            </td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">Submitted Protein Accession</td>
+            <td>The peptide's protein accession from the original data file/PRIDE experiment.</td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">Mapped Protein Accession</td>
+            <td>As the submitted protein accessions can sometimes
+                be in none-standard format PRIDE Inspector will try to convert it to a more
+                common format.
+            </td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">Precursor Charge</td>
+            <td>Precursor ion charge</td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">Delta m/z</td>
+            <td>
+                The difference between the observed and theoretical m/z.
+            </td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">Precursor m/z</td>
+            <td>Precursor ion m/z value.</td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">#PTMs</td>
+            <td>Number of post translational modifications on this peptide.</td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">PTM List</td>
+            <td>A distinct list of PTM accessions with their count</td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">#Ions</td>
+            <td>Number of fragment ions assigned to this peptide identification.</td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">Peptide Score</td>
+            <td>
+                Peptide b1Score given by the search engine, the number of columns depends on the search engine
+                used.
+                For instance, mascot b1Score will be displayed if Mascot search engine is used. Both X correlation
+                and
+                Delta Cn will be displayed for SEQUEST search engine.
+            </td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">Length</td>
+            <td>Peptide length</td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">Start</td>
+            <td>The start position of the peptide within protein sequence.</td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">Stop</td>
+            <td>The stop position of the peptide within protein sequence.</td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">pI</td>
+            <td>Theoretical isoelectric point</td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">Spectrum</td>
+            <td>Spectrum ID</td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">Identification ID</td>
+            <td>Unique protein identification ID</td>
+        </tr>
+        <tr class="piRowEven">
+            <td width="20%">Peptide ID</td>
+            <td>Peptide ID for a given protein identification</td>
+        </tr>
+        <tr class="piRowOdd">
+            <td width="20%">More</td>
+            <td>Show additional params for the peptide</td>
+        </tr>
+    </table>
+</div>
+
+<div class="piProcedureSteps">
+    <a name="sample"></a>
+
+    <h3>Sample Table</h3>
+
+    <p>
+        Sample Table shows a summary of all the samples used in this experiment, each row reprents a sub sample, it
+        includes reagent name, species, tissue, GO term and a sample description.
+    </p>
+</div>
+
+<div class="piProcedureSteps">
+    <a name="compare"></a>
+
+    <h3>Protein Quantification Comparison Histogram</h3>
+
+    <p>
+        This histogram shows the quantitative values of the selected proteins from the protein table, the values are
+        grouped by the reagent ratios. Due to screen size limitation, maximum ten proteins are allowed.
+    </p>
+
+    <p>
+        Every time a new control sample is set, this hisgram will be updated automatically as well.
+    </p>
+
+    <div class="note">
+        <p>
+            You can right click on the histogram to save the histogram, supported formats are: pdf, svg, png, jpeg and
+            gif.
+            You can also print the histogram by right click.
+        </p>
+    </div>
+</div>
+<div class="piProcedureSteps">
+    <a name="spectrum"></a>
+
+    <h3>Spectrum Browser</h3>
+
+    <p>
+        The Spectrum Browser shows the spectrum identifying the selected peptide.
+        <br>
+        For more details, please refer to: <a href="../mzgraph/spectra.html">Spectrum Browser</a>.
+    </p>
+</div>
+
+</div>
+</div>
+
+
+<div id="seealso">
+    <a name="topicSeeAlsoTopicsList"></a>
+
+    <h2>See Also</h2>
+
+    <p>
+        <strong>Other titles:</strong>
+    </p>
+
+    <ul>
+        <li><a href="../export_quant.html">Exporting Qunatitative Data</a></li>
+    </ul>
+</div>
+<div id="footer">
+    <p>Comments, questions, suggestions? See the
+        <a href="../../feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+    </p>
+</div>
+</div>
+</body>
+</html>

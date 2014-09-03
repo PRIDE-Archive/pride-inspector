@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../css/s.css">
+    <title>What to do when PRIDE Inspector run out of memory?</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+    <!-- header -->
+    <div id="header">
+        <h1>What to do when PRIDE Inspector run out of memory?</h1>
+    </div>
+
+    <!-- navigation -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+        <tr>
+            <td align="left" class="topicpath">
+                <a href="mzml.html">Previous</a> | <a href="deltamz.html">Next</a> | <span style="color:#666666;">See Also</span>
+            </td>
+            <td width="70%" class="topicpath"></td>
+        </tr>
+    </table>
+
+    <!-- table of contents -->
+    <div class="introduction">
+        <p>
+            Although PRIDE Inspector is design to handle large data sets with small memory footprint, it can still run
+            out of memory if many files or public experiments are opened at the same time. If you have seen such a
+            warning message in a pop-up window, you should try to increase the memory allocation for the program.This
+            can be done by editing the config.props file, this file is located in the config folder of the installation
+            directory.
+        </p>
+        <p>
+            In the file, change the <b>pride.inspector.max.memory=1024</b> to a higher number, for instance,
+            <b>pride.inspector.max.memory=2048</b> will give PRIDE Inspector 2G of memory. Please note that you will need to
+            restart PRIDE Inspector in order for the change to take effect. It is also important to know that on a
+            32-bit operating system you can not increase this value beyond 2000.
+        </p>
+    </div>
+
+    <div id="footer">
+        <p>Comments, questions, suggestions? See the
+            <a href="../feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+        </p>
+    </div>
+</div>
+</body>
+</html>

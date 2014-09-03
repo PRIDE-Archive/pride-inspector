@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../css/s.css">
+    <title>How does PRIDE Inspector calculate delta m/z?</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+    <!-- header -->
+    <div id="header">
+        <h1>How does PRIDE Inspector calculate delta m/z?</h1>
+    </div>
+
+    <!-- navigation -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+        <tr>
+            <td align="left" class="topicpath">
+                <a href="memory.html">Previous</a> | <a href="shared_peptide.html">Next</a> | <a
+                    href="#topicSeeAlsoTopicsList">See Also</a>
+            </td>
+            <td width="70%" class="topicpath"></td>
+        </tr>
+    </table>
+
+    <!-- table of contents -->
+    <div class="introduction">
+        <p>
+            Four types of information have been taken into account to calculate delta m/z in PRIDE Inspector:
+        <ul>
+            <li>Peptide Sequence - Required</li>
+            <li>Post translational modifications - Optional</li>
+            <li>Precursor m/z - Required</li>
+            <li>Precursor charge - Required</li>
+        </ul>
+        </p>
+
+        <div class="note">
+            The calculation can be broken down into the following steps:
+            <br><br>
+            1. Calculate peptide mass: simply sum the masses of all the amino acids in the peptide.
+            <br><br>
+            2. Calculate PTM mass: simply sum the masses of all the post translational modifications in the peptide.
+            <br><br>
+            3. Calculate theoretical mass: [Peptide mass - PTM mass - 18 dalton].
+            <br><br>
+            4. Calculate precursor mass: [(Precursor m/z * Precursor charge) - (Precursor charge * 1 dalton)].
+            <br><br>
+            5. Calculate detla m/z: [(Precursor mass - Theoretical mass)/Precursor charge].
+        </div>
+    </div>
+
+    <div id="seealso">
+        <a name="topicSeeAlsoTopicsList"></a>
+
+        <h2>See Also</h2>
+
+        <p>
+            <strong>Other topics:</strong>
+        </p>
+
+        <ul>
+            <li><a href="../usage/browse/protein.html">Protein Tab</a></li>
+        </ul>
+    </div>
+
+    <div id="footer">
+        <p>Comments, questions, suggestions? See the
+            <a href="../feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+        </p>
+    </div>
+</div>
+</body>
+</html>

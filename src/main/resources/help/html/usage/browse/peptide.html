@@ -1,0 +1,283 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/s.css">
+    <title>Peptide Tab</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+<!-- header -->
+<div id="header">
+    <h1>Peptide Tab</h1>
+</div>
+
+<!-- navigation -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+    <tr>
+        <td align="left" class="topicpath">
+            <a href="protein.html">Previous</a> | <a href="mzgraph.html">Next</a> | <a
+                href="#topicSeeAlsoTopicsList">See Also</a>
+        </td>
+        <td width="70%" class="topicpath"></td>
+    </tr>
+</table>
+
+<!-- table of contents -->
+<div class="introduction">
+    <p>
+        The Peptide Tab provides a peptide centric view. All identified peptides are displayed in this
+        area. The total number of peptides is part of the tab title.
+    </p>
+
+    <p>
+        From top to bottom, you can see three main areas of information:
+    <ul>
+        <li><a href="#peptide">Peptide</a> - a summary table containing all peptides in the experiment
+        </li>
+        <li><a href="#psm">PSM</a> - a table showing the peptide-spectrum matches in the selected peptide
+        </li>
+        <li><a href="#spectrum">Spectrum Browser</a> - visualizes the spectrum used to identified the peptide.
+        </li>
+        <li><a href="#sequence">Protein Sequence Viewer</a> - shows the peptides and ptm coverage in protein sequence
+        </li>
+    </ul>
+    </p>
+
+    <div class="note">
+        <p>
+            You can select the peptide you are interested in by clicking on the respective row in the peptide table.
+            This
+            will trigger an automatic update of both the PTM table and the spectrum browser. The of PTMs
+            in the selected peptide will be updated in the PTM table. Additionally, the spectrum identifying
+            the selected peptide will be displayed.
+        </p>
+    </div>
+
+    <div class="note">
+        <p>
+            You can sort the table according to the column by clicking on the column's title. Sorting can be
+            either ascending or descending.
+        </p>
+    </div>
+</div>
+
+<!-- content -->
+<div id="content">
+    <div class="section">
+        <div class="piProcedureSteps">
+            <a name="peptide"></a>
+
+            <h3>Peptide</h3>
+
+            <p>
+
+            <div class="note">
+                <p>
+                    An mass spec experiment often don't contain protein names and protein sequences, these are the
+                    key
+                    information to interpret the protein identification results. In the PRIDE Inspector, you can click
+                    on
+                    <span class="annotation">Obtain Protein Details</span>
+                    to retrieve the complete protein names, protein accession status, protein sequence and protein
+                    sequence
+                    coverage. Once clicked, two extra columns will be added to the protein table: protein name and fit.
+                    [Note
+                    that, this requires an active Internet
+                    connection]
+                </p>
+
+                <p>
+                    More information on <span class="annotation"><a href="../protein/obtain_protein_details.html">Obtain
+                    Protein
+                    Details</a></span>
+                </p>
+            </div>
+
+            You can click on <img src="../../images/show_column.png" alt="Show/Hide Icon"/> to show or hide columns, and
+            the
+            table below gives a short description for every column in the peptide table:
+            <table class="piTable" width="100%" cellpadding="4" cellspacing="4">
+                <tr class="piRowHead">
+                    <td width="20%">Column</td>
+                    <td>Description</td>
+                </tr>
+                <tr class="piRowOdd">
+                    <td width="20%">Peptide Sequence</td>
+                    <td>The complete peptide sequence is shown with modified amino acids highlighted in red. If you
+                        mouse
+                        over the peptide sequence, a tooltip with PTM details will be displayed.
+                    </td>
+                </tr>
+                <tr class="piRowEven">
+                    <td width="20%">Fit</td>
+                    <td>whether the peptide sequence fits the protein sequence, it could be unknown when the protein
+                        sequence is
+                        no available, or fit if the peptide sequence can be found at the given start and stop position
+                        of the
+                        protein sequence, or fuzzy fit if the peptide position no longer fit, but the peptide sequence
+                        can still
+                        be found in the protein sequence.
+                    </td>
+                </tr>
+                <tr class="piRowOdd">
+                    <td width="20%">Protein</td>
+                    <td>The peptide's protein accession</td>
+                </tr>
+                <tr class="piRowEven">
+                    <td width="20%">Modification</td>
+                    <td>Post translational modifications on this peptide.</td>
+                </tr>
+                <tr class="piRowOdd">
+                    <td width="20%">#PSM</td>
+                    <td>A number of peptide-spectrum matches</td>
+                </tr>
+                <tr class="piRowEven">
+                    <td width="20%">Length</td>
+                    <td>Peptide length</td>
+                </tr>
+                <tr class="piRowOdd">
+                    <td width="20%">pI</td>
+                    <td>Theoretical isoelectric point calculated using peptide sequence. See details from <a
+                            href="../isoelectric_point.html">here</a>.
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="piProcedureSteps">
+            <a name="psm"></a>
+
+            <h3>PSM</h3>
+
+            <p>
+                You can click on <img src="../../images/show_column.png" alt="Show/Hide Icon"/> to show or hide columns,
+                and the
+                table below gives a short description for every column in the PTM table:
+            <table class="piTable" width="100%" cellpadding="4" cellspacing="4">
+                <tr class="piRowHead">
+                    <td width="20%">Column</td>
+                    <td>Description</td>
+                </tr>
+                <tr class="piRowOdd">
+                    <td width="20%">Peptide Sequence</td>
+                    <td>The complete peptide sequence is shown with modified amino acids highlighted in red. If you
+                        mouse
+                        over the peptide sequence, a tooltip with PTM details will be displayed.
+                    </td>
+                </tr>
+                <tr class="piRowEven">
+                    <td width="20%">Fit</td>
+                    <td>whether the peptide sequence fits the protein sequence, it could be unknown when the protein
+                        sequence is
+                        no available, or fit if the peptide sequence can be found at the given start and stop position
+                        of the
+                        protein sequence, or fuzzy fit if the peptide position no longer fit, but the peptide sequence
+                        can still
+                        be found in the protein sequence.
+                    </td>
+                </tr>
+                <tr class="piRowOdd">
+                    <td width="20%">Ranking</td>
+                    <td>The ranking given by the search engine</td>
+                </tr>
+                <tr class="piRowEven">
+                    <td width="20%">Delta m/z</td>
+                    <td>
+                        The difference between the observed and theoretical m/z.
+                    </td>
+                </tr>
+                <tr class="piRowOdd">
+                    <td width="20%">Charge</td>
+                    <td>Precursor ion charge</td>
+                </tr>
+
+                <tr class="piRowEven">
+                    <td width="20%">Precursor m/z</td>
+                    <td>Precursor ion m/z value.</td>
+                </tr>
+                <tr class="piRowOdd">
+                    <td width="20%">Modifications</td>
+                    <td>A distinct list of PTM accessions with their count</td>
+                </tr>
+                <tr class="piRowEven">
+                    <td width="20%">Peptide Score</td>
+                    <td>
+                        Peptide b1Score given by the search engine, the number of columns depends on the search engine
+                        used.
+                        For instance, mascot b1Score will be displayed if Mascot search engine is used. Both X
+                        correlation
+                        and
+                        Delta Cn will be displayed for SEQUEST search engine.
+                    </td>
+                </tr>
+                <tr class="piRowOdd">
+                    <td width="20%">Length</td>
+                    <td>Peptide length</td>
+                </tr>
+                <tr class="piRowEven">
+                    <td width="20%">Start</td>
+                    <td>The start position of the peptide within protein sequence.</td>
+                </tr>
+                <tr class="piRowOdd">
+                    <td width="20%">Stop</td>
+                    <td>The stop position of the peptide within protein sequence.</td>
+                </tr>
+                <tr class="piRowEven">
+                    <td width="20%">Spectrum Id</td>
+                    <td>Spectrum ID</td>
+                </tr>
+            </table>
+            </p>
+        </div>
+
+        <div class="piProcedureSteps">
+            <a name="spectrum"></a>
+
+            <h3>Spectrum Browser</h3>
+
+            <p>
+                Displays the spectrum identifying the selected peptide.
+                <br>
+                For more details, please refer to: <a href="../mzgraph/spectra.html">Spectrum Browser</a>.
+            </p>
+        </div>
+
+        <div class="piProcedureSteps">
+            <a name="sequence"></a>
+
+            <h3>Protein Sequence Viewer</h3>
+
+            <p>
+                The Protein Sequence Viewer can be used to visualize downloaded protein sequence, and colour code it
+                with
+                peptide and ptm identifications.
+                <br>
+                For more details, please refer to: <a href="../protein/protein_sequence_viewer.html">Protein Sequence
+                Viewer</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<div id="seealso">
+    <a name="topicSeeAlsoTopicsList"></a>
+
+    <h2>See Also</h2>
+
+    <ul>
+        <li><a href="../export.html">Exporting Data from PRIDE Inspector</a></li>
+    </ul>
+</div>
+<div id="footer">
+    <p>Comments, questions, suggestions? See the
+        <a href="../../feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+    </p>
+</div>
+</div>
+</body>
+</html>

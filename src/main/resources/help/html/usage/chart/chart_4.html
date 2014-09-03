@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/s.css">
+    <title>Distribution of Precursor Ion Masses Chart</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+    <!-- header -->
+    <div id="header">
+        <h1>Distribution of Precursor Ion Masses Chart</h1>
+    </div>
+
+    <!-- navigation -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+        <tr>
+            <td align="left" class="topicpath">
+                <a href="chart_3.html">Previous</a> |
+                <a href="chart_5.html">Next</a> |
+                <a href="#topicSeeAlsoTopicsList">See Also</a>
+            </td>
+            <td width="70%" class="topicpath"></td>
+        </tr>
+    </table>
+
+    <!-- table of contents -->
+    <div class="introduction">
+        <p>Displays a relative frequency distribution of precursor ion masses for a single PRIDE experiment (<span style="color:red">red</span>) against other derived precursor ion mass distribution and its upper and lower quartiles.</p>
+    </div>
+
+    <!-- content -->
+    <div id="content">
+        <div class="section">
+            <h3>Explanation</h3>
+            <p>
+                A relative frequency distribution of precursor ion masses for the experiment (red curve) against a
+                reference (if selected by the user). It is possible to filter the information for all, identified and
+                unidentified spectra. Three references are available for the users:
+            </p>
+            <ol>
+                <li>
+                    Empirically derived precursor ion mass distributions from all PRIDE experiments that have a single
+                    tryptic digest step annotation associated with them and its upper and lower quartiles. This reference
+                    is aimed to provide a species independent distribution.
+                </li>
+                <li>
+                    Reference obtained in an analogous way from PRIDE human experiments.
+                </li>
+                <li>
+                    Reference obtained in an analogous way from PRIDE mouse experiments.
+                </li>
+            </ol>
+            <p>
+                Experiments that only contained peptides without missed cleavages were ignored as such results are caused
+                by specific search engines parameters and do not reflect the biological background. These peptides are
+                generally shorter and thus these experiments would shift the overall distribution towards the lower masses.
+            </p>
+            <p>
+                A (red) curve that lies to the left of the empirical distribution (in a different color) identifies a
+                disproportionate number of lower mass peptides being identified / fragmented. In an analogous way, a
+                (red) curve that lies to the right of the empirical distribution identifies a disproportionate number of
+                higher mass peptides being identified / fragmented.
+            </p>
+            <p>
+                Such alterations may be caused by the general amino acid composition of the organism being investigated,
+                or the digestion protocol used (non-tryptic) but does not necessarily indicate a problem in your experiment.
+            </p>
+
+            <img src="images/precursor_ion_masses.png" alt="Distribution of Precursor Ion Masses example" />
+
+            <p>
+                For human the average tryptic peptide mass is 1100 Daltons. This distribution should encompass this average.
+                The shift to the right in this distribution is expected due to the number of missed cleavages resulting
+                in higher mass peptides.
+            </p>
+        </div>
+    </div>
+
+
+    <div id="seealso">
+        <a name="topicSeeAlsoTopicsList"></a>
+
+        <h2>See Also</h2>
+
+        <p>
+            <strong>Title:</strong>
+        </p>
+
+        <ul>
+            <li><a href="chart_1.html">Peak Intensity Distribution Chart</a></li>
+            <li><a href="chart_2.html">Precursor Ion Charge Distribution Chart</a></li>
+            <li><a href="chart_3.html">Average MS/MS spectrum</a></li>
+            <li><a href="chart_5.html">Number of Peptides Identified per Protein Chart</a></li>
+            <li><a href="chart_6.html">Number of Peaks per Spectrum Chart</a></li>
+            <li><a href="chart_7.html">Delta m/z Chart</a></li>
+            <li><a href="chart_8.html">Number of Missed Tryptic Cleavages Chart</a></li>
+        </ul>
+    </div>
+    <div id="footer">
+        <p>Comments, questions, suggestions? See the
+            <a href="../../feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+        </p>
+    </div>
+</div>
+</body>
+</html>

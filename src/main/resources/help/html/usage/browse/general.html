@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/s.css">
+    <title>General Tab</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+    <!-- header -->
+    <div id="header">
+        <h1>General Tab</h1>
+    </div>
+
+    <!-- navigation -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+        <tr>
+            <td align="left" class="topicpath">
+                <a href="../browse_data.html">Previous</a> | <a href="protein.html">Next</a> | <a
+                    href="#topicSeeAlsoTopicsList">See Also</a>
+            </td>
+            <td width="70%" class="topicpath"></td>
+        </tr>
+    </table>
+
+    <!-- table of contents -->
+    <div class="introduction">
+        <p>
+            The General Tab provides a unified view on the metadata of different types of data sources. It is
+            arranged in a series of three panels, each panel showing a specific type of metadata. The type of metadata
+            is indicated by the panel's title. Each metadata panel can be viewed by clicking on the button at the top of
+            the
+            General Tab.
+        </p>
+        <br>
+
+        <p>
+            You can find out more about each metadata panels in the sections below:
+        </p>
+        <ul>
+            <li><a href="#general">Experiment General</a></li>
+            <li><a href="#sample">Sample & Protocol</a></li>
+            <li><a href="#software">Instrument & Processing</a></li>
+        </ul>
+    </div>
+
+    <!-- content -->
+    <div id="content">
+        <div class="section">
+            <div class="piProcedureSteps">
+                <a name="general"></a>
+
+                <h3>Experiemnt General</h3>
+
+                <p>
+                    The overall information about the experiment.
+                    <br>
+                    The top section of this panel shows a summary of the key metadata, this include experiment title,
+                    project name, sample species, sample tissues, mass spec instrument and a short experiment
+                    description.
+                    <br>
+                    References of this experiment will be displayed if present, along with contact information and
+                    additional support information.
+                </p>
+            </div>
+
+            <div class="piProcedureSteps">
+                <a name="sample"></a>
+
+                <h3>Sample & Protocol</h3>
+
+                <p>
+                    Additional information on the sample investigated in the experiment. Both <span
+                        class="keyword">mzML</span> and <span class="keyword">PRIDE XML</span>
+                    format contain this information. It generally contains the species, tissue and cell
+                    type investigated in the experiment.
+                </p>
+
+                <p>
+                    The protocol table gives a detailed description on the experimental steps. It starts with the
+                    protocol name, followed by a list of steps. Note that, only PRIDE XML contains this information.
+                </p>
+            </div>
+
+            <div class="piProcedureSteps">
+                <a name="software"></a>
+
+                <h3>Instrument & Processing</h3>
+
+                <p>
+                    Instrument Configuration captures the mass spectrometer model. It contains the following key
+                    sections:
+                <ul>
+                    <li>Instrument Name - Descriptive name of the instrument (make, model, significant customisations)
+                    </li>
+                    <li>Source - Invariant ion source (e.g. MALDI) information, as a run of name-value pairs</li>
+                    <li>Analyzer - Mass analyzer component (e.g. quadrupole, collision cell), ordered so as to reflect
+                        the
+                        physical order of the
+                        described components in the mass spectrometer.
+                    </li>
+                    <li>Detector - Ion detector information, as a run of name-value pairs.</li>
+                </ul>
+                </p>
+                <p>
+                    Data processing shows a description of the default processing by which the peak list(s) were
+                    generated, it also displayed the software been used.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="seealso">
+        <a name="topicSeeAlsoTopicsList"></a>
+
+        <h2>See Also</h2>
+
+        <p>
+            <strong>File formats:</strong>
+        </p>
+
+        <ul>
+            <li><a href="../../faq/mzml.html">mzML</a></li>
+            <li><a href="../../faq/pride_xml.html">PRIDE XML</a></li>
+        </ul>
+    </div>
+    <div id="footer">
+        <p>Comments, questions, suggestions? See the
+            <a href="../../feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+        </p>
+    </div>
+</div>
+</body>
+</html>

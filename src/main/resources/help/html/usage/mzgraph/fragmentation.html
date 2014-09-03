@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/s.css">
+    <title>Fragmentation Table Browser</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+    <!-- header -->
+    <div id="header">
+        <h1>Fragmentation Table Browser</h1>
+    </div>
+
+    <!-- navigation -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+        <tr>
+            <td align="left" class="topicpath">
+                <a href="spectra.html">Previous</a> | <a href="chromatogram.html">Next</a> | <a
+                    href="#topicSeeAlsoTopicsList">See Also</a>
+            </td>
+            <td width="70%" class="topicpath"></td>
+        </tr>
+    </table>
+
+    <!-- table of contents -->
+    <div class="introduction">
+        <p>
+            Fragmentation Table Browser shows which peptide fragmentation ions match the spectra. 
+            This table and the peak labels on the <a href="./spectra.html">spectrum browser</a> are  
+            complementary ways of judging how well the peptide explains the spectra.            
+        </p>
+        <p>
+            Fragmentation Browser's features can be classified into the following four categories:
+        </p>
+        <ul>
+            <li><a href="#basics">Basic Interactions</a></li>
+            <li><a href="#manual">Display Manual Annotations</a></li>
+            <li><a href="#auto">Display Auto Annotations</a></li>
+            <li><a href="#none">Errors</a></li>
+        </ul>
+    </div>
+
+    <!-- content -->
+    <div id="content">
+        <div class="section">
+            <div class="piProcedureSteps">
+                <a name="basics"></a>
+
+                <h3>Basic interactions</h3>
+                <p>
+                    Fragmentation Table Browser including three parts: 
+                </p>
+                <ol>
+                      <li><a href="#toolbar">Tool Bar</a>: gives user to modify some parameters.</li>
+                      <li><a href="#table">Fragmentation Table</a>: shows peptide fragmentation ions match the spectra.</li>
+                      <li><a href="#chart">Errors Differ Chart</a>: shows the matches between theoretical digestion masses of the peptide and the peaks of the fragment ions for the spectra / peptide selected.</li>
+                </ol>
+
+                <p><a name="toolbar"></a>
+                    <span class="keyword">Tool Bar</span>: There are three components on the tool bar:
+                    <table class="piTable" width="100%" cellpadding="4" cellspacing="4">
+                        <tr class="piRowHead">
+                            <td width="20%">Tool Bar Component</td>
+                            <td>Description</td>
+                        </tr>
+    
+                        <tr class="piRowEven">
+                            <td width="20%"><span class="keyword"><a name="comment_label">Comment Label</a></span></td>
+                            <td>Shows current type of fragment ions matching.</td>
+                        </tr>
+
+                        <tr class="piRowOdd">
+                            <td width="20%"><span class="keyword"><a name="ion_pair">Choose Ion Type</a></span></td>
+                            <td>Choose one type of ions pair. Such as A_X means show A and X fragment ions in the <a href="#table">Fragmentation Table</a>. The default choosed value is B_Y ion pair.</td>
+                        </tr>
+
+                        <tr class="piRowEven">
+                            <td width="20%"><span class="keyword"><a name="interval_range">Range(Da)</a></span></td>
+                            <td>Choose error differ interval range from 0.1Da to 1.0Da in the <a href="#chart">Errors Differ Chart</a>. Default value is 0.5Da</td>
+                        </tr>
+                    </table>
+                </p>
+
+                <p><a name="table"></a>
+                    <span class="keyword">Fragmentation Table</span>:  shows peptide fragmentation ions match the spectra. Highlight on the table cell means there exists a fragment ion matching. When you click the cell, system will give an box annotation on the <a href="#chart">Errors Differ Chart</a>.
+
+                    <table class="piTable" width="100%" cellpadding="4" cellspacing="4">
+                        <tr class="piRowHead">
+                            <td width="20%">Ion Type</td>
+                            <td>Description</td>
+                        </tr>
+    
+                        <tr class="piRowEven">
+                            <td width="20%"><span class="keyword">y</span></td>
+                            <td>Y ion</td>
+                        </tr>
+
+                        <tr class="piRowOdd">
+                            <td width="20%"><span class="keyword">y++</span></td>
+                            <td>Doubly charge Y ion</td>
+                        </tr>
+
+                        <tr class="piRowEven">
+                            <td width="20%"><span class="keyword">y°</span></td>
+                            <td>Y ion with loss of water</td>
+                        </tr>
+
+                        <tr class="piRowOdd">
+                            <td width="20%"><span class="keyword">y°++</span></td>
+                            <td>Doubly charge Y ion with loss of water</td>
+                        </tr>
+
+                        <tr class="piRowEven">
+                            <td width="20%"><span class="keyword">y*</span></td>
+                            <td>Y ion with loss of ammonia</td>
+                        </tr>
+
+                        <tr class="piRowOdd">
+                            <td width="20%"><span class="keyword">y*++</span></td>
+                            <td>Doubly charge Y ion with loss of ammonia</td>
+                        </tr>
+                    </table>                   
+                </p>
+
+                <p><a name="chart"></a>
+                    <span class="keyword">Errors Differ Chart</span>: shows the matches between theoretical digestion masses of the peptide and the peaks of the fragment ions for the spectra / peptide selected. When you click one point on the chart, the according matched the <a href="#table">Fragmentation Table</a> cell background will become grey color.
+                </p>
+            </div>
+
+            <div class="piProcedureSteps">
+                <a name="manual"></a>
+
+                <h3>Display Manual Annotations</h3>
+
+                <p>
+                    If there exist fragment ion matches which stored in the PRIDE database, system will show these manual annotations to user.  
+                    At this context, <a href="#toolbar">Tool Bar</a>'s <a href="#comment_label">Comment Label</a> component will display 
+                    "Show manual annotations" message, and <a href="#interval_range">Range(Da)</a> component not display.
+                </p>
+            </div>
+
+            <div class="piProcedureSteps">
+                <a name="auto"></a>
+
+                <h3>Display Auto Annotations</h3>
+
+                <p>
+                    If there not exist fragment ion matches in the PRIDE database, system will using peptide spectrum matches (PTM) algorithms
+                    to generate some annotations automatically, and show them to user.  
+                    At this context, <a href="#toolbar">Tool Bar</a>'s <a href="#comment_label">Comment Label</a> component will display 
+                    "Show auto annotations." message, and <a href="#interval_range">Range(Da)</a> component will display.
+                </p>
+            </div>
+
+            <div class="piProcedureSteps">
+                <a name="none"></a>
+
+                <h3>Errors</h3>
+
+                <p>
+                    If delta mass over charge of peptide great than 1 Da, which means the spectra mass is not reliable. Thus, Fragmentation
+                    Table Browser hide the <a href="#toolbar">Tool Bar</a>, <a href="#table">Fragmentation Table</a> and the
+                    <a href="#chart">Errors Differ Chart</a>, only show "Delta m/z is too large, no fragmentation table!" message.
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="seealso">
+        <a name="topicSeeAlsoTopicsList"></a>
+
+        <h2>See Also</h2>
+
+        <p>
+            <strong>Other topics:</strong>
+        </p>
+
+        <ul>
+            <li><a href="spectra.html">Spectrum Browser</a></li>
+        </ul>
+    </div>
+    <div id="footer">
+        <p>Comments, questions, suggestions? See the
+            <a href="../../feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+        </p>
+    </div>
+</div>
+</body>
+</html>

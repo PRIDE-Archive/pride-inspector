@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/s.css">
+    <title>Number of Missed Tryptic Cleavages Chart</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+    <!-- header -->
+    <div id="header">
+        <h1>Number of Missed Tryptic Cleavages Chart</h1>
+    </div>
+
+    <!-- navigation -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+        <tr>
+            <td align="left" class="topicpath">
+                <a href="chart_7.html">Previous</a> |
+                <a href="../open_file.html">Next</a> |
+                <!-- a href="chart_9.html">Next</a> | -->
+                <a href="#topicSeeAlsoTopicsList">See Also</a>
+            </td>
+            <td width="70%" class="topicpath"></td>
+        </tr>
+    </table>
+
+    <!-- table of contents -->
+    <div class="introduction">
+        <p>Displays the number of missed tryptic cleavages.</p>
+    </div>
+
+    <!-- content -->
+    <div id="content">
+        <div class="section">
+            <h3>Explanation</h3>
+
+            <p>
+                A histogram representing the percentage of peptides in the experiment with a different number of missed
+                tryptic cleavages in peptides. This graph is only applicable to experiments where trypsin is used. Two
+                assumptions were made for these calculations: first, the enzyme used in the experiment is trypsin;
+                second, the cleavage rule used by the enzyme is “C-terminal side of K or R except if P is C-term to K or
+                R. This chart can be used to compare several experiments where the same number of missed cleavages has
+                been used as a parameter for the search, and the same experimental conditions used. Then a dramatic
+                change in the shape of the chart could mean a change in the efficiency of the trypsin used (though many
+                other factors can also be the reason for it such as change in the parameters of the search engine,
+                database size and other experimental causes).
+            </p>
+
+            <p>
+                In a more practical way, this chart has two immediate applications: first, checking that the search
+                engine is working correctly and the number of missed cleavages found in the identified peptides matches
+                with the "missed cleavages" parameters used in the search engine. Second, knowing the distribution of
+                this chart, the researcher can adjust the number of missed cleavages used in future searches: e.g. maybe
+                the use of 4 missed cleavages instead of 1 is producing only a 0.1% increase in peptide identifications
+                with searches 10 times longer.
+            </p>
+
+            <img src="images/missed_cleavages.png" alt="Number of Missed Tryptic Cleavages example"/>
+
+            <p>
+                This is an example with only about 10% of the peptides containing one missed cleavage.
+            </p>
+        </div>
+    </div>
+
+
+    <div id="seealso">
+        <a name="topicSeeAlsoTopicsList"></a>
+
+        <h2>See Also</h2>
+
+        <p>
+            <strong>Title:</strong>
+        </p>
+
+        <ul>
+            <li><a href="chart_1.html">Peak Intensity Distribution Chart</a></li>
+            <li><a href="chart_2.html">Precursor Ion Charge Distribution Chart</a></li>
+            <li><a href="chart_3.html">Average MS/MS spectrum</a></li>
+            <li><a href="chart_4.html">Distribution of Precursor Ion Masses Chart</a></li>
+            <li><a href="chart_5.html">Number of Peptides Identified per Protein Chart</a></li>
+            <li><a href="chart_6.html">Number of Peaks per Spectrum Chart</a></li>
+            <li><a href="chart_7.html">Delta m/z Chart</a></li>
+        </ul>
+    </div>
+    <div id="footer">
+        <p>Comments, questions, suggestions? See the
+            <a href="../../feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+        </p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+JFDML JFormDesigner: "5.1.0.2.64" Java: "1.6.0_24" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {comp separator1::t:::x, seq {space :::p, par l {comp headerPanel::l::506:x, comp splitPane1::l::506:x, seq t {space :0:360:x, comp button2:::p:70:p, space :::p, comp setButton:::p:70:p}}, space :::p}}"
+			"$verticalGroup": "par l {seq l {comp headerPanel:::p:24:p, space :::p, comp splitPane1::::330:x, space u:::p, comp separator1:::p:5:p, space :::p, par b {comp button2::b:p:25:p, comp setButton::b:p:25:p}, space :p:11:p}}"
+		} ) {
+			name: "this"
+			"$sizePolicy": 0
+			"$locationPolicy": 0
+			add( new FormContainer( "javax.swing.JSplitPane", new FormLayoutManager( class javax.swing.JSplitPane ) ) {
+				name: "splitPane1"
+				"dividerLocation": 146
+				"dividerSize": 4
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) {
+					"hgap": 8
+					"vgap": 8
+				} ) {
+					name: "menuPanel"
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "left"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "msFilesPanel"
+					add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+						name: "scrollPane1"
+						"preferredSize": new java.awt.Dimension( 450, 419 )
+						"foreground": sfield java.awt.Color white
+						add( new FormComponent( "javax.swing.JTable" ) {
+							name: "msFileTable"
+							"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector, new java.util.Vector {
+								add( "File Name" )
+								add( "Size (M)" )
+								add( "Type" )
+								add( "Remove" )
+							}, new java.util.Vector {
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( class java.lang.String )
+								add( null )
+							}, new java.util.Vector {
+								add( false )
+								add( false )
+								add( false )
+								add( false )
+							}, new java.util.Vector {
+								add( new com.jformdesigner.model.SwingTableColumn( null, 160, 0, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 55, 0, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 40, 0, 0, true ) )
+								add( new com.jformdesigner.model.SwingTableColumn( null, 60, 0, 0, true ) )
+							} )
+							"border": sfield com.jformdesigner.model.FormObject NULL_VALUE
+							"gridColor": new java.awt.Color( 255, 255, 255, 255 )
+							"focusTraversalPolicyProvider": true
+						} )
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "Center"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) {
+						"vgap": 12
+						"hgap": 12
+					} ) {
+						name: "globalAddPanel"
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "South"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) {
+						"alignment": 0
+						"hgap": 3
+						"vgap": 3
+					} ) {
+						name: "panel2"
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "West"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "right"
+				} )
+			} )
+			add( new FormComponent( "javax.swing.JSeparator" ) {
+				name: "separator1"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "headerPanel"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "setButton"
+				"text": "Set"
+				"maximumSize": new java.awt.Dimension( 75, 25 )
+				"minimumSize": new java.awt.Dimension( 75, 25 )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button2"
+				"text": "Cancel"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 85, 0 )
+			"size": new java.awt.Dimension( 530, 445 )
+		} )
+	}
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../css/s.css">
+    <title>Export Quantitative Data</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+    <!-- header -->
+    <div id="header">
+        <h1>Quantitative Data in PRIDE XML</h1>
+    </div>
+
+    <!-- navigation -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+        <tr>
+            <td align="left" class="topicpath">
+                <a href="export_quant.html">Previous</a> | <a href="isoelectric_point.html">Next</a> | <a
+                    href="#topicSeeAlsoTopicsList">See Also</a>
+            </td>
+            <td width="70%" class="topicpath"></td>
+        </tr>
+    </table>
+
+    <!-- table of contents -->
+    <div class="introduction">
+        <p>
+            This document gives a brief introduction into how quantitative proteomics data is stored
+            in PRIDE XML files.
+        </p>
+    </div>
+
+    <!-- content -->
+    <div id="content">
+        <div class="section">
+            <h3>Quantitative data in PRIDE XML</h3>
+
+            <p>
+                When the PRIDE XML format was developed quantitative methods for MS based proteomics
+                experiments were not widely used. Therefore, the PRIDE XML format does not inherently
+                support the storage of quantitative results. Using a feature present in PRIDE XML that
+                allows one to store additional data for proteins and peptides we defined away that
+                enables us to nevertheless store simple quantitative results in PRIDE XML files.
+            </p>
+
+            <p>
+                New methods to quantify proteins in MS based proteomics are constantly being developed.
+                Therefore, it is very difficult to define a common way to represent this heterogeneous
+                data. The PRIDE database is focused on storing proteomics data that is part of a
+                manuscript or publication. Therefore, we decided to build the support for quantitative
+                data in PRIDE XML files around the requirements for this specific task.
+            </p>
+
+            <h3>Supported quantitative data</h3>
+
+            <p>
+                PRIDE XML only supports the storage of final quantitative results but not any
+                intermediate results generated during the processing of the raw data. For every protein
+                and peptide one single value can be stored per multiplexed sample (if applicable). In
+                a 4-plex iTRAQ experiment, for example, it is thus possible to report one value per
+                reporter ion per peptide and protein. This thus results in 4 quantification values per
+                protein and peptide.
+            </p>
+
+            <p>
+                The stored quantitative values can either be the final calculated ratios (with the
+                quantitative value for the reference sample set to 1) or the raw measured reporter ion
+                intensities. This primarily depends on which of these numbers are considered "final" by
+                the submitter.
+            </p>
+        </div>
+    </div>
+
+
+    <div id="seealso">
+        <a name="topicSeeAlsoTopicsList"></a>
+
+        <h2>See Also</h2>
+
+        <p>
+            <strong>Other topics which will help you understand the data you are exporting:</strong>
+        </p>
+
+        <ul>
+            <li><a href="browse/quant.html">Quantification Data</a></li>
+            <li><a href="export_quant.html">Export Quantitative Data</a></li>
+        </ul>
+    </div>
+    <div id="footer">
+        <p>Comments, questions, suggestions? See the
+            <a href="feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+        </p>
+    </div>
+</div>
+</body>
+</html>

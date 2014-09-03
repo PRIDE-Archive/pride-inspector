@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+" codebase="http://www.ebi.ac.uk/pride/resources/tools/inspector/latest/webstart/">
+    <information>
+        <title>PRIDE Inspector Webstart</title>
+        <vendor>PRIDE Team</vendor>
+        <homepage href="http://www.ebi.ac.uk/pride"/>
+        <offline-allowed/>
+        <shortcut online="false">
+            <desktop/>
+        </shortcut>
+    </information>
+
+    <security>
+        <all-permissions/>
+    </security>
+
+    <resources>
+        <j2se version="1.6+" max-heap-size="1024m"/>
+        $dependencies
+    </resources>
+
+    <application-desc main-class="$mainClass">
+    <!-- Insert Arguments-->
+    </application-desc>
+</jnlp>

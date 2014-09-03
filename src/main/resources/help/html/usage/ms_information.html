@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../css/s.css">
+    <title>Add MS Information related with mzIdentML File</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+    <!-- header -->
+    <div id="header">
+        <h1>Add MS Information related with mzIdentML File</h1>
+    </div>
+
+    <!-- navigation -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+        <tr>
+            <td align="left" class="topicpath">
+                <a href="isoelectric_point.html">Previous</a>| <a href="open_file.html">Next</a> | <a
+                    href="#topicSeeAlsoTopicsList">See Also</a>
+            </td>
+            <td width="70%" class="topicpath"></td>
+        </tr>
+    </table>
+
+    <!-- table of contents -->
+    <div class="introduction">
+        <p>
+            A mzIdentML file only contains the identification information: Protein information, peptide information, ion
+            fragments,
+            identification software and other information related with the identification process. One mzIdentML can be
+            related with more
+            than one Mass Spectrum files (mzXML, mzML, mzData, pkl, mgf, dta, ms2). See also <a
+                href="http://www.psidev.info/mzidentml">mzIdentML
+            specifications.</a>
+        </p>
+
+        To add the ms files, you can use two options:
+        <ul>
+            <li>Load spectrum files before mzIdentML loading: It associates each opened mzIdentML files with the
+                corresponding ms files.
+            </li>
+            <li>Load spectrum files after mzIdentML loading: Click the <img src="../../../icon/16x16/peak.png"
+                                                                            alt="Ms information">
+                on the<a href="ui/navigation.html"> Assays Panel </a>
+            </li>
+        </ul>
+
+        Once selected one of these options you can add files with the Add Spectra Files Button. This method will try to
+        find MS annotations in the mzIdentML file
+        and match selected files using the location in the SpectraData object (See also <a
+            href="http://www.psidev.info/mzidentml">mzIdentML
+        specifications.</a>).
+
+        <ul>
+            <li><a href="#before">Load spectrum files before mzIdentML loading</a></li>
+            <li><a href="#after">Load spectrum files after mzIdentML loading</a></li>
+        </ul>
+    </div>
+
+    <!-- content -->
+    <div id="content">
+        <div class="section">
+            <div class="piProcedureSteps">
+                <a name="before"></a>
+
+                <h3>Load spectrum files before mzIdentML loading</h3>
+
+                <p>
+                    If you know the folder and the MS files associated with your mzIdentML you can add them before
+                    loading the mzIdentML file.
+
+                <div>
+                    <img src="../images/add_before_ms.png" alt="Load spectrum files before mzIdentML loading"/>
+                </div>
+                </p>
+
+                <p>
+                    Click on <span class="keyword">Add spectra files</span> button to associate to each mzIdnetML files
+                    the spectra files.
+                </p>
+
+                <p>
+                    The table below gives a short description for every column in the Spectrum File Table.
+                </p>
+
+                <table class="piTable" width="100%" cellpadding="4" cellspacing="4">
+                    <tr class="piRowHead">
+                        <td width="20%">Column</td>
+                        <td>Description</td>
+                    </tr>
+                    <tr class="piRowEven">
+                        <td width="20%">File Name</td>
+                        <td>The name of the File added</td>
+                    </tr>
+                    <tr class="piRowEven">
+                        <td width="20%">Size(M)</td>
+                        <td>The size of experiment file to download in megabyte.</td>
+                    </tr>
+                    <tr class="piRowEven">
+                        <td width="20%">Type</td>
+                        <td>MS File Type: pkl, mgf, dta, ms2, mzML, mzData</td>
+                    </tr>
+                    <tr class="piRowOdd">
+                        <td width="20%">Remove</td>
+                        <td>Button to remove the added file</td>
+                    </tr>
+                </table>
+                <div class="note">
+                    You can choose <span class="keyword">Set</span> Button to continue with the loading process.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="content-1">
+        <div class="section">
+            <div class="piProcedureSteps">
+                <a name="after"></a>
+
+                <h3>Load spectrum files after mzIdentML loading</h3>
+
+                <p>
+                    After mzIdentML loading you can add the MS files associated with your mzIdentML. Click the <img
+                        src="../../../icon/16x16/peak.png" alt="Ms information">
+                    on the<a href="ui/navigation.html"> Assays Panel </a>
+
+                <div>
+                    <img src="../images/add_after_ms.png" alt="Load spectrum files after mzIdentML loading"/>
+                </div>
+                </p>
+
+                <p>
+                    Click on <span class="keyword">Add spectra files</span> button to associate to each mzIdentML files
+                    the spectra files. Also you can add manually (Click the <img src="../../../icon/16x16/open_file.gif"
+                                                                                 alt="Ms Add">) for
+                    each SpectraData object (See also <a href="http://www.psidev.info/mzidentml">mzIdentML
+                    specifications.</a>) the file associated if the annotated ms name do not match with the actual name
+                    of your file.
+                </p>
+
+                <p>
+                    The table below gives a short description for every column in the Spectrum File Table.
+                </p>
+
+                <table class="piTable" width="100%" cellpadding="4" cellspacing="4">
+                    <tr class="piRowHead">
+                        <td width="20%">Column</td>
+                        <td>Description</td>
+                    </tr>
+                    <tr class="piRowEven">
+                        <td width="20%">File ID</td>
+                        <td>SpectraData MS File ID annotated in mzIdentML</td>
+                    </tr>
+                    <tr class="piRowEven">
+                        <td width="20%">Spectra File Source</td>
+                        <td>SpectraData MS File Name annotated in mzIdentML</td>
+                    </tr>
+                    <tr class="piRowEven">
+                        <td width="20%">No. Spectra</td>
+                        <td>Number of Spectra identified in the mzIdentML file associated with the MS File</td>
+                    </tr>
+                    <tr class="piRowEven">
+                        <td width="20%">MS File</td>
+                        <td>Location of the MS File Added</td>
+                    </tr>
+                    <tr class="piRowEven">
+                        <td width="20%">Type</td>
+                        <td>MS File Type: pkl, mgf, dta, ms2, mzML, mzData</td>
+                    </tr>
+                    <tr class="piRowOdd">
+                        <td width="20%">Add/Remove</td>
+                        <td>Button to add manually the file or remove the added file</td>
+                    </tr>
+                </table>
+                <div class="note">
+                    You can choose <span class="keyword">Set</span> Button to continue with the loading process.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="seealso">
+        <a name="topicSeeAlsoTopicsList"></a>
+
+        <h2>See Also</h2>
+
+        <p>
+            <strong>Other topics:</strong>
+        </p>
+
+        <ul>
+            <li><a href="user_interface.html">Familiarize Yourself with User Interface</a></li>
+            <li><a href="browse_data.html">Familiarize Yourself with Browsing Data</a></li>
+        </ul>
+    </div>
+    <div id="footer">
+        <p>Comments, questions, suggestions? See the
+            <a href="../feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+        </p>
+    </div>
+</div>
+</body>
+</html>
