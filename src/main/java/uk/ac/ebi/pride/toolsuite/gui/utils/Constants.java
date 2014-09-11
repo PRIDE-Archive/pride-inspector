@@ -72,7 +72,6 @@ public interface Constants {
     public static final String GZIPPED_FILE = ".gz";
     public static final String MZIDENT_FILE =".mzid";
     //Todo: We added the large extension for mzidentml files but in the future will be only mzid
-
     public static final String MZIDENT_FILE_LARGE=".mzidentml";
     public static final String MZXML_FILE   = ".mzxml";
     public static final String MGF_FILE = ".mgf";
@@ -80,6 +79,7 @@ public interface Constants {
     public static final String MS2_FILE = ".ms2";
     public static final String PKL_FILE = ".pkl";
     public static final String APL_FILE = ".apl";
+    public static final String MZTAB_FILE = ".mztab";
 
 
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");

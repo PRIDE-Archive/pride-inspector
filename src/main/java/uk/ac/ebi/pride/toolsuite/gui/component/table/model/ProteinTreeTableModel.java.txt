@@ -2,7 +2,7 @@ package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
 import org.jdesktop.swingx.tree.TreeModelSupport;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
-import uk.ac.ebi.pride.utilities.data.Tuple;
+import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.toolsuite.gui.component.sequence.AnnotatedProtein;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskEvent;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskListener;

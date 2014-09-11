@@ -114,7 +114,7 @@ public class SimpleMsDialog extends JDialog {
             data[i][1] = (spectraData.getName() != null) ? spectraData.getName() : "";
             data[i][2] = ((MzIdentMLControllerImpl) controller).getNumberOfSpectrabySpectraData(spectraData);
             data[i][3] = msFileName;
-            List<uk.ac.ebi.pride.utilities.data.utils.Constants.SpecFileFormat> fileformats = MzIdentMLUtils.getFileTypeSupported(spectraData);
+            List<uk.ac.ebi.pride.utilities.data.utils.Constants.SpecFileFormat> fileformats = uk.ac.ebi.pride.utilities.data.utils.Constants.getFileTypeSupported(spectraData);
             List<String> fileStrFormats = new ArrayList<String>(fileformats.size());
             for (uk.ac.ebi.pride.utilities.data.utils.Constants.SpecFileFormat specFileFormat : fileformats)
                 fileStrFormats.add(specFileFormat.toString());

@@ -20,7 +20,8 @@ import java.util.Map;
  * Task to open mzML/MzIdentML or PRIDE xml files.
  * <p/>
  * <p/>
- * User: rwang, ypriverol
+ * @author rwang
+ * @author ypriverol
  * Date: 01-Feb-2010
  * Time: 10:37:49
  */

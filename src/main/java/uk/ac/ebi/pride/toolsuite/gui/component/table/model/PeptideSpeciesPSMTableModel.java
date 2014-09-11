@@ -1,6 +1,6 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
-import uk.ac.ebi.pride.utilities.data.Tuple;
+import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
 import java.util.ArrayList;

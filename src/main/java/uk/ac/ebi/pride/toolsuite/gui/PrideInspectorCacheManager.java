@@ -5,8 +5,8 @@ import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.utilities.data.Triple;
-import uk.ac.ebi.pride.utilities.data.Tuple;
+import uk.ac.ebi.pride.utilities.util.Triple;
+import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.tools.protein_details_fetcher.model.Protein;
 
 import java.util.Collection;

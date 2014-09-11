@@ -1,6 +1,6 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.decoy;
 
-import uk.ac.ebi.pride.utilities.data.Tuple;
+import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.filter.DecoyAccessionFilter;

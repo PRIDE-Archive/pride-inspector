@@ -1,6 +1,6 @@
 package uk.ac.ebi.pride.toolsuite.gui.task.impl;
 
-import uk.ac.ebi.pride.utilities.data.Tuple;
+import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.TableDataRetriever;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableRow;
