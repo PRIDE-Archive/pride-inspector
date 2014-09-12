@@ -4,6 +4,7 @@ import org.bushe.swing.event.EventBus;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.MzIdentMLControllerImpl;
+import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.ReferencedIdentificationController;
 import uk.ac.ebi.pride.utilities.data.core.SpectraData;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.component.chart.ChartTabPane;
@@ -46,7 +47,7 @@ public class AddMsDataAccessControllersTask extends TaskAdapter<Void, Map<Spectr
     @Override
     protected Void doInBackground() throws Exception {
         try {
-            boolean status = ((MzIdentMLControllerImpl) controller).addNewMSController(spectraDataFileMap, newFiles, fileTypes);
+            boolean status = ((ReferencedIdentificationController) controller).addNewMSController(spectraDataFileMap, newFiles, fileTypes);
 
             if (status) {
                 //((MzIdentMLControllerImpl) controller).addMSController(msFileMap);

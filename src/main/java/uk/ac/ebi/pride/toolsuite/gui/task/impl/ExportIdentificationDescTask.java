@@ -66,7 +66,7 @@ public class ExportIdentificationDescTask extends AbstractDataAccessTask<Void, V
             //------- Comment section -------
 
             // data source
-            if (controller.getType().equals(DataAccessController.Type.XML_FILE) || controller.getType().equals(DataAccessController.Type.MZIDENTML)) {
+            if (controller.getType().equals(DataAccessController.Type.XML_FILE) || controller.getType().equals(DataAccessController.Type.MZIDENTML) || controller.getType().equals(DataAccessController.Type.MZTAB)) {
                 writer.println("# Data source: " + ((File) controller.getSource()).getAbsolutePath());
             } else if (controller.getType().equals(DataAccessController.Type.DATABASE)) {
                 writer.println("# Data source: pride public mysql instance");

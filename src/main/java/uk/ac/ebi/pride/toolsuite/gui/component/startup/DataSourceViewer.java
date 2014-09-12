@@ -33,7 +33,8 @@ import java.util.List;
  * DataSourceViewer should be monitor the DataAccessControllers in
  * DataAccessMonitor.
  * <p/>
- * User: yprez, rwang
+ * @author ypriverol
+ * @author rwang
  * Date: 26-Feb-2010
  * Time: 10:42:08
  */
@@ -329,7 +330,7 @@ public class DataSourceViewer extends JPanel {
             // get the icon depending on the type of the data access controller
             ImageIcon icon = null;
             DataAccessController.Type type = controller.getType();
-            if (DataAccessController.Type.XML_FILE.equals(type) || DataAccessController.Type.MZIDENTML.equals(type)) {
+            if (DataAccessController.Type.XML_FILE.equals(type) || DataAccessController.Type.MZIDENTML.equals(type) || DataAccessController.Type.MZTAB.equals(type)) {
                 icon = GUIUtilities.loadImageIcon(context.getProperty(categories.isEmpty() || status.size()>0 ? "file.source.loading.small.icon" : "file.source.small.icon"));
             } else if (DataAccessController.Type.DATABASE.equals(type)) {
                 icon = GUIUtilities.loadImageIcon(context.getProperty(categories.isEmpty() || status.size()>0 ? "database.source.loading.small.icon" : "database.source.small.icon"));
@@ -412,7 +413,7 @@ public class DataSourceViewer extends JPanel {
             DataAccessController.Type type = controller.getType();
 
 
-            if (DataAccessController.Type.MZIDENTML.equals(type) && !categories.isEmpty()) {
+            if ((DataAccessController.Type.MZIDENTML.equals(type) || DataAccessController.Type.MZTAB.equals(type)) && !categories.isEmpty()) {
                 // get the icon
 
                 Icon icon = GUIUtilities.loadImageIcon(context.getProperty("open.mzidentml.ms.icon.small"));
@@ -499,7 +500,7 @@ public class DataSourceViewer extends JPanel {
                 java.util.List<DataAccessController> controllers = context.getControllers();
                 if (row >= 0 && row < controllers.size()) {
                     DataAccessController controller = controllers.get(row);
-                    if(controller.getType().equals(DataAccessController.Type.MZIDENTML)){
+                    if(controller.getType().equals(DataAccessController.Type.MZIDENTML) || controller.getType().equals(DataAccessController.Type.MZTAB)){
                         Dialog dialog = new SimpleMsDialog(uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop.getInstance().getMainComponent(),controller);
                         dialog.setVisible(true);
                     }

@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.MzIdentMLControllerImpl;
+import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.MzTabControllerImpl;
+import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.ReferencedIdentificationController;
 import uk.ac.ebi.pride.utilities.data.core.SpectraData;
 import uk.ac.ebi.pride.utilities.data.utils.MzIdentMLUtils;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
@@ -37,6 +39,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
+ * Simple Dialog to add the Spectrum.
  * @author ypriverol
  */
 public class SimpleMsDialog extends JDialog {
@@ -101,7 +104,7 @@ public class SimpleMsDialog extends JDialog {
                 COLUMN_HEADER_ID, COLUMN_HEADER_SOURCE, COLUMN_HEADER_NUMBER, COLUMN_HEADER_MSFILE, COLUMN_HEADER_MSTYPE, COLUMN_HEADER_REMOVE
         };
 
-        msFileMap = ((MzIdentMLControllerImpl) controller).getSpectraDataMSFiles();
+        msFileMap = ((ReferencedIdentificationController) controller).getSpectraDataMSFiles();
 
         Object[][] data = new Object[msFileMap.size()][columns.length];
 
@@ -112,7 +115,7 @@ public class SimpleMsDialog extends JDialog {
             String msFileName = (msFileMap.get(spectraData) == null) ? "" : msFileMap.get(spectraData).getAbsolutePath();
             data[i][0] = spectraData.getId();
             data[i][1] = (spectraData.getName() != null) ? spectraData.getName() : "";
-            data[i][2] = ((MzIdentMLControllerImpl) controller).getNumberOfSpectrabySpectraData(spectraData);
+            data[i][2] = ((ReferencedIdentificationController) controller).getNumberOfSpectrabySpectraData(spectraData);
             data[i][3] = msFileName;
             List<uk.ac.ebi.pride.utilities.data.utils.Constants.SpecFileFormat> fileformats = uk.ac.ebi.pride.utilities.data.utils.Constants.getFileTypeSupported(spectraData);
             List<String> fileStrFormats = new ArrayList<String>(fileformats.size());
@@ -283,7 +286,7 @@ public class SimpleMsDialog extends JDialog {
         for (int i = 0; i < msFileTable.getRowCount(); i++) {
             totalSpectra += (Integer) msFileTable.getValueAt(i, 2);
             missSpectrum += (((String) msFileTable.getValueAt(i, 3)).length() == 0) ? (Integer) msFileTable.getValueAt(i, 2) : 0;
-            noSupported += (!((MzIdentMLControllerImpl) controller).getSupportedSpectraData().contains(msFileTable.getValueAt(i, 0))) ? (Integer) msFileTable.getValueAt(i, 2) : 0;
+            noSupported += (!((ReferencedIdentificationController) controller).getSupportedSpectraData().contains(msFileTable.getValueAt(i, 0))) ? (Integer) msFileTable.getValueAt(i, 2) : 0;
         }
         message = getMessage(missSpectrum, noSupported, totalSpectra);
         type = getMessageType(missSpectrum, noSupported, totalSpectra);
@@ -301,7 +304,7 @@ public class SimpleMsDialog extends JDialog {
         DefaultTableModel model = (DefaultTableModel) msFileTable.getModel();
         String fileName = (String) model.getValueAt(row, 3);
         Comparable idSpectra = (Comparable) model.getValueAt(row, 0);
-        boolean supported = ((MzIdentMLControllerImpl) controller).getSupportedSpectraData().contains(idSpectra);
+        boolean supported = ((ReferencedIdentificationController) controller).getSupportedSpectraData().contains(idSpectra);
         if (colName.equals(COLUMN_HEADER_REMOVE) && row >= 0 && fileName.length() > 0) {
             msFileTable.getModel().setValueAt("", row, 3);
             setButton.setEnabled(true);
@@ -362,7 +365,7 @@ public class SimpleMsDialog extends JDialog {
     }
 
     private void addMultipleMStoSpectraData(List<File> files) {
-        Map<SpectraData, File> tempMapFile = ((MzIdentMLControllerImpl) controller).checkMScontrollers(files);
+        Map<SpectraData, File> tempMapFile = ((ReferencedIdentificationController) controller).checkMScontrollers(files);
         for (SpectraData spectraData : tempMapFile.keySet()) {
             for (int i = 0; i < msFileTable.getRowCount(); i++) {
                 Comparable idSpectra = (Comparable) msFileTable.getValueAt(i, 0);
@@ -518,7 +521,7 @@ public class SimpleMsDialog extends JDialog {
 
             Comparable idSpectra = (Comparable) msFileTable.getValueAt(row, 0);
 
-            boolean supported = ((MzIdentMLControllerImpl) controller).getSupportedSpectraData().contains(idSpectra);
+            boolean supported = ((ReferencedIdentificationController) controller).getSupportedSpectraData().contains(idSpectra.toString());
 
             String fileName = (String) msFileTable.getValueAt(row, 3);
 
