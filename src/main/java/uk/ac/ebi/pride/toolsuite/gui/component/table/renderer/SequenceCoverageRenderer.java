@@ -3,6 +3,7 @@ package uk.ac.ebi.pride.toolsuite.gui.component.table.renderer;
 import org.jdesktop.swingx.JXTable;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableHeader;
 import uk.ac.ebi.pride.toolsuite.gui.utils.Constants;
+import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
@@ -33,7 +34,7 @@ public class SequenceCoverageRenderer extends JLabel implements TableCellRendere
         // set background
         if (isSelected)
             this.setBackground(table.getSelectionBackground());
-        else if(value != null){
+        else if(value != null && NumberUtilities.isNumber(value.toString()) &&  Double.parseDouble(value.toString()) > 0){
             Double valueDouble = Double.parseDouble(value.toString());
             //System.out.println(valueDouble);
             int alpha = (int) (Constants.DELTA_MZ_NORMAL.getAlpha()*valueDouble);
