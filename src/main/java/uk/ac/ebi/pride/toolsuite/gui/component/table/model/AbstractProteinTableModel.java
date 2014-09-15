@@ -13,7 +13,8 @@ import java.util.Map;
 /**
  * Abstract class of protein table model When the file do not contains protein inference
  * <p/>
- * User: ypriverol, rwang
+ * @author ypriverol
+ * @author rwang
  * Date: 24/08/2011
  * Time: 16:21
  */

@@ -6,7 +6,8 @@ package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
  * This enum is created for table models to listen to different type incoming data content,
  * and filter out the irrelevant ones.
  * <p/>
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 14-Sep-2010
  * Time: 11:38:09
  */

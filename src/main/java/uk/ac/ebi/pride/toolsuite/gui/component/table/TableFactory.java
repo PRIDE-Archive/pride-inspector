@@ -524,8 +524,8 @@ public class TableFactory {
         TableColumnExt proteinIdColumn = (TableColumnExt) quantProteinTable.getColumn(ProteinTableHeader.PROTEIN_ID.getHeader());
         proteinIdColumn.setVisible(false);
 
-        TableColumnExt proteinGroupIdColumn = (TableColumnExt) quantProteinTable.getColumn(ProteinTableHeader.PROTEIN_GROUP_ID.getHeader());
-        proteinGroupIdColumn.setVisible(false);
+        //TableColumnExt proteinGroupIdColumn = (TableColumnExt) quantProteinTable.getColumn(ProteinTableHeader.PROTEIN_GROUP_ID.getHeader());
+        //proteinGroupIdColumn.setVisible(false);
 
         // hide the protein name column
         TableColumnExt proteinNameColumn = (TableColumnExt) quantProteinTable.getColumn(ProteinTableHeader.PROTEIN_NAME.getHeader());

@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Quantitative protein table model
  * <p/>
- * User: rwang
+ * @author rwang
  * Date: 11/08/2011
  * Time: 09:17
  */

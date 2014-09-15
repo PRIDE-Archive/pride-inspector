@@ -42,7 +42,7 @@ import java.awt.event.ActionListener;
 import java.util.Collection;
 
 /**
- * User: rwang
+ * @author rwang
  * Date: 15/08/2011
  * Time: 11:33
  */
