@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
-import uk.ac.ebi.pride.utilities.data.utils.QuantCvTermReference;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.action.impl.ExportQuantitativeDataAction;
 import uk.ac.ebi.pride.toolsuite.gui.action.impl.ExtraProteinDetailAction;
@@ -29,6 +28,7 @@ import uk.ac.ebi.pride.toolsuite.gui.task.Task;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskListener;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.RetrieveQuantProteinTableTask;
+import uk.ac.ebi.pride.utilities.term.QuantCvTermReference;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;

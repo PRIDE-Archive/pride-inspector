@@ -3,7 +3,6 @@ package uk.ac.ebi.pride.toolsuite.gui.component.table;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 import uk.ac.ebi.pride.utilities.data.core.*;
-import uk.ac.ebi.pride.utilities.data.utils.QuantCvTermReference;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorCacheManager;
 import uk.ac.ebi.pride.toolsuite.gui.component.sequence.AnnotatedProtein;
 import uk.ac.ebi.pride.toolsuite.gui.component.sequence.PeptideFitState;
@@ -17,6 +16,7 @@ import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.tools.protein_details_fetcher.model.Protein;
 import uk.ac.ebi.pride.tools.utils.AccessionResolver;
 import uk.ac.ebi.pride.util.NumberUtilities;
+import uk.ac.ebi.pride.utilities.term.QuantCvTermReference;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -414,7 +414,7 @@ public class TableDataRetriever {
         for (int i = 1; i <= QuantitativeSample.MAX_SUB_SAMPLE_SIZE; i++) {
             CvParam reagent = sample.getReagent(i);
             if (reagent != null) {
-                headers.add(QuantCvTermReference.getReagentShortLabel(reagent));
+                headers.add(QuantCvTermReference.getReagentShortLabel(reagent.getAccession()));
             }
         }
 
@@ -434,12 +434,12 @@ public class TableDataRetriever {
         // get reference reagent
         CvParam referenceReagent = sample.getReagent(refSampleIndex);
         // get short label for the reagent
-        String shortenedReferenceReagent = QuantCvTermReference.getReagentShortLabel(referenceReagent);
+        String shortenedReferenceReagent = QuantCvTermReference.getReagentShortLabel(referenceReagent.getAccession());
         for (int i = 1; i < QuantitativeSample.MAX_SUB_SAMPLE_SIZE; i++) {
             if (refSampleIndex != i) {
                 CvParam reagent = sample.getReagent(i);
                 if (reagent != null) {
-                    headers.add(QuantCvTermReference.getReagentShortLabel(reagent) + Constants.QUANTIFICATION_RATIO_CHAR + shortenedReferenceReagent);
+                    headers.add(QuantCvTermReference.getReagentShortLabel(reagent.getAccession()) + Constants.QUANTIFICATION_RATIO_CHAR + shortenedReferenceReagent);
                 }
             }
         }

@@ -24,7 +24,6 @@ import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 import uk.ac.ebi.pride.utilities.data.core.CvParam;
 import uk.ac.ebi.pride.utilities.data.core.Quantification;
 import uk.ac.ebi.pride.utilities.data.core.QuantitativeSample;
-import uk.ac.ebi.pride.utilities.data.utils.QuantCvTermReference;
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.EventBusSubscribable;
 import uk.ac.ebi.pride.toolsuite.gui.event.QuantSelectionEvent;
@@ -32,6 +31,7 @@ import uk.ac.ebi.pride.toolsuite.gui.event.ReferenceSampleChangeEvent;
 import uk.ac.ebi.pride.toolsuite.gui.io.FileExtension;
 import uk.ac.ebi.pride.toolsuite.gui.io.SaveComponentUtils;
 import uk.ac.ebi.pride.toolsuite.gui.io.SaveImageDialog;
+import uk.ac.ebi.pride.utilities.term.QuantCvTermReference;
 
 import javax.swing.*;
 import java.awt.*;
@@ -380,8 +380,8 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
                     if (reagent != null) {
                         Double reagentResult = quantitation.getIsotopeLabellingResult(i);
                         double value = (referenceReagentResult == null || reagentResult == null) ? 0 : (reagentResult / referenceReagentResult);
-                        Comparable column = QuantCvTermReference.getReagentShortLabel(reagent)
-                                + "/" + QuantCvTermReference.getReagentShortLabel(referenceReagent);
+                        Comparable column = QuantCvTermReference.getReagentShortLabel(reagent.getAccession())
+                                + "/" + QuantCvTermReference.getReagentShortLabel(referenceReagent.getAccession());
                         dataset.addValue(value, proteinAcc, id, column);
                         java.util.List<Comparable> columns = idMapping.get(id);
                         if (columns == null) {
