@@ -34,7 +34,6 @@ public class IdentificationMetadataPanel extends JPanel {
         dataBaseTabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
         List<SearchDataBase> searchDataBaseList = metaData.getSearchDatabases();
         if (!searchDataBaseList.isEmpty()) {
-            int cnt = 1;
             for (SearchDataBase searchDataBase : searchDataBaseList) {
                 String name = searchDataBase.getName();
                 SearchDatabaseMetadataPanel databaseMetadataPanel = new SearchDatabaseMetadataPanel(searchDataBase);

@@ -251,7 +251,7 @@ public class TableDataRetriever {
 
     private static void addProteinScores(ProteinTableRow proteinTableRow, DataAccessController controller, Comparable identId) {
         Score score = controller.getProteinScores(identId);
-        Collection<CvTermReference> availablePeptideLevelScores = controller.getAvailablePeptideLevelScores();
+        Collection<CvTermReference> availablePeptideLevelScores = controller.getAvailableProteinLevelScores();
         if (score != null) {
             for (CvTermReference availablePeptideLevelScore : availablePeptideLevelScores) {
                 List<Number> values = score.getScores(availablePeptideLevelScore);
