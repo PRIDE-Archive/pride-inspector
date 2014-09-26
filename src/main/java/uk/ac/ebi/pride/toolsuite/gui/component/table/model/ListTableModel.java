@@ -6,9 +6,8 @@ import java.util.*;
 /**
  * List based table model, it also keeps track of column name and types.
  * <p/>
- * User: rwang
- * Date: 20-Aug-2010
- * Time: 10:37:00
+ * @author rwang
+ * @author ypriverol
  */
 public abstract class ListTableModel<T> extends AbstractTableModel {
     protected final Map<String, String> columnNames;

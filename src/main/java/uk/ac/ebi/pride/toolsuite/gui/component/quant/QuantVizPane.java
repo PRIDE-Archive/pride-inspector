@@ -12,11 +12,13 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 15/08/2011
  * Time: 11:36
  */
 public class QuantVizPane extends DataAccessControllerPane implements EventBusSubscribable {
+
     private static Logger logger = LoggerFactory.getLogger(QuantVizPane.class);
 
     private static final int DIVIDER_SIZE = 5;
@@ -24,7 +26,7 @@ public class QuantVizPane extends DataAccessControllerPane implements EventBusSu
 
     private QuantProteinComparisonChart comparisonChart;
 
-    private SpectrumViewPane spectrumViewPane;
+    private QuantPeptideComparisonChart comparisonPeptideChart;
 
     public QuantVizPane(DataAccessController controller, JComponent parentComponent) {
         super(controller, parentComponent);
@@ -44,8 +46,8 @@ public class QuantVizPane extends DataAccessControllerPane implements EventBusSu
         comparisonChart.setBorder(BorderFactory.createLineBorder(Color.gray));
 
         // Spectrum view pane
-        spectrumViewPane = new SpectrumViewPane(controller, false);
-        spectrumViewPane.setBorder(BorderFactory.createLineBorder(Color.gray));
+        comparisonPeptideChart = new QuantPeptideComparisonChart(controller);
+        comparisonPeptideChart.setBorder(BorderFactory.createLineBorder(Color.gray));
 
 
         // put into a split pane
@@ -56,7 +58,7 @@ public class QuantVizPane extends DataAccessControllerPane implements EventBusSu
         splitPane.setResizeWeight(SPLIT_PANE_RESIZE_WEIGHT);
 
         splitPane.setTopComponent(comparisonChart);
-        splitPane.setBottomComponent(spectrumViewPane);
+        splitPane.setBottomComponent(comparisonPeptideChart);
 
         this.add(splitPane, BorderLayout.CENTER);
         this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -64,7 +66,7 @@ public class QuantVizPane extends DataAccessControllerPane implements EventBusSu
 
     @Override
     public void subscribeToEventBus(EventService eventBus) {
-        spectrumViewPane.subscribeToEventBus(null);
+        comparisonPeptideChart.subscribeToEventBus(null);
         comparisonChart.subscribeToEventBus(null);
     }
 }

@@ -1,7 +1,8 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
 /**
- * @author Rui Wang
+ * @author rwang
+ * @author ypriverol
  * @version $Id$
  */
 public enum ProteinTableHeader {

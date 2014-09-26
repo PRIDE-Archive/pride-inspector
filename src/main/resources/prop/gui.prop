@@ -320,6 +320,7 @@ internet.connection.warning.message = <html><b>Please check whether you have Int
 chart.warning.message=It may take some time to compute these summary charts for big files, do you want to start?
 chart.time.warning.message=Calculating summary charts requires a full file scan, this may take a few minutes, thank you for waiting.
 no.protein.selection.warning.message=Select Proteins Using Checkbox Above
+no.peptide.selection.warning.message=Select Peptide Using Checkbox Above
 no.spectrum.warning.message = Spectrum Not Available
 out.of.memory.message=PRIDE Inspector has run out memory.\nYou can increase the memory limit in ./config/config.props.\nCheck out the FAQ section in the help document for details.
 
@@ -330,7 +331,8 @@ export.quantitative.data.long.title = Export Quantitative Data
 export.quantitative.data.small.icon= icon/16x16/export_enable.gif
 
 # quantitative histogram labels
-quant.histogram.title =  Protein Quantification
+quant.protein.histogram.title =  Protein Quantification
+quant.peptide.histogram.title =  Peptide Quantification
 quant.histogram.x.axis = Reagent
 quant.histogram.y.axis = Ratio
 

@@ -120,8 +120,6 @@ public class AbstractProteinTableModel extends ProgressiveListTableModel<Void, T
         }
     }
 
-
-
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         ProteinTableRow proteinTableRow = (ProteinTableRow) contents.get(rowIndex);
@@ -161,7 +159,6 @@ public class AbstractProteinTableModel extends ProgressiveListTableModel<Void, T
 
     private Double getProteinScore(ProteinTableRow proteinTableRow, String columnName) {
         List<Double> scores = proteinTableRow.getScores();
-
         int scoreIndex = 0;
 
         for (CvTermReference scoreTermReference : listScores) {

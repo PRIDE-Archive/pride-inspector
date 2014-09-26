@@ -19,11 +19,6 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.TextAnchor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
-import uk.ac.ebi.pride.utilities.data.core.CvParam;
-import uk.ac.ebi.pride.utilities.data.core.Quantification;
-import uk.ac.ebi.pride.utilities.data.core.QuantitativeSample;
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.EventBusSubscribable;
 import uk.ac.ebi.pride.toolsuite.gui.event.QuantSelectionEvent;
@@ -31,6 +26,11 @@ import uk.ac.ebi.pride.toolsuite.gui.event.ReferenceSampleChangeEvent;
 import uk.ac.ebi.pride.toolsuite.gui.io.FileExtension;
 import uk.ac.ebi.pride.toolsuite.gui.io.SaveComponentUtils;
 import uk.ac.ebi.pride.toolsuite.gui.io.SaveImageDialog;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
+import uk.ac.ebi.pride.utilities.data.core.CvParam;
+import uk.ac.ebi.pride.utilities.data.core.Quantification;
+import uk.ac.ebi.pride.utilities.data.core.QuantitativeSample;
 import uk.ac.ebi.pride.utilities.term.QuantCvTermReference;
 
 import javax.swing.*;
@@ -42,19 +42,15 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * Histogram to compare quantitative results between proteins
- * <p/>
- * @author rwang
- * @author ypriverol
- * Date: 15/08/2011
- * Time: 11:36
+ * Created by yperez on 25/09/2014.
  */
-public class QuantProteinComparisonChart extends DataAccessControllerPane implements EventBusSubscribable {
+public class QuantPeptideComparisonChart extends DataAccessControllerPane implements EventBusSubscribable {
 
-    private static final Logger logger = LoggerFactory.getLogger(QuantProteinComparisonChart.class);
+    private static final Logger logger = LoggerFactory.getLogger(QuantPeptideComparisonChart.class);
 
     /**
      * Data set used to render the bar chart
@@ -73,13 +69,13 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
      */
     private int referenceSampleIndex = -1;
     /**
-     * mapping between protein identification id and the label of each category
+     * mapping between peptide identification id and the label of each category
      */
-    private Map<Comparable, java.util.List<Comparable>> idMapping;
+    private Map<Comparable, List<Comparable>> idMapping;
     /**
-     * Event subscriber listens to protein selection event
+     * Event subscriber listens to Peptide selection event
      */
-    private QuantSelectionSubscriber proteinSelectionSubscriber;
+    private QuantSelectionSubscriber peptideSelectionSubscriber;
     /**
      * Event subscriber listens to reference sample change event
      */
@@ -87,18 +83,18 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
     /**
      * Warning message to show when no protein is selected
      */
-    private String noProteinSelectionMessage;
+    private String noPeptideSelectionMessage;
     /**
      * Whether there are proteins selected
      */
     private boolean noProteinSelected;
 
 
-    public QuantProteinComparisonChart(DataAccessController controller) {
+    public QuantPeptideComparisonChart(DataAccessController controller) {
         super(controller);
-        this.idMapping = new HashMap<Comparable, java.util.List<Comparable>>();
+        this.idMapping = new HashMap<Comparable, List<Comparable>>();
         this.noProteinSelected = true;
-        this.noProteinSelectionMessage = appContext.getProperty("no.protein.selection.warning.message");
+        this.noPeptideSelectionMessage = appContext.getProperty("no.peptide.selection.warning.message");
     }
 
     @Override
@@ -110,7 +106,7 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
     @Override
     protected void addComponents() {
         dataset = new QuantCategoryDataset();
-        JFreeChart chart = ChartFactory.createBarChart(appContext.getProperty("quant.protein.histogram.title"),
+        JFreeChart chart = ChartFactory.createBarChart(appContext.getProperty("quant.peptide.histogram.title"),
                 appContext.getProperty("quant.histogram.x.axis"),
                 appContext.getProperty("quant.histogram.y.axis"),
                 dataset,
@@ -274,9 +270,9 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
             g2.setPaint(Color.gray);
             g2.setFont(g2.getFont().deriveFont(20f).deriveFont(Font.BOLD));
             FontMetrics fontMetrics = g2.getFontMetrics();
-            int msgWidth = fontMetrics.stringWidth(noProteinSelectionMessage);
+            int msgWidth = fontMetrics.stringWidth(noPeptideSelectionMessage);
             int xPos = clip.x + clip.width / 2 - msgWidth / 2;
-            g2.drawString(noProteinSelectionMessage, xPos, clip.height / 2);
+            g2.drawString(noPeptideSelectionMessage, xPos, clip.height / 2);
             g2.dispose();
         }
     }
@@ -289,11 +285,11 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
         }
 
         // subscriber
-        proteinSelectionSubscriber = new QuantSelectionSubscriber();
+        peptideSelectionSubscriber = new QuantSelectionSubscriber();
         referenceSampleSubscriber = new ReferenceSampleSubscriber();
 
         // subscribeToEventBus
-        eventBus.subscribe(QuantSelectionEvent.class, proteinSelectionSubscriber);
+        eventBus.subscribe(QuantSelectionEvent.class, peptideSelectionSubscriber);
         eventBus.subscribe(ReferenceSampleChangeEvent.class, referenceSampleSubscriber);
     }
 
