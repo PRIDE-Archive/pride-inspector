@@ -31,7 +31,8 @@ import java.util.regex.Pattern;
 /**
  * TableFactory can be used to different type of tables.
  * <p/>
- * User: ypriverol
+ * @author ypriverol
+ * @author rwang
  * Date: 11-Sep-2010
  * Time: 13:39:00
  */
@@ -75,8 +76,6 @@ public class TableFactory {
         }else{
             table = createProteinTable(listProteinScores, controller);
         }
-        //    proteinTreeTableModel.getTreeModelSupport().fireTreeStructureChanged(new TreePath(proteinTreeTableModel.getRoot()));
-
         return table;
     }
 
@@ -95,10 +94,6 @@ public class TableFactory {
         TableColumnExt proteinIdColumn = (TableColumnExt) table.getColumn(ProteinTableHeader.PROTEIN_ID.getHeader());
         proteinIdColumn.setVisible(false);
 
-        //When file do not contains protein inference then this filed must be removed
-        //TableColumnExt proteinGroupIdColumn = (TableColumnExt) table.getColumn(ProteinTableHeader.PROTEIN_GROUP_ID.getHeader());
-        //proteinGroupIdColumn.setVisible(false);
-
         TableColumnExt compareColumn = (TableColumnExt) table.getColumn(ProteinTableHeader.COMPARE.getHeader());
         compareColumn.setVisible(false);
 
@@ -116,14 +111,6 @@ public class TableFactory {
         // sequence coverage column
         TableColumnExt seqCoverageColumn = (TableColumnExt) table.getColumn(ProteinTableHeader.PROTEIN_SEQUENCE_COVERAGE.getHeader());
         seqCoverageColumn.setCellRenderer(new SequenceCoverageRenderer());
-        /*seqCoverageColumn.setCellRenderer(new JSparklinesBarChartTableCellRenderer(
-                PlotOrientation.HORIZONTAL,             // orientation of the plot
-                0.0,
-                100.0,                                  // upper range for the plot
-                Color.blue,
-                Constants.FIT_PEPTIDE_BACKGROUND_COLOUR));
-        ((JSparklinesBarChartTableCellRenderer) seqCoverageColumn.getCellRenderer()).showNumberAndChart(true, 40, table.getFont(), SwingConstants.CENTER, new DecimalFormat("##.#%"));
-        */
         seqCoverageColumn.setVisible(false);
 
         // isoelectric point column
@@ -196,6 +183,10 @@ public class TableFactory {
         TableColumnExt peptideColumn = (TableColumnExt) table.getColumn(PeptideTreeTableModel.TableHeader.PEPTIDE_COLUMN.getHeader());
         peptideColumn.setCellRenderer(new PeptideSequenceCellRenderer());
 
+        //Comparsion is only done in Quantitation Experiments.
+        TableColumnExt compareColumn = (TableColumnExt) table.getColumn(PeptideTableHeader.COMPARE.getHeader());
+        compareColumn.setVisible(false);
+
         // delta mass column
         TableColumnExt deltaMassColumn = (TableColumnExt) table.getColumn(PeptideTableHeader.DELTA_MZ_COLUMN.getHeader());
         double minLimit = Double.parseDouble(Desktop.getInstance().getDesktopContext().getProperty("delta.mz.min.limit"));
@@ -248,7 +239,7 @@ public class TableFactory {
         TableColumnExt numOfFragmentIons = (TableColumnExt) table.getColumn(PeptideTableHeader.NUMBER_OF_FRAGMENT_IONS_COLUMN.getHeader());
         numOfFragmentIons.setVisible(false);
 
-//        // hide spectrum id column
+        // hide spectrum id column
         String spectrumIdHeader = PeptideTableHeader.SPECTRUM_ID.getHeader();
         TableColumnExt spectrumIdColumn = (TableColumnExt) table.getColumn(spectrumIdHeader);
         spectrumIdColumn.setVisible(false);
@@ -524,9 +515,6 @@ public class TableFactory {
         TableColumnExt proteinIdColumn = (TableColumnExt) quantProteinTable.getColumn(ProteinTableHeader.PROTEIN_ID.getHeader());
         proteinIdColumn.setVisible(false);
 
-        //TableColumnExt proteinGroupIdColumn = (TableColumnExt) quantProteinTable.getColumn(ProteinTableHeader.PROTEIN_GROUP_ID.getHeader());
-        //proteinGroupIdColumn.setVisible(false);
-
         // hide the protein name column
         TableColumnExt proteinNameColumn = (TableColumnExt) quantProteinTable.getColumn(ProteinTableHeader.PROTEIN_NAME.getHeader());
         proteinNameColumn.setVisible(false);
@@ -670,6 +658,10 @@ public class TableFactory {
         // hide peptide id column
         TableColumnExt peptideIdColumn = (TableColumnExt) quantPeptideTable.getColumn(PeptideTableHeader.PEPTIDE_ID.getHeader());
         peptideIdColumn.setVisible(false);
+
+        // hide peptide id column
+        //TableColumnExt chargeStateColumn = (TableColumnExt) quantPeptideTable.getColumn(PeptideTableHeader.PRECURSOR_CHARGE_COLUMN.getHeader());
+        //chargeStateColumn.setVisible(false);
 
         // add hyper link click listener
         String protAccColumnHeader = PeptideTableHeader.PROTEIN_ACCESSION_COLUMN.getHeader();

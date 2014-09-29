@@ -408,6 +408,7 @@ public class QuantProteinSelectionPane extends DataAccessControllerPane implemen
 
         @Override
         public void tableChanged(TableModelEvent e) {
+
             int firstRowIndex = e.getFirstRow();
             int lastRowIndex = e.getLastRow();
             int columnIndex = e.getColumn();
@@ -417,6 +418,7 @@ public class QuantProteinSelectionPane extends DataAccessControllerPane implemen
             QuantProteinTableModel tableModel = (QuantProteinTableModel) proteinTable.getModel();
 
             int checkBoxColumnIndex = tableModel.getColumnIndex(ProteinTableHeader.COMPARE.getHeader());
+
             if (!ignore && firstRowIndex == lastRowIndex && columnIndex == checkBoxColumnIndex && TableModelEvent.UPDATE == type) {
                 // get protein identification id
                 int identColNum = tableModel.getColumnIndex(ProteinTableHeader.PROTEIN_ID.getHeader());
@@ -429,6 +431,7 @@ public class QuantProteinSelectionPane extends DataAccessControllerPane implemen
         }
 
         private void notifyProteinSelection(TableModel tableModel, Comparable identId, int rowModelIndex, int colModelIndex) {
+
             Boolean selected = (Boolean) tableModel.getValueAt(rowModelIndex, colModelIndex);
 
             // check whether reached the maximum number
@@ -441,7 +444,7 @@ public class QuantProteinSelectionPane extends DataAccessControllerPane implemen
                 tableModel.setValueAt(false, rowModelIndex, colModelIndex);
             } else {
                 EventService eventBus = ContainerEventServiceFinder.getEventService(QuantProteinSelectionPane.this);
-                eventBus.publish(new QuantSelectionEvent(proteinTable, identId, referenceSampleIndex, QuantSelectionEvent.Type.PROTIEN, selected));
+                eventBus.publish(new QuantSelectionEvent(proteinTable, identId, referenceSampleIndex, QuantSelectionEvent.Type.PROTEIN, selected, controller));
                 if (selected) {
                     numOfSelectedProteins++;
                 } else {

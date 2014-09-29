@@ -8,7 +8,8 @@ import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
 import java.util.*;
 
 /**
- * @author Rui Wang
+ * @author rwang
+ * @author ypriverol
  * @version $Id$
  */
 public class PeptideTableRow {

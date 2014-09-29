@@ -5,6 +5,7 @@ import org.bushe.swing.event.EventService;
 import org.bushe.swing.event.EventSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.pride.toolsuite.gui.event.QuantSelectionEvent;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
@@ -30,11 +31,13 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 
 /**
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 15/08/2011
  * Time: 11:33
  */
 public class QuantPeptideSelectionPane extends DataAccessControllerPane implements EventBusSubscribable {
+
     private static final Logger logger = LoggerFactory.getLogger(QuantPeptideSelectionPane.class);
 
     /**
@@ -155,7 +158,7 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
         referenceSampleSubscriber = new ReferenceSampleSubscriber();
 
         // subscribeToEventBus
-        eventBus.subscribe(ProteinIdentificationEvent.class, proteinIdentSubscriber);
+        eventBus.subscribe(QuantSelectionEvent.class, proteinIdentSubscriber);
         eventBus.subscribe(ReferenceSampleChangeEvent.class, referenceSampleSubscriber);
     }
 
@@ -201,7 +204,7 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
          */
         @SuppressWarnings("unchecked")
         private void updateTable(ProgressiveListTableModel tableModel, Comparable identId) {
-            RetrieveQuantPeptideTableTask retrieveTask = new RetrieveQuantPeptideTableTask(QuantPeptideSelectionPane.this.getController(), identId, referenceSampleIndex);
+            RetrieveQuantPeptideTableTask retrieveTask = new RetrieveQuantPeptideTableTask(QuantPeptideSelectionPane.this.getController(), identId, referenceSampleIndex, true);
             retrieveTask.addTaskListener(tableModel);
             TaskUtil.startBackgroundTask(retrieveTask, QuantPeptideSelectionPane.this.getController());
         }
@@ -210,27 +213,39 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
     /**
      * Listen to the event when a new protein identification has been selected
      */
-    private class SelectProteinIdentSubscriber implements EventSubscriber<ProteinIdentificationEvent> {
+    private class SelectProteinIdentSubscriber implements EventSubscriber<QuantSelectionEvent> {
 
         @Override
-        public void onEvent(ProteinIdentificationEvent event) {
-            Comparable identId = event.getIdentificationId();
-            logger.debug("Identification has been selected: {}", identId);
+        public void onEvent(QuantSelectionEvent event) {
+            if (QuantSelectionEvent.Type.PROTEIN.equals(event.getType())) {
+                Comparable id = event.getId();
+                QuantPeptideTableModel tableModel = (QuantPeptideTableModel) pepTable.getModel();
+                DataAccessController controller = event.getController();
+                if (event.isSelected()) {
+                    updateTable(tableModel, id, true);
+                } else {
+                    updateTable(tableModel, id, false);
+                }
+            }
 
-            updateProteinLabel(identId);
-
-            // clear peptide table,
-            QuantPeptideTableModel tableModel = (QuantPeptideTableModel) pepTable.getModel();
-
-            // reset sorting behavior
-            pepTable.setRowSorter(new NumberTableRowSorter(tableModel));
-            tableModel.removeAllRows();
-
-            // cancel ongoing table update tasks
-            cancelOngoingTableUpdates(tableModel);
-
-            // update peptide table
-            updateTable(tableModel, identId);
+//            Comparable identId = event.getId();
+//
+//            logger.debug("Identification has been selected: {}", identId);
+//
+//            updateProteinLabel(identId);
+//
+//            // clear peptide table,
+//            QuantPeptideTableModel tableModel = (QuantPeptideTableModel) pepTable.getModel();
+//
+//            // reset sorting behavior
+//            pepTable.setRowSorter(new NumberTableRowSorter(tableModel));
+//            tableModel.removeAllRows();
+//
+//            // cancel ongoing table update tasks
+//            cancelOngoingTableUpdates(tableModel);
+//
+//            // update peptide table
+//            updateTable(tableModel, identId);
         }
 
         private void updateProteinLabel(Comparable identId) {
@@ -269,8 +284,8 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
          * @param identId    identification id
          */
         @SuppressWarnings("unchecked")
-        private void updateTable(ProgressiveListTableModel tableModel, Comparable identId) {
-            RetrieveQuantPeptideTableTask retrieveTask = new RetrieveQuantPeptideTableTask(QuantPeptideSelectionPane.this.getController(), identId, QuantPeptideSelectionPane.this.referenceSampleIndex);
+        private void updateTable(ProgressiveListTableModel tableModel, Comparable identId, boolean status) {
+            RetrieveQuantPeptideTableTask retrieveTask = new RetrieveQuantPeptideTableTask(QuantPeptideSelectionPane.this.getController(), identId, QuantPeptideSelectionPane.this.referenceSampleIndex, status);
             retrieveTask.addTaskListener(tableModel);
             TaskUtil.startBackgroundTask(retrieveTask, QuantPeptideSelectionPane.this.getController());
         }

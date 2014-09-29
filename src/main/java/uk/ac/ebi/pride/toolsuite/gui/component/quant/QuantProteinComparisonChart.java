@@ -320,7 +320,7 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
 
         @Override
         public void onEvent(QuantSelectionEvent selectionEvent) {
-            if (QuantSelectionEvent.Type.PROTIEN.equals(selectionEvent.getType())) {
+            if (QuantSelectionEvent.Type.PROTEIN.equals(selectionEvent.getType())) {
                 Comparable id = selectionEvent.getId();
                 if (selectionEvent.isSelected()) {
                     noProteinSelected = false;
