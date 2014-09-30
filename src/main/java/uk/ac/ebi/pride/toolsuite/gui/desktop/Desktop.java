@@ -14,7 +14,8 @@ import java.util.EventObject;
 import java.util.HashSet;
 
 /**
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 21-Jan-2010
  * Time: 11:25:25
  */

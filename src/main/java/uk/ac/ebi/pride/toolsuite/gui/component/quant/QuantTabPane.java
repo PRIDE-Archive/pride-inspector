@@ -35,7 +35,7 @@ public class QuantTabPane extends PrideInspectorTabPane {
     /**
      * the size of the divider for split pane
      */
-    private static final int DIVIDER_SIZE = 5;
+    private static final int DIVIDER_SIZE = 6;
     /**
      * Inner split pane contains protein table
      */
@@ -60,7 +60,7 @@ public class QuantTabPane extends PrideInspectorTabPane {
     /**
      * Quantitative sample pane
      */
-    private QuantSamplePane samplePane;
+    //private QuantSamplePane samplePane;
     /**
      * visualize spectrum
      */
@@ -106,11 +106,11 @@ public class QuantTabPane extends PrideInspectorTabPane {
         proteinInnerPane.setDividerSize(DIVIDER_SIZE);
         proteinInnerPane.setResizeWeight(INNER_SPLIT_PANE_RESIZE_WEIGHT);
 
-        sampleInnerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        sampleInnerPane.setBorder(BorderFactory.createEmptyBorder());
-        sampleInnerPane.setOneTouchExpandable(true);
-        sampleInnerPane.setDividerSize(DIVIDER_SIZE);
-        sampleInnerPane.setResizeWeight(INNER_SPLIT_PANE_RESIZE_WEIGHT);
+        //sampleInnerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        //sampleInnerPane.setBorder(BorderFactory.createEmptyBorder());
+       // sampleInnerPane.setOneTouchExpandable(true);
+       // sampleInnerPane.setDividerSize(DIVIDER_SIZE);
+       // sampleInnerPane.setResizeWeight(INNER_SPLIT_PANE_RESIZE_WEIGHT);
 
         // create the outer split pane
         outerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -124,15 +124,14 @@ public class QuantTabPane extends PrideInspectorTabPane {
         proteinInnerPane.setTopComponent(proteinPane);
 
         // sample pane
-        samplePane = new QuantSamplePane(controller);
-        sampleInnerPane.setTopComponent(samplePane);
-
-        proteinInnerPane.setBottomComponent(sampleInnerPane);
-        outerPane.setTopComponent(proteinInnerPane);
+       // samplePane = new QuantSamplePane(controller);
+       // sampleInnerPane.setTopComponent(samplePane);
 
         // peptide selection pane
         peptidePane = new QuantPeptideSelectionPane(controller);
-        sampleInnerPane.setBottomComponent(peptidePane);
+        //sampleInnerPane.setTopComponent(peptidePane);
+        outerPane.setTopComponent(proteinInnerPane);
+        proteinInnerPane.setBottomComponent(peptidePane);
 
         // visualization tab pane
         quantVizPane = new QuantVizPane(controller, this);
@@ -168,9 +167,9 @@ public class QuantTabPane extends PrideInspectorTabPane {
      * Return a referenc eto the sample pane
      * @return
      */
-    public QuantSamplePane getQuantSamplePane() {
-        return samplePane;
-    }
+   // public QuantSamplePane getQuantSamplePane() {
+      //  return samplePane;
+   // }
 
     @Override
     public void started(TaskEvent event) {

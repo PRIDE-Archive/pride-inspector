@@ -33,6 +33,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author rwang
@@ -85,12 +87,7 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
      */
     private int numOfSelectedPeptides = 0;
 
-    /**
-     * button to set reference sample
-     */
-    private JButton sampleInformation;
-
-    /**
+        /**
      * Constructor
      *
      * @param controller data access controller
@@ -116,12 +113,16 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
     @Override
     protected void addComponents() {
         // add descriptive panel
-        JPanel headerPanel = buildMetaDataPane();
-        this.add(headerPanel, BorderLayout.NORTH);
+//        JPanel headerPanel = buildMetaDataPane();
+//        this.add(headerPanel, BorderLayout.NORTH);
 
         // create identification table
         try {
             pepTable = TableFactory.createQuantPeptideTable(controller, controller.getAvailablePeptideLevelScores());
+
+            // createAttributedSequence header panel
+            JPanel headerPanel = buildHeaderPane();
+            this.add(headerPanel, BorderLayout.NORTH);
 
             // add row selection listener
             pepTable.getSelectionModel().addListSelectionListener(new PeptideSelectionListener(pepTable));
@@ -144,6 +145,21 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
             logger.error(msg, e);
             appContext.addThrowableEntry(new ThrowableEntry(MessageType.ERROR, msg, e));
         }
+    }
+
+    /**
+     * This builds the top panel to display, it includes
+     *
+     * @return JPanel  header panel
+     */
+    private JPanel buildHeaderPane() {
+        // add meta data panel
+        JPanel metaDataPanel = buildMetaDataPane();
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        titlePanel.setOpaque(false);
+        titlePanel.add(metaDataPanel, BorderLayout.WEST);
+
+        return titlePanel;
     }
 
     /**

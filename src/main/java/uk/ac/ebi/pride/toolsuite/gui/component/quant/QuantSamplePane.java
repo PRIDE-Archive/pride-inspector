@@ -32,6 +32,8 @@ public class QuantSamplePane extends DataAccessControllerPane {
     @Override
     protected void setupMainPane() {
         // set layout
+        this.setSize(new Dimension(400, 200));
+        this.setPreferredSize(new Dimension(400, 200));
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5));
     }
@@ -88,7 +90,7 @@ public class QuantSamplePane extends DataAccessControllerPane {
         metaDataPanel.setOpaque(false);
         metaDataPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         // protein table label
-        JLabel tableLabel = new JLabel("<html><b>Sample</b></html>");
+        JLabel tableLabel = new JLabel("<html><b>Samples</b></html>");
         metaDataPanel.add(tableLabel);
 
         return metaDataPanel;

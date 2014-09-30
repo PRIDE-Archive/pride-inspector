@@ -5,13 +5,11 @@ import org.bushe.swing.event.EventService;
 import org.bushe.swing.event.EventSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.pride.toolsuite.gui.action.impl.*;
+import uk.ac.ebi.pride.toolsuite.gui.desktop.*;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
-import uk.ac.ebi.pride.toolsuite.gui.action.impl.ExportQuantitativeDataAction;
-import uk.ac.ebi.pride.toolsuite.gui.action.impl.ExtraProteinDetailAction;
-import uk.ac.ebi.pride.toolsuite.gui.action.impl.OpenHelpAction;
-import uk.ac.ebi.pride.toolsuite.gui.action.impl.SetRefSampleAction;
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.EventBusSubscribable;
 import uk.ac.ebi.pride.toolsuite.gui.component.exception.ThrowableEntry;
@@ -262,6 +260,14 @@ public class QuantProteinSelectionPane extends DataAccessControllerPane implemen
      */
     private JPopupMenu createPopupMenu() {
         JPopupMenu menu = new JPopupMenu();
+
+        //Sample details
+        JMenuItem sampleMenuItem = new JMenuItem();
+        Point location = sampleMenuItem.getLocation();
+        Icon samplePeptideIcon = GUIUtilities.loadIcon(appContext.getProperty("data.source.small.icon"));
+        String samplePeptideTitle = appContext.getProperty("sample.information.title");
+        sampleMenuItem.setAction(new SampleInfoAction(uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop.getInstance().getMainComponent(), samplePeptideTitle, samplePeptideIcon, controller, location));
+        menu.add(sampleMenuItem);
 
         //protein details
         JMenuItem protMenuItem = new JMenuItem();

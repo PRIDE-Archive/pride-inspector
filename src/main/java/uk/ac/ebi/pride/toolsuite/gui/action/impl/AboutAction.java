@@ -10,7 +10,9 @@ import java.awt.event.ActionEvent;
 /**
  * Show About panel.
  *
- * User: rwang
+ * @author rwang
+ * @author ypriverol
+ *
  * Date: 18-Aug-2010
  * Time: 14:28:10
  */

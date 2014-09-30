@@ -30,7 +30,9 @@ import java.util.List;
 /**
  * Abstract class to to retrieve extra protein details, such as: name, status and coverage
  * <p/>
- * User: rwang
+ * @author rwang
+ * @author ypriverol
+ *
  * Date: 25/08/2011
  * Time: 10:29
  */
