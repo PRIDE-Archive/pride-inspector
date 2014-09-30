@@ -12,7 +12,8 @@ import java.util.List;
 
 /**
  * Task to retrieve all the peptide related quantitative information per protein identification
- * User: rwang
+ * @quthor rwang
+ * @author ypriverol
  * Date: 18/08/2011
  * Time: 11:09
  */
@@ -30,7 +31,7 @@ public class RetrieveQuantPeptideTableTask extends TaskAdapter<Void, Tuple<Table
 
     private boolean status;
 
-    public RetrieveQuantPeptideTableTask(DataAccessController controller, Comparable identId, int referenceSampleIndex, boolean status) {
+    public RetrieveQuantPeptideTableTask(DataAccessController controller, Comparable identId, int referenceSampleIndex, Boolean status) {
         this.setName(DEFAULT_TASK_NAME);
         this.setDescription(DEFAULT_TASK_DESC);
         this.controller = controller;

@@ -444,7 +444,7 @@ public class QuantProteinSelectionPane extends DataAccessControllerPane implemen
                 tableModel.setValueAt(false, rowModelIndex, colModelIndex);
             } else {
                 EventService eventBus = ContainerEventServiceFinder.getEventService(QuantProteinSelectionPane.this);
-                eventBus.publish(new QuantSelectionEvent(proteinTable, identId, referenceSampleIndex, QuantSelectionEvent.Type.PROTEIN, selected, controller));
+                eventBus.publish(new QuantSelectionEvent(proteinTable, identId, referenceSampleIndex, QuantSelectionEvent.Type.PROTEIN, selected, controller, null));
                 if (selected) {
                     numOfSelectedProteins++;
                 } else {

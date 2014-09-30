@@ -16,7 +16,8 @@ import java.util.regex.Pattern;
 /**
  * Mouse listener for clicking hyper link
  * <p/>
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 10-Sep-2010
  * Time: 17:05:09
  */

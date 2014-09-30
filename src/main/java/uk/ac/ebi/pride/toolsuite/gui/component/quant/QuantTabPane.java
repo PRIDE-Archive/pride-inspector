@@ -31,7 +31,7 @@ public class QuantTabPane extends PrideInspectorTabPane {
     /**
      * resize weight for outer split pane
      */
-    private static final double OUTER_SPLIT_PANE_RESIZE_WEIGHT = 0.7;
+    private static final double OUTER_SPLIT_PANE_RESIZE_WEIGHT = 0.4;
     /**
      * the size of the divider for split pane
      */

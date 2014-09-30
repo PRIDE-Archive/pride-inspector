@@ -45,6 +45,34 @@ public class QuantPeptideTableModel extends AbstractPeptideTableModel {
         fireTableStructureChanged();
     }
 
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        String columnName = getColumnName(columnIndex);
+        if (columnName.equals(ProteinTableHeader.COMPARE.getHeader())) {
+            return Boolean.class;
+        } else {
+            return super.getColumnClass(columnIndex);
+        }
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        String columnName = getColumnName(columnIndex);
+        return columnName.equals(PeptideTableHeader.COMPARE.getHeader()) || super.isCellEditable(rowIndex, columnIndex);
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        String columnName = getColumnName(columnIndex);
+        if (columnName.equals(PeptideTableHeader.COMPARE.getHeader())) {
+            PeptideTableRow peptideTableRow = (PeptideTableRow)contents.get(rowIndex);
+            peptideTableRow.setComparisonState((Boolean)aValue);
+            fireTableCellUpdated(rowIndex, columnIndex);
+        } else {
+            super.setValueAt(aValue, rowIndex, columnIndex);
+        }
+    }
+
     /**
      * Add peptide row data
      *

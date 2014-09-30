@@ -5,6 +5,7 @@ import org.bushe.swing.event.EventService;
 import org.bushe.swing.event.EventSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.pride.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.event.QuantSelectionEvent;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
@@ -28,6 +29,9 @@ import uk.ac.ebi.pride.toolsuite.gui.task.impl.RetrieveQuantPeptideTableTask;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
 import java.awt.*;
 
 /**
@@ -39,6 +43,8 @@ import java.awt.*;
 public class QuantPeptideSelectionPane extends DataAccessControllerPane implements EventBusSubscribable {
 
     private static final Logger logger = LoggerFactory.getLogger(QuantPeptideSelectionPane.class);
+
+    private static final int MAX_NUMBER_OF_PROTEINS = 10;
 
     /**
      * the title for ptm label
@@ -75,6 +81,16 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
     private ReferenceSampleSubscriber referenceSampleSubscriber;
 
     /**
+     * The number of selected proteins
+     */
+    private int numOfSelectedPeptides = 0;
+
+    /**
+     * button to set reference sample
+     */
+    private JButton sampleInformation;
+
+    /**
      * Constructor
      *
      * @param controller data access controller
@@ -107,13 +123,16 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
         try {
             pepTable = TableFactory.createQuantPeptideTable(controller, controller.getAvailablePeptideLevelScores());
 
-
             // add row selection listener
             pepTable.getSelectionModel().addListSelectionListener(new PeptideSelectionListener(pepTable));
 
             // add mouse listener
             String protAccColumnHeader = PeptideTableHeader.PROTEIN_ACCESSION_COLUMN.getHeader();
             pepTable.addMouseMotionListener(new TableCellMouseMotionListener(pepTable, protAccColumnHeader));
+
+            // add table model listener to listen to checkbox selection event
+            TableModel tableModel = pepTable.getModel();
+            tableModel.addTableModelListener(new CheckBoxSelectionListener());
 
             JScrollPane scrollPane = new JScrollPane(pepTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                     JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -327,6 +346,72 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
                             eventBus.publish(new PSMEvent(QuantPeptideSelectionPane.this, controller, identId, peptideId));
                         }
                     }
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    private class CheckBoxSelectionListener implements TableModelListener {
+        /**
+         * whether to ignore the next event
+         */
+        private boolean ignore = false;
+
+        @Override
+        public void tableChanged(TableModelEvent e) {
+
+            int firstRowIndex = e.getFirstRow();
+
+            int lastRowIndex = e.getLastRow();
+
+            int columnIndex = e.getColumn();
+
+            int type = e.getType();
+
+            // get table model
+            QuantPeptideTableModel tableModel = (QuantPeptideTableModel) pepTable.getModel();
+
+            int checkBoxColumnIndex = tableModel.getColumnIndex(PeptideTableHeader.COMPARE.getHeader());
+
+            if (!ignore && firstRowIndex == lastRowIndex && columnIndex == checkBoxColumnIndex && TableModelEvent.UPDATE == type) {
+                // get protein identification id
+                int identColNum = tableModel.getColumnIndex(PeptideTableHeader.IDENTIFICATION_ID.getHeader());
+
+                Comparable identId = (Comparable) tableModel.getValueAt(firstRowIndex, identColNum);
+
+                int peptideColNum = tableModel.getColumnIndex(PeptideTableHeader.PEPTIDE_ID.getHeader());
+
+                Comparable identPeptide = (Comparable) tableModel.getValueAt(firstRowIndex, peptideColNum);
+
+                // notify protein selection
+                notifyPeptideSelection(tableModel, identId, identPeptide, firstRowIndex, columnIndex);
+            }
+
+            ignore = false;
+        }
+
+        private void notifyPeptideSelection(TableModel tableModel, Comparable identId, Comparable idPeptide, int rowModelIndex, int colModelIndex) {
+
+            Boolean selected = (Boolean) tableModel.getValueAt(rowModelIndex, colModelIndex);
+
+            // check whether reached the maximum number
+            if (selected && numOfSelectedPeptides >= MAX_NUMBER_OF_PROTEINS) {
+                // show warnings
+                GUIUtilities.warn(uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop.getInstance().getMainComponent(),
+                        "Protein Selection limited is reached: " + MAX_NUMBER_OF_PROTEINS + " maximum",
+                        "Selection Limit Reached");
+                ignore = true;
+                tableModel.setValueAt(false, rowModelIndex, colModelIndex);
+            } else {
+                EventService eventBus = ContainerEventServiceFinder.getEventService(QuantPeptideSelectionPane.this);
+                eventBus.publish(new QuantSelectionEvent(pepTable, identId, referenceSampleIndex, QuantSelectionEvent.Type.PEPTIDE, selected, controller, idPeptide));
+                if (selected) {
+                    numOfSelectedPeptides++;
+                } else {
+                    numOfSelectedPeptides--;
                 }
             }
         }

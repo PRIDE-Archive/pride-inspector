@@ -491,6 +491,7 @@ public class TableFactory {
      * @return JTable  quant protein table
      */
     public static JTable createQuantProteinTable(DataAccessController controller, TableModel tableModel) {
+
         DefaultTableColumnModelExt columnModel = new DefaultTableColumnModelExt();
         JXTable quantProteinTable = createDefaultJXTable(tableModel);
         quantProteinTable.setAutoCreateColumnsFromModel(false);
@@ -582,6 +583,7 @@ public class TableFactory {
      */
     public static JTable createQuantPeptideTable(DataAccessController controller, Collection<CvTermReference> listPeptideScores) {
 
+        DefaultTableColumnModelExt columnModel = new DefaultTableColumnModelExt();
         QuantPeptideTableModel tableModel = new QuantPeptideTableModel(listPeptideScores);
         JXTable quantPeptideTable = createDefaultJXTable(tableModel);
         quantPeptideTable.setAutoCreateColumnsFromModel(false);
@@ -589,15 +591,21 @@ public class TableFactory {
         // add table model change listener
         tableModel.addTableModelListener(new BarChartColumnListener(quantPeptideTable));
 
-        // hide protein accession
-        String protAccHeader = PeptideTableHeader.PROTEIN_ACCESSION_COLUMN.getHeader();
-        TableColumnExt proteinAccColumn = (TableColumnExt) quantPeptideTable.getColumn(protAccHeader);
-        proteinAccColumn.setVisible(false);
+        // in case the compare doesn't exist
+        List<TableColumn> columns = columnModel.getColumns(true);
+        for (TableColumn column : columns) {
+            if (column.getHeaderValue().equals(ProteinTableHeader.COMPARE.getHeader())) {
+                column.setMaxWidth(25);
+            }
+        }
 
+        // hide mapped protein accession
+        String mappedProtAccHeader = PeptideTableHeader.PROTEIN_ACCESSION_COLUMN.getHeader();
+        TableColumnExt mappedProtAccColumn = (TableColumnExt) quantPeptideTable.getColumn(mappedProtAccHeader);
+        mappedProtAccColumn.setCellRenderer(new ProteinAccessionHyperLinkCellRenderer());
         // add hyper link click listener
-        quantPeptideTable.addMouseMotionListener(new TableCellMouseMotionListener(quantPeptideTable, protAccHeader));
-        quantPeptideTable.addMouseListener(new HyperLinkCellMouseClickListener(quantPeptideTable, protAccHeader, new ProteinAccHyperLinkGenerator()));
-
+        quantPeptideTable.addMouseMotionListener(new TableCellMouseMotionListener(quantPeptideTable, mappedProtAccHeader));
+        quantPeptideTable.addMouseListener(new HyperLinkCellMouseClickListener(quantPeptideTable, mappedProtAccHeader, new ProteinAccHyperLinkGenerator()));
         // hide protein name
         TableColumnExt proteinNameColumn = (TableColumnExt) quantPeptideTable.getColumn(PeptideTableHeader.PROTEIN_NAME.getHeader());
         proteinNameColumn.setVisible(false);
@@ -659,14 +667,9 @@ public class TableFactory {
         TableColumnExt peptideIdColumn = (TableColumnExt) quantPeptideTable.getColumn(PeptideTableHeader.PEPTIDE_ID.getHeader());
         peptideIdColumn.setVisible(false);
 
-        // hide peptide id column
-        //TableColumnExt chargeStateColumn = (TableColumnExt) quantPeptideTable.getColumn(PeptideTableHeader.PRECURSOR_CHARGE_COLUMN.getHeader());
-        //chargeStateColumn.setVisible(false);
-
-        // add hyper link click listener
-        String protAccColumnHeader = PeptideTableHeader.PROTEIN_ACCESSION_COLUMN.getHeader();
-        quantPeptideTable.addMouseMotionListener(new TableCellMouseMotionListener(quantPeptideTable, protAccColumnHeader));
-        quantPeptideTable.addMouseListener(new HyperLinkCellMouseClickListener(quantPeptideTable, protAccColumnHeader, new ProteinAccHyperLinkGenerator()));
+        // hide peptide charge state
+        TableColumnExt rankingColumn = (TableColumnExt) quantPeptideTable.getColumn(PeptideTableHeader.RANKING.getHeader());
+        rankingColumn.setVisible(false);
 
         // additional column
         String additionalColHeader = PeptideTableHeader.ADDITIONAL.getHeader();
@@ -743,9 +746,6 @@ public class TableFactory {
 
         // row height
         table.setRowHeight(20);
-
-        // prevent dragging of column
-        //table.getTableHeader().setReorderingAllowed(false);
 
         // remove border
         table.setBorder(BorderFactory.createEmptyBorder());

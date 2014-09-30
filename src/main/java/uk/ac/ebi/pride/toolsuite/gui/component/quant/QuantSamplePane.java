@@ -14,7 +14,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 15/08/2011
  * Time: 11:34
  */

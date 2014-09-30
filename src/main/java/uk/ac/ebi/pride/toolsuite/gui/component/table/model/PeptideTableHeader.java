@@ -7,8 +7,8 @@ package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
  */
 public enum PeptideTableHeader {
     PEPTIDE_COLUMN("Peptide", "Peptide Sequence"),
-    COMPARE("Compare", "Click to choose the peptides you want to compare"),
     PROTEIN_ACCESSION_COLUMN("Protein", "Protein Accession"),
+    COMPARE("Compare", "Click to choose the peptides you want to compare"),
     PROTEIN_NAME("Protein Name", "Protein Name Retrieved Using Web"),
     PROTEIN_STATUS("Status", "Status Of The Protein Accession"),
     PROTEIN_SEQUENCE_COVERAGE("Coverage", "Protein Sequence Coverage"),

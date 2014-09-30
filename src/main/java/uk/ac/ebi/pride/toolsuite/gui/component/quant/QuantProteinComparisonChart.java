@@ -6,10 +6,7 @@ import org.bushe.swing.event.EventSubscriber;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.labels.ItemLabelAnchor;
-import org.jfree.chart.labels.ItemLabelPosition;
-import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
-import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
+import org.jfree.chart.labels.*;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
@@ -115,7 +112,7 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
                 appContext.getProperty("quant.histogram.y.axis"),
                 dataset,
                 PlotOrientation.VERTICAL,
-                false,
+                true,
                 true,
                 false);
         // set chart title size
@@ -135,6 +132,10 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
         renderer.setItemMargin(0);
         renderer.setMaximumBarWidth(20);
         renderer.setShadowVisible(false);
+
+        QuantCategoryItemLaegendLabelGenerator legendlabelGenerator = new QuantCategoryItemLaegendLabelGenerator();
+        renderer.setLegendItemLabelGenerator(legendlabelGenerator);
+
         // label
         renderer.setBaseItemLabelPaint(Color.black);
         QuantCategoryItemLabelGenerator labelGenerator = new QuantCategoryItemLabelGenerator();
@@ -438,6 +439,10 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
         public Comparable getLabel(Comparable rowKey) {
             return labelMap.get(rowKey);
         }
+
+        public Comparable getLegend(Comparable rowKey) {
+            return labelMap.get(rowKey);
+        }
     }
 
     private class QuantCategoryItemLabelGenerator extends StandardCategoryItemLabelGenerator {
@@ -454,6 +459,24 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
                 return label == null ? null : label.toString();
             } else {
                 return super.generateLabelString(dataset, row, column);
+            }
+        }
+    }
+
+    private class QuantCategoryItemLaegendLabelGenerator extends StandardCategorySeriesLabelGenerator {
+
+        protected QuantCategoryItemLaegendLabelGenerator() {
+            super();
+        }
+
+        @Override
+        public String generateLabel(CategoryDataset dataset, int series) {
+            if (dataset instanceof QuantCategoryDataset) {
+                Comparable rowKey = dataset.getRowKey(series);
+                Comparable label = ((QuantCategoryDataset) dataset).getLegend(rowKey);
+                return label == null ? null : label.toString();
+            } else {
+                return super.generateLabel(dataset, series);
             }
         }
     }

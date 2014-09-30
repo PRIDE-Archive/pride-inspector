@@ -6,13 +6,11 @@ import org.bushe.swing.event.EventSubscriber;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.labels.ItemLabelAnchor;
-import org.jfree.chart.labels.ItemLabelPosition;
-import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
-import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
+import org.jfree.chart.labels.*;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.title.LegendTitle;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -46,7 +44,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by yperez on 25/09/2014.
+ * JFreeChar Panel for Peptide Quantitation data.
+ * @author ypriverol
+ * @author rwang
+ *
  */
 public class QuantPeptideComparisonChart extends DataAccessControllerPane implements EventBusSubscribable {
 
@@ -71,7 +72,7 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
     /**
      * mapping between peptide identification id and the label of each category
      */
-    private Map<Comparable, List<Comparable>> idMapping;
+    private Map<Comparable, Map<Comparable, List<Comparable>>> idMapping;
     /**
      * Event subscriber listens to Peptide selection event
      */
@@ -92,7 +93,7 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
 
     public QuantPeptideComparisonChart(DataAccessController controller) {
         super(controller);
-        this.idMapping = new HashMap<Comparable, List<Comparable>>();
+        this.idMapping = new HashMap<Comparable, Map<Comparable, List<Comparable>>>();
         this.noProteinSelected = true;
         this.noPeptideSelectionMessage = appContext.getProperty("no.peptide.selection.warning.message");
     }
@@ -111,7 +112,7 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
                 appContext.getProperty("quant.histogram.y.axis"),
                 dataset,
                 PlotOrientation.VERTICAL,
-                false,
+                true,
                 true,
                 false);
         // set chart title size
@@ -131,12 +132,17 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
         renderer.setItemMargin(0);
         renderer.setMaximumBarWidth(20);
         renderer.setShadowVisible(false);
+
+        //Legend
+        QuantCategoryItemLaegendLabelGenerator legendlabelGenerator = new QuantCategoryItemLaegendLabelGenerator();
+        renderer.setLegendItemLabelGenerator(legendlabelGenerator);
+
         // label
         renderer.setBaseItemLabelPaint(Color.black);
         QuantCategoryItemLabelGenerator labelGenerator = new QuantCategoryItemLabelGenerator();
         renderer.setBaseItemLabelGenerator(labelGenerator);
         renderer.setBaseItemLabelsVisible(true);
-        renderer.setBaseItemLabelFont(new Font("SansSerif", Font.PLAIN, 11));
+        renderer.setBaseItemLabelFont(new Font("SansSerif", Font.PLAIN, 10));
         ItemLabelPosition p = new ItemLabelPosition(
                 ItemLabelAnchor.CENTER, TextAnchor.CENTER,
                 TextAnchor.CENTER, -Math.PI / 2.0);
@@ -316,17 +322,18 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
 
         @Override
         public void onEvent(QuantSelectionEvent selectionEvent) {
-            if (QuantSelectionEvent.Type.PROTEIN.equals(selectionEvent.getType())) {
+            if (QuantSelectionEvent.Type.PEPTIDE.equals(selectionEvent.getType())) {
                 Comparable id = selectionEvent.getId();
+                Comparable idPeptide = selectionEvent.getPeptideId();
                 if (selectionEvent.isSelected()) {
                     noProteinSelected = false;
-                    addData(id);
+                    addData(id, idPeptide);
                     if (!colorSet) {
                         setChartBarColour();
                         colorSet = true;
                     }
                 } else {
-                    removeData(id);
+                    removeData(id, idPeptide);
                 }
             }
         }
@@ -340,14 +347,16 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
         public void onEvent(ReferenceSampleChangeEvent referenceSampleChangeEvent) {
             int newReferenceSampleIndex = referenceSampleChangeEvent.getReferenceSampleIndex();
             if (newReferenceSampleIndex != referenceSampleIndex) {
-                java.util.List<Comparable> ids = new ArrayList<Comparable>(idMapping.keySet());
                 // clear dataset
                 dataset.clear();
                 // set new reference sample index
                 referenceSampleIndex = newReferenceSampleIndex;
                 // regenerate new dataset
-                for (Comparable id : ids) {
-                    addData(id);
+                for (Map.Entry proteinEntry : idMapping.entrySet()) {
+                    Comparable proteinId = (Comparable) proteinEntry.getKey();
+                    Map<Comparable, List<Comparable>> peptideIds = (Map<Comparable, List<Comparable>>) proteinEntry.getValue();
+                    for(Comparable peptideId: peptideIds.keySet())
+                        addData(proteinId, peptideId);
                 }
             }
         }
@@ -358,12 +367,15 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
      *
      * @param id protein id
      */
-    private void addData(Comparable id) {
+    private void addData(Comparable id, Comparable idPeptide) {
         try {
             // get protein accession
             String proteinAcc = controller.getProteinAccession(id);
+
+            String sequence   = controller.getPeptideSequence(id,idPeptide);
             // get quantitation data
-            Quantification quantitation = controller.getProteinQuantData(id);
+            Quantification quantitation = controller.getPeptideQuantData(id,idPeptide);
+
             QuantitativeSample sample = controller.getQuantSample();
             if (referenceSampleIndex < 1) {
                 referenceSampleIndex = controller.getReferenceSubSampleIndex();
@@ -380,13 +392,18 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
                         double value = (referenceReagentResult == null || reagentResult == null) ? 0 : (reagentResult / referenceReagentResult);
                         Comparable column = QuantCvTermReference.getReagentShortLabel(reagent.getAccession())
                                 + "/" + QuantCvTermReference.getReagentShortLabel(referenceReagent.getAccession());
-                        dataset.addValue(value, proteinAcc, id, column);
-                        java.util.List<Comparable> columns = idMapping.get(id);
-                        if (columns == null) {
-                            columns = new ArrayList<Comparable>();
-                            idMapping.put(id, columns);
+                        dataset.addValue(value, sequence, proteinAcc, id.toString() + idPeptide.toString(), column);
+                        Map<Comparable, List<Comparable>> peptides = new HashMap<Comparable, List<Comparable>>();
+                        List<Comparable> columns = new ArrayList<Comparable>();
+
+                        if( idMapping.get(id) != null ){
+                            peptides = idMapping.get(id);
+                            if(peptides.get(idPeptide) != null)
+                                columns = peptides.get(idPeptide);
                         }
                         columns.add(column);
+                        peptides.put(idPeptide, columns);
+                        idMapping.put(id, peptides);
                     }
                 }
             }
@@ -400,28 +417,34 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
      *
      * @param id protein id
      */
-    private void removeData(Comparable id) {
+    private void removeData(Comparable id, Comparable idPeptide) {
         // remove from bar chart
-        java.util.List<Comparable> columns = idMapping.get(id);
-        if (columns != null) {
+        Map<Comparable, List<Comparable>> peptides = idMapping.get(id);
+        if (peptides != null && peptides.get(idPeptide) != null) {
+            List<Comparable> columns = peptides.get(idPeptide);
             for (Comparable column : columns) {
-                dataset.removeValue(id, column);
+                dataset.removeValue(id.toString() + idPeptide.toString(), column);
             }
             // remove mapping
-            idMapping.remove(id);
+            peptides.remove(idPeptide);
+            if(idMapping.get(id).size() == 0)
+                idMapping.remove(id);
         }
     }
 
     private class QuantCategoryDataset extends DefaultCategoryDataset {
 
         private Map<Comparable, Comparable> labelMap;
+        private Map<Comparable, Comparable> legendMap;
 
         private QuantCategoryDataset() {
             labelMap = new HashMap<Comparable, Comparable>();
+            legendMap = new HashMap<Comparable, Comparable>();
         }
 
-        public void addValue(Number value, Comparable label, Comparable rowKey, Comparable columnKey) {
+        public void addValue(Number value, Comparable label, Comparable legendItem,Comparable rowKey, Comparable columnKey) {
             labelMap.put(rowKey, label);
+            legendMap.put(rowKey, legendItem);
             super.addValue(value, rowKey, columnKey);
         }
 
@@ -429,11 +452,19 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
         public void removeValue(Comparable rowKey, Comparable columnKey) {
             super.removeValue(rowKey, columnKey);
             labelMap.remove(rowKey);
+            legendMap.remove(rowKey);
         }
 
         public Comparable getLabel(Comparable rowKey) {
             return labelMap.get(rowKey);
         }
+
+        public Comparable getLegend(Comparable rowKey) {
+            return legendMap.get(rowKey);
+        }
+
+
+
     }
 
     private class QuantCategoryItemLabelGenerator extends StandardCategoryItemLabelGenerator {
@@ -450,6 +481,24 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
                 return label == null ? null : label.toString();
             } else {
                 return super.generateLabelString(dataset, row, column);
+            }
+        }
+    }
+
+    private class QuantCategoryItemLaegendLabelGenerator extends StandardCategorySeriesLabelGenerator {
+
+        protected QuantCategoryItemLaegendLabelGenerator() {
+            super();
+        }
+
+        @Override
+        public String generateLabel(CategoryDataset dataset, int series) {
+            if (dataset instanceof QuantCategoryDataset) {
+                Comparable rowKey = dataset.getRowKey(series);
+                Comparable label = ((QuantCategoryDataset) dataset).getLegend(rowKey);
+                return label == null ? null : label.toString();
+            } else {
+                return super.generateLabel(dataset, series);
             }
         }
     }

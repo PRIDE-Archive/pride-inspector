@@ -13,6 +13,8 @@ import java.util.*;
  * @version $Id$
  */
 public class PeptideTableRow {
+
+    private Boolean comparisonState;
     private PeptideSequence sequence;
     private ProteinAccession proteinAccession;
     private String proteinName;
@@ -35,6 +37,14 @@ public class PeptideTableRow {
     public PeptideTableRow() {
         this.scores = new ArrayList<Double>();
         this.quantifications = new ArrayList<Object>();
+    }
+
+    public Boolean getComparisonState() {
+        return comparisonState;
+    }
+
+    public void setComparisonState(Boolean comparisonState) {
+        this.comparisonState = comparisonState;
     }
 
     public PeptideSequence getSequence() {

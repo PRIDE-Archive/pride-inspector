@@ -5,7 +5,7 @@ import org.bushe.swing.event.AbstractEventServiceEvent;
 /**
  * Event to notify a reference sample change
  *
- * User: rwang
+ * @author rwang
  * Date: 18/08/2011
  * Time: 12:15
  */

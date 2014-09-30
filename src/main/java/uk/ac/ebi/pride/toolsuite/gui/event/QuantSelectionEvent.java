@@ -12,18 +12,27 @@ import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
  * Time: 16:59
  */
 public class QuantSelectionEvent extends AbstractEventServiceEvent {
+
     public enum Type {PROTEIN, PEPTIDE}
 
     private Comparable id;
+
     private int referenceSampleIndex;
+
     private Type type;
+
     private boolean selected;
+
+    private Comparable peptideId;
+
     private DataAccessController controller;
 
     public QuantSelectionEvent(Object source,
                                Comparable id, int refSampleIndex,
                                Type type, boolean selected,
-                               DataAccessController controller
+                               DataAccessController controller,
+                               Comparable peptideId
+
     ) {
         super(source);
         this.id= id;
@@ -31,6 +40,7 @@ public class QuantSelectionEvent extends AbstractEventServiceEvent {
         this.type = type;
         this.selected = selected;
         this.controller = controller;
+        this.peptideId = peptideId;
     }
 
     public Comparable getId() {
@@ -39,6 +49,14 @@ public class QuantSelectionEvent extends AbstractEventServiceEvent {
 
     public void setId(Comparable id) {
         this.id = id;
+    }
+
+    public Comparable getPeptideId() {
+        return peptideId;
+    }
+
+    public void setPeptideId(Comparable peptideId) {
+        this.peptideId = peptideId;
     }
 
     public int getReferenceSampleIndex() {
