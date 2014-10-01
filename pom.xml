@@ -83,6 +83,7 @@
         <prider-data-provider-api.version>1.0</prider-data-provider-api.version>
         <httpclient.version>4.3.3</httpclient.version>
         <spring-security-core.version>3.2.1.RELEASE</spring-security-core.version>
+        <commons-lang3.version>3.3.2</commons-lang3.version>
     </properties>
 
     <dependencies>
@@ -174,7 +175,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.3.2</version>
+            <version>${commons-lang3.version}</version>
         </dependency>
 
         <dependency>
