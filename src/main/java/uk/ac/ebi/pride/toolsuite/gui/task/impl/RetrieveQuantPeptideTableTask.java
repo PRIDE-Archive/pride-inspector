@@ -1,5 +1,9 @@
 package uk.ac.ebi.pride.toolsuite.gui.task.impl;
 
+import org.bushe.swing.event.ContainerEventServiceFinder;
+import org.bushe.swing.event.EventService;
+import uk.ac.ebi.pride.toolsuite.gui.component.quant.QuantPeptideSelectionPane;
+import uk.ac.ebi.pride.toolsuite.gui.event.QuantSelectionEvent;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.TableDataRetriever;
@@ -7,6 +11,7 @@ import uk.ac.ebi.pride.toolsuite.gui.component.table.model.PeptideTableRow;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.TableContentType;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskAdapter;
 
+import javax.swing.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -72,14 +77,16 @@ public class RetrieveQuantPeptideTableTask extends TaskAdapter<Void, Tuple<Table
                 // get and publish protein related details
                 PeptideTableRow peptideContent = TableDataRetriever.getPeptideTableRow(controller, identId, peptideId);
 
-                if(selectedPeptides.get(identId) != null && selectedPeptides.get(identId).contains(peptideId))
+                if(selectedPeptides.get(identId) != null && selectedPeptides.get(identId).contains(peptideId)){
                     peptideContent.setComparisonState(true);
+                }
 
                 // get and publish quantitative data
                 List<Object> peptideQuantContent = TableDataRetriever.getPeptideQuantTableRow(controller, identId, peptideId, referenceSampleIndex);
                 peptideContent.addQuantifications(peptideQuantContent);
 
                 publish(new Tuple<TableContentType, Object>(TableContentType.PEPTIDE_QUANTITATION_REMOVE, peptideContent));
+
             }
         }
 

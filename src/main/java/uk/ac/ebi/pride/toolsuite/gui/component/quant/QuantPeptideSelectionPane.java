@@ -329,6 +329,17 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
             RetrieveQuantPeptideTableTask retrieveTask = new RetrieveQuantPeptideTableTask(QuantPeptideSelectionPane.this.getController(), identId, QuantPeptideSelectionPane.this.referenceSampleIndex, status, selectedPeptides);
             retrieveTask.addTaskListener(tableModel);
             TaskUtil.startBackgroundTask(retrieveTask, QuantPeptideSelectionPane.this.getController());
+            if(!status){
+                /*
+                 * Update the chart panel when whe remove the Peptides from Table if click the Protein.
+                 */
+                Collection<Comparable> peptideIds = controller.getPeptideIds(identId);
+                for(Comparable peptideId: peptideIds){
+                    EventService eventBus = ContainerEventServiceFinder.getEventService(QuantPeptideSelectionPane.this);
+                    eventBus.publish(new QuantSelectionEvent(pepTable, identId, referenceSampleIndex, QuantSelectionEvent.Type.PEPTIDE, false, controller, peptideId));
+                }
+
+            }
         }
     }
 

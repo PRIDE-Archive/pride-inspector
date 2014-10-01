@@ -92,8 +92,6 @@ public class QuantPeptideTableModel extends AbstractPeptideTableModel {
         fireTableRowsDeleted(rowPosition, rowPosition);
     }
 
-
-
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         PeptideTableRow peptideTableRow = (PeptideTableRow)contents.get(rowIndex);
