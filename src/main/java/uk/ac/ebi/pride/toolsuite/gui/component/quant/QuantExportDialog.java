@@ -2,6 +2,7 @@ package uk.ac.ebi.pride.toolsuite.gui.component.quant;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableRow;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessUtilities;
@@ -42,7 +43,8 @@ import static uk.ac.ebi.pride.toolsuite.gui.utils.Constants.TAB_SEP_FILE;
 
 
 /**
- * @author User #2
+ * @author ypriverol
+ * @author rwang
  */
 public class QuantExportDialog extends JDialog {
     private static final Logger logger = LoggerFactory.getLogger(QuantExportDialog.class);
@@ -319,8 +321,8 @@ public class QuantExportDialog extends JDialog {
         // copy all the data
         int rowCnt = existingTableModel.getRowCount();
         for (int i = 0; i < rowCnt; i++) {
-            java.util.List<Object> row = (java.util.List<Object>) existingTableModel.getRow(i);
-            row.remove(compareColumnIndex);
+            ProteinTableRow row = (ProteinTableRow) existingTableModel.getRow(i);
+            //row.remove(compareColumnIndex);
             tableModel.addRow(row);
         }
 
