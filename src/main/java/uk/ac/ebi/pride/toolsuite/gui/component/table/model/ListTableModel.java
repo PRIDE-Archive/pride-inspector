@@ -60,6 +60,14 @@ public abstract class ListTableModel<T> extends AbstractTableModel {
         contents.add(content);
     }
 
+    public void removeRow(Object content){
+        contents.remove(content);
+    }
+
+    public int getRowPostion( Object content){
+        return contents.indexOf(content);
+    }
+
     /**
      * Add the row data using a given row number
      *

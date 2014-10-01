@@ -35,8 +35,11 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.*;
+import java.util.List;
 
 /**
+ * Quantitative Selection Pane.
  * @author rwang
  * @author ypriverol
  * Date: 15/08/2011
@@ -87,6 +90,8 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
      */
     private int numOfSelectedPeptides = 0;
 
+    private Map<Comparable, java.util.List<Comparable>> selectedPeptides;
+
         /**
      * Constructor
      *
@@ -95,6 +100,7 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
     public QuantPeptideSelectionPane(DataAccessController controller) {
         super(controller);
         this.currentIdentId = -1;
+        this.selectedPeptides = new HashMap<Comparable, List<Comparable>>();
     }
 
     /**
@@ -239,7 +245,7 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
          */
         @SuppressWarnings("unchecked")
         private void updateTable(ProgressiveListTableModel tableModel, Comparable identId) {
-            RetrieveQuantPeptideTableTask retrieveTask = new RetrieveQuantPeptideTableTask(QuantPeptideSelectionPane.this.getController(), identId, referenceSampleIndex, true);
+            RetrieveQuantPeptideTableTask retrieveTask = new RetrieveQuantPeptideTableTask(QuantPeptideSelectionPane.this.getController(), identId, referenceSampleIndex, true, selectedPeptides);
             retrieveTask.addTaskListener(tableModel);
             TaskUtil.startBackgroundTask(retrieveTask, QuantPeptideSelectionPane.this.getController());
         }
@@ -320,7 +326,7 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
          */
         @SuppressWarnings("unchecked")
         private void updateTable(ProgressiveListTableModel tableModel, Comparable identId, boolean status) {
-            RetrieveQuantPeptideTableTask retrieveTask = new RetrieveQuantPeptideTableTask(QuantPeptideSelectionPane.this.getController(), identId, QuantPeptideSelectionPane.this.referenceSampleIndex, status);
+            RetrieveQuantPeptideTableTask retrieveTask = new RetrieveQuantPeptideTableTask(QuantPeptideSelectionPane.this.getController(), identId, QuantPeptideSelectionPane.this.referenceSampleIndex, status, selectedPeptides);
             retrieveTask.addTaskListener(tableModel);
             TaskUtil.startBackgroundTask(retrieveTask, QuantPeptideSelectionPane.this.getController());
         }
@@ -426,8 +432,22 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
                 eventBus.publish(new QuantSelectionEvent(pepTable, identId, referenceSampleIndex, QuantSelectionEvent.Type.PEPTIDE, selected, controller, idPeptide));
                 if (selected) {
                     numOfSelectedPeptides++;
+                    List<Comparable> peptides = new ArrayList<Comparable>();
+                    if(selectedPeptides.containsKey(identId)){
+                        peptides = selectedPeptides.get(identId);
+                    }
+                    peptides.add(idPeptide);
+                    selectedPeptides.put(identId,peptides);
                 } else {
                     numOfSelectedPeptides--;
+                    if(selectedPeptides.containsKey(identId)){
+                        List<Comparable> peptides = selectedPeptides.get(identId);
+                        peptides.remove(idPeptide);
+                        if(peptides.isEmpty())
+                            selectedPeptides.remove(identId);
+                        else
+                            selectedPeptides.put(identId,peptides);
+                    }
                 }
             }
         }

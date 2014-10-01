@@ -14,7 +14,8 @@ import java.util.Map;
 /**
  * Abstract class for peptide table model
  * <p/>
- * User: rwang, ypriverol
+ * @author rwang
+ * @author ypriverol
  * Date: 24/08/2011
  * Time: 16:36
  */

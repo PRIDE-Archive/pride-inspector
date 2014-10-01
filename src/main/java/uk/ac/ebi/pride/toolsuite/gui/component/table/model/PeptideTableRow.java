@@ -12,7 +12,7 @@ import java.util.*;
  * @author ypriverol
  * @version $Id$
  */
-public class PeptideTableRow {
+public class PeptideTableRow{
 
     private Boolean comparisonState;
     private PeptideSequence sequence;
@@ -37,6 +37,7 @@ public class PeptideTableRow {
     public PeptideTableRow() {
         this.scores = new ArrayList<Double>();
         this.quantifications = new ArrayList<Object>();
+        this.comparisonState = false;
     }
 
     public Boolean getComparisonState() {
@@ -262,5 +263,69 @@ public class PeptideTableRow {
         }
 
         return accessionText.substring(0, accessionText.length() - 1);
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PeptideTableRow that = (PeptideTableRow) o;
+
+        if (peptideFitState != that.peptideFitState) return false;
+        if (comparisonState != null ? !comparisonState.equals(that.comparisonState) : that.comparisonState != null)
+            return false;
+        if (deltaMz != null ? !deltaMz.equals(that.deltaMz) : that.deltaMz != null) return false;
+        if (numberOfFragmentIons != null ? !numberOfFragmentIons.equals(that.numberOfFragmentIons) : that.numberOfFragmentIons != null)
+            return false;
+        if (!peptideId.equals(that.peptideId)) return false;
+        if (precursorCharge != null ? !precursorCharge.equals(that.precursorCharge) : that.precursorCharge != null)
+            return false;
+        if (precursorMz != null ? !precursorMz.equals(that.precursorMz) : that.precursorMz != null) return false;
+        if (proteinAccession != null ? !proteinAccession.equals(that.proteinAccession) : that.proteinAccession != null)
+            return false;
+        if (proteinAccessionStatus != null ? !proteinAccessionStatus.equals(that.proteinAccessionStatus) : that.proteinAccessionStatus != null)
+            return false;
+        if (!proteinId.equals(that.proteinId)) return false;
+        if (proteinName != null ? !proteinName.equals(that.proteinName) : that.proteinName != null) return false;
+        if (quantifications != null ? !quantifications.equals(that.quantifications) : that.quantifications != null)
+            return false;
+        if (ranking != null ? !ranking.equals(that.ranking) : that.ranking != null) return false;
+        if (scores != null ? !scores.equals(that.scores) : that.scores != null) return false;
+        if (sequence != null ? !sequence.equals(that.sequence) : that.sequence != null) return false;
+        if (sequenceCoverage != null ? !sequenceCoverage.equals(that.sequenceCoverage) : that.sequenceCoverage != null)
+            return false;
+        if (sequenceEndPosition != null ? !sequenceEndPosition.equals(that.sequenceEndPosition) : that.sequenceEndPosition != null)
+            return false;
+        if (sequenceStartPosition != null ? !sequenceStartPosition.equals(that.sequenceStartPosition) : that.sequenceStartPosition != null)
+            return false;
+        if (spectrumId != null ? !spectrumId.equals(that.spectrumId) : that.spectrumId != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = comparisonState != null ? comparisonState.hashCode() : 0;
+        result = 31 * result + (sequence != null ? sequence.hashCode() : 0);
+        result = 31 * result + (proteinAccession != null ? proteinAccession.hashCode() : 0);
+        result = 31 * result + (proteinName != null ? proteinName.hashCode() : 0);
+        result = 31 * result + (proteinAccessionStatus != null ? proteinAccessionStatus.hashCode() : 0);
+        result = 31 * result + (sequenceCoverage != null ? sequenceCoverage.hashCode() : 0);
+        result = 31 * result + peptideFitState;
+        result = 31 * result + (ranking != null ? ranking.hashCode() : 0);
+        result = 31 * result + (deltaMz != null ? deltaMz.hashCode() : 0);
+        result = 31 * result + (precursorCharge != null ? precursorCharge.hashCode() : 0);
+        result = 31 * result + (precursorMz != null ? precursorMz.hashCode() : 0);
+        result = 31 * result + (numberOfFragmentIons != null ? numberOfFragmentIons.hashCode() : 0);
+        result = 31 * result + (scores != null ? scores.hashCode() : 0);
+        result = 31 * result + (sequenceStartPosition != null ? sequenceStartPosition.hashCode() : 0);
+        result = 31 * result + (sequenceEndPosition != null ? sequenceEndPosition.hashCode() : 0);
+        result = 31 * result + (spectrumId != null ? spectrumId.hashCode() : 0);
+        result = 31 * result + proteinId.hashCode();
+        result = 31 * result + peptideId.hashCode();
+        result = 31 * result + (quantifications != null ? quantifications.hashCode() : 0);
+        return result;
     }
 }

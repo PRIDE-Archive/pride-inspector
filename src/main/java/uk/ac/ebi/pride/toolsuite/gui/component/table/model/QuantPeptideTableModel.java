@@ -27,7 +27,9 @@ public class QuantPeptideTableModel extends AbstractPeptideTableModel {
             updateQuantColumnHeaders(newData.getValue());
         } else if (TableContentType.PEPTIDE_QUANTITATION.equals(type)) {
             addPeptideData((PeptideTableRow)newData.getValue());
-        } else {
+        } else if (TableContentType.PEPTIDE_QUANTITATION_REMOVE.equals(type)){
+            removePeptideData((PeptideTableRow)newData.getValue());
+        }else {
             super.addData(newData);
         }
     }
@@ -82,6 +84,12 @@ public class QuantPeptideTableModel extends AbstractPeptideTableModel {
         int rowCnt = this.getRowCount();
         this.addRow(peptideTableRow);
         fireTableRowsInserted(rowCnt, rowCnt);
+    }
+
+    private void removePeptideData(PeptideTableRow peptideTableRow){
+        int rowPosition = this.getRowPostion(peptideTableRow);
+        this.removeRow(peptideTableRow);
+        fireTableRowsDeleted(rowPosition, rowPosition);
     }
 
 

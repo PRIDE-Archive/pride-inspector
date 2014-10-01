@@ -266,7 +266,7 @@ public class QuantProteinSelectionPane extends DataAccessControllerPane implemen
         Point location = sampleMenuItem.getLocation();
         Icon samplePeptideIcon = GUIUtilities.loadIcon(appContext.getProperty("data.source.small.icon"));
         String samplePeptideTitle = appContext.getProperty("sample.information.title");
-        sampleMenuItem.setAction(new SampleInfoAction(uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop.getInstance().getMainComponent(), samplePeptideTitle, samplePeptideIcon, controller, location));
+        sampleMenuItem.setAction(new SampleInfoAction(uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop.getInstance().getMainComponent(),moreButton, samplePeptideTitle, samplePeptideIcon, controller, location));
         menu.add(sampleMenuItem);
 
         //protein details

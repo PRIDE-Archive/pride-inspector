@@ -9,6 +9,7 @@ import uk.ac.ebi.pride.toolsuite.gui.task.TaskAdapter;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Task to retrieve all the peptide related quantitative information per protein identification
@@ -31,13 +32,16 @@ public class RetrieveQuantPeptideTableTask extends TaskAdapter<Void, Tuple<Table
 
     private boolean status;
 
-    public RetrieveQuantPeptideTableTask(DataAccessController controller, Comparable identId, int referenceSampleIndex, Boolean status) {
+    private Map<Comparable, List<Comparable>> selectedPeptides;
+
+    public RetrieveQuantPeptideTableTask(DataAccessController controller, Comparable identId, int referenceSampleIndex, Boolean status, Map<Comparable, List<Comparable>> selectedPeptides) {
         this.setName(DEFAULT_TASK_NAME);
         this.setDescription(DEFAULT_TASK_DESC);
         this.controller = controller;
         this.identId = identId;
         this.referenceSampleIndex = referenceSampleIndex;
         this.status = status;
+        this.selectedPeptides = selectedPeptides;
     }
 
     @Override
@@ -62,6 +66,20 @@ public class RetrieveQuantPeptideTableTask extends TaskAdapter<Void, Tuple<Table
                 peptideContent.addQuantifications(peptideQuantContent);
 
                 publish(new Tuple<TableContentType, Object>(TableContentType.PEPTIDE_QUANTITATION, peptideContent));
+            }
+        }else{
+            for(Comparable peptideId : peptideIds){
+                // get and publish protein related details
+                PeptideTableRow peptideContent = TableDataRetriever.getPeptideTableRow(controller, identId, peptideId);
+
+                if(selectedPeptides.get(identId) != null && selectedPeptides.get(identId).contains(peptideId))
+                    peptideContent.setComparisonState(true);
+
+                // get and publish quantitative data
+                List<Object> peptideQuantContent = TableDataRetriever.getPeptideQuantTableRow(controller, identId, peptideId, referenceSampleIndex);
+                peptideContent.addQuantifications(peptideQuantContent);
+
+                publish(new Tuple<TableContentType, Object>(TableContentType.PEPTIDE_QUANTITATION_REMOVE, peptideContent));
             }
         }
 
