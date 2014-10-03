@@ -167,7 +167,7 @@ public class SortableTreeTableModel extends DefaultTreeTableModel {
 			// depth-first sorting, start with leaves by recursing downwards
 			Enumeration<? extends TreeTableNode> childEnum = parent.children();
 			while (childEnum.hasMoreElements()) {
-				TreeTableNode child = (TreeTableNode) childEnum.nextElement();
+				TreeTableNode child = childEnum.nextElement();
 				this.doSort(child, reset);
 			}
 			
@@ -225,5 +225,5 @@ public class SortableTreeTableModel extends DefaultTreeTableModel {
     public List<String> getColumnTooltips(){
         return new ArrayList<String>(columnNames.values());
     }
-	
+
 }

@@ -1,17 +1,17 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
 
-
 import org.jdesktop.swingx.treetable.TreeTableNode;
-import uk.ac.ebi.pride.utilities.util.Tuple;
+import uk.ac.ebi.pride.tools.protein_details_fetcher.model.Protein;
 import uk.ac.ebi.pride.toolsuite.gui.component.sequence.AnnotatedProtein;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.SortableTreeTableModel;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskEvent;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskListener;
 import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
-import uk.ac.ebi.pride.tools.protein_details_fetcher.model.Protein;
+import uk.ac.ebi.pride.utilities.util.Tuple;
 
+import javax.swing.tree.TreePath;
 import java.util.*;
 
 /**
@@ -52,6 +52,7 @@ public class SortableProteinTreeTableModel  extends SortableTreeTableModel
 
         if (TableContentType.PROTEIN.equals(type)) {
             addProteinTableRow((ProteinTableRow) newData.getValue());
+            this.modelSupport.fireTreeStructureChanged(new TreePath(getPathToRoot(getRoot())));
         } else if (TableContentType.PROTEIN_DETAILS.equals(type)) {
             addProteinDetailData(newData.getValue());
         } else if (TableContentType.PROTEIN_SEQUENCE_COVERAGE.equals(type)) {
@@ -83,13 +84,13 @@ public class SortableProteinTreeTableModel  extends SortableTreeTableModel
             int childIndex = getIndexOfChild(parentProteinTableRow, proteinNode);
             insertNodeInto(proteinNode, parentProteinTableRow,childIndex);
         }
-
     }
 
     @Override
     public int getIndexOfChild(Object parent, Object child) {
         SortableProteinNode parentProteinRow = (SortableProteinNode) parent;
-        return parentProteinRow.getChildProteinTableRows().indexOf(child);
+        List<SortableProteinNode> childProteinTableRows = parentProteinRow.getChildProteinTableRows();
+        return childProteinTableRows.indexOf(child);
     }
 
     private void addProteinDetailData(Object value) {
