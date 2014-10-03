@@ -1,15 +1,11 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.renderer;
 
 import org.jdesktop.swingx.JXTable;
-import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableHeader;
 import uk.ac.ebi.pride.toolsuite.gui.utils.Constants;
 import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 
 import javax.swing.*;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.text.DecimalFormat;
 
@@ -22,7 +18,7 @@ import java.text.DecimalFormat;
  */
 public class SequenceCoverageRenderer extends JLabel implements TableCellRenderer {
     private Object value;
-    private Color  defaultColor;
+    private Color defaultColor;
 
     public SequenceCoverageRenderer() {
         setOpaque(true);
@@ -34,16 +30,21 @@ public class SequenceCoverageRenderer extends JLabel implements TableCellRendere
         // set background
         if (isSelected)
             this.setBackground(table.getSelectionBackground());
-        else if(value != null && NumberUtilities.isNumber(value.toString()) &&  Double.parseDouble(value.toString()) > 0){
+        else if (value != null && NumberUtilities.isNumber(value.toString()) && Double.parseDouble(value.toString()) > 0) {
             Double valueDouble = Double.parseDouble(value.toString());
             //System.out.println(valueDouble);
-            int alpha = (int) (Constants.DELTA_MZ_NORMAL.getAlpha()*valueDouble);
+            int alpha = (int) (Constants.DELTA_MZ_NORMAL.getAlpha() * valueDouble);
             setBackground(new Color(Constants.DELTA_MZ_NORMAL.getRed(),
                     Constants.DELTA_MZ_NORMAL.getGreen(),
                     Constants.DELTA_MZ_NORMAL.getBlue(),
                     alpha));
-        }else if(table instanceof JXTable){
-                setBackground(table.getBackground());
+        } else if (table instanceof JXTable) {
+            Color alternate = UIManager.getColor("Table.alternateRowColor");
+            if (row % 2 == 1) {
+                this.setBackground(alternate);
+            } else {
+                this.setBackground(Color.WHITE);
+            }
         }
         return this;
     }
