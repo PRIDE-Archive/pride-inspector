@@ -62,8 +62,12 @@ public class HyperLinkCellRenderer extends JLabel implements TableCellRenderer {
         if (isSelected) {
             this.setBackground(table.getSelectionBackground());
         } else {
-            Color background = table.getBackground();
-            this.setBackground(background);
+            Color alternate = UIManager.getColor("Table.alternateRowColor");
+            if (row % 2 == 1) {
+                this.setBackground(alternate);
+            } else {
+                this.setBackground(Color.WHITE);
+            }
         }
         // repaint the component
         this.revalidate();

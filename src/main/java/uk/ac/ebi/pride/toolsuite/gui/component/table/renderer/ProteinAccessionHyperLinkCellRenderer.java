@@ -52,7 +52,12 @@ public class ProteinAccessionHyperLinkCellRenderer extends JLabel implements Tab
         if (isSelected) {
             this.setBackground(table.getSelectionBackground());
         } else {
-            this.setBackground(table.getBackground());
+            Color alternate = UIManager.getColor("Table.alternateRowColor");
+            if (row % 2 == 1) {
+                this.setBackground(alternate);
+            } else {
+                this.setBackground(Color.WHITE);
+            }
         }
         // repaint the component
         this.revalidate();
