@@ -7,8 +7,6 @@ import org.bushe.swing.event.annotation.EventSubscriber;
 import org.jdesktop.swingx.JXTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 import uk.ac.ebi.pride.engine.SearchEngineType;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.action.impl.ExtraProteinDetailAction;
@@ -16,12 +14,15 @@ import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.exception.ThrowableEntry;
 import uk.ac.ebi.pride.toolsuite.gui.component.message.MessageType;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.TableFactory;
-import uk.ac.ebi.pride.toolsuite.gui.component.table.model.*;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableHeader;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableModel;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.model.SortableProteinNode;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.ProteinSortableTreeTable;
-import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.SortableTreeTableModel;
 import uk.ac.ebi.pride.toolsuite.gui.event.container.ExpandPanelEvent;
 import uk.ac.ebi.pride.toolsuite.gui.event.container.ProteinIdentificationEvent;
 import uk.ac.ebi.pride.toolsuite.gui.event.container.SortProteinTableEvent;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 
 import javax.help.CSH;
 import javax.swing.*;
@@ -70,7 +71,6 @@ public class ProteinSelectionPane extends DataAccessControllerPane{
             identTable.setSortable(true);
             identTable.setAutoCreateRowSorter(true);
             ((ProteinSortableTreeTable)identTable).setRowSorter();
-            SortableTreeTableModel m = (SortableTreeTableModel)((ProteinSortableTreeTable) identTable).getModel();
 
         }else if(evt.getType() == SortProteinTableEvent.Type.DISABLE_SORT && identTable instanceof ProteinSortableTreeTable){
             identTable.setSortable(false);
