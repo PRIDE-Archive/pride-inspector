@@ -12,7 +12,7 @@ import javax.swing.table.TableColumn;
  * @author ypriverol
  * @author rwang
  */
-public class ProteinSortableTreeTable extends SortableTreeTable{
+public class ProteinSortableTreeTable extends SortableTreeTable {
 
     /**
      * Constructs a sortable tree table with checkboxes from a tree table model.
