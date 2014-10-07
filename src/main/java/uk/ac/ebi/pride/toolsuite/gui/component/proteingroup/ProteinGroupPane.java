@@ -173,9 +173,14 @@ public class ProteinGroupPane extends DataAccessControllerPane<Void, Protein>{
     public void finished(TaskEvent<Void> event) {
         for(Protein protein: proteinVertices.keySet()){
             graph.addVertex(protein.getId().toString());
+            if(protein.getId() == idProtein)
+                vertexPaints.put(protein.getId().toString(), Color.RED);
+            else
+                vertexPaints.put(protein.getId().toString(), Color.LIGHT_GRAY);
         }
         for(uk.ac.ebi.pride.utilities.mol.Peptide peptideSequence: peptideVertices.keySet()){
             graph.addVertex(peptideVertices.get(peptideSequence));
+            vertexPaints.put(peptideVertices.get(peptideSequence), Color.green);
             for(Protein protein: proteinVertices.keySet()){
                 for(Peptide peptide: protein.getPeptides()){
                     Tuple<Protein, uk.ac.ebi.pride.utilities.mol.Peptide> edge = new Tuple<Protein, uk.ac.ebi.pride.utilities.mol.Peptide>(protein, peptideSequence);
@@ -196,16 +201,15 @@ public class ProteinGroupPane extends DataAccessControllerPane<Void, Protein>{
         visualizationViewer.getRenderContext().getMultiLayerTransformer().setToIdentity();
 
         Forest<String, String> graphLayout = (Forest<String, String>) graph;
-
+        visualizationViewer.validate();
         visualizationViewer.repaint();
     }
 
     @Override
     protected void addComponents() {
         vertexPaints = LazyMap.<String,Paint>decorate(new HashMap<String, Paint>(), new ConstantTransformer(Color.white));
-        edgePaints   = LazyMap.<String,Paint>decorate(new HashMap<String,Paint>(), new ConstantTransformer(Color.blue));
+        edgePaints   = LazyMap.<String,Paint>decorate(new HashMap<String,Paint>(), new ConstantTransformer(Color.BLUE));
         graph        = Graphs.<String,String>synchronizedForest(new DelegateForest<String, String>());
-//        graph = new DelegateForest<String, String>();
     }
 
     /**
@@ -464,21 +468,23 @@ public class ProteinGroupPane extends DataAccessControllerPane<Void, Protein>{
 
             Class layoutC = (Class) layoutCombo.getSelectedItem();
 
-            try{
+            try {
                 Layout<String, String> previousLayout = visualizationViewer.getGraphLayout();
-                if(previousLayout.getClass() == RadialTreeLayout.class){
-                    Rings rings = new Rings((RadialTreeLayout<String,String>)previousLayout);
+                if (previousLayout.getClass() == RadialTreeLayout.class) {
+                    Rings rings = new Rings((RadialTreeLayout<String, String>) previousLayout);
                     visualizationViewer.removePreRenderPaintable(rings);
                 }
 
                 Object o;
                 Constructor<? extends Layout<String, String>> constructor;
-                if(layoutC != TreeLayout.class && layoutC != RadialTreeLayout.class)
-                   constructor = layoutC.getConstructor(new Class[] {Graph.class});
-                else
+                if (layoutC != TreeLayout.class && layoutC != RadialTreeLayout.class){
+                    constructor = layoutC.getConstructor(new Class[]{Graph.class});
+                    o = constructor.newInstance(graph);
+                }else if (layoutC != TreeLayout.class){
                     constructor = layoutC.getConstructor(new Class[]{Forest.class});
-
-                o = constructor.newInstance(graph);
+                    o = constructor.newInstance(graph);
+                }else
+                    o = new TreeLayout<String, String>((Forest<String, String>)graph, 60, 100);
 
                 Layout<String,String> l = (Layout<String,String>) o;
 
