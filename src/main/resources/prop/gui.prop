@@ -214,6 +214,10 @@ load.next.mzdata.small.icon=icon/16x16/load_next.png
 load.protein.detail.small.icon=icon/16x16/load_next.png
 load.protein.detail.title=Obtain Protein Details
 
+#Protein Groups details
+load.protein.groups.detail.small.icon=icon/16x16/find_experiment.png
+load.protein.groups.detail.title=Show Protein Group
+
 # set control sample
 set.control.sample.title=Set Control Sample
 set.control.sample.small.icon=icon/16x16/setting.png

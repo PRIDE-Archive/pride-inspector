@@ -127,7 +127,7 @@ public class ProteinSelectionPane extends DataAccessControllerPane{
         metaDataPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         try {
             // protein table label
-            JLabel tableLabel = new JLabel("Protein");
+            JLabel tableLabel = new JLabel("Protein List");
             tableLabel.setFont(tableLabel.getFont().deriveFont(Font.BOLD));
 
             metaDataPanel.add(tableLabel);
@@ -272,9 +272,11 @@ public class ProteinSelectionPane extends DataAccessControllerPane{
 
                     Comparable identId = ((SortableProteinNode) node).getProteinId();
 
+                    Comparable proteinGroupId = ((SortableProteinNode) node).getProteinGroupId();
+
                     // publish the event to local event bus
                     EventService eventBus = ContainerEventServiceFinder.getEventService(ProteinSelectionPane.this);
-                    eventBus.publish(new ProteinIdentificationEvent(ProteinSelectionPane.this, controller, identId));
+                    eventBus.publish(new ProteinIdentificationEvent(ProteinSelectionPane.this, controller, identId, proteinGroupId));
             }
         }
     }
@@ -301,10 +303,14 @@ public class ProteinSelectionPane extends DataAccessControllerPane{
                     int identColNum = proteinTableModel.getColumnIndex(ProteinTableHeader.PROTEIN_ID.getHeader());
                     int modelRowIndex = table.convertRowIndexToModel(rowNum);
                     Comparable identId = (Comparable) proteinTableModel.getValueAt(modelRowIndex, identColNum);
-
+                    Comparable proteinGroupId = null;
+                    if(controller.hasProteinAmbiguityGroup()){
+                        identColNum = proteinTableModel.getColumnIndex(ProteinTableHeader.PROTEIN_GROUP_ID.getHeader());
+                        proteinGroupId = (Comparable) proteinTableModel.getValueAt(modelRowIndex, identColNum);
+                    }
                     // publish the event to local event bus
                     EventService eventBus = ContainerEventServiceFinder.getEventService(ProteinSelectionPane.this);
-                    eventBus.publish(new ProteinIdentificationEvent(ProteinSelectionPane.this, controller, identId));
+                    eventBus.publish(new ProteinIdentificationEvent(ProteinSelectionPane.this, controller, identId, proteinGroupId));
                 }
             }
     }

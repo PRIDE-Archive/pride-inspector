@@ -28,6 +28,7 @@ import java.util.List;
  * Time: 11:59:12
  */
 public class LoadChartDataTask extends AbstractDataAccessTask<PrideDataReader, Void> {
+
     private static final Logger logger = LoggerFactory.getLogger(LoadChartDataTask.class);
 
     private String accession;

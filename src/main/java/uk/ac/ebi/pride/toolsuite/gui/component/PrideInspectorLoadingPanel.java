@@ -9,7 +9,7 @@ import java.awt.*;
 /**
  * A panel displays pride's logo and showing a loading status
  * <p/>
- * User: rwang
+ * @author rwang
  * Date: 14/03/11
  * Time: 16:41
  */

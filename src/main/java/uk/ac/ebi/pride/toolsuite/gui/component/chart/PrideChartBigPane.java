@@ -36,6 +36,7 @@ import java.util.Map;
  * Time: 14:36:02
  */
 public class PrideChartBigPane extends PrideChartPane {
+
     private ChartTabPane container;
     private PrideChartType currentChartType;
 
@@ -300,18 +301,6 @@ public class PrideChartBigPane extends PrideChartPane {
         });
         toolsPanel.add(btnNext);
 
-//        // Auto adjust
-//        Icon resizeIcon = GUIUtilities.loadIcon(propMgr.getProperty("chart_auto_adjust.icon.large"));
-//        String resizeTooltip = propMgr.getProperty("chart_auto_adjust.tooltip");
-//        PrideChartButton btnResize = new PrideChartButton(resizeIcon, resizeTooltip);
-//        btnResize.setEnabled(chartPanel!=null);
-//
-//        btnResize.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent ae) {
-//                if( chartPanel!=null ) chartPanel.restoreAutoBounds();
-//            }
-//        });
-//        toolsPanel.add(btnResize);
 
         // Info
         Icon infoIcon = GUIUtilities.loadIcon(propMgr.getProperty("chart_info.icon.large"));
@@ -342,28 +331,6 @@ public class PrideChartBigPane extends PrideChartPane {
             });
         }
         toolsPanel.add(btnOptions);
-
-//        // Extra legend
-//        Icon legendIcon = GUIUtilities.loadIcon(propMgr.getProperty("chart_legend.icon.large"));
-//        String legendTooltip = propMgr.getProperty("chart_legend.tooltip");
-//        PrideChartButton btnLegend = new PrideChartButton(legendIcon, legendTooltip);
-//
-////        boolean chartHasLegend = managedPrideChart.hasLegend();
-////        btnLegend.setEnabled(chartHasLegend);
-////        // If the chart has legend, the behaviour of the extra legend button has to be like a standard JToggleButton
-////        if (chartHasLegend) {
-////            btnLegend.setSelected(managedPrideChart.isLegendVisible());
-////            btnLegend.setKeepSelected(managedPrideChart.isLegendVisible());
-////            //Only needed an action listener if the chart has legend
-////            btnLegend.addActionListener(new ActionListener() {
-////                public void actionPerformed(ActionEvent ae) {
-////                    setExtraPanel(show.LEGEND, (PrideChartButton) ae.getSource());
-////                }
-////            });
-////        }
-////        possiblePressedButtons.add(btnLegend);
-//
-//        toolsPanel.add(btnLegend);
 
         toolsPanel.setBackground(Color.WHITE);
 

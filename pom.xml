@@ -83,6 +83,7 @@
         <prider-data-provider-api.version>1.0</prider-data-provider-api.version>
         <httpclient.version>4.3.3</httpclient.version>
         <spring-security-core.version>3.2.1.RELEASE</spring-security-core.version>
+        <jung.version>2.0.1</jung.version>
         <commons-lang3.version>3.3.2</commons-lang3.version>
     </properties>
 
@@ -259,6 +260,25 @@
             <groupId>net.java.balloontip</groupId>
             <artifactId>balloontip</artifactId>
             <version>1.2.4.1</version>
+        </dependency>
+
+        <!-- Jung dependencies-->
+        <dependency>
+            <groupId>net.sf.jung</groupId>
+            <artifactId>jung-graph-impl</artifactId>
+            <version>${jung.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.jung</groupId>
+            <artifactId>jung-visualization</artifactId>
+            <version>${jung.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.jung</groupId>
+            <artifactId>jung-samples</artifactId>
+            <version>${jung.version}</version>
         </dependency>
 
     </dependencies>

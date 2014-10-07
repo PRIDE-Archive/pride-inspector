@@ -74,18 +74,6 @@ public class PrideChartThumbnailPane extends PrideChartPane {
             }
         });
         toolBar.add(btnZoomIn);
-//
-//        // Auto adjust
-//        Icon adjustIcon = GUIUtilities.loadIcon(propMgr.getProperty("chart_auto_adjust.icon.small"));
-//        String adjustTooltip = propMgr.getProperty("chart_auto_adjust.tooltip");
-//        PrideChartButton btnAdjust = new PrideChartButton(adjustIcon, adjustTooltip);
-//        btnAdjust.setEnabled(cp != null);
-//        btnAdjust.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent ae) {
-//                if (cp != null) cp.restoreAutoBounds();
-//            }
-//        });
-//        toolBar.add(btnAdjust);
 
         toolBar.setBackground(Color.WHITE);
 
