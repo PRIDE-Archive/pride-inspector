@@ -124,6 +124,8 @@ public class WelcomePane extends JPanel implements TaskListener<Object, Object> 
      * Set up the main component
      */
     private void setupMainPane() {
+        this.setBorder(BorderFactory.createEmptyBorder());
+
         this.setLayout(new BorderLayout());
 
         // pride inspector context
@@ -190,7 +192,7 @@ public class WelcomePane extends JPanel implements TaskListener<Object, Object> 
 
         // scroll pane for screen size
         JScrollPane scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setBorder(BorderFactory.createLineBorder(Color.gray));
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         this.add(scrollPane, BorderLayout.CENTER);
 
