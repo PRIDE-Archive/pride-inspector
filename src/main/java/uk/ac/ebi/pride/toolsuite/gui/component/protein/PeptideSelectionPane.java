@@ -59,8 +59,8 @@ public class PeptideSelectionPane extends DataAccessControllerPane<Peptide, Void
     /**
      * the title for ptm label
      */
-    private final static String PTM_LABEL = "<html><b>Modified AAs</b>: ";
-    private final static String PEPTIDE_TABLE_DESC = "Protein";
+    private final static String PTM_LABEL = "<html><b>Modified residues</b>: ";
+    private final static String PEPTIDE_TABLE_DESC = "PSM List";
 
     /**
      * peptide table for peptide related details

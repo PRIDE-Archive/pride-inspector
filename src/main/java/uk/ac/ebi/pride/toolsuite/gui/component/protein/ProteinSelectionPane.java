@@ -37,11 +37,12 @@ import java.util.Collection;
 /**
  * IdentificationSelectionPane displays identification related details in a table.
  * <p/>
+ *
  * @author ypriverol
  * @author rwang
  */
 
-public class ProteinSelectionPane extends DataAccessControllerPane{
+public class ProteinSelectionPane extends DataAccessControllerPane {
 
     private static final Logger logger = LoggerFactory.getLogger(ProteinTabPane.class.getName());
 
@@ -66,18 +67,18 @@ public class ProteinSelectionPane extends DataAccessControllerPane{
     }
 
     @EventSubscriber(eventClass = SortProteinTableEvent.class)
-    public void onSortProteinTableEvent(SortProteinTableEvent evt){
-        if(evt.getType() == SortProteinTableEvent.Type.ENABLE_SORT && identTable instanceof ProteinSortableTreeTable){
+    public void onSortProteinTableEvent(SortProteinTableEvent evt) {
+        if (evt.getType() == SortProteinTableEvent.Type.ENABLE_SORT && identTable instanceof ProteinSortableTreeTable) {
             identTable.setSortable(true);
             identTable.setAutoCreateRowSorter(true);
-            ((ProteinSortableTreeTable)identTable).setRowSorter();
+            ((ProteinSortableTreeTable) identTable).setRowSorter();
 
-        }else if(evt.getType() == SortProteinTableEvent.Type.DISABLE_SORT && identTable instanceof ProteinSortableTreeTable){
+        } else if (evt.getType() == SortProteinTableEvent.Type.DISABLE_SORT && identTable instanceof ProteinSortableTreeTable) {
             identTable.setSortable(false);
             identTable.setAutoCreateRowSorter(false);
             identTable.setRowSorter(null);
         }
-       // ((TreeTableRowSorter) identTable.getRowSorter()).setSortOrder(0, SortOrder.ASCENDING);
+        // ((TreeTableRowSorter) identTable.getRowSorter()).setSortOrder(0, SortOrder.ASCENDING);
        /*Remove last line of the table I need to know why is inserting this line*/
 
     }
@@ -85,7 +86,7 @@ public class ProteinSelectionPane extends DataAccessControllerPane{
     @Override
     protected void addComponents() {
         // create identification table
-        identTable = TableFactory.createProteinTable(controller.getAvailableProteinLevelScores(), controller.hasProteinAmbiguityGroup(),controller);
+        identTable = TableFactory.createProteinTable(controller.getAvailableProteinLevelScores(), controller.hasProteinAmbiguityGroup(), controller);
 
         // createAttributedSequence header panel
         JPanel headerPanel = buildHeaderPane();
@@ -93,12 +94,12 @@ public class ProteinSelectionPane extends DataAccessControllerPane{
 
 
         // add row selection listener
-        if(controller.hasProteinAmbiguityGroup()){
+        if (controller.hasProteinAmbiguityGroup()) {
             TreeSelectionModel selectionModel = ((ProteinSortableTreeTable) identTable).getTreeSelectionModel();
             selectionModel.addTreeSelectionListener(new IdentificationTreeSelectionListener(identTable));
             identTable.getModel().addTableModelListener(new ProteinInsertListener(identTable));
-        }else{
-            ListSelectionModel selectionModel =  identTable.getSelectionModel();
+        } else {
+            ListSelectionModel selectionModel = identTable.getSelectionModel();
             selectionModel.addListSelectionListener(new IdentificationSelectionListener(identTable));
             identTable.getModel().addTableModelListener(new ProteinInsertListener(identTable));
         }
@@ -186,6 +187,7 @@ public class ProteinSelectionPane extends DataAccessControllerPane{
         JToolBar toolBar = new JToolBar();
         toolBar.setFloatable(false);
         toolBar.setOpaque(false);
+        toolBar.setBorder(BorderFactory.createEmptyBorder());
 
         // load protein names
         JButton loadAllProteinNameButton = GUIUtilities.createLabelLikeButton(null, null);
@@ -265,54 +267,58 @@ public class ProteinSelectionPane extends DataAccessControllerPane{
             int rowCnt = table.getRowCount();
             if (rowCnt > 0 && rowNum >= 0) {
                 // get table model
+                ProteinSortableTreeTable proteinSortableTreeTable = (ProteinSortableTreeTable) table;
+
                 // fire a property change event with selected identification id
-                    TreeSelectionModel treeSelectionModel = ((ProteinSortableTreeTable)table).getTreeSelectionModel();
-                    TreePath selectionPath = treeSelectionModel.getSelectionPath();
-                    Object node = selectionPath.getLastPathComponent();
+                TreeSelectionModel treeSelectionModel = proteinSortableTreeTable.getTreeSelectionModel();
+                TreePath selectionPath = treeSelectionModel.getSelectionPath();
 
-                    Comparable identId = ((SortableProteinNode) node).getProteinId();
+                Object node = selectionPath.getLastPathComponent();
+                Comparable identId = ((SortableProteinNode) node).getProteinId();
+                Comparable proteinGroupId = ((SortableProteinNode) node).getProteinGroupId();
 
-                    Comparable proteinGroupId = ((SortableProteinNode) node).getProteinGroupId();
+                // publish the event to local event bus
+                EventService eventBus = ContainerEventServiceFinder.getEventService(ProteinSelectionPane.this);
+                eventBus.publish(new ProteinIdentificationEvent(ProteinSelectionPane.this, controller, identId, proteinGroupId));
 
-                    // publish the event to local event bus
-                    EventService eventBus = ContainerEventServiceFinder.getEventService(ProteinSelectionPane.this);
-                    eventBus.publish(new ProteinIdentificationEvent(ProteinSelectionPane.this, controller, identId, proteinGroupId));
+                table.revalidate();
+                table.repaint();
             }
         }
     }
 
     /**
-     *  * This selection listener listens to Identification table for any selection on the row.
-         * It will then fire a property change event with the selected identification id.
-         */
+     * * This selection listener listens to Identification table for any selection on the row.
+     * It will then fire a property change event with the selected identification id.
+     */
     private class IdentificationSelectionListener implements ListSelectionListener {
 
         private final JXTable table;
 
-            private IdentificationSelectionListener(JXTable table) {
-                this.table = table;
-            }
+        private IdentificationSelectionListener(JXTable table) {
+            this.table = table;
+        }
 
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int rowNum = table.getSelectedRow();
-                int rowCnt = table.getRowCount();
-                if (rowCnt > 0 && rowNum >= 0) {
-                    ProteinTableModel proteinTableModel = (ProteinTableModel) table.getModel();
-                    // get Protein ID
-                    int identColNum = proteinTableModel.getColumnIndex(ProteinTableHeader.PROTEIN_ID.getHeader());
-                    int modelRowIndex = table.convertRowIndexToModel(rowNum);
-                    Comparable identId = (Comparable) proteinTableModel.getValueAt(modelRowIndex, identColNum);
-                    Comparable proteinGroupId = null;
-                    if(controller.hasProteinAmbiguityGroup()){
-                        identColNum = proteinTableModel.getColumnIndex(ProteinTableHeader.PROTEIN_GROUP_ID.getHeader());
-                        proteinGroupId = (Comparable) proteinTableModel.getValueAt(modelRowIndex, identColNum);
-                    }
-                    // publish the event to local event bus
-                    EventService eventBus = ContainerEventServiceFinder.getEventService(ProteinSelectionPane.this);
-                    eventBus.publish(new ProteinIdentificationEvent(ProteinSelectionPane.this, controller, identId, proteinGroupId));
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            int rowNum = table.getSelectedRow();
+            int rowCnt = table.getRowCount();
+            if (rowCnt > 0 && rowNum >= 0) {
+                ProteinTableModel proteinTableModel = (ProteinTableModel) table.getModel();
+                // get Protein ID
+                int identColNum = proteinTableModel.getColumnIndex(ProteinTableHeader.PROTEIN_ID.getHeader());
+                int modelRowIndex = table.convertRowIndexToModel(rowNum);
+                Comparable identId = (Comparable) proteinTableModel.getValueAt(modelRowIndex, identColNum);
+                Comparable proteinGroupId = null;
+                if (controller.hasProteinAmbiguityGroup()) {
+                    identColNum = proteinTableModel.getColumnIndex(ProteinTableHeader.PROTEIN_GROUP_ID.getHeader());
+                    proteinGroupId = (Comparable) proteinTableModel.getValueAt(modelRowIndex, identColNum);
                 }
+                // publish the event to local event bus
+                EventService eventBus = ContainerEventServiceFinder.getEventService(ProteinSelectionPane.this);
+                eventBus.publish(new ProteinIdentificationEvent(ProteinSelectionPane.this, controller, identId, proteinGroupId));
             }
+        }
     }
 
     /**

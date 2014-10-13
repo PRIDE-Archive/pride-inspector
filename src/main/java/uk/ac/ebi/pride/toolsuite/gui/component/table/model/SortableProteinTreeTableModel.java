@@ -18,25 +18,27 @@ import java.util.*;
  * @author ypriverol
  * @author rwang
  */
-public class SortableProteinTreeTableModel  extends SortableTreeTableModel
+public class SortableProteinTreeTableModel extends SortableTreeTableModel
         implements TaskListener<Void, Tuple<TableContentType, Object>> {
 
     private final Random random;
     private final Map<Comparable, SortableProteinNode> proteinGroupIdToProteinTableRow;
+    private boolean structureChanged = false;
 
 
-
-/**
- * Constructs a sortable tree table model using the specified root node.
- *
- * @param root              The tree table node to be used as root.
- * @param listPeptideScores
- */
+    /**
+     * Constructs a sortable tree table model using the specified root node.
+     *
+     * @param root              The tree table node to be used as root.
+     * @param listPeptideScores
+     */
     public SortableProteinTreeTableModel(TreeTableNode root, Collection<CvTermReference> listPeptideScores) {
         super(root, listPeptideScores);
         this.random = new Random();
         proteinGroupIdToProteinTableRow = new HashMap<Comparable, SortableProteinNode>();
     }
+
+
 
 
     @Override
@@ -52,7 +54,10 @@ public class SortableProteinTreeTableModel  extends SortableTreeTableModel
 
         if (TableContentType.PROTEIN.equals(type)) {
             addProteinTableRow((ProteinTableRow) newData.getValue());
-            this.modelSupport.fireTreeStructureChanged(new TreePath(getPathToRoot(getRoot())));
+            if (!structureChanged) {
+                this.modelSupport.fireTreeStructureChanged(new TreePath(getPathToRoot(getRoot())));
+                structureChanged = true;
+            }
         } else if (TableContentType.PROTEIN_DETAILS.equals(type)) {
             addProteinDetailData(newData.getValue());
         } else if (TableContentType.PROTEIN_SEQUENCE_COVERAGE.equals(type)) {
@@ -82,7 +87,7 @@ public class SortableProteinTreeTableModel  extends SortableTreeTableModel
         } else {
             parentProteinTableRow.addChildProteinTableRow(proteinNode);
             int childIndex = getIndexOfChild(parentProteinTableRow, proteinNode);
-            insertNodeInto(proteinNode, parentProteinTableRow,childIndex);
+            insertNodeInto(proteinNode, parentProteinTableRow, childIndex);
         }
     }
 
@@ -100,15 +105,15 @@ public class SortableProteinTreeTableModel  extends SortableTreeTableModel
         // iterate over each row, set the protein name
         Collection<SortableProteinNode> parentProteinTableRows = proteinGroupIdToProteinTableRow.values();
         for (SortableProteinNode parentProteinTableRow : parentProteinTableRows) {
-            addProteinDetailsForProteinTableRow(proteins, (SortableProteinNode) getRoot(), parentProteinTableRow);
+            addProteinDetailsForProteinTableRow(proteins, parentProteinTableRow);
 
             for (SortableProteinNode childProteinTableRow : parentProteinTableRow.getChildProteinTableRows()) {
-                addProteinDetailsForProteinTableRow(proteins, parentProteinTableRow, childProteinTableRow);
+                addProteinDetailsForProteinTableRow(proteins, childProteinTableRow);
             }
         }
     }
 
-    private void addProteinDetailsForProteinTableRow(Map<String, Protein> proteins, SortableProteinNode parentProteinTableRow, SortableProteinNode childProteinTableRow) {
+    private void addProteinDetailsForProteinTableRow(Map<String, Protein> proteins, SortableProteinNode childProteinTableRow) {
         Object proteinAccession = childProteinTableRow.getProteinAccession();
 
         if (proteinAccession != null) {
@@ -124,11 +129,11 @@ public class SortableProteinTreeTableModel  extends SortableTreeTableModel
 
                     // set protein name
                     childProteinTableRow.setProteinName(annotatedProtein.getName());
-                    childProteinTableRow.updatePropertyObject(columnNames,proteinScores);
+                    childProteinTableRow.updatePropertyObject(columnNames, proteinScores);
 
                     // set protein status
                     childProteinTableRow.setProteinAccessionStatus(annotatedProtein.getStatus().name());
-                    childProteinTableRow.updatePropertyObject(columnNames,proteinScores);
+                    childProteinTableRow.updatePropertyObject(columnNames, proteinScores);
 
                 }
             }

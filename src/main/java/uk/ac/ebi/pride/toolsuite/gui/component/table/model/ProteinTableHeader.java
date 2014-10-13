@@ -14,9 +14,9 @@ public enum ProteinTableHeader {
     PROTEIN_SEQUENCE_COVERAGE("Coverage", "Protein Sequence Coverage"),
     THEORETICAL_ISOELECTRIC_POINT("pI", "Theoretical isoelectric point"),
     IDENTIFICATION_THRESHOLD("Threshold", "PRIDE Protein Threshold"),
-    NUMBER_OF_PEPTIDES("# Peptides", "Number of Peptides"),
-    NUMBER_OF_UNIQUE_PEPTIDES("# Distinct Peptides", "Number of Distinct Peptides"),
-    NUMBER_OF_PTMS("# PTMs", "Number of PTMs"),
+    NUMBER_OF_PEPTIDES("#PSMs", "Number of peptide spectrum matches"),
+    NUMBER_OF_UNIQUE_PEPTIDES("#Distinct Peptides", "Number of Distinct Peptides"),
+    NUMBER_OF_PTMS("#PTMs", "Number of PTMs"),
     PROTEIN_ID("Protein ID", "Protein ID"),
     ADDITIONAL("More", "Additional Details");
 

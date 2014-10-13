@@ -1,40 +1,42 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table;
 
-import no.uib.jsparklines.renderers.JSparklinesBarChartTableCellRenderer;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.table.DefaultTableColumnModelExt;
 import org.jdesktop.swingx.table.TableColumnExt;
-import org.jfree.chart.plot.PlotOrientation;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
-import uk.ac.ebi.pride.utilities.data.core.*;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.listener.*;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.*;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.renderer.*;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.sorter.NumberTableRowSorter;
-import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.*;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.ComponentHeaderRenderer;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.ComponentTableHeader;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.ProteinSortableTreeTable;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.TreeTableRowSorter;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop;
 import uk.ac.ebi.pride.toolsuite.gui.url.*;
 import uk.ac.ebi.pride.toolsuite.gui.utils.Constants;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.data.core.*;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
 /**
  * TableFactory can be used to different type of tables.
  * <p/>
+ *
  * @author ypriverol
  * @author rwang
- * Date: 11-Sep-2010
- * Time: 13:39:00
+ *         Date: 11-Sep-2010
+ *         Time: 13:39:00
  */
 public class TableFactory {
     /**
@@ -56,7 +58,6 @@ public class TableFactory {
     }
 
 
-
     /**
      * Build a table to display peptide related details.
      *
@@ -65,15 +66,16 @@ public class TableFactory {
      */
     public static JXTable createProteinTable(final Collection<CvTermReference> listProteinScores, final boolean hasProteinGroups, DataAccessController controller) {
         JXTable table;
-        if(hasProteinGroups){
-            SortableProteinTreeTableModel proteinTreeTableModel = new SortableProteinTreeTableModel(new SortableProteinNode(),listProteinScores);
-            table   = createDefaultJXTreeTable(proteinTreeTableModel, hasProteinGroups);
+        if (hasProteinGroups) {
+            SortableProteinTreeTableModel proteinTreeTableModel = new SortableProteinTreeTableModel(new SortableProteinNode(), listProteinScores);
+            table = createDefaultJXTreeTable(proteinTreeTableModel, hasProteinGroups);
+            table.setEditable(false);
 
             String protAccColumnHeader = PeptideTreeTableModel.TableHeader.PROTEIN_ACCESSION_COLUMN.getHeader();
             table.addMouseMotionListener(new TableCellMouseMotionListener(table, protAccColumnHeader));
             table.addMouseListener(new HyperLinkCellMouseClickListener(table, protAccColumnHeader, new ProteinAccHyperLinkGenerator()));
 
-        }else{
+        } else {
             table = createProteinTable(listProteinScores, controller);
         }
         return table;
@@ -703,9 +705,9 @@ public class TableFactory {
 
     private static ProteinSortableTreeTable createDefaultJXTreeTable(SortableProteinTreeTableModel tableModel, boolean hasProteinGropus) {
         //final JXTreeTable table = new JXTreeTable();
-        ProteinSortableTreeTable table= new ProteinSortableTreeTable(tableModel,hasProteinGropus);
+        ProteinSortableTreeTable table = new ProteinSortableTreeTable(tableModel, hasProteinGropus);
         String[] columnHeaderTooltips = new String[tableModel.getColumnTooltips().size()];
-        for(int i = 0; i < tableModel.getColumnTooltips().size(); i++)
+        for (int i = 0; i < tableModel.getColumnTooltips().size(); i++)
             columnHeaderTooltips[i] = tableModel.getColumnTooltips().get(i);
         // Install component header
         TableColumnModel tcm = table.getColumnModel();
@@ -754,7 +756,6 @@ public class TableFactory {
         table.setRootVisible(false);
         table.setSortable(false);
     }
-
 
 
     private static void configureTable(JXTable table) {
@@ -872,6 +873,7 @@ public class TableFactory {
 
     /**
      * Creates and configures a mouse adapter for tree table headers to display a context menu.
+     *
      * @return the header mouse adapter
      */
     public static MouseAdapter createHeaderMouseAdapter(final JXTreeTable treeTbl) {
@@ -946,7 +948,7 @@ public class TableFactory {
             @Override
             public void mousePressed(MouseEvent me) {
                 int col = ch.columnAtPoint(me.getPoint());
-                if(!treeTbl.isSortable())
+                if (!treeTbl.isSortable())
                     col = -1;
                 // Check whether right mouse button has been pressed
                 if ((col != -1) && (me.getButton() == MouseEvent.BUTTON1)) {
