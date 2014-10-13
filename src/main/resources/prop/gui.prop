@@ -237,7 +237,7 @@ quantitation.tab.icon.small=icon/16x16/view.png
 quantitation.tab.loading.icon.small=icon/16x16/loading.gif
 
 # loading text
-loading.title =  Loading... Please wait
+loading.title =  Loading file ...
 
 # text for about pane
 about.pride.main.logo=logo/pride-logo.png

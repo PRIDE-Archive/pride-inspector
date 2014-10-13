@@ -5,8 +5,7 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTreeTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
+import uk.ac.ebi.pride.toolsuite.gui.access.GeneralMetaDataGroup;
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.PrideInspectorLoadingPanel;
 import uk.ac.ebi.pride.toolsuite.gui.component.chart.ChartTabPane;
@@ -18,9 +17,13 @@ import uk.ac.ebi.pride.toolsuite.gui.component.quant.QuantTabPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.report.SummaryReportMessage;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProgressiveListTableModel;
 import uk.ac.ebi.pride.toolsuite.gui.event.SummaryReportEvent;
+import uk.ac.ebi.pride.toolsuite.gui.task.TaskEvent;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskListener;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
+import uk.ac.ebi.pride.toolsuite.gui.task.impl.RetrieveMetaDataTask;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.ScanExperimentTask;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +36,7 @@ import java.util.Collection;
  * Date: 29-Jul-2010
  * Time: 14:07:59
  */
-public class ControllerContentPane extends DataAccessControllerPane {
+public class ControllerContentPane extends DataAccessControllerPane<GeneralMetaDataGroup, Void> {
     private static final Logger logger = LoggerFactory.getLogger(ControllerContentPane.class);
 
     private JTabbedPane contentTabPane;
@@ -77,14 +80,31 @@ public class ControllerContentPane extends DataAccessControllerPane {
         Collection<DataAccessController.ContentCategory> categories = controller.getContentCategories();
 
         if (!categories.isEmpty()) {
-            createTabbedPane();
-
-            setTabVisibility();
-
-            retrieveIdentificationData();
-        } else {
-            createLoadingPanel();
+            retrieveMetaData();
         }
+        createLoadingPanel();
+    }
+
+    @Override
+    public void succeed(TaskEvent<GeneralMetaDataGroup> generalMetaDataGroupTaskEvent) {
+        GeneralMetaDataGroup metaDataGroup = generalMetaDataGroupTaskEvent.getValue();
+
+        this.removeAll();
+
+        createTabbedPane(metaDataGroup);
+
+        setTabVisibility();
+
+        retrieveIdentificationData();
+    }
+
+    private void retrieveMetaData() {
+        RetrieveMetaDataTask retrieveTask = new RetrieveMetaDataTask(controller);
+
+        // register task listener
+        retrieveTask.addTaskListener(this);
+
+        TaskUtil.startBackgroundTask(retrieveTask, controller);
     }
 
     private void createLoadingPanel() {
@@ -151,7 +171,8 @@ public class ControllerContentPane extends DataAccessControllerPane {
             quantTabEnabled = controller.hasQuantData();
             contentTabPane.setEnabledAt(quantTabIndex, quantTabEnabled);
             if (quantTabEnabled) {
-                EventBus.publish(new SummaryReportEvent(this, controller, new SummaryReportMessage(SummaryReportMessage.Type.SUCCESS, "Quantifications found", "This data source contains quantitative data")));
+                EventBus.publish(new SummaryReportEvent(this, controller,
+                        new SummaryReportMessage(SummaryReportMessage.Type.SUCCESS, "Quantifications found", "This data source contains quantitative data")));
             }
         }
     }
@@ -161,9 +182,11 @@ public class ControllerContentPane extends DataAccessControllerPane {
             peptideTabEnabled = controller.hasPeptide();
             contentTabPane.setEnabledAt(peptideTabIndex, peptideTabEnabled);
             if (peptideTabEnabled) {
-                EventBus.publish(new SummaryReportEvent(this, controller, new SummaryReportMessage(SummaryReportMessage.Type.SUCCESS, "Peptides found", "This data source contains peptides")));
+                EventBus.publish(new SummaryReportEvent(this, controller,
+                        new SummaryReportMessage(SummaryReportMessage.Type.SUCCESS, "Peptides found", "This data source contains peptides")));
             } else {
-                EventBus.publish(new SummaryReportEvent(this, controller, new SummaryReportMessage(SummaryReportMessage.Type.ERROR, "Peptides not found", "This data source does not contain peptides")));
+                EventBus.publish(new SummaryReportEvent(this, controller,
+                        new SummaryReportMessage(SummaryReportMessage.Type.ERROR, "Peptides not found", "This data source does not contain peptides")));
             }
         }
     }
@@ -173,19 +196,23 @@ public class ControllerContentPane extends DataAccessControllerPane {
             proteinTabEnabled = controller.hasProtein();
             contentTabPane.setEnabledAt(proteinTabIndex, proteinTabEnabled);
             if (proteinTabEnabled) {
-                EventBus.publish(new SummaryReportEvent(this, controller, new SummaryReportMessage(SummaryReportMessage.Type.SUCCESS, "Proteins found", "This data source contains protein identifications")));
+                EventBus.publish(new SummaryReportEvent(this, controller,
+                        new SummaryReportMessage(SummaryReportMessage.Type.SUCCESS, "Proteins found", "This data source contains protein identifications")));
                 checkProteinGroupPresence(controller);
             } else {
-                EventBus.publish(new SummaryReportEvent(this, controller, new SummaryReportMessage(SummaryReportMessage.Type.ERROR, "Proteins not found", "This data source does not contain protein identifications")));
+                EventBus.publish(new SummaryReportEvent(this, controller,
+                        new SummaryReportMessage(SummaryReportMessage.Type.ERROR, "Proteins not found", "This data source does not contain protein identifications")));
             }
         }
     }
 
-    private void checkProteinGroupPresence(DataAccessController controller){
-        if(controller.hasProteinAmbiguityGroup()){
-            EventBus.publish(new SummaryReportEvent(this, controller, new SummaryReportMessage(SummaryReportMessage.Type.SUCCESS, "Protein Group found", "This data source contains protein group information")));
-        }else{
-            EventBus.publish(new SummaryReportEvent(this, controller, new SummaryReportMessage(SummaryReportMessage.Type.WARNING, "Proteins Group not found", "This data source does not contain protein group information")));
+    private void checkProteinGroupPresence(DataAccessController controller) {
+        if (controller.hasProteinAmbiguityGroup()) {
+            EventBus.publish(new SummaryReportEvent(this, controller,
+                    new SummaryReportMessage(SummaryReportMessage.Type.SUCCESS, "Protein Group found", "This data source contains protein group information")));
+        } else {
+            EventBus.publish(new SummaryReportEvent(this, controller,
+                    new SummaryReportMessage(SummaryReportMessage.Type.WARNING, "Proteins Group not found", "This data source does not contain protein group information")));
         }
     }
 
@@ -213,14 +240,15 @@ public class ControllerContentPane extends DataAccessControllerPane {
      * Insert each tab
      * This function create and insert new Tabs
      */
-    private void createTabbedPane() {
+    private void createTabbedPane(GeneralMetaDataGroup metaDataGroup) {
         contentTabPane = new JTabbedPane();
         Collection<DataAccessController.ContentCategory> categories = controller.getContentCategories();
 
         // the type of data contains experiment data
         if (!categories.isEmpty()) {
 
-            createMetaDataTab();
+            if (metaDataGroup != null)
+                createMetaDataTab(metaDataGroup);
 
             createProteinTab(categories);
 
@@ -280,13 +308,10 @@ public class ControllerContentPane extends DataAccessControllerPane {
         }
     }
 
-    private void createMetaDataTab() {
-        if (controller.hasMetaDataInformation()) {
-            metaDataTabPane = new MetaDataTabPane(controller, this);
-            metaDataTabIndex = indexCount++;
-            contentTabPane.insertTab(metaDataTabPane.getTitle(), metaDataTabPane.getIcon(), metaDataTabPane, metaDataTabPane.getTitle(), metaDataTabIndex);
-            metaDataTabPane.populate();
-        }
+    private void createMetaDataTab(GeneralMetaDataGroup metaDataGroup) {
+        metaDataTabPane = new MetaDataTabPane(controller, this, metaDataGroup);
+        metaDataTabIndex = indexCount++;
+        contentTabPane.insertTab(metaDataTabPane.getTitle(), metaDataTabPane.getIcon(), metaDataTabPane, metaDataTabPane.getTitle(), metaDataTabIndex);
     }
 
     /**
@@ -295,7 +320,6 @@ public class ControllerContentPane extends DataAccessControllerPane {
      */
     @SuppressWarnings("unchecked")
     private void retrieveIdentificationData() {
-
         Collection<DataAccessController.ContentCategory> categories = controller.getContentCategories();
         if (categories.contains(DataAccessController.ContentCategory.PROTEIN) && categories.contains(DataAccessController.ContentCategory.PEPTIDE)) {
             scanEntireExperiment();
@@ -310,10 +334,10 @@ public class ControllerContentPane extends DataAccessControllerPane {
 
         // register protein table model as a task listener
         JXTable identTable = (JXTable) proteinTabPane.getIdentificationPane().getIdentificationTable();
-        if(controller.hasProteinAmbiguityGroup())
-           retrieveTask.addTaskListener((TaskListener) ((JXTreeTable) identTable).getTreeTableModel());
+        if (controller.hasProteinAmbiguityGroup())
+            retrieveTask.addTaskListener((TaskListener) ((JXTreeTable) identTable).getTreeTableModel());
         else
-           retrieveTask.addTaskListener((TaskListener) identTable.getModel());
+            retrieveTask.addTaskListener((TaskListener) identTable.getModel());
 
         // register peptide tab as a task listener
         retrieveTask.addTaskListener(peptideTabPane);

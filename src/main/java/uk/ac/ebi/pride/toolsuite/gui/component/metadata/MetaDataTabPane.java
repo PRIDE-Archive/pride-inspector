@@ -3,30 +3,24 @@ package uk.ac.ebi.pride.toolsuite.gui.component.metadata;
 import org.bushe.swing.event.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
-import uk.ac.ebi.pride.utilities.data.core.CvParam;
-import uk.ac.ebi.pride.utilities.data.core.UserParam;
-import uk.ac.ebi.pride.toolsuite.gui.EDTUtils;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.access.GeneralMetaDataGroup;
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.report.SummaryReportMessage;
-import uk.ac.ebi.pride.toolsuite.gui.component.startup.ControllerContentPane;
 import uk.ac.ebi.pride.toolsuite.gui.event.SummaryReportEvent;
-import uk.ac.ebi.pride.toolsuite.gui.task.TaskEvent;
-import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
-import uk.ac.ebi.pride.toolsuite.gui.task.impl.RetrieveMetaDataTask;
-import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.util.NumberUtilities;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.data.core.CvParam;
+import uk.ac.ebi.pride.utilities.data.core.UserParam;
+import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
 import javax.help.CSH;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * MetaDataTabPane displays all the meta data shared across the data source/experiment.
@@ -46,6 +40,7 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
     private static final String IDENTIFICATION_METADATA = "Identification Protocol";
 
     private static final String PANE_TITLE = "Overview";
+    private final GeneralMetaDataGroup metaDataGroup;
 
     private JPanel metaDataTopPanel;
     private JPanel metaDataContainer;
@@ -57,8 +52,10 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
     private IdentificationMetadataPanel identificationMetadataPanel;
 
 
-    public MetaDataTabPane(DataAccessController controller, JComponent component) {
+    public MetaDataTabPane(DataAccessController controller, JComponent component, GeneralMetaDataGroup metaDataGroup) {
         super(controller, component);
+        this.metaDataGroup = metaDataGroup;
+        populate();
     }
 
     @Override
@@ -75,63 +72,35 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
         this.setLoadingIcon(GUIUtilities.loadIcon(context.getProperty("general.tab.loading.icon.small")));
     }
 
+
     @Override
     public void populate() {
-        // start retrieving meta data
-        retrieveMetaData();
+        // init container
+        createContainer();
+
+        // create meta data panels
+        createMetaDataPanels(metaDataGroup);
+
+        // tool bar
+        createTopPanel(metaDataGroup);
+
+        // add to scroll pane
+        JScrollPane scrollPane = new JScrollPane(metaDataContainer,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        MetaDataTabPane.this.add(scrollPane, BorderLayout.CENTER);
+
+        // set vertical scroll bar's speed
+        scrollPane.getVerticalScrollBar().setUnitIncrement(100);
     }
 
-    @Override
-    public void started(TaskEvent event) {
-        parentComponent.revalidate();
-        parentComponent.repaint();
-    }
 
-    @Override
-
-    public void succeed(TaskEvent<GeneralMetaDataGroup> metaDataTaskEvent) {
-
-        final GeneralMetaDataGroup metaData = metaDataTaskEvent.getValue();
-
-        Runnable run = new Runnable() {
-
-            @Override
-            public void run() {
-                // init container
-                createContainer();
-
-                // create meta data panels
-                createMetaDataPanels(metaData);
-
-                // tool bar
-                createTopPanel(metaData);
-
-                // add to scroll pane
-                JScrollPane scrollPane = new JScrollPane(metaDataContainer,
-                        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-                scrollPane.setBorder(BorderFactory.createEmptyBorder());
-                MetaDataTabPane.this.add(scrollPane, BorderLayout.CENTER);
-
-                // set vertical scroll bar's speed
-                scrollPane.getVerticalScrollBar().setUnitIncrement(100);
-            }
-        };
-
-        try {
-            EDTUtils.invokeAndWait(run);
-        } catch (InvocationTargetException e) {
-            String msg = "Failed to create meta data panels";
-            logger.error(msg, e);
-
-        } catch (InterruptedException e) {
-            String msg = "Failed to create meta data panels";
-            logger.error(msg, e);
-        }
-
-        // notify key information, such as: FDR
-        notifyKeyInfo(metaData);
-    }
+//    @Override
+//    public void started(TaskEvent event) {
+//        parentComponent.revalidate();
+//        parentComponent.repaint();
+//    }
 
     /**
      * Notify experiment summary for certain data
@@ -177,32 +146,6 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
         }
     }
 
-    // called when a background task finished to reset the icon
-    @Override
-    public void finished(TaskEvent<Void> event) {
-       // showIcon(getIcon());
-    }
-
-    /**
-     * Show a different icon if the parent component is not null and an instance of DataContentDisplayPane
-     *
-     * @param icon icon to show
-     */
-    private void showIcon(Icon icon) {
-        if (parentComponent != null && parentComponent instanceof ControllerContentPane) {
-            ControllerContentPane contentPane = (ControllerContentPane) parentComponent;
-            contentPane.setTabIcon(contentPane.getMetaDataTabIndex(), icon);
-        }
-    }
-
-    private void retrieveMetaData() {
-        RetrieveMetaDataTask retrieveTask = new RetrieveMetaDataTask(controller);
-
-        // register task listener
-        retrieveTask.addTaskListener(this);
-
-        TaskUtil.startBackgroundTask(retrieveTask, controller);
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {

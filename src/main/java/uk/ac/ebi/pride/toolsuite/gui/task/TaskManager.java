@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  * Time: 11:34:32
  */
 public class TaskManager extends PropertyChangeHelper {
-    private final static Logger logger = LoggerFactory.getLogger(TaskManager.class.getName());
+    private final static Logger logger = LoggerFactory.getLogger(TaskManager.class);
 
     /**
      * property change event name, this is fired when a new task is added
