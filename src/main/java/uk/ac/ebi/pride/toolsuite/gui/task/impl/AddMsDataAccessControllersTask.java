@@ -24,7 +24,7 @@ import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
- * User: ypriverol
+ * @author ypriverol
  * Date: 3/4/13
  * Time: 2:48 PM
  */

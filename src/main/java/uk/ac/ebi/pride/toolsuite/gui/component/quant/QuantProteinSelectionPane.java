@@ -394,7 +394,7 @@ public class QuantProteinSelectionPane extends DataAccessControllerPane implemen
 
                         // publish the event to local event bus
                         EventService eventBus = ContainerEventServiceFinder.getEventService(QuantProteinSelectionPane.this);
-                        eventBus.publish(new ProteinIdentificationEvent(QuantProteinSelectionPane.this, controller, identId));
+                        eventBus.publish(new ProteinIdentificationEvent(QuantProteinSelectionPane.this, controller, identId, null));
                     }
                 } else {
                     table.getSelectionModel().clearSelection();

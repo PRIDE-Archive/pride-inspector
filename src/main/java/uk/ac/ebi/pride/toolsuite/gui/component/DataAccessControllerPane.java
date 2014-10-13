@@ -22,7 +22,9 @@ import java.util.List;
  * 3. It implements TaskListener interface for to listen to Task events, no concrete implementations
  * are given.
  * <p/>
- * User: rwang
+ * @author rwang
+ * @author ypriverol
+ *
  * Date: 03-May-2010
  * Time: 18:36:45
  */

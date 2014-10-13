@@ -47,7 +47,8 @@ import java.awt.event.ActionListener;
  * 2. It notifies all parties (components) listening on the changes with appropriate data.
  * <p/>
  * <p/>
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 03-Mar-2010
  * Time: 14:55:11
  */

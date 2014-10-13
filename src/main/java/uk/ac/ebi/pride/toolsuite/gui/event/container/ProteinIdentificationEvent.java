@@ -9,8 +9,12 @@ import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
  * @author ypriverol
  */
 public class ProteinIdentificationEvent extends AbstractEventServiceEvent {
+
     private Comparable identificationId;
+
     private DataAccessController controller;
+
+    private Comparable proteinGroupId;
 
     /**
      * Default constructor
@@ -19,10 +23,11 @@ public class ProteinIdentificationEvent extends AbstractEventServiceEvent {
      * @param controller    data access controller
      * @param identId   Identification id
      */
-    public ProteinIdentificationEvent(Object source, DataAccessController controller, Comparable identId) {
+    public ProteinIdentificationEvent(Object source, DataAccessController controller, Comparable identId, Comparable proteinGroupId) {
         super(source);
         this.controller = controller;
         this.identificationId = identId;
+        this.proteinGroupId = proteinGroupId;
     }
 
     public Comparable getIdentificationId() {
@@ -39,5 +44,13 @@ public class ProteinIdentificationEvent extends AbstractEventServiceEvent {
 
     public void setController(DataAccessController controller) {
         this.controller = controller;
+    }
+
+    public Comparable getProteinGroupId() {
+        return proteinGroupId;
+    }
+
+    public void setProteinGroupId(Comparable proteinGroupId) {
+        this.proteinGroupId = proteinGroupId;
     }
 }

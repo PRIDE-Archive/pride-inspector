@@ -21,6 +21,8 @@ import uk.ac.ebi.pride.toolsuite.gui.task.TaskEvent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * IdentTabPane displays protein identification and peptide related information.
@@ -157,6 +159,26 @@ public class ProteinTabPane extends PrideInspectorTabPane {
         peptidePane.subscribeToEventBus(null);
         vizTabPane.subscribeToEventBus(null);
     }
+
+    private JPanel ProteinGroupPanel() {
+        JPanel msgPanel = new JPanel();
+        msgPanel.setPreferredSize(new Dimension(500, 40));
+        msgPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
+        msgPanel.setLayout(new BoxLayout(msgPanel, BoxLayout.LINE_AXIS));
+
+        msgPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+
+        // add a glue to fill the empty space
+        msgPanel.add(Box.createHorizontalGlue());
+
+        JButton computeButton = new JButton("Show Protein Groups");
+
+        msgPanel.add(computeButton);
+
+        msgPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+
+            return msgPanel;
+     }
 
     /**
      * Return a reference to the identification pane

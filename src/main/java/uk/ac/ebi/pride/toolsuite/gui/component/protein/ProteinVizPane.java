@@ -3,6 +3,7 @@ package uk.ac.ebi.pride.toolsuite.gui.component.protein;
 import org.bushe.swing.event.EventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.pride.toolsuite.gui.component.proteingroup.ProteinGroupPane;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 import uk.ac.ebi.pride.toolsuite.gui.action.impl.ExtraProteinDetailAction;
@@ -20,11 +21,13 @@ import java.awt.*;
 /**
  * This tab pane shows both the spectrum browser and protein sequence panel
  * <p/>
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 09/06/11
  * Time: 11:37
  */
 public class ProteinVizPane extends DataAccessControllerPane implements EventBusSubscribable {
+
     private static Logger logger = LoggerFactory.getLogger(ProteinVizPane.class);
     /**
      * the default background color

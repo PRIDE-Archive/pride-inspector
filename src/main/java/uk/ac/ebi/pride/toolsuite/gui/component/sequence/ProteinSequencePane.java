@@ -39,11 +39,13 @@ import static uk.ac.ebi.pride.toolsuite.gui.component.sequence.AttributedSequenc
 /**
  * Panel to visualize protein sequence
  * <p/>
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 08/06/11
  * Time: 11:57
  */
 public class ProteinSequencePane extends DataAccessControllerPane<AnnotatedProtein, Void> implements EventBusSubscribable {
+
     private final static Logger logger = LoggerFactory.getLogger(ProteinSequencePane.class);
     private final static int TOP_MARGIN = 5;
     private final static int TOP_MARGIN_MESSAGE = 45;

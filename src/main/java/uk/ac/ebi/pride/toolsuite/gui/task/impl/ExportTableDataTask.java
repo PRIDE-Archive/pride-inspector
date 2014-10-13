@@ -21,6 +21,7 @@ import java.io.PrintWriter;
  * Time: 15:35
  */
 public class ExportTableDataTask extends TaskAdapter<Void, Void>{
+
     private static final Logger logger = LoggerFactory.getLogger(ExportIdentificationDescTask.class);
 
     /**

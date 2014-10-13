@@ -36,7 +36,9 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 /**
- * Creator: Qingwei-XU
+ * @author Qingwei-XU
+ * @author ypriverol
+ *
  * Date: 19/11/12
  */
 public class FragmentationTablePane extends DataAccessControllerPane<Peptide, Void> implements EventBusSubscribable {
@@ -63,7 +65,6 @@ public class FragmentationTablePane extends DataAccessControllerPane<Peptide, Vo
 
     public FragmentationTablePane(DataAccessController controller) {
         super(controller);
-
         this.controller = controller;
     }
 
