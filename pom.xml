@@ -73,7 +73,7 @@
         <eventbus.version>1.4</eventbus.version>
         <swingx-all.version>1.6.5-1</swingx-all.version>
         <ehcache.version>2.7.0</ehcache.version>
-        <balloontip.version>1.2.1</balloontip.version>
+        <balloontip.version>1.2.4.1</balloontip.version>
         <protein-details-fetcher.version>1.0.5-SNAPSHOT</protein-details-fetcher.version>
         <accession-resolver.version>1.0.3</accession-resolver.version>
         <prider-ws-model.version>0.1.6.1</prider-ws-model.version>
@@ -85,6 +85,8 @@
         <spring-security-core.version>3.2.1.RELEASE</spring-security-core.version>
         <jung.version>2.0.1</jung.version>
         <commons-lang3.version>3.3.2</commons-lang3.version>
+        <jcip-annotations.version>1.0</jcip-annotations.version>
+        <jsparklines.version>1.0.1</jsparklines.version>
     </properties>
 
     <dependencies>
@@ -252,14 +254,14 @@
         <dependency>
             <groupId>no.uib</groupId>
             <artifactId>jsparklines</artifactId>
-            <version>1.0.1</version>
+            <version>${jsparklines.version}</version>
         </dependency>
 
         <!-- Messages with ballontips -->
         <dependency>
             <groupId>net.java.balloontip</groupId>
             <artifactId>balloontip</artifactId>
-            <version>1.2.4.1</version>
+            <version>${balloontip.version}</version>
         </dependency>
 
         <!-- Jung dependencies-->
@@ -280,6 +282,14 @@
             <artifactId>jung-samples</artifactId>
             <version>${jung.version}</version>
         </dependency>
+
+        <!-- java concurrency annotations-->
+        <dependency>
+            <groupId>net.jcip</groupId>
+            <artifactId>jcip-annotations</artifactId>
+            <version>${jcip-annotations.version}</version>
+        </dependency>
+
 
     </dependencies>
 
