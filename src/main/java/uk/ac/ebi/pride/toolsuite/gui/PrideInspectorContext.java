@@ -2,7 +2,6 @@ package uk.ac.ebi.pride.toolsuite.gui;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.toolsuite.gui.access.DataAccessMonitor;
 import uk.ac.ebi.pride.toolsuite.gui.action.PrideAction;
 import uk.ac.ebi.pride.toolsuite.gui.component.db.DatabaseSearchPane;
@@ -11,6 +10,7 @@ import uk.ac.ebi.pride.toolsuite.gui.component.reviewer.LoginRecord;
 import uk.ac.ebi.pride.toolsuite.gui.component.startup.WelcomePane;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.DesktopContext;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskManager;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 
 import javax.help.HelpBroker;
 import javax.help.HelpSet;
@@ -18,10 +18,10 @@ import javax.help.HelpSetException;
 import javax.help.SwingHelpUtilities;
 import javax.swing.*;
 import java.net.URL;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Overall context of the GUI, this object should only have one instance per application.
@@ -71,7 +71,7 @@ public class PrideInspectorContext extends DesktopContext {
     /**
      * Tracking all the summary report in a list model for each database access controller
      */
-    private Map<DataAccessController, ListModel> summaryReportTracker;
+    private final Map<DataAccessController, ListModel> summaryReportTracker;
 
     /**
      * The main help set for PRIDE Inspector
@@ -111,16 +111,16 @@ public class PrideInspectorContext extends DesktopContext {
         this.dataAccessMonitor = new DataAccessMonitor();
 
         // data content pane cache
-        this.dataContentPaneCache = Collections.synchronizedMap(new HashMap<DataAccessController, JComponent>());
+        this.dataContentPaneCache = new ConcurrentHashMap<DataAccessController, JComponent>();
 
         // data summary pane cache
-        this.dataSummaryPaneCache = Collections.synchronizedMap(new HashMap<DataAccessController, JComponent>());
+        this.dataSummaryPaneCache = new ConcurrentHashMap<DataAccessController, JComponent>();
 
         // action map
-        this.sharedActionCache = Collections.synchronizedMap(new HashMap<DataAccessController, Map<Class<? extends PrideAction>, PrideAction>>());
+        this.sharedActionCache = new ConcurrentHashMap<DataAccessController, Map<Class<? extends PrideAction>, PrideAction>>();
 
         // summary report tracker
-        this.summaryReportTracker = Collections.synchronizedMap(new HashMap<DataAccessController, ListModel>());
+        this.summaryReportTracker = new ConcurrentHashMap<DataAccessController, ListModel>();
 
         // by default the data source browser is invisible
         this.leftControlPaneVisible = false;
