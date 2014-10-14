@@ -4,6 +4,7 @@ import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 import uk.ac.ebi.pride.toolsuite.gui.utils.GUIBlocker;
 import uk.ac.ebi.pride.toolsuite.gui.utils.PropertyChangeHelper;
+import uk.ac.ebi.pride.toolsuite.gui.utils.ThreadCalculator;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -35,16 +36,6 @@ public class TaskManager extends PropertyChangeHelper {
     public final static String REMOVE_TASK_PROP = "remove_new_task";
 
     /**
-     * This number defines the number threads can be running at the same time
-     */
-    private final static int CORE_POOL_SIZE = 10;
-
-    /**
-     * This number defines the number threads can be running and waiting at the same time
-     */
-    private final static int MAXIMUM_POOL_SIZE = 20;
-
-    /**
      * Threshold pool executor, it is responsible to running all the tasks
      */
     private final ExecutorService executor;
@@ -67,27 +58,14 @@ public class TaskManager extends PropertyChangeHelper {
 
     /**
      * Constructor
-     * <p/>
-     * This will create a thread pool with default configurations.
-     * <p/>
-     * 1. the number of allowed threads are 20.
-     * <p/>
-     * 2. the number of max running threads are 10.
      */
     public TaskManager() {
-        this(new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
-                10L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>()));
-    }
 
-    /**
-     * Constructor
-     *
-     * @param executor provide an implementation of the thread pool.
-     */
-    public TaskManager(final ExecutorService executor) {
+        // 8 means that the time spent on waiting for I/O is about 80% of the total time
+        int numberOfThreads = ThreadCalculator.calculateNumberOfThreads(8);
 
         // thread pool
-        this.executor = executor;
+        this.executor = Executors.newFixedThreadPool(numberOfThreads);
 
         // a list of tasks
         this.tasks = new CopyOnWriteArrayList<Task>();

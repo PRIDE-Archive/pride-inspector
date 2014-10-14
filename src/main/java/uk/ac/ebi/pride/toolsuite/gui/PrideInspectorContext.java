@@ -161,7 +161,7 @@ public class PrideInspectorContext extends DesktopContext {
      *
      * @return List<DataAccessController>   a list of existing data access controller
      */
-    public final synchronized List<DataAccessController> getControllers() {
+    public final List<DataAccessController> getControllers() {
         return dataAccessMonitor.getControllers();
     }
 
@@ -172,7 +172,7 @@ public class PrideInspectorContext extends DesktopContext {
      *
      * @return int  the number of data access controllers
      */
-    public final synchronized int getNumberOfControllers() {
+    public final int getNumberOfControllers() {
         return dataAccessMonitor.getNumberOfControllers();
     }
 
@@ -184,7 +184,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller data access controller
      * @return boolean  true if it is data access controller
      */
-    public final synchronized boolean isForegroundDataAccessController(DataAccessController controller) {
+    public final boolean isForegroundDataAccessController(DataAccessController controller) {
         return dataAccessMonitor.isForegroundDataAccessController(controller);
     }
 
@@ -195,7 +195,7 @@ public class PrideInspectorContext extends DesktopContext {
      *
      * @return DataAccessController data access controller
      */
-    public final synchronized DataAccessController getForegroundDataAccessController() {
+    public final DataAccessController getForegroundDataAccessController() {
         return dataAccessMonitor.getForegroundDataAccessController();
     }
 
@@ -206,7 +206,7 @@ public class PrideInspectorContext extends DesktopContext {
      *
      * @param controller data access controller
      */
-    public final synchronized void setForegroundDataAccessController(DataAccessController controller) {
+    public final void setForegroundDataAccessController(DataAccessController controller) {
         dataAccessMonitor.setForegroundDataAccessController(controller);
     }
 
@@ -219,7 +219,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller  data access controller
      * @param cancelTasks whether to cancel the tasks associated with this controller
      */
-    public final synchronized void removeDataAccessController(DataAccessController controller, boolean cancelTasks) {
+    public final void removeDataAccessController(DataAccessController controller, boolean cancelTasks) {
         if (cancelTasks) {
             // cancel all the tasks related to this data access controller
             TaskManager taskMgr = this.getTaskManager();
@@ -246,15 +246,14 @@ public class PrideInspectorContext extends DesktopContext {
      * This method will close data access controller, it will also stop all ongoing tasks related to this
      * data access controller.
      *
-     * @param controller  data access controller
+     * @param controller data access controller
      */
-    public final synchronized void replaceSummaryReport(DataAccessController controller, DataAccessController replacement) {
+    public final void replaceSummaryReport(DataAccessController controller, DataAccessController replacement) {
         // remove summary report
         summaryReportTracker.remove(controller);
         // add new summary report for the new data access controller
         getSummaryReportModel(replacement);
     }
-
 
 
     /**
@@ -264,7 +263,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param replacement replacement data access controller
      * @param cancelTasks whether to cancel the tasks associated with this controller
      */
-    public final synchronized void replaceDataAccessController(DataAccessController original, DataAccessController replacement, boolean cancelTasks) {
+    public final void replaceDataAccessController(DataAccessController original, DataAccessController replacement, boolean cancelTasks) {
         if (cancelTasks) {
             // cancel all the tasks related to this data access controller
             TaskManager taskMgr = this.getTaskManager();
@@ -294,7 +293,7 @@ public class PrideInspectorContext extends DesktopContext {
      *
      * @param controller data access controller
      */
-    public final synchronized void addDataAccessController(DataAccessController controller) {
+    public final void addDataAccessController(DataAccessController controller) {
         addDataAccessController(controller, true);
     }
 
@@ -304,7 +303,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller data access controller
      * @param foreground foreground status
      */
-    public final synchronized void addDataAccessController(DataAccessController controller, boolean foreground) {
+    public final void addDataAccessController(DataAccessController controller, boolean foreground) {
         // initialize summary report model
         getSummaryReportModel(controller);
 
@@ -322,7 +321,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller data access controller
      * @return JComponent   DataContentDisplayPane
      */
-    public final synchronized JComponent getDataContentPane(DataAccessController controller) {
+    public final JComponent getDataContentPane(DataAccessController controller) {
         return dataContentPaneCache.get(controller);
     }
 
@@ -334,7 +333,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller data access controller
      * @return JComponent   DataContentDisplayPane
      */
-    public final synchronized JComponent getSummaryPane(DataAccessController controller) {
+    public final JComponent getSummaryPane(DataAccessController controller) {
         return dataSummaryPaneCache.get(controller);
     }
 
@@ -394,7 +393,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller data access controller
      * @param action     pride action
      */
-    public final void addPrideAction(DataAccessController controller, PrideAction action) {
+    public final synchronized void addPrideAction(DataAccessController controller, PrideAction action) {
         Map<Class<? extends PrideAction>, PrideAction> actionMap = sharedActionCache.get(controller);
         if (actionMap == null) {
             actionMap = new HashMap<Class<? extends PrideAction>, PrideAction>();
@@ -513,7 +512,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller data access controller
      * @return ListModel   summary report model
      */
-    public ListModel getSummaryReportModel(DataAccessController controller) {
+    public synchronized ListModel getSummaryReportModel(DataAccessController controller) {
         ListModel model = summaryReportTracker.get(controller);
         if (model == null) {
             model = new ReportListModel(controller);
