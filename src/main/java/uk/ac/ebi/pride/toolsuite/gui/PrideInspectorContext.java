@@ -513,11 +513,14 @@ public class PrideInspectorContext extends DesktopContext {
      * @return ListModel   summary report model
      */
     public synchronized ListModel getSummaryReportModel(DataAccessController controller) {
-        ListModel model = summaryReportTracker.get(controller);
+        ListModel model = controller == null ? null : summaryReportTracker.get(controller);
+
         if (model == null) {
             model = new ReportListModel(controller);
         }
-        summaryReportTracker.put(controller, model);
+
+        if (controller != null)
+            summaryReportTracker.put(controller, model);
 
         return model;
     }
