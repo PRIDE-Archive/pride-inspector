@@ -21,7 +21,8 @@ import java.awt.event.ActionListener;
 /**
  * Action to set a control sample
  * <p/>
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 15/08/2011
  * Time: 17:07
  */
@@ -32,7 +33,7 @@ public class SetRefSampleAction extends PrideAction {
     private JPopupMenu controlSampleMenu;
 
     public SetRefSampleAction(DataAccessController controller) {
-        super(Desktop.getInstance().getDesktopContext().getProperty("set.control.sample.title"),
+        super(!controller.getType().equals(DataAccessController.Type.MZTAB)?Desktop.getInstance().getDesktopContext().getProperty("set.control.sample.title"):Desktop.getInstance().getDesktopContext().getProperty("set.quantification.variables.title"),
                 GUIUtilities.loadIcon(Desktop.getInstance().getDesktopContext().getProperty("set.control.sample.small.icon")));
         this.controller = controller;
     }
@@ -52,24 +53,33 @@ public class SetRefSampleAction extends PrideAction {
         JPopupMenu menu = new JPopupMenu();
 
         try {
-            QuantitativeSample sample = controller.getQuantSample();
-            int refSampelIndex = controller.getReferenceSubSampleIndex();
-            ButtonGroup buttonGroup = new ButtonGroup();
-            for (int i = 1; i <= QuantitativeSample.MAX_SUB_SAMPLE_SIZE; i++) {
-                CvParam reagent = sample.getReagent(i);
-                if (reagent != null) {
-                    JRadioButtonMenuItem radioButton = new JRadioButtonMenuItem(reagent.getName(), i == refSampelIndex);
-                    radioButton.addActionListener(new RefSampleActionListener(source, i));
-                    menu.add(radioButton);
-                    buttonGroup.add(radioButton);
+            if(!controller.getType().equals(DataAccessController.Type.MZTAB)){
+                QuantitativeSample sample = controller.getQuantSample();
+                int refSampelIndex = controller.getReferenceSubSampleIndex();
+                ButtonGroup buttonGroup = new ButtonGroup();
+                for (int i = 1; i <= QuantitativeSample.MAX_SUB_SAMPLE_SIZE; i++) {
+                    CvParam reagent = sample.getReagent(i);
+                    if (reagent != null) {
+                        JRadioButtonMenuItem radioButton = new JRadioButtonMenuItem(reagent.getName(), i == refSampelIndex);
+                        radioButton.addActionListener(new RefSampleActionListener(source, i));
+                        menu.add(radioButton);
+                        buttonGroup.add(radioButton);
+                    }
                 }
+            }else{
+                ButtonGroup buttonGroup = new ButtonGroup();
+                JRadioButtonMenuItem radioButtonStudy     = new JRadioButtonMenuItem("Study Variables", true);
+                JRadioButtonMenuItem radioButtonAbundace  = new JRadioButtonMenuItem("Abundance Variables", false);
+                radioButtonStudy.addActionListener(new RefSampleActionListener(source, 0));
+                radioButtonAbundace.addActionListener(new RefSampleActionListener(source, 1));
+                menu.add(radioButtonStudy);
+                menu.add(radioButtonAbundace);
+                buttonGroup.add(radioButtonStudy);
+                buttonGroup.add(radioButtonAbundace);
             }
-
         } catch (DataAccessException e) {
             logger.error("Failed to get quantitative sample descriptions");
         }
-
-
         return menu;
     }
 

@@ -38,16 +38,24 @@ public class RetrieveQuantProteinTableTask extends TaskAdapter<Void, Tuple<Table
 
         // get new headers
         // protein quantitative table header
-        List<Object> proteinQuantHeaders = TableDataRetriever.getProteinQuantTableHeaders(controller, referenceSampleIndex);
-        publish(new Tuple<TableContentType, Object>(TableContentType.PROTEIN_QUANTITATION_HEADER, proteinQuantHeaders));
+        if(!controller.getType().equals(DataAccessController.Type.MZTAB)){
+            List<Object> proteinQuantHeaders = TableDataRetriever.getProteinQuantTableHeaders(controller, referenceSampleIndex);
+            publish(new Tuple<TableContentType, Object>(TableContentType.PROTEIN_QUANTITATION_HEADER, proteinQuantHeaders));
+        }
+
 
         // get each row
         for (Comparable identId : identIds) {
             // get and publish protein related details
             ProteinTableRow proteinTableRow = TableDataRetriever.getProteinTableRow(controller, identId, null);
             // get and publish quantitative data
-            List<Object> identQuantContent = TableDataRetriever.getProteinQuantTableRow(controller, identId, referenceSampleIndex);
-            proteinTableRow.addQuantifications(identQuantContent);
+            if(!controller.getType().equals(DataAccessController.Type.MZTAB)){
+                List<Object> identQuantContent = TableDataRetriever.getProteinQuantTableRow(controller, identId, referenceSampleIndex);
+                proteinTableRow.addQuantifications(identQuantContent);
+            }else{
+                List<Object> identQuantContent = TableDataRetriever.getProteinQuantTableRow(controller, identId);
+                proteinTableRow.addQuantifications(identQuantContent);
+            }
 
             publish(new Tuple<TableContentType, Object>(TableContentType.PROTEIN_QUANTITATION, proteinTableRow));
         }

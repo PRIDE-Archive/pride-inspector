@@ -95,7 +95,11 @@ public class QuantProteinSelectionPane extends DataAccessControllerPane implemen
     public QuantProteinSelectionPane(DataAccessController controller, JComponent parentComp) {
         super(controller, parentComp);
         try {
-            this.referenceSampleIndex = controller.getReferenceSubSampleIndex();
+            if(!controller.getType().equals(DataAccessController.Type.MZTAB))
+               this.referenceSampleIndex = controller.getReferenceSubSampleIndex();
+            else
+                this.referenceSampleIndex = 0;
+                // By default we show for mzTab files the Study Variables
         } catch (DataAccessException e) {
             logger.error("Failed to get the default reference sub sample index");
         }
@@ -118,7 +122,10 @@ public class QuantProteinSelectionPane extends DataAccessControllerPane implemen
     protected void addComponents() {
         // create identification table
         try {
-            proteinTable = TableFactory.createQuantProteinTable(controller, controller.getAvailableProteinLevelScores());
+            if(!controller.getType().equals(DataAccessController.Type.MZTAB))
+               proteinTable = TableFactory.createQuantProteinTable(controller, controller.getAvailableProteinLevelScores());
+            else
+                proteinTable = TableFactory.createQuantProteinTable(controller, controller.getAvailableProteinLevelScores(), controller.getStudyVariables());
         } catch (DataAccessException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -215,7 +222,8 @@ public class QuantProteinSelectionPane extends DataAccessControllerPane implemen
         refSampleButton.setForeground(Color.blue);
 
         refSampleButton.setAction(new SetRefSampleAction(controller));
-        refSampleButton.getAction().setEnabled(false);
+        if(!controller.getType().equals(DataAccessController.Type.MZTAB))
+           refSampleButton.getAction().setEnabled(false);
         toolBar.add(refSampleButton);
         // add gaps
         toolBar.add(Box.createRigidArea(new Dimension(10, 10)));
@@ -331,7 +339,7 @@ public class QuantProteinSelectionPane extends DataAccessControllerPane implemen
         public void onEvent(ReferenceSampleChangeEvent referenceSampleChangeEvent) {
             // get new index
             int newIndex = referenceSampleChangeEvent.getReferenceSampleIndex();
-            if (newIndex != referenceSampleIndex) {
+            if (newIndex != referenceSampleIndex && !controller.getType().equals(DataAccessController.Type.MZTAB)) {
                 referenceSampleIndex = newIndex;
                 QuantProteinTableModel tableModel = (QuantProteinTableModel) proteinTable.getModel();
 

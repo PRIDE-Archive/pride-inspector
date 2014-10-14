@@ -17,6 +17,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.TextAnchor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.pride.jmztab.model.StudyVariable;
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.EventBusSubscribable;
 import uk.ac.ebi.pride.toolsuite.gui.event.QuantSelectionEvent;
@@ -27,6 +28,7 @@ import uk.ac.ebi.pride.toolsuite.gui.io.SaveImageDialog;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 import uk.ac.ebi.pride.utilities.data.core.CvParam;
+import uk.ac.ebi.pride.utilities.data.core.QuantScore;
 import uk.ac.ebi.pride.utilities.data.core.Quantification;
 import uk.ac.ebi.pride.utilities.data.core.QuantitativeSample;
 import uk.ac.ebi.pride.utilities.term.QuantCvTermReference;
@@ -96,6 +98,8 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
         this.idMapping = new HashMap<Comparable, Map<Comparable, List<Comparable>>>();
         this.noProteinSelected = true;
         this.noPeptideSelectionMessage = appContext.getProperty("no.peptide.selection.warning.message");
+        if(controller.getType().equals(DataAccessController.Type.MZTAB))
+            referenceSampleIndex = 0;
     }
 
     @Override
@@ -369,30 +373,74 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
      */
     private void addData(Comparable id, Comparable idPeptide) {
         try {
-            // get protein accession
-            String proteinAcc = controller.getProteinAccession(id);
+            if(!controller.getType().equals(DataAccessController.Type.MZTAB)){
+                // get protein accession
+                String proteinAcc = controller.getProteinAccession(id);
 
-            String sequence   = controller.getPeptideSequence(id,idPeptide);
-            // get quantitation data
-            Quantification quantitation = controller.getPeptideQuantData(id,idPeptide);
+                String sequence   = controller.getPeptideSequence(id,idPeptide);
+                // get quantitation data
+                Quantification quantitation = controller.getPeptideQuantData(id,idPeptide);
 
-            QuantitativeSample sample = controller.getQuantSample();
-            if (referenceSampleIndex < 1) {
-                referenceSampleIndex = controller.getReferenceSubSampleIndex();
-            }
-            // get reference reagent
-            Double referenceReagentResult = quantitation.getIsotopeLabellingResult(referenceSampleIndex);
-            CvParam referenceReagent = sample.getReagent(referenceSampleIndex);
-            // get short label for the reagent
-            for (int i = 1; i < QuantitativeSample.MAX_SUB_SAMPLE_SIZE; i++) {
-                if (referenceSampleIndex != i) {
-                    CvParam reagent = sample.getReagent(i);
-                    if (reagent != null) {
-                        Double reagentResult = quantitation.getIsotopeLabellingResult(i);
-                        double value = (referenceReagentResult == null || reagentResult == null) ? 0 : (reagentResult / referenceReagentResult);
-                        Comparable column = QuantCvTermReference.getReagentShortLabel(reagent.getAccession())
-                                + "/" + QuantCvTermReference.getReagentShortLabel(referenceReagent.getAccession());
-                        dataset.addValue(value, sequence, proteinAcc, id.toString() + idPeptide.toString(), column);
+                QuantitativeSample sample = controller.getQuantSample();
+                if (referenceSampleIndex < 1) {
+                    referenceSampleIndex = controller.getReferenceSubSampleIndex();
+                }
+                // get reference reagent
+                Double referenceReagentResult = quantitation.getIsotopeLabellingResult(referenceSampleIndex);
+                CvParam referenceReagent = sample.getReagent(referenceSampleIndex);
+                // get short label for the reagent
+                for (int i = 1; i < QuantitativeSample.MAX_SUB_SAMPLE_SIZE; i++) {
+                    if (referenceSampleIndex != i) {
+                        CvParam reagent = sample.getReagent(i);
+                        if (reagent != null) {
+                            Double reagentResult = quantitation.getIsotopeLabellingResult(i);
+                            double value = (referenceReagentResult == null || reagentResult == null) ? 0 : (reagentResult / referenceReagentResult);
+                            Comparable column = QuantCvTermReference.getReagentShortLabel(reagent.getAccession())
+                                    + "/" + QuantCvTermReference.getReagentShortLabel(referenceReagent.getAccession());
+                            dataset.addValue(value, sequence, proteinAcc, id.toString() + idPeptide.toString(), column);
+                            Map<Comparable, List<Comparable>> peptides = new HashMap<Comparable, List<Comparable>>();
+                            List<Comparable> columns = new ArrayList<Comparable>();
+
+                            if( idMapping.get(id) != null ){
+                                peptides = idMapping.get(id);
+                                if(peptides.get(idPeptide) != null)
+                                    columns = peptides.get(idPeptide);
+                            }
+                            columns.add(column);
+                            peptides.put(idPeptide, columns);
+                            idMapping.put(id, peptides);
+                        }
+                    }
+                }
+            }else{
+                // get protein accession
+                String proteinAcc = controller.getProteinAccession(id);
+
+                String sequence   = controller.getQuantPeptideSequence(id, idPeptide);
+                // get quantitation data
+                QuantScore quantitation = controller.getQuantPeptideByIndex(id, idPeptide).getQuantScore();
+
+
+                if(referenceSampleIndex == 0){
+                   for(Comparable column: quantitation.getStudyVariableScores().keySet()){
+                       dataset.addValue(quantitation.getStudyVariableScores().get(column), sequence, proteinAcc, id.toString() + idPeptide.toString(), column.toString());
+
+                       Map<Comparable, List<Comparable>> peptides = new HashMap<Comparable, List<Comparable>>();
+                       List<Comparable> columns = new ArrayList<Comparable>();
+
+                       if( idMapping.get(id) != null ){
+                           peptides = idMapping.get(id);
+                           if(peptides.get(idPeptide) != null)
+                               columns = peptides.get(idPeptide);
+                       }
+                       columns.add(column);
+                       peptides.put(idPeptide, columns);
+                       idMapping.put(id, peptides);
+                   }
+                }else{
+                    for(Comparable column: quantitation.getAssayAbundance().keySet()){
+                        dataset.addValue(quantitation.getAssayAbundance().get(column), sequence, proteinAcc, id.toString() + idPeptide.toString(), column.toString());
+
                         Map<Comparable, List<Comparable>> peptides = new HashMap<Comparable, List<Comparable>>();
                         List<Comparable> columns = new ArrayList<Comparable>();
 
@@ -405,8 +453,10 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
                         peptides.put(idPeptide, columns);
                         idMapping.put(id, peptides);
                     }
+
                 }
             }
+
         } catch (DataAccessException e) {
             logger.error("Failed to retrieve quantitative data", e);
         }

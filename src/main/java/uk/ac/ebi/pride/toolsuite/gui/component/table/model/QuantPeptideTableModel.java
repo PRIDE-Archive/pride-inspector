@@ -1,5 +1,6 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
+
 import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
@@ -15,9 +16,20 @@ import java.util.List;
  */
 public class QuantPeptideTableModel extends AbstractPeptideTableModel {
 
+    private List<uk.ac.ebi.pride.utilities.data.core.StudyVariable> studyVariables;
+
+    public static String ABUNDANCE_HEADER = "abundance_";
+
     public QuantPeptideTableModel(Collection<CvTermReference> listScores) {
         super(listScores);
     }
+
+    public QuantPeptideTableModel(Collection<CvTermReference> listScores, List<uk.ac.ebi.pride.utilities.data.core.StudyVariable> studyVariables){
+        super(listScores);
+        this.studyVariables = studyVariables;
+        updateStudyVariablesHeader();
+    }
+
 
     @Override
     public void addData(Tuple<TableContentType, Object> newData) {
@@ -45,6 +57,21 @@ public class QuantPeptideTableModel extends AbstractPeptideTableModel {
         }
 
         fireTableStructureChanged();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void updateStudyVariablesHeader(){
+        setColumnHeaders();
+
+        if(this.studyVariables != null && !studyVariables.isEmpty()){
+            for(uk.ac.ebi.pride.utilities.data.core.StudyVariable studyVariable: studyVariables){
+                columnNames.put(studyVariable.getDescription(), studyVariable.getDescription());
+            }
+            for(uk.ac.ebi.pride.utilities.data.core.StudyVariable studyVariable: studyVariables){
+                columnNames.put(ABUNDANCE_HEADER + studyVariable.getDescription(), ABUNDANCE_HEADER + studyVariable.getDescription());
+            }
+            fireTableStructureChanged();
+        }
     }
 
     @Override

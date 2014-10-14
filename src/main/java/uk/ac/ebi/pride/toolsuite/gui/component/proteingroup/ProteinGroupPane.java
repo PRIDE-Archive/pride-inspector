@@ -484,7 +484,7 @@ public class ProteinGroupPane extends DataAccessControllerPane<Void, Protein>{
                     constructor = layoutC.getConstructor(new Class[]{Forest.class});
                     o = constructor.newInstance(graph);
                 }else
-                    o = new TreeLayout<String, String>((Forest<String, String>)graph, 60, 100);
+                    o = new TreeLayout<String, String>((Forest<String, String>)graph, 80, 200);
 
                 Layout<String,String> l = (Layout<String,String>) o;
 

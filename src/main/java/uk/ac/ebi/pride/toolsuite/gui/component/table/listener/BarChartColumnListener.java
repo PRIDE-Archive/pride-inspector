@@ -52,4 +52,6 @@ public class BarChartColumnListener extends DynamicColumnListener {
             }
         }
     }
+
+
 }

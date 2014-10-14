@@ -152,6 +152,128 @@ public class TableDataRetriever {
         return peptideTableRow;
     }
 
+    /**
+     * Get a row of data for peptide table.
+     *
+     * @param controller data access controller
+     * @param identId    identification id
+     * @param peptideId  peptide id
+     * @return List<Object> row data
+     * @throws uk.ac.ebi.pride.utilities.data.controller.DataAccessException
+     *          data access exception
+     */
+    public static PeptideTableRow getPeptideQuantDataTableRow(DataAccessController controller,
+                                                     Comparable identId,
+                                                     Comparable peptideId) throws DataAccessException {
+        PeptideTableRow peptideTableRow = new PeptideTableRow();
+
+        // peptide sequence with modifications
+        List<Modification> mods = new ArrayList<Modification>(controller.getNumberOfQuantPTMs(identId, peptideId));
+        String sequence = controller.getQuantPeptideSequence(identId, peptideId);
+        peptideTableRow.setSequence(new PeptideSequence(null, null, sequence, mods, null));
+
+        // start and end position
+        int start = -1;
+        int end   = -1;
+
+        // Protein Accession
+        String protAcc = controller.getProteinAccession(identId);
+        String protAccVersion = controller.getProteinAccessionVersion(identId);
+        String database = (controller.getSearchDatabase(identId).getName() == null) ? "" : controller.getSearchDatabase(identId).getName();
+        AccessionResolver resolver = new AccessionResolver(protAcc, protAccVersion, database, true);
+        String mappedProtAcc = resolver.isValidAccession() ? resolver.getAccession() : null;
+        peptideTableRow.setProteinAccession(new ProteinAccession(protAcc, mappedProtAcc));
+
+        // get protein details
+        Protein protein = PrideInspectorCacheManager.getInstance().getProteinDetails(mappedProtAcc);
+        if (protein != null) {
+            protein = new AnnotatedProtein(protein);
+        }
+
+        // Protein name
+        peptideTableRow.setProteinName(protein == null ? null : protein.getName());
+
+        // protein status
+        peptideTableRow.setProteinAccessionStatus(protein == null ? null : protein.getStatus().name());
+
+        // sequence coverage
+        Double coverage = PrideInspectorCacheManager.getInstance().getSequenceCoverage(controller.getUid(), identId);
+        peptideTableRow.setSequenceCoverage(coverage);
+
+        // peptide present
+        int peptideFitState;
+        if (protein == null || protein.getSequenceString() == null || "".equals(protein.getSequenceString())) {
+            peptideFitState = PeptideFitState.UNKNOWN;
+        } else {
+            if (protein.hasSubSequenceString(sequence, start, end)) {
+                peptideFitState = PeptideFitState.STRICT_FIT;
+            } else if (protein.hasSubSequenceString(sequence)) {
+                peptideFitState = PeptideFitState.FIT;
+            } else {
+                peptideFitState = PeptideFitState.NOT_FIT;
+            }
+        }
+        peptideTableRow.setPeptideFitState(peptideFitState);
+
+        // ranking
+        int rank = -1;
+        peptideTableRow.setRanking(rank == -1 ? null : rank);
+
+        // precursor charge
+        QuantPeptide quantPeptide = controller.getQuantPeptideByIndex(identId, peptideId);
+        Integer charge = quantPeptide.getPrecursorCharge();
+        Comparable specId = controller.getQuantPeptideSpectrumId(identId,peptideId);
+        if (charge == null && specId != null) {
+            charge = controller.getSpectrumPrecursorCharge(specId);
+            if (charge == null || charge == 0) {
+                charge = null;
+            }
+        }
+        peptideTableRow.setPrecursorCharge(charge);
+
+        if (specId != null) {
+            double mz = controller.getSpectrumPrecursorMz(specId);
+            mz = (mz == -1)? quantPeptide.getPrecursorMz():mz;
+            List<Double> ptmMasses = new ArrayList<Double>();
+            for (Modification mod : mods) {
+                List<Double> monoMasses = mod.getMonoisotopicMassDelta();
+                if (monoMasses != null && !monoMasses.isEmpty()) {
+                    ptmMasses.add(monoMasses.get(0));
+                }
+            }
+            Double deltaMass = MoleculeUtilities.calculateDeltaMz(sequence, mz, charge, ptmMasses);
+            peptideTableRow.setDeltaMz(deltaMass == null ? null : NumberUtilities.scaleDouble(deltaMass, 4));
+
+            peptideTableRow.setPrecursorMz(mz == -1 ? null : NumberUtilities.scaleDouble(mz, 4));
+        } else {
+            peptideTableRow.setDeltaMz(null);
+            peptideTableRow.setPrecursorMz(null);
+        }
+
+        // Number of fragment ions
+        peptideTableRow.setNumberOfFragmentIons(0);
+
+        // peptide scores
+        addQuantPeptideScores(peptideTableRow, controller, identId, peptideId);
+
+        // Start
+        peptideTableRow.setSequenceStartPosition(start == -1 ? null : start);
+
+        // End
+        peptideTableRow.setSequenceEndPosition(end == -1 ? null : end);
+
+        // Spectrum reference
+        peptideTableRow.setSpectrumId(specId);
+
+        // identification id
+        peptideTableRow.setProteinId(identId);
+
+        // peptide index
+        peptideTableRow.setPeptideId(peptideId);
+
+        return peptideTableRow;
+    }
+
     private static void addPeptideScores(PeptideTableRow peptideTableRow, DataAccessController controller,
                                          Comparable identId, Comparable peptideId) {
         Score score = controller.getPeptideScore(identId, peptideId);
@@ -162,6 +284,28 @@ public class TableDataRetriever {
                 if (!values.isEmpty()) {
                     // take the first by default
                     //content.add(values.get(0));
+                    Double value =  (values.get(0) != null)?NumberUtilities.scaleDouble(values.get(0).doubleValue(),4):-1.0;
+                    peptideTableRow.addScore(value);
+
+                } else {
+                    peptideTableRow.addScore(null);
+                }
+            }
+        } else {
+            for (CvTermReference availablePeptideLevelScore : availablePeptideLevelScores) {
+                peptideTableRow.addScore(null);
+            }
+        }
+    }
+
+    private static void addQuantPeptideScores(PeptideTableRow peptideTableRow, DataAccessController controller,
+                                              Comparable identId, Comparable peptideId) {
+        Score score = controller.getQuantPeptideScore(identId, peptideId);
+        Collection<CvTermReference> availablePeptideLevelScores = controller.getAvailablePeptideLevelScores();
+        if (score != null) {
+            for (CvTermReference availablePeptideLevelScore : availablePeptideLevelScores) {
+                List<Number> values = score.getScores(availablePeptideLevelScore);
+                if (!values.isEmpty()) {
                     Double value =  (values.get(0) != null)?NumberUtilities.scaleDouble(values.get(0).doubleValue(),4):-1.0;
                     peptideTableRow.addScore(value);
 
@@ -463,6 +607,19 @@ public class TableDataRetriever {
         return getQuantTableRow(controller, quant, referenceSubSampleIndex, true);
     }
 
+    /**
+     * Retrieve a row for identification quantitative table
+     *
+     * @param controller              data access controller
+     * @param identId                 identification id
+     * @return List<Object> a list of results
+     * @throws DataAccessException data access exception
+     */
+    public static List<Object> getProteinQuantTableRow(DataAccessController controller,
+                                                       Comparable identId) throws DataAccessException {
+        return getQuantTableRow(controller, identId);
+    }
+
 
     /**
      * Retrieve a row for peptide quantitative table
@@ -480,6 +637,39 @@ public class TableDataRetriever {
                                                        int referenceSubSampleIndex) throws DataAccessException {
         Quantification quant = controller.getPeptideQuantData(identId, peptideId);
         return getQuantTableRow(controller, quant, referenceSubSampleIndex, false);
+    }
+
+    /**
+     * Retrieve a row for peptide quantitative table
+     *
+     * @param controller              data access controller
+     * @param identId                 identification id
+     * @param peptideId               peptide id
+     * @return List<Object>    a list of results
+     * @throws DataAccessException data access exception
+     */
+    public static List<Object> getPeptideQuantTableRow(DataAccessController controller,
+                                                       Comparable identId,
+                                                       Comparable peptideId) throws DataAccessException {
+        return getQuantTableRow(controller, identId, peptideId);
+    }
+
+    private static List<Object> getQuantTableRow(DataAccessController controller, Comparable idProtein, Comparable idPeptide) throws DataAccessException {
+
+        List<Object> contents = new ArrayList<Object>();
+
+        uk.ac.ebi.pride.utilities.data.core.QuantPeptide peptide  = controller.getQuantPeptideByIndex(idProtein, idPeptide);
+
+
+        if(peptide.getQuantScore() != null && !peptide.getQuantScore().getStudyVariableScores().isEmpty()){
+            for(Double studyVariableValue: peptide.getQuantScore().getStudyVariableScores().values()){
+                contents.add(studyVariableValue);
+            }
+            for(Double abundance: peptide.getQuantScore().getAssayAbundance().values()){
+                contents.add(abundance);
+            }
+        }
+        return contents;
     }
 
     /**
@@ -507,6 +697,23 @@ public class TableDataRetriever {
             contents.addAll(getIsotopeLabellingQuantData(methods, controller, quant, refSampleIndex, isProteinIdent));
         }
 
+        return contents;
+    }
+
+
+    private static List<Object> getQuantTableRow(DataAccessController controller, Comparable idProtein) throws DataAccessException {
+        List<Object> contents = new ArrayList<Object>();
+
+        uk.ac.ebi.pride.utilities.data.core.Protein protein = controller.getProteinById(idProtein);
+
+        if(protein.getQuantScore() != null && !protein.getQuantScore().getStudyVariableScores().isEmpty()){
+            for(Double studyVariableValue: protein.getQuantScore().getStudyVariableScores().values()){
+                contents.add(studyVariableValue);
+            }
+            for(Double abundance: protein.getQuantScore().getAssayAbundance().values()){
+                contents.add(abundance);
+            }
+        }
         return contents;
     }
 

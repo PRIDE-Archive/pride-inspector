@@ -14,7 +14,8 @@ import java.awt.*;
 /**
  * Quantitative data tab is used to visualize quantitative results
  *
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 11/08/2011
  * Time: 08:42
  */
@@ -27,15 +28,15 @@ public class QuantTabPane extends PrideInspectorTabPane {
     /**
      * resize weight for inner split pane
      */
-    private static final double INNER_SPLIT_PANE_RESIZE_WEIGHT = 0.5;
+    private static final double INNER_SPLIT_PANE_RESIZE_WEIGHT = 0.6;
     /**
      * resize weight for outer split pane
      */
-    private static final double OUTER_SPLIT_PANE_RESIZE_WEIGHT = 0.4;
+    private static final double OUTER_SPLIT_PANE_RESIZE_WEIGHT = 0.6;
     /**
      * the size of the divider for split pane
      */
-    private static final int DIVIDER_SIZE = 6;
+    private static final int DIVIDER_SIZE = 5;
     /**
      * Inner split pane contains protein table
      */
@@ -65,6 +66,8 @@ public class QuantTabPane extends PrideInspectorTabPane {
      * visualize spectrum
      */
     private QuantVizPane quantVizPane;
+
+    private ProteinQuantVizPane proteinQuantVizPane;
 
     /**
      * Constructor
@@ -99,18 +102,46 @@ public class QuantTabPane extends PrideInspectorTabPane {
      */
     @Override
     protected void addComponents() {
+//        // create the inner split pane
+//        proteinInnerPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+//        proteinInnerPane.setBorder(BorderFactory.createEmptyBorder());
+//        proteinInnerPane.setOneTouchExpandable(true);
+//        proteinInnerPane.setDividerSize(DIVIDER_SIZE);
+//        proteinInnerPane.setResizeWeight(INNER_SPLIT_PANE_RESIZE_WEIGHT);
+//
+//        // create the outer split pane
+//        outerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+//        outerPane.setBorder(BorderFactory.createEmptyBorder());
+//        outerPane.setOneTouchExpandable(false);
+//        outerPane.setDividerSize(DIVIDER_SIZE);
+//        outerPane.setResizeWeight(OUTER_SPLIT_PANE_RESIZE_WEIGHT);
+//
+//        // protein identification selection pane
+//        proteinPane = new QuantProteinSelectionPane(controller, this);
+//        proteinInnerPane.setTopComponent(proteinPane);
+//
+//
+//        peptidePane = new QuantPeptideSelectionPane(controller);
+//        //sampleInnerPane.setTopComponent(peptidePane);
+//        outerPane.setTopComponent(proteinInnerPane);
+//        proteinInnerPane.setBottomComponent(peptidePane);
+//
+//        // visualization tab pane
+//        quantVizPane = new QuantVizPane(controller, this);
+//        outerPane.setBottomComponent(quantVizPane);
+//
+//        this.add(outerPane, BorderLayout.CENTER);
+//
+//        // subscribe to event bus
+//        proteinPane.subscribeToEventBus(null);
+//        peptidePane.subscribeToEventBus(null);
+//        quantVizPane.subscribeToEventBus(null);
         // create the inner split pane
-        proteinInnerPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        proteinInnerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         proteinInnerPane.setBorder(BorderFactory.createEmptyBorder());
-        proteinInnerPane.setOneTouchExpandable(true);
+        proteinInnerPane.setOneTouchExpandable(false);
         proteinInnerPane.setDividerSize(DIVIDER_SIZE);
         proteinInnerPane.setResizeWeight(INNER_SPLIT_PANE_RESIZE_WEIGHT);
-
-        //sampleInnerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        //sampleInnerPane.setBorder(BorderFactory.createEmptyBorder());
-       // sampleInnerPane.setOneTouchExpandable(true);
-       // sampleInnerPane.setDividerSize(DIVIDER_SIZE);
-       // sampleInnerPane.setResizeWeight(INNER_SPLIT_PANE_RESIZE_WEIGHT);
 
         // create the outer split pane
         outerPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -121,28 +152,23 @@ public class QuantTabPane extends PrideInspectorTabPane {
 
         // protein identification selection pane
         proteinPane = new QuantProteinSelectionPane(controller, this);
-        proteinInnerPane.setTopComponent(proteinPane);
-
-        // sample pane
-       // samplePane = new QuantSamplePane(controller);
-       // sampleInnerPane.setTopComponent(samplePane);
+        outerPane.setTopComponent(proteinPane);
 
         // peptide selection pane
         peptidePane = new QuantPeptideSelectionPane(controller);
-        //sampleInnerPane.setTopComponent(peptidePane);
-        outerPane.setTopComponent(proteinInnerPane);
-        proteinInnerPane.setBottomComponent(peptidePane);
+        proteinInnerPane.setTopComponent(peptidePane);
 
         // visualization tab pane
-        quantVizPane = new QuantVizPane(controller, this);
-        outerPane.setBottomComponent(quantVizPane);
+        proteinQuantVizPane = new ProteinQuantVizPane(controller, this);
+        proteinQuantVizPane.setMinimumSize(new Dimension(200, 200));
+        proteinInnerPane.setBottomComponent(proteinQuantVizPane);
+        outerPane.setBottomComponent(proteinInnerPane);
 
         this.add(outerPane, BorderLayout.CENTER);
 
         // subscribe to event bus
-        proteinPane.subscribeToEventBus(null);
         peptidePane.subscribeToEventBus(null);
-        quantVizPane.subscribeToEventBus(null);
+        proteinQuantVizPane.subscribeToEventBus(null);
     }
 
     /**
@@ -163,13 +189,6 @@ public class QuantTabPane extends PrideInspectorTabPane {
         return peptidePane;
     }
 
-    /**
-     * Return a referenc eto the sample pane
-     * @return
-     */
-   // public QuantSamplePane getQuantSamplePane() {
-      //  return samplePane;
-   // }
 
     @Override
     public void started(TaskEvent event) {
