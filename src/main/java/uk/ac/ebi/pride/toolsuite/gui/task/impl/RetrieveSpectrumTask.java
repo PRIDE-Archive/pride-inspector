@@ -37,6 +37,9 @@ public class RetrieveSpectrumTask extends AbstractDataAccessTask<Spectrum, Void>
     @Override
     @SuppressWarnings("unchecked")
     protected Spectrum retrieve() throws Exception {
+        // check for interruption before execution
+        checkInterruption();
+
         if (spectrumId != null) {
             return getSpectrum(spectrumId);
         } else {
@@ -91,5 +94,11 @@ public class RetrieveSpectrumTask extends AbstractDataAccessTask<Spectrum, Void>
             }
         }
         return spectrum;
+    }
+
+    private void checkInterruption() throws InterruptedException {
+        if (Thread.interrupted()) {
+            throw new InterruptedException();
+        }
     }
 }

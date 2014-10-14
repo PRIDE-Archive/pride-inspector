@@ -226,7 +226,6 @@ public class PrideInspectorContext extends DesktopContext {
             taskMgr.cancelTasksByOwner(controller);
         }
 
-
         // remove gui component associated with this data access controller
         removeDataContentPane(controller);
 
@@ -254,9 +253,6 @@ public class PrideInspectorContext extends DesktopContext {
         summaryReportTracker.remove(controller);
         // add new summary report for the new data access controller
         getSummaryReportModel(replacement);
-
-
-
     }
 
 

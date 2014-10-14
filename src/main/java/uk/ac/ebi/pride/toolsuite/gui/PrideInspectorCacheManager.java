@@ -27,17 +27,17 @@ public class PrideInspectorCacheManager {
     /**
      * Protein name cache
      */
-    private Ehcache proteinNameCache;
+    private final Ehcache proteinNameCache;
 
     /**
      * Protein sequence coverage cache
      */
-    private Ehcache sequenceCoverageCache;
+    private final Ehcache sequenceCoverageCache;
 
     /**
      * Peptide fit cache
      */
-    private Ehcache peptideFitCache;
+    private final Ehcache peptideFitCache;
 
 
     private PrideInspectorCacheManager() {

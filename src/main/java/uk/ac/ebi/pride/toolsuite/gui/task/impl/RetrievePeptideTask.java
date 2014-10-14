@@ -35,11 +35,19 @@ public class RetrievePeptideTask extends AbstractDataAccessTask<Peptide, String>
         Peptide peptide = null;
         try {
             peptide = controller.getPeptideByIndex(identId, peptideId);
+
+            checkInterruption();
         } catch(DataAccessException dex) {
             String msg = "Failed to retrieve peptide";
             logger.error(msg, dex);
             appContext.addThrowableEntry(new ThrowableEntry(MessageType.ERROR, msg, dex));
         }
         return peptide;
+    }
+
+    private void checkInterruption() throws InterruptedException {
+        if (Thread.interrupted()) {
+            throw new InterruptedException();
+        }
     }
 }
