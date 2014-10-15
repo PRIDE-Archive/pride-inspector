@@ -54,36 +54,48 @@ public class RetrieveQuantPeptideTableTask extends TaskAdapter<Void, Tuple<Table
 
         // get new headers
         // protein quantitative table header
-        List<Object> peptideQuantHeaders = TableDataRetriever.getPeptideQuantTableHeaders(controller, referenceSampleIndex);
-
-        publish(new Tuple<TableContentType, Object>(TableContentType.PEPTIDE_QUANTITATION_HEADER, peptideQuantHeaders));
-
-        // get all the peptide ids
-        Collection<Comparable> peptideIds = controller.getPeptideIds(identId);
+        Collection<Comparable> peptideIds;
+        if(!controller.getType().equals(DataAccessController.Type.MZTAB)){
+            List<Object> peptideQuantHeaders = TableDataRetriever.getPeptideQuantTableHeaders(controller, referenceSampleIndex);
+            publish(new Tuple<TableContentType, Object>(TableContentType.PEPTIDE_QUANTITATION_HEADER, peptideQuantHeaders));
+            peptideIds = controller.getPeptideIds(identId);
+        }else{
+            peptideIds = controller.getQuantPeptideIds(identId);
+        }
 
         if(status){
             for (Comparable peptideId : peptideIds) {
                 // get and publish protein related details
-                PeptideTableRow peptideContent = TableDataRetriever.getPeptideTableRow(controller, identId, peptideId);
-
-                // get and publish quantitative data
-                List<Object> peptideQuantContent = TableDataRetriever.getPeptideQuantTableRow(controller, identId, peptideId, referenceSampleIndex);
+                List<Object> peptideQuantContent;
+                PeptideTableRow peptideContent;
+                if(!controller.getType().equals(DataAccessController.Type.MZTAB)){
+                     peptideContent = TableDataRetriever.getPeptideTableRow(controller, identId, peptideId);
+                     peptideQuantContent = TableDataRetriever.getPeptideQuantTableRow(controller, identId, peptideId, referenceSampleIndex);
+                }else{
+                    peptideContent = TableDataRetriever.getPeptideQuantDataTableRow(controller, identId, peptideId);
+                    peptideQuantContent = TableDataRetriever.getPeptideQuantTableRow(controller, identId, peptideId);
+                }
                 peptideContent.addQuantifications(peptideQuantContent);
-
                 publish(new Tuple<TableContentType, Object>(TableContentType.PEPTIDE_QUANTITATION, peptideContent));
             }
         }else{
             for(Comparable peptideId : peptideIds){
                 // get and publish protein related details
-                PeptideTableRow peptideContent = TableDataRetriever.getPeptideTableRow(controller, identId, peptideId);
+
+                List<Object> peptideQuantContent;
+                PeptideTableRow peptideContent;
+                if(!controller.getType().equals(DataAccessController.Type.MZTAB)){
+                    peptideContent = TableDataRetriever.getPeptideTableRow(controller, identId, peptideId);
+                    peptideQuantContent = TableDataRetriever.getPeptideQuantTableRow(controller, identId, peptideId, referenceSampleIndex);
+                }else{
+                    peptideContent = TableDataRetriever.getPeptideQuantDataTableRow(controller, identId, peptideId);
+                    peptideQuantContent = TableDataRetriever.getPeptideQuantTableRow(controller, identId, peptideId);
+                }
+                peptideContent.addQuantifications(peptideQuantContent);
 
                 if(selectedPeptides.get(identId) != null && selectedPeptides.get(identId).contains(peptideId)){
                     peptideContent.setComparisonState(true);
                 }
-
-                // get and publish quantitative data
-                List<Object> peptideQuantContent = TableDataRetriever.getPeptideQuantTableRow(controller, identId, peptideId, referenceSampleIndex);
-                peptideContent.addQuantifications(peptideQuantContent);
 
                 publish(new Tuple<TableContentType, Object>(TableContentType.PEPTIDE_QUANTITATION_REMOVE, peptideContent));
 

@@ -220,6 +220,7 @@ load.protein.groups.detail.title=Show Protein Group
 
 # set control sample
 set.control.sample.title=Set Control Sample
+set.quantification.variables.title = Set Quantification Variables
 set.control.sample.small.icon=icon/16x16/setting.png
 
 # icons for different tabs

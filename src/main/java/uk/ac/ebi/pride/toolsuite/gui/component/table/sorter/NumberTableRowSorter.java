@@ -9,7 +9,8 @@ import java.util.Comparator;
  * NumberTableRowSorter sort the column as numbers is the column data type is an instance of Number,
  * otherwise, sort it as string.
  *
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 28-Jul-2010
  * Time: 15:15:18
  */

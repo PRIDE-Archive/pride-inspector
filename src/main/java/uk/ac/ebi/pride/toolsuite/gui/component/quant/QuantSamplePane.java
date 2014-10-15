@@ -48,6 +48,7 @@ public class QuantSamplePane extends DataAccessControllerPane {
         try {
             sample = controller.getQuantSample();
             sampleDetailTable = TableFactory.createQuantSampleTable(sample);
+
         } catch (DataAccessException e) {
             logger.error("Fail to get quantitative sample");
         }

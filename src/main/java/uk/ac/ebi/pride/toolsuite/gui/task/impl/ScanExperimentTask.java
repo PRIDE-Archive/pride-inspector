@@ -25,7 +25,9 @@ import java.util.*;
 /**
  * Scan experiment for all the data related to identification, peptide and quantitation
  * <p/>
- * User: rwang
+ * @author rwang
+ * @author ypriverol
+ *
  * Date: 14-Sep-2010
  * Time: 11:34:33
  */
@@ -177,16 +179,23 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
 
     private void getQuantData(Comparable identId, ProteinTableRow proteinTableRow) {
         logger.debug("Scan quantification details: {}", identId);
-        List<Object> identQuantContent = TableDataRetriever.getProteinQuantTableRow(controller, identId, -1);
-        proteinTableRow.addQuantifications(identQuantContent);
+        if(!controller.getType().equals(DataAccessController.Type.MZTAB)){
+            List<Object> identQuantContent = TableDataRetriever.getProteinQuantTableRow(controller, identId, -1);
+            proteinTableRow.addQuantifications(identQuantContent);
+        }else{
+            List<Object> identQuantContent = TableDataRetriever.getProteinQuantTableRow(controller, identId);
+            proteinTableRow.addQuantifications(identQuantContent);
+        }
         publish(new Tuple<TableContentType, Object>(TableContentType.PROTEIN_QUANTITATION, proteinTableRow));
     }
 
     private void getQuantHeaders() {
         logger.debug("Scan quantification table header");
         // protein quantitative table header
-        List<Object> proteinQuantHeaders = TableDataRetriever.getProteinQuantTableHeaders(controller, -1);
-        publish(new Tuple<TableContentType, Object>(TableContentType.PROTEIN_QUANTITATION_HEADER, proteinQuantHeaders));
+        if(!controller.getType().equals(DataAccessController.Type.MZTAB)){
+            List<Object> proteinQuantHeaders = TableDataRetriever.getProteinQuantTableHeaders(controller, -1);
+            publish(new Tuple<TableContentType, Object>(TableContentType.PROTEIN_QUANTITATION_HEADER, proteinQuantHeaders));
+        }
     }
 
     private void checkInterruption() throws InterruptedException {

@@ -1,5 +1,6 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
+import uk.ac.ebi.pride.utilities.data.core.StudyVariable;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
@@ -15,8 +16,18 @@ import java.util.*;
  */
 public class QuantProteinTableModel extends AbstractProteinTableModel {
 
+    public static String ABUNDANCE_HEADER = "abundance_";
+
+    List<StudyVariable> studyVariables;
+
     public QuantProteinTableModel(Collection<CvTermReference> listProteinScores) {
         super(listProteinScores);
+    }
+
+    public QuantProteinTableModel(Collection<CvTermReference> listProteinScores, List<StudyVariable> studyVariables){
+        super(listProteinScores);
+        this.studyVariables = studyVariables;
+        updateStudyVariablesHeader();
     }
 
     @SuppressWarnings("unchecked")
@@ -32,9 +43,24 @@ public class QuantProteinTableModel extends AbstractProteinTableModel {
         fireTableStructureChanged();
     }
 
+    @SuppressWarnings("unchecked")
+    private void updateStudyVariablesHeader(){
+        setColumnHeaders();
+
+        if(this.studyVariables != null && !studyVariables.isEmpty()){
+            for(StudyVariable studyVariable: studyVariables){
+                columnNames.put(studyVariable.getDescription(), studyVariable.getDescription());
+            }
+            for(StudyVariable studyVariable: studyVariables){
+                columnNames.put(ABUNDANCE_HEADER + studyVariable.getDescription(), ABUNDANCE_HEADER + studyVariable.getDescription());
+            }
+            fireTableStructureChanged();
+        }
+    }
+
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        String columnName = getColumnName(columnIndex);
+            String columnName = getColumnName(columnIndex);
         if (columnName.equals(ProteinTableHeader.COMPARE.getHeader())) {
             return Boolean.class;
         } else {

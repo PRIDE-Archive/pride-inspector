@@ -124,7 +124,10 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
 
         // create identification table
         try {
-            pepTable = TableFactory.createQuantPeptideTable(controller, controller.getAvailablePeptideLevelScores());
+            if(!controller.getType().equals(DataAccessController.Type.MZTAB))
+                pepTable = TableFactory.createQuantPeptideTable(controller, controller.getAvailablePeptideLevelScores());
+            else
+                pepTable = TableFactory.createQuantPeptideTable(controller, controller.getAvailablePeptideLevelScores(), controller.getStudyVariables());
 
             // createAttributedSequence header panel
             JPanel headerPanel = buildHeaderPane();

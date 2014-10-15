@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 import uk.ac.ebi.pride.utilities.data.core.CvParam;
+import uk.ac.ebi.pride.utilities.data.core.QuantScore;
 import uk.ac.ebi.pride.utilities.data.core.Quantification;
 import uk.ac.ebi.pride.utilities.data.core.QuantitativeSample;
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
@@ -96,6 +97,8 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
         this.idMapping = new HashMap<Comparable, java.util.List<Comparable>>();
         this.noProteinSelected = true;
         this.noProteinSelectionMessage = appContext.getProperty("no.protein.selection.warning.message");
+        if(controller.getType().equals(DataAccessController.Type.MZTAB))
+            referenceSampleIndex = 0;
     }
 
     @Override
@@ -365,27 +368,57 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
      */
     private void addData(Comparable id) {
         try {
-            // get protein accession
-            String proteinAcc = controller.getProteinAccession(id);
-            // get quantitation data
-            Quantification quantitation = controller.getProteinQuantData(id);
-            QuantitativeSample sample = controller.getQuantSample();
-            if (referenceSampleIndex < 1) {
-                referenceSampleIndex = controller.getReferenceSubSampleIndex();
-            }
-            // get reference reagent
-            Double referenceReagentResult = quantitation.getIsotopeLabellingResult(referenceSampleIndex);
-            CvParam referenceReagent = sample.getReagent(referenceSampleIndex);
-            // get short label for the reagent
-            for (int i = 1; i < QuantitativeSample.MAX_SUB_SAMPLE_SIZE; i++) {
-                if (referenceSampleIndex != i) {
-                    CvParam reagent = sample.getReagent(i);
-                    if (reagent != null) {
-                        Double reagentResult = quantitation.getIsotopeLabellingResult(i);
-                        double value = (referenceReagentResult == null || reagentResult == null) ? 0 : (reagentResult / referenceReagentResult);
-                        Comparable column = QuantCvTermReference.getReagentShortLabel(reagent.getAccession())
-                                + "/" + QuantCvTermReference.getReagentShortLabel(referenceReagent.getAccession());
-                        dataset.addValue(value, proteinAcc, id, column);
+
+            if(!controller.getType().equals(DataAccessController.Type.MZTAB)){
+                // get protein accession
+                String proteinAcc = controller.getProteinAccession(id);
+                // get quantitation data
+                Quantification quantitation = controller.getProteinQuantData(id);
+                QuantitativeSample sample = controller.getQuantSample();
+                if (referenceSampleIndex < 1) {
+                    referenceSampleIndex = controller.getReferenceSubSampleIndex();
+                }
+                // get reference reagent
+                Double referenceReagentResult = quantitation.getIsotopeLabellingResult(referenceSampleIndex);
+                CvParam referenceReagent = sample.getReagent(referenceSampleIndex);
+                // get short label for the reagent
+                for (int i = 1; i < QuantitativeSample.MAX_SUB_SAMPLE_SIZE; i++) {
+                    if (referenceSampleIndex != i) {
+                        CvParam reagent = sample.getReagent(i);
+                        if (reagent != null) {
+                            Double reagentResult = quantitation.getIsotopeLabellingResult(i);
+                            double value = (referenceReagentResult == null || reagentResult == null) ? 0 : (reagentResult / referenceReagentResult);
+                            Comparable column = QuantCvTermReference.getReagentShortLabel(reagent.getAccession())
+                                    + "/" + QuantCvTermReference.getReagentShortLabel(referenceReagent.getAccession());
+                            dataset.addValue(value, proteinAcc, id, column);
+                            java.util.List<Comparable> columns = idMapping.get(id);
+                            if (columns == null) {
+                                columns = new ArrayList<Comparable>();
+                                idMapping.put(id, columns);
+                            }
+                            columns.add(column);
+                        }
+                    }
+                }
+            }else{
+                // get protein accession
+                String proteinAcc = controller.getProteinAccession(id);
+                // get quantitation data
+                QuantScore quantitation = controller.getProteinById(id).getQuantScore();
+
+                if (referenceSampleIndex == 0) {
+                    for(Comparable column: quantitation.getStudyVariableScores().keySet()){
+                        dataset.addValue(quantitation.getStudyVariableScores().get(column), proteinAcc, id, column.toString());
+                        java.util.List<Comparable> columns = idMapping.get(id);
+                        if (columns == null) {
+                            columns = new ArrayList<Comparable>();
+                            idMapping.put(id, columns);
+                        }
+                        columns.add(column);
+                    }
+                }else{
+                    for(Comparable column: quantitation.getAssayAbundance().keySet()){
+                        dataset.addValue(quantitation.getAssayAbundance().get(column), proteinAcc, id, column.toString());
                         java.util.List<Comparable> columns = idMapping.get(id);
                         if (columns == null) {
                             columns = new ArrayList<Comparable>();
