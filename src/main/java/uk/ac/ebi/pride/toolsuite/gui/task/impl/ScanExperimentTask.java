@@ -3,12 +3,6 @@ package uk.ac.ebi.pride.toolsuite.gui.task.impl;
 import org.bushe.swing.event.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.utilities.util.Tuple;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
-import uk.ac.ebi.pride.utilities.data.core.Modification;
-import uk.ac.ebi.pride.utilities.data.core.Protein;
-import uk.ac.ebi.pride.utilities.data.core.ProteinGroup;
 import uk.ac.ebi.pride.toolsuite.gui.component.exception.ThrowableEntry;
 import uk.ac.ebi.pride.toolsuite.gui.component.message.MessageType;
 import uk.ac.ebi.pride.toolsuite.gui.component.report.SummaryReportMessage;
@@ -19,7 +13,12 @@ import uk.ac.ebi.pride.toolsuite.gui.component.table.model.TableContentType;
 import uk.ac.ebi.pride.toolsuite.gui.event.ProcessingDataSourceEvent;
 import uk.ac.ebi.pride.toolsuite.gui.event.SummaryReportEvent;
 import uk.ac.ebi.pride.toolsuite.gui.event.container.SortProteinTableEvent;
-
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
+import uk.ac.ebi.pride.utilities.data.core.Modification;
+import uk.ac.ebi.pride.utilities.data.core.Protein;
+import uk.ac.ebi.pride.utilities.data.core.ProteinGroup;
+import uk.ac.ebi.pride.utilities.util.Tuple;
 
 import java.util.*;
 
@@ -65,7 +64,7 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
     protected Void retrieve() throws Exception {
 
         try {
-            EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.IDENTIFICATION_READING,controller));
+            EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.IDENTIFICATION_READING, controller));
             // get quant headers
             boolean hasQuantData = controller.hasQuantData();
             if (hasQuantData) {
@@ -106,9 +105,9 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
 
                     checkInterruption();
                 }
-                }
-                EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.IDENTIFICATION_READING,controller));
-            if(controller.hasProteinAmbiguityGroup())
+            }
+            EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.IDENTIFICATION_READING, controller));
+            if (controller.hasProteinAmbiguityGroup())
                 EventBus.publish(new SortProteinTableEvent(controller, SortProteinTableEvent.Type.ENABLE_SORT));
 
             if (missingSpectrumLinks > 0) {

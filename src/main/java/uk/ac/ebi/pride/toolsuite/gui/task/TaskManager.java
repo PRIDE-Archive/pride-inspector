@@ -1,19 +1,16 @@
 package uk.ac.ebi.pride.toolsuite.gui.task;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
 import uk.ac.ebi.pride.toolsuite.gui.utils.GUIBlocker;
 import uk.ac.ebi.pride.toolsuite.gui.utils.PropertyChangeHelper;
+import uk.ac.ebi.pride.toolsuite.gui.utils.ThreadCalculator;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * TaskManager acts as a thread pool, it does the followings:
@@ -26,9 +23,8 @@ import java.util.concurrent.TimeUnit;
  * Date: 22-Jan-2010
  * Time: 11:34:32
  */
+@ThreadSafe
 public class TaskManager extends PropertyChangeHelper {
-    private final static Logger logger = LoggerFactory.getLogger(TaskManager.class.getName());
-
     /**
      * property change event name, this is fired when a new task is added
      */
@@ -40,23 +36,19 @@ public class TaskManager extends PropertyChangeHelper {
     public final static String REMOVE_TASK_PROP = "remove_new_task";
 
     /**
-     * This number defines the number threads can be running at the same time
-     */
-    private final static int CORE_POOL_SIZE = 10;
-
-    /**
-     * This number defines the number threads can be running and waiting at the same time
-     */
-    private final static int MAXIMUM_POOL_SIZE = 20;
-
-    /**
      * Threshold pool executor, it is responsible to running all the tasks
      */
     private final ExecutorService executor;
 
     /**
+     * task list lock
+     */
+    private final Object tasksLock = new Object();
+
+    /**
      * A list of current ongoing tasks
      */
+    @GuardedBy("tasksLock")
     private final List<Task> tasks;
 
     /**
@@ -66,30 +58,17 @@ public class TaskManager extends PropertyChangeHelper {
 
     /**
      * Constructor
-     * <p/>
-     * This will create a thread pool with default configurations.
-     * <p/>
-     * 1. the number of allowed threads are 20.
-     * <p/>
-     * 2. the number of max running threads are 10.
      */
     public TaskManager() {
-        this(new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
-                1L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>()));
-    }
 
-    /**
-     * Constructor
-     *
-     * @param executor provide an implementation of the thread pool.
-     */
-    public TaskManager(ExecutorService executor) {
+        // 8 means that the time spent on waiting for I/O is about 80% of the total time
+        int numberOfThreads = ThreadCalculator.calculateNumberOfThreads(8);
 
         // thread pool
-        this.executor = executor;
+        this.executor = Executors.newFixedThreadPool(numberOfThreads);
 
         // a list of tasks
-        this.tasks = Collections.synchronizedList(new ArrayList<Task>());
+        this.tasks = new CopyOnWriteArrayList<Task>();
 
         // internal property change listener
         this.taskPropListener = new TaskPropertyListener();
@@ -117,7 +96,7 @@ public class TaskManager extends PropertyChangeHelper {
     public void addTask(Task task, boolean notify) {
         // add task the task list
         List<Task> oldTasks, newTasks;
-        synchronized (tasks) {
+        synchronized (tasksLock) {
             oldTasks = new ArrayList<Task>(tasks);
             tasks.add(task);
             newTasks = new ArrayList<Task>(tasks);
@@ -148,13 +127,15 @@ public class TaskManager extends PropertyChangeHelper {
     @SuppressWarnings("unchecked")
     public List<Task> getTasks(TaskListener listener) {
         List<Task> ts = new ArrayList<Task>();
-        synchronized (tasks) {
+
+        synchronized (tasksLock) {
             for (Task task : tasks) {
                 if (task.hasTaskListener(listener)) {
                     ts.add(task);
                 }
             }
         }
+
         return ts;
     }
 
@@ -166,13 +147,15 @@ public class TaskManager extends PropertyChangeHelper {
      */
     public List<Task> getTasks(PropertyChangeListener listener) {
         List<Task> ts = new ArrayList<Task>();
-        synchronized (tasks) {
+
+        synchronized (tasksLock) {
             for (Task task : tasks) {
                 if (task.hasPropertyChangeListener(listener)) {
                     ts.add(task);
                 }
             }
         }
+
         return ts;
     }
 
@@ -184,13 +167,15 @@ public class TaskManager extends PropertyChangeHelper {
      */
     public List<Task> getTasks(Class<? extends Task> taskClass) {
         List<Task> ts = new ArrayList<Task>();
-        synchronized (tasks) {
+
+        synchronized (tasksLock) {
             for (Task task : tasks) {
                 if (task.getClass().equals(taskClass)) {
                     ts.add(task);
                 }
             }
         }
+
         return ts;
     }
 
@@ -201,7 +186,7 @@ public class TaskManager extends PropertyChangeHelper {
      * @return boolean  true if the task is in task manager
      */
     public boolean hasTask(Task task) {
-        synchronized (tasks) {
+        synchronized (tasksLock) {
             return tasks.contains(task);
         }
     }
@@ -213,7 +198,7 @@ public class TaskManager extends PropertyChangeHelper {
      */
     @SuppressWarnings("unchecked")
     public void removeTaskListener(TaskListener listener) {
-        synchronized (tasks) {
+        synchronized (tasksLock) {
             for (Task task : tasks) {
                 task.removeTaskListener(listener);
             }
@@ -234,20 +219,21 @@ public class TaskManager extends PropertyChangeHelper {
         boolean canceled = false;
 
         // remove task from task manager
-        boolean hasTask = hasTask(task);
-        if (hasTask) {
-            // cancel all the children tasks first
-            cancelTasksByOwner(task);
+        synchronized (tasksLock) {
+            boolean hasTask = hasTask(task);
+            if (hasTask) {
+                // cancel all the children tasks first
+                cancelTasksByOwner(task);
 
-            List<Task> oldTasks, newTasks;
-            synchronized (tasks) {
+                List<Task> oldTasks, newTasks;
                 oldTasks = new ArrayList<Task>(tasks);
                 tasks.remove(task);
                 canceled = task.cancel(interrupt);
                 newTasks = new ArrayList<Task>(tasks);
                 task.removePropertyChangeListener(taskPropListener);
+
+                firePropertyChange(REMOVE_TASK_PROP, oldTasks, newTasks);
             }
-            firePropertyChange(REMOVE_TASK_PROP, oldTasks, newTasks);
         }
 
         return canceled;
@@ -260,8 +246,10 @@ public class TaskManager extends PropertyChangeHelper {
      * @param owner owner of the tasks
      */
     public void cancelTasksByOwner(Object owner) {
-        for (Task task : tasks) {
-            task.removeByOwner(owner);
+        synchronized (tasksLock) {
+            for (Task task : tasks) {
+                task.removeByOwner(owner);
+            }
         }
     }
 
@@ -292,7 +280,8 @@ public class TaskManager extends PropertyChangeHelper {
             if (Task.COMPLETED_PROP.equals(propName)) {
                 Task task = (Task) evt.getSource();
                 List<Task> oldTasks, newTasks;
-                synchronized (tasks) {
+
+                synchronized (tasksLock) {
                     oldTasks = new ArrayList<Task>(tasks);
                     tasks.remove(task);
                     // remove all the children tasks too
@@ -300,6 +289,7 @@ public class TaskManager extends PropertyChangeHelper {
                     newTasks = new ArrayList<Task>(tasks);
                     task.removePropertyChangeListener(taskPropListener);
                 }
+
                 firePropertyChange(REMOVE_TASK_PROP, oldTasks, newTasks);
 
                 // unblock gui

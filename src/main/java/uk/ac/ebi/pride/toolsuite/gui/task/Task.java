@@ -1,5 +1,7 @@
 package uk.ac.ebi.pride.toolsuite.gui.task;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.toolsuite.gui.utils.GUIBlocker;
@@ -21,19 +23,36 @@ import java.util.concurrent.ExecutionException;
  * Date: 25-Jan-2010
  * Time: 11:03:14
  */
+@ThreadSafe
 public abstract class Task<T, V> extends SwingWorker<T, V> {
 
-    private static final Logger logger = LoggerFactory.getLogger(Task.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(Task.class);
 
     public static final String NAME_PROP = "name";
     public static final String DESCRIPTION_PROP = "description";
     public static final String COMPLETED_PROP = "completed";
     public static final String GUI_BLOCKER_PROP = "blocker";
 
+    // task name
+    @GuardedBy("this")
     private String name;
+
+    // task description
+    @GuardedBy("this")
     private String description;
+
+    // lock for owners collection
+    private final Object ownersLock = new Object();
+    @GuardedBy("ownersLock")
     private final Collection<Object> owners;
+
+    // lock for task listeners collection
+    private final Object taskListenersLock = new Object();
+    @GuardedBy("taskListenersLock")
     private final Collection<TaskListener<T, V>> taskListeners;
+
+    // GUI blocker for the task for blocking GUI components
+    @GuardedBy("this")
     private GUIBlocker blocker;
 
     public Task() {
@@ -102,8 +121,10 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
      * @param owner owner object could be tasks as well, but it can not be itself.
      */
     public final void addOwner(Object owner) {
-        if (!this.equals(owner) && !owners.contains(owner)) {
-            owners.add(owner);
+        synchronized (ownersLock) {
+            if (!this.equals(owner) && !owners.contains(owner)) {
+                owners.add(owner);
+            }
         }
     }
 
@@ -113,7 +134,9 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
      * @return List<Object> a list of owners
      */
     public final List<Object> getOwners() {
-        return new ArrayList<Object>(owners);
+        synchronized (ownersLock) {
+            return new ArrayList<Object>(owners);
+        }
     }
 
     /**
@@ -122,11 +145,13 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
      *
      * @param owner owner of the task
      */
-    public synchronized void removeByOwner(Object owner) {
-        if (!isDone() && owners.contains(owner)) {
-            this.cancel(true);
+    public void removeByOwner(Object owner) {
+        synchronized (ownersLock) {
+            if (!isDone() && owners.contains(owner)) {
+                this.cancel(true);
+            }
+            owners.remove(owner);
         }
-        owners.remove(owner);
     }
 
     /**
@@ -153,7 +178,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
      * @param listener property change listener
      * @return boolean true mean exist
      */
-    public boolean hasPropertyChangeListener(PropertyChangeListener listener) {
+    public synchronized boolean hasPropertyChangeListener(PropertyChangeListener listener) {
         for (PropertyChangeListener propertyChangeListener : this.getPropertyChangeSupport().getPropertyChangeListeners()) {
             if (propertyChangeListener.equals(listener)) {
                 return true;
@@ -162,25 +187,14 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
         return false;
     }
 
-    /**
-     * Add a collection of task listeners
-     *
-     * @param listeners a collection of task listeners
-     */
-    public void addTaskListeners(Collection<TaskListener<T, V>> listeners) {
-        if (listeners == null) {
-            throw new IllegalArgumentException("Cannot add null task listeners");
-        }
-
-        taskListeners.addAll(listeners);
-    }
-
     public void addTaskListener(TaskListener<T, V> listener) {
         if (listener == null) {
             throw new IllegalArgumentException("Null Task Listener");
         }
 
-        taskListeners.add(listener);
+        synchronized (taskListenersLock) {
+            taskListeners.add(listener);
+        }
     }
 
     public void removeTaskListener(TaskListener<T, V> listener) {
@@ -188,15 +202,21 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
             throw new IllegalArgumentException("Null Task Listener");
         }
 
-        taskListeners.remove(listener);
+        synchronized (taskListenersLock) {
+            taskListeners.remove(listener);
+        }
     }
 
     public boolean hasTaskListener(TaskListener<T, V> listener) {
-        return taskListeners.contains(listener);
+        synchronized (taskListenersLock) {
+            return taskListeners.contains(listener);
+        }
     }
 
     public Collection<TaskListener<T, V>> getTaskListeners() {
-        return new ArrayList<TaskListener<T, V>>(taskListeners);
+        synchronized (taskListenersLock) {
+            return new ArrayList<TaskListener<T, V>>(taskListeners);
+        }
     }
 
     protected void process(List<V> values) {
@@ -205,7 +225,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
 
     //ToDo: Interrupted() and failed() does not cover exceptions during doinbackground(), this is not ideal!
 
-    protected final void done() {      
+    protected final void done() {
     }
 
     /**
@@ -236,15 +256,19 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
 
     private void fireStartedListeners() {
         TaskEvent<Void> event = new TaskEvent<Void>(this, null);
-        for (TaskListener listener : taskListeners) {
-            listener.started(event);
+        synchronized (taskListenersLock) {
+            for (TaskListener listener : taskListeners) {
+                listener.started(event);
+            }
         }
     }
 
     private void fireProcessListeners(List<V> values) {
         TaskEvent<List<V>> event = new TaskEvent<List<V>>(this, values);
-        for (TaskListener<T, V> listener : taskListeners) {
-            listener.process(event);
+        synchronized (taskListenersLock) {
+            for (TaskListener<T, V> listener : taskListeners) {
+                listener.process(event);
+            }
         }
     }
 
@@ -265,43 +289,55 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
 
     private void fireCancelledListeners() {
         TaskEvent<Void> event = new TaskEvent<Void>(this, null);
-        for (TaskListener listener : taskListeners) {
-            listener.cancelled(event);
+        synchronized (taskListenersLock) {
+            for (TaskListener listener : taskListeners) {
+                listener.cancelled(event);
+            }
         }
     }
 
     private void fireInterruptedListeners(InterruptedException iex) {
         TaskEvent<InterruptedException> event = new TaskEvent<InterruptedException>(this, iex);
-        for (TaskListener listener : taskListeners) {
-            listener.interrupted(event);
+        synchronized (taskListenersLock) {
+            for (TaskListener listener : taskListeners) {
+                listener.interrupted(event);
+            }
         }
     }
 
     private void fireSucceedListeners(T result) {
         TaskEvent<T> event = new TaskEvent<T>(this, result);
-        for (TaskListener<T, V> listener : taskListeners) {
-            listener.succeed(event);
+        synchronized (taskListenersLock) {
+            for (TaskListener<T, V> listener : taskListeners) {
+                listener.succeed(event);
+            }
         }
     }
 
     private void fireFailedListeners(Throwable error) {
         TaskEvent<Throwable> event = new TaskEvent<Throwable>(this, error);
-        for (TaskListener listener : taskListeners) {
-            listener.failed(event);
+        synchronized (taskListenersLock) {
+            for (TaskListener listener : taskListeners) {
+                listener.failed(event);
+            }
         }
     }
 
     private void fireFinishedListeners() {
         TaskEvent<Void> event = new TaskEvent<Void>(this, null);
-        for (TaskListener listener : taskListeners) {
-            listener.finished(event);
+        synchronized (taskListenersLock) {
+            for (TaskListener listener : taskListeners) {
+                listener.finished(event);
+            }
         }
     }
 
     private void fireProgressListeners(int progress) {
         TaskEvent<Integer> event = new TaskEvent<Integer>(this, progress);
-        for (TaskListener listener : taskListeners) {
-            listener.progress(event);
+        synchronized (taskListenersLock) {
+            for (TaskListener listener : taskListeners) {
+                listener.progress(event);
+            }
         }
     }
 
@@ -312,7 +348,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
             String propName = evt.getPropertyName();
 
             if ("state".equals(propName)) {
-                StateValue state = (StateValue)(evt.getNewValue());
+                StateValue state = (StateValue) (evt.getNewValue());
                 switch (state) {
                     case STARTED:
                         taskStarted();
@@ -321,7 +357,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
                         taskDone();
                         break;
                 }
-            }else if("progress".equals(propName)) {
+            } else if ("progress".equals(propName)) {
                 fireProgressListeners(getProgress());
             }
         }

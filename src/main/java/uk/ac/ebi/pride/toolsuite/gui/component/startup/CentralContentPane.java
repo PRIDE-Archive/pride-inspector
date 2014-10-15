@@ -17,6 +17,7 @@ import uk.ac.ebi.pride.toolsuite.gui.task.impl.OpenWelcomePaneTask;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * DataBrowser is the main display area for the data, it is responsible for the followings:
@@ -32,7 +33,7 @@ public class CentralContentPane extends JPanel {
 
     private static final Logger logger = LoggerFactory.getLogger(CentralContentPane.class);
 
-    private boolean locked = false;
+    private AtomicBoolean locked = new AtomicBoolean(false);
     /**
      * Reference to pride inspector context
      */
@@ -47,11 +48,11 @@ public class CentralContentPane extends JPanel {
     }
 
     public boolean isLocked() {
-        return locked;
+        return locked.get();
     }
 
     public void setLocked(boolean locked) {
-        this.locked = locked;
+        this.locked.set(locked);
     }
 
     /**

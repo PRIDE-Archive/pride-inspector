@@ -2,7 +2,6 @@ package uk.ac.ebi.pride.toolsuite.gui;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.toolsuite.gui.access.DataAccessMonitor;
 import uk.ac.ebi.pride.toolsuite.gui.action.PrideAction;
 import uk.ac.ebi.pride.toolsuite.gui.component.db.DatabaseSearchPane;
@@ -11,6 +10,7 @@ import uk.ac.ebi.pride.toolsuite.gui.component.reviewer.LoginRecord;
 import uk.ac.ebi.pride.toolsuite.gui.component.startup.WelcomePane;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.DesktopContext;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskManager;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 
 import javax.help.HelpBroker;
 import javax.help.HelpSet;
@@ -18,10 +18,10 @@ import javax.help.HelpSetException;
 import javax.help.SwingHelpUtilities;
 import javax.swing.*;
 import java.net.URL;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Overall context of the GUI, this object should only have one instance per application.
@@ -71,7 +71,7 @@ public class PrideInspectorContext extends DesktopContext {
     /**
      * Tracking all the summary report in a list model for each database access controller
      */
-    private Map<DataAccessController, ListModel> summaryReportTracker;
+    private final Map<DataAccessController, ListModel> summaryReportTracker;
 
     /**
      * The main help set for PRIDE Inspector
@@ -111,16 +111,16 @@ public class PrideInspectorContext extends DesktopContext {
         this.dataAccessMonitor = new DataAccessMonitor();
 
         // data content pane cache
-        this.dataContentPaneCache = Collections.synchronizedMap(new HashMap<DataAccessController, JComponent>());
+        this.dataContentPaneCache = new ConcurrentHashMap<DataAccessController, JComponent>();
 
         // data summary pane cache
-        this.dataSummaryPaneCache = Collections.synchronizedMap(new HashMap<DataAccessController, JComponent>());
+        this.dataSummaryPaneCache = new ConcurrentHashMap<DataAccessController, JComponent>();
 
         // action map
-        this.sharedActionCache = Collections.synchronizedMap(new HashMap<DataAccessController, Map<Class<? extends PrideAction>, PrideAction>>());
+        this.sharedActionCache = new ConcurrentHashMap<DataAccessController, Map<Class<? extends PrideAction>, PrideAction>>();
 
         // summary report tracker
-        this.summaryReportTracker = Collections.synchronizedMap(new HashMap<DataAccessController, ListModel>());
+        this.summaryReportTracker = new ConcurrentHashMap<DataAccessController, ListModel>();
 
         // by default the data source browser is invisible
         this.leftControlPaneVisible = false;
@@ -161,7 +161,7 @@ public class PrideInspectorContext extends DesktopContext {
      *
      * @return List<DataAccessController>   a list of existing data access controller
      */
-    public final synchronized List<DataAccessController> getControllers() {
+    public final List<DataAccessController> getControllers() {
         return dataAccessMonitor.getControllers();
     }
 
@@ -172,7 +172,7 @@ public class PrideInspectorContext extends DesktopContext {
      *
      * @return int  the number of data access controllers
      */
-    public final synchronized int getNumberOfControllers() {
+    public final int getNumberOfControllers() {
         return dataAccessMonitor.getNumberOfControllers();
     }
 
@@ -184,7 +184,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller data access controller
      * @return boolean  true if it is data access controller
      */
-    public final synchronized boolean isForegroundDataAccessController(DataAccessController controller) {
+    public final boolean isForegroundDataAccessController(DataAccessController controller) {
         return dataAccessMonitor.isForegroundDataAccessController(controller);
     }
 
@@ -195,7 +195,7 @@ public class PrideInspectorContext extends DesktopContext {
      *
      * @return DataAccessController data access controller
      */
-    public final synchronized DataAccessController getForegroundDataAccessController() {
+    public final DataAccessController getForegroundDataAccessController() {
         return dataAccessMonitor.getForegroundDataAccessController();
     }
 
@@ -206,7 +206,7 @@ public class PrideInspectorContext extends DesktopContext {
      *
      * @param controller data access controller
      */
-    public final synchronized void setForegroundDataAccessController(DataAccessController controller) {
+    public final void setForegroundDataAccessController(DataAccessController controller) {
         dataAccessMonitor.setForegroundDataAccessController(controller);
     }
 
@@ -219,13 +219,12 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller  data access controller
      * @param cancelTasks whether to cancel the tasks associated with this controller
      */
-    public final synchronized void removeDataAccessController(DataAccessController controller, boolean cancelTasks) {
+    public final void removeDataAccessController(DataAccessController controller, boolean cancelTasks) {
         if (cancelTasks) {
             // cancel all the tasks related to this data access controller
             TaskManager taskMgr = this.getTaskManager();
             taskMgr.cancelTasksByOwner(controller);
         }
-
 
         // remove gui component associated with this data access controller
         removeDataContentPane(controller);
@@ -247,18 +246,14 @@ public class PrideInspectorContext extends DesktopContext {
      * This method will close data access controller, it will also stop all ongoing tasks related to this
      * data access controller.
      *
-     * @param controller  data access controller
+     * @param controller data access controller
      */
-    public final synchronized void replaceSummaryReport(DataAccessController controller, DataAccessController replacement) {
+    public final void replaceSummaryReport(DataAccessController controller, DataAccessController replacement) {
         // remove summary report
         summaryReportTracker.remove(controller);
         // add new summary report for the new data access controller
         getSummaryReportModel(replacement);
-
-
-
     }
-
 
 
     /**
@@ -268,7 +263,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param replacement replacement data access controller
      * @param cancelTasks whether to cancel the tasks associated with this controller
      */
-    public final synchronized void replaceDataAccessController(DataAccessController original, DataAccessController replacement, boolean cancelTasks) {
+    public final void replaceDataAccessController(DataAccessController original, DataAccessController replacement, boolean cancelTasks) {
         if (cancelTasks) {
             // cancel all the tasks related to this data access controller
             TaskManager taskMgr = this.getTaskManager();
@@ -298,7 +293,7 @@ public class PrideInspectorContext extends DesktopContext {
      *
      * @param controller data access controller
      */
-    public final synchronized void addDataAccessController(DataAccessController controller) {
+    public final void addDataAccessController(DataAccessController controller) {
         addDataAccessController(controller, true);
     }
 
@@ -308,7 +303,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller data access controller
      * @param foreground foreground status
      */
-    public final synchronized void addDataAccessController(DataAccessController controller, boolean foreground) {
+    public final void addDataAccessController(DataAccessController controller, boolean foreground) {
         // initialize summary report model
         getSummaryReportModel(controller);
 
@@ -326,7 +321,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller data access controller
      * @return JComponent   DataContentDisplayPane
      */
-    public final synchronized JComponent getDataContentPane(DataAccessController controller) {
+    public final JComponent getDataContentPane(DataAccessController controller) {
         return dataContentPaneCache.get(controller);
     }
 
@@ -338,7 +333,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller data access controller
      * @return JComponent   DataContentDisplayPane
      */
-    public final synchronized JComponent getSummaryPane(DataAccessController controller) {
+    public final JComponent getSummaryPane(DataAccessController controller) {
         return dataSummaryPaneCache.get(controller);
     }
 
@@ -398,7 +393,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller data access controller
      * @param action     pride action
      */
-    public final void addPrideAction(DataAccessController controller, PrideAction action) {
+    public final synchronized void addPrideAction(DataAccessController controller, PrideAction action) {
         Map<Class<? extends PrideAction>, PrideAction> actionMap = sharedActionCache.get(controller);
         if (actionMap == null) {
             actionMap = new HashMap<Class<? extends PrideAction>, PrideAction>();
@@ -517,12 +512,15 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller data access controller
      * @return ListModel   summary report model
      */
-    public ListModel getSummaryReportModel(DataAccessController controller) {
-        ListModel model = summaryReportTracker.get(controller);
+    public synchronized ListModel getSummaryReportModel(DataAccessController controller) {
+        ListModel model = controller == null ? null : summaryReportTracker.get(controller);
+
         if (model == null) {
             model = new ReportListModel(controller);
         }
-        summaryReportTracker.put(controller, model);
+
+        if (controller != null)
+            summaryReportTracker.put(controller, model);
 
         return model;
     }
