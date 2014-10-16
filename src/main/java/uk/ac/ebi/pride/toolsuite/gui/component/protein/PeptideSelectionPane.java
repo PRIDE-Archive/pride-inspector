@@ -156,7 +156,7 @@ public class PeptideSelectionPane extends DataAccessControllerPane<Peptide, Void
                    proteinGroup.add(proteinGroupPane);
                    proteinGroup.setLocationRelativeTo(null);
                    proteinGroup.pack();
-                   proteinGroup.show();
+                   //noinspection deprecation
                    proteinGroup.setModal(true);
                    proteinGroup.setVisible(true);
                    LoadProteinGroupNodeTreeTask taskNode = new LoadProteinGroupNodeTreeTask(controller, currentProtein, currentProteinGroupId);
