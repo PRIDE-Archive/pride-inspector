@@ -27,6 +27,7 @@ import java.awt.event.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -598,7 +599,7 @@ public class TableFactory {
      * @param controller data access controller
      * @return JTable   protein quantitative table
      */
-    public static JTable createQuantProteinTable(DataAccessController controller, Collection<CvTermReference> listProteinScores, List<StudyVariable> studyVariables) {
+    public static JTable createQuantProteinTable(DataAccessController controller, Collection<CvTermReference> listProteinScores, Map<Comparable, StudyVariable> studyVariables) {
         QuantProteinTableModel tableModel = new QuantProteinTableModel(listProteinScores, studyVariables);
         return createQuantProteinTable(controller, tableModel);
     }
@@ -609,7 +610,7 @@ public class TableFactory {
      * @param listPeptideScores List of CvTerm
      * @return JTable  peptide table
      */
-    public static JTable createQuantPeptideTable(DataAccessController controller, Collection<CvTermReference> listPeptideScores, List<StudyVariable> studyVariables) {
+    public static JTable createQuantPeptideTable(DataAccessController controller, Collection<CvTermReference> listPeptideScores, Map<Comparable, StudyVariable> studyVariables) {
 
         DefaultTableColumnModelExt columnModel = new DefaultTableColumnModelExt();
         QuantPeptideTableModel tableModel = new QuantPeptideTableModel(listPeptideScores, studyVariables);
