@@ -1,11 +1,13 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
 
+import uk.ac.ebi.pride.utilities.data.core.StudyVariable;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Quantitative peptide table model
@@ -16,7 +18,7 @@ import java.util.List;
  */
 public class QuantPeptideTableModel extends AbstractPeptideTableModel {
 
-    private List<uk.ac.ebi.pride.utilities.data.core.StudyVariable> studyVariables;
+    private Map<Comparable, uk.ac.ebi.pride.utilities.data.core.StudyVariable> studyVariables;
 
     public static String ABUNDANCE_HEADER = "abundance_";
 
@@ -24,7 +26,7 @@ public class QuantPeptideTableModel extends AbstractPeptideTableModel {
         super(listScores);
     }
 
-    public QuantPeptideTableModel(Collection<CvTermReference> listScores, List<uk.ac.ebi.pride.utilities.data.core.StudyVariable> studyVariables){
+    public QuantPeptideTableModel(Collection<CvTermReference> listScores, Map<Comparable, StudyVariable> studyVariables){
         super(listScores);
         this.studyVariables = studyVariables;
         updateStudyVariablesHeader();
@@ -64,10 +66,10 @@ public class QuantPeptideTableModel extends AbstractPeptideTableModel {
         setColumnHeaders();
 
         if(this.studyVariables != null && !studyVariables.isEmpty()){
-            for(uk.ac.ebi.pride.utilities.data.core.StudyVariable studyVariable: studyVariables){
+            for(uk.ac.ebi.pride.utilities.data.core.StudyVariable studyVariable: studyVariables.values()){
                 columnNames.put(studyVariable.getDescription(), studyVariable.getDescription());
             }
-            for(uk.ac.ebi.pride.utilities.data.core.StudyVariable studyVariable: studyVariables){
+            for(uk.ac.ebi.pride.utilities.data.core.StudyVariable studyVariable: studyVariables.values()){
                 columnNames.put(ABUNDANCE_HEADER + studyVariable.getDescription(), ABUNDANCE_HEADER + studyVariable.getDescription());
             }
             fireTableStructureChanged();

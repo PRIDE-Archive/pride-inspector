@@ -8,7 +8,8 @@ import uk.ac.ebi.pride.utilities.data.core.ProteinGroup;
 
 
 /**
- * Created by yperez on 03/10/2014.
+ * Retrieve protein groups from DataAccessController
+ * @author ypriverol
  */
 public class LoadProteinGroupNodeTreeTask extends AbstractDataAccessTask<Void, Protein> {
 

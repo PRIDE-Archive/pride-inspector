@@ -39,13 +39,11 @@ public class SampleInfoAction extends PrideAction {
         Container c = sampleInfo.getContentPane();
         c.setLayout( new FlowLayout() );
         QuantSamplePane quantSamplePane = new QuantSamplePane(controller);
-        //sampleInfo.add(quantSamplePane);
         c.add( quantSamplePane );
         Point point = component.getLocation();
 
         sampleInfo.setLocation((int) point.getX() + 510, (int) point.getY() + 110);
         sampleInfo.pack();
-        sampleInfo.show();
         sampleInfo.setModal(true);
         sampleInfo.setVisible(true);
     }

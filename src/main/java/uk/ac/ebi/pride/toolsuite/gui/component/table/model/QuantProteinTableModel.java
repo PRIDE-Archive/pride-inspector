@@ -18,13 +18,13 @@ public class QuantProteinTableModel extends AbstractProteinTableModel {
 
     public static String ABUNDANCE_HEADER = "abundance_";
 
-    List<StudyVariable> studyVariables;
+    Map<Comparable, StudyVariable> studyVariables;
 
     public QuantProteinTableModel(Collection<CvTermReference> listProteinScores) {
         super(listProteinScores);
     }
 
-    public QuantProteinTableModel(Collection<CvTermReference> listProteinScores, List<StudyVariable> studyVariables){
+    public QuantProteinTableModel(Collection<CvTermReference> listProteinScores, Map<Comparable, StudyVariable> studyVariables){
         super(listProteinScores);
         this.studyVariables = studyVariables;
         updateStudyVariablesHeader();
@@ -48,10 +48,10 @@ public class QuantProteinTableModel extends AbstractProteinTableModel {
         setColumnHeaders();
 
         if(this.studyVariables != null && !studyVariables.isEmpty()){
-            for(StudyVariable studyVariable: studyVariables){
+            for(StudyVariable studyVariable: studyVariables.values()){
                 columnNames.put(studyVariable.getDescription(), studyVariable.getDescription());
             }
-            for(StudyVariable studyVariable: studyVariables){
+            for(StudyVariable studyVariable: studyVariables.values()){
                 columnNames.put(ABUNDANCE_HEADER + studyVariable.getDescription(), ABUNDANCE_HEADER + studyVariable.getDescription());
             }
             fireTableStructureChanged();
