@@ -1,6 +1,7 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
+import uk.ac.ebi.pride.archive.dataprovider.file.ProjectFileType;
 import uk.ac.ebi.pride.toolsuite.gui.component.reviewer.SubmissionFileDetail;
 
 import javax.swing.tree.TreePath;
@@ -51,11 +52,11 @@ public class SubmissionFileDownloadTableModel extends AbstractTreeTableModel {
         for (SubmissionFileDetail sourceFileDetail : submissionFileDetails) {
             if (sourceFileDetail.getAsssayAccession() != null &&
                 !sourceFileDetail.getAsssayAccession().equalsIgnoreCase(NOT_APPLICABLE) &&
-                !sourceFileDetail.getFileType().equalsIgnoreCase("RESULT")) {
+                !sourceFileDetail.getFileType().equals(ProjectFileType.RESULT)) {
 
                 for (SubmissionFileDetail resultFileDetail : submissionFileDetails) {
                     if (!sourceFileDetail.equals(resultFileDetail) &&
-                        resultFileDetail.getFileType().equalsIgnoreCase("RESULT") &&
+                        resultFileDetail.getFileType().equals(ProjectFileType.RESULT) &&
                         resultFileDetail.getAsssayAccession().equals(sourceFileDetail.getAsssayAccession())) {
                         resultFileDetail.addSourceFileMapping(sourceFileDetail);
                         sourceFileDetail.addResultFileMapping(resultFileDetail);
@@ -68,7 +69,7 @@ public class SubmissionFileDownloadTableModel extends AbstractTreeTableModel {
         for (SubmissionFileDetail submissionFileDetail : submissionFileDetails) {
             if (submissionFileDetail.getAsssayAccession() == null ||
                 submissionFileDetail.getAsssayAccession().equalsIgnoreCase(NOT_APPLICABLE) ||
-                    submissionFileDetail.getFileType().equalsIgnoreCase("RESULT")) {
+                    submissionFileDetail.getFileType().equals(ProjectFileType.RESULT)) {
                 ((SubmissionFileDetail)root).addSourceFileMapping(submissionFileDetail);
                 submissionFileDetail.addResultFileMapping((SubmissionFileDetail)root);
             }

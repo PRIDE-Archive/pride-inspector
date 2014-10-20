@@ -76,11 +76,10 @@
         <balloontip.version>1.2.4.1</balloontip.version>
         <protein-details-fetcher.version>1.0.5-SNAPSHOT</protein-details-fetcher.version>
         <accession-resolver.version>1.0.3</accession-resolver.version>
-        <prider-ws-model.version>0.1.6.1</prider-ws-model.version>
+        <prider-ws-model.version>0.2.7</prider-ws-model.version>
         <jackson-mapper-asl.version>1.9.9</jackson-mapper-asl.version>
         <httpcore.version>4.3.2</httpcore.version>
         <spring-web.version>3.2.3.RELEASE</spring-web.version>
-        <prider-data-provider-api.version>1.0</prider-data-provider-api.version>
         <httpclient.version>4.3.3</httpclient.version>
         <spring-security-core.version>3.2.1.RELEASE</spring-security-core.version>
         <jung.version>2.0.1</jung.version>
@@ -208,7 +207,7 @@
         <!-- PRIDE-R web service model-->
         <dependency>
             <groupId>uk.ac.ebi.pride.archive</groupId>
-            <artifactId>webservice-model</artifactId>
+            <artifactId>web-service-model</artifactId>
             <version>${prider-ws-model.version}</version>
         </dependency>
 
@@ -235,12 +234,6 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
             <version>${spring-security-core.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>uk.ac.ebi.pride.prider</groupId>
-            <artifactId>prider-data-provider-api</artifactId>
-            <version>${prider-data-provider-api.version}</version>
         </dependency>
 
         <!-- apache commons httpcomponents-->

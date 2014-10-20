@@ -2,15 +2,15 @@ package uk.ac.ebi.pride.toolsuite.gui.task.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.utilities.util.Tuple;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
-import uk.ac.ebi.pride.utilities.data.utils.CollectionUtils;
 import uk.ac.ebi.pride.toolsuite.gui.component.exception.ThrowableEntry;
 import uk.ac.ebi.pride.toolsuite.gui.component.message.MessageType;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.TableDataRetriever;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.PeptideTableRow;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.TableContentType;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
+import uk.ac.ebi.pride.utilities.data.utils.CollectionUtils;
+import uk.ac.ebi.pride.utilities.util.Tuple;
 
 import java.util.Collection;
 
@@ -47,8 +47,7 @@ public class RetrievePeptideTableTask extends AbstractDataAccessTask<Void, Tuple
      * Retrieve all the identifications.
      *
      * @param controller DataAccessController
-     * @throws uk.ac.ebi.pride.utilities.data.controller.DataAccessException
-     *          thrown when there is error while reading the data.
+     * @throws uk.ac.ebi.pride.utilities.data.controller.DataAccessException thrown when there is error while reading the data.
      */
     public RetrievePeptideTableTask(DataAccessController controller) throws DataAccessException {
         this(controller, 0, controller.getNumberOfProteins());
@@ -88,8 +87,6 @@ public class RetrievePeptideTableTask extends AbstractDataAccessTask<Void, Tuple
     @Override
     protected Void retrieve() throws Exception {
         try {
-
-
             Collection<Comparable> identIds = controller.getProteinIds();
 
             int identSize = identIds.size();
@@ -105,13 +102,9 @@ public class RetrievePeptideTableTask extends AbstractDataAccessTask<Void, Tuple
                             PeptideTableRow content = TableDataRetriever.getPeptideTableRow(controller, identId, peptideId);
                             publish(new Tuple<TableContentType, Object>(TableContentType.PEPTIDE, content));
                         }
-
                     }
 
-                    // this is important for cancelling
-                    if (Thread.interrupted()) {
-                        throw new InterruptedException();
-                    }
+                    checkInterruption();
                 }
 
             }
@@ -120,9 +113,8 @@ public class RetrievePeptideTableTask extends AbstractDataAccessTask<Void, Tuple
             String msg = "Failed to retrieve peptide related data";
             logger.error(msg, dex);
             appContext.addThrowableEntry(new ThrowableEntry(MessageType.ERROR, msg, dex));
-        } catch (InterruptedException e) {
-            logger.warn("Peptide table update has been cancelled");
         }
+
         return null;
     }
 }

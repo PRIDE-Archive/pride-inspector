@@ -17,6 +17,8 @@ import java.util.Collection;
  * Time: 09:25
  */
 public class RetrieveSelectedPeptideAnnotation extends AbstractDataAccessTask<Void, Void> {
+    private static final String DEFAULT_TASK_TITLE = "Retrieving peptide";
+    private static final String DEFAULT_TASK_DESCRIPTION = "Retrieving peptide";
     /**
      * Protein object, where the selected annotation is going to be set
      */
@@ -33,12 +35,17 @@ public class RetrieveSelectedPeptideAnnotation extends AbstractDataAccessTask<Vo
      * @param identId   identification id
      * @param peptideId peptide id
      */
-    public RetrieveSelectedPeptideAnnotation(DataAccessController controller, AnnotatedProtein protein,
-                                             Comparable identId, Comparable peptideId) {
+    public RetrieveSelectedPeptideAnnotation(DataAccessController controller,
+                                             AnnotatedProtein protein,
+                                             Comparable identId,
+                                             Comparable peptideId) {
         super(controller);
         this.protein = protein;
         this.identId = identId;
         this.peptideId = peptideId;
+
+        this.setName(DEFAULT_TASK_TITLE);
+        this.setDescription(DEFAULT_TASK_DESCRIPTION);
     }
 
     @Override
@@ -50,6 +57,8 @@ public class RetrieveSelectedPeptideAnnotation extends AbstractDataAccessTask<Vo
         peptideAnnotation.setSequence(controller.getPeptideSequence(identId, peptideId));
         peptideAnnotation.setStart(controller.getPeptideSequenceStart(identId, peptideId));
         peptideAnnotation.setEnd(controller.getPeptideSequenceEnd(identId, peptideId));
+
+        checkInterruption();
 
         // add ptm annotations
         addPTMAnnotations(peptideId, peptideAnnotation);

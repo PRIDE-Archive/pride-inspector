@@ -16,6 +16,9 @@ import java.util.Arrays;
  * @version $Id$
  */
 public class GetMyProjectFilesMetadataTask extends Task<FileDetailList, String> {
+    private static final String DEFAULT_TASK_TITLE = "Getting project files";
+    private static final String DEFAULT_TASK_DESCRIPTION = "Getting project files";
+
     private String accession;
     private RestTemplate restTemplate;
     private HttpEntity<String> requestEntity;
@@ -31,6 +34,9 @@ public class GetMyProjectFilesMetadataTask extends Task<FileDetailList, String> 
         final HttpHeaders headers = getHeaders(userName, password);
         this.requestEntity = new HttpEntity<String>(headers);
         this.restTemplate = new RestTemplate();
+
+        this.setName(DEFAULT_TASK_TITLE);
+        this.setDescription(DEFAULT_TASK_DESCRIPTION);
     }
 
     private HttpHeaders getHeaders(String userName, char[] password) {

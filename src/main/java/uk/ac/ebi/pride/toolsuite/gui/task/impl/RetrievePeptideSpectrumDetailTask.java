@@ -1,16 +1,13 @@
 package uk.ac.ebi.pride.toolsuite.gui.task.impl;
 
 import org.bushe.swing.event.EventBus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.utilities.util.Tuple;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
-import uk.ac.ebi.pride.utilities.data.core.Modification;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.TableContentType;
 import uk.ac.ebi.pride.toolsuite.gui.event.ProcessingDataSourceEvent;
-import uk.ac.ebi.pride.toolsuite.gui.task.TaskAdapter;
-import uk.ac.ebi.pride.utilities.mol.MoleculeUtilities;
 import uk.ac.ebi.pride.util.NumberUtilities;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.data.core.Modification;
+import uk.ac.ebi.pride.utilities.mol.MoleculeUtilities;
+import uk.ac.ebi.pride.utilities.util.Tuple;
 
 import java.util.*;
 
@@ -21,23 +18,11 @@ import java.util.*;
  * Time: 3:10 PM
  */
 
-public class RetrievePeptideSpectrumDetailTask extends TaskAdapter<Void, Tuple<TableContentType, Object>> {
-
-    private static final Logger logger = LoggerFactory.getLogger(RetrievePeptideSpectrumDetailTask.class);
+public class RetrievePeptideSpectrumDetailTask extends AbstractDataAccessTask<Void, Tuple<TableContentType, Object>> {
 
     private static final String DEFAULT_TASK_NAME = "Retrieve Peptide-Spectrum Details";
 
     private static final String DEFAULT_TASK_DESC = "Retrieve Peptide-Spectrum Details";
-
-    /**
-     * The number of proteins for each batch download
-     */
-    private static final int MAX_BATCH_DOWNLOAD_SIZE = 10;
-
-    /**
-     * data access controller
-     */
-    private DataAccessController controller;
 
     /**
      * Constructor
@@ -45,22 +30,17 @@ public class RetrievePeptideSpectrumDetailTask extends TaskAdapter<Void, Tuple<T
      * @param controller data access controller
      */
     public RetrievePeptideSpectrumDetailTask(DataAccessController controller) {
+        super(controller);
 
         // set name and description
         this.setName(DEFAULT_TASK_NAME);
         this.setDescription(DEFAULT_TASK_DESC);
-
-        this.controller = controller;
     }
 
     @Override
-    protected Void doInBackground() throws Exception {
+    protected Void retrieve() throws Exception {
         // protein identification id
         Collection<Comparable> protIdentIds = controller.getProteinIds();
-
-
-        //protein identification id and accession buffer
-        Map<Comparable, String> accBuffer = new LinkedHashMap<Comparable, String>();
 
         Map<Tuple<Comparable, Comparable>, Double> peptideDeltaMap = new HashMap<Tuple<Comparable, Comparable>, Double>();
 
@@ -77,10 +57,14 @@ public class RetrievePeptideSpectrumDetailTask extends TaskAdapter<Void, Tuple<T
                 peptideDeltaMap.put(new Tuple<Comparable, Comparable>(protIdentId, peptideId), delta);
                 peptidePrecursorMap.put(new Tuple<Comparable, Comparable>(protIdentId, peptideId), precursorMz);
             }
+
+            checkInterruption();
         }
+
         publish(new Tuple<TableContentType, Object>(TableContentType.PEPTIDE_DELTA, peptideDeltaMap));
         publish(new Tuple<TableContentType, Object>(TableContentType.PEPTIDE_PRECURSOR_MZ, peptidePrecursorMap));
         EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.SPECTRA_READING, controller));
+
         return null;
     }
 

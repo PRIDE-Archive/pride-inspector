@@ -117,9 +117,8 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
             String msg = "Failed to retrieve protein and peptide related data";
             logger.error(msg, dex);
             appContext.addThrowableEntry(new ThrowableEntry(MessageType.ERROR, msg, dex));
-        } catch (InterruptedException ex) {
-            logger.warn("Protein table and peptide table update has been cancelled");
         }
+
         return null;
     }
 
@@ -195,12 +194,6 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
         if(!controller.getType().equals(DataAccessController.Type.MZTAB)){
             List<Object> proteinQuantHeaders = TableDataRetriever.getProteinQuantTableHeaders(controller, -1);
             publish(new Tuple<TableContentType, Object>(TableContentType.PROTEIN_QUANTITATION_HEADER, proteinQuantHeaders));
-        }
-    }
-
-    private void checkInterruption() throws InterruptedException {
-        if (Thread.interrupted()) {
-            throw new InterruptedException();
         }
     }
 }

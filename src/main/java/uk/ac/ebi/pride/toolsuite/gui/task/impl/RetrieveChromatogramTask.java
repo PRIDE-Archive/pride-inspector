@@ -17,12 +17,17 @@ import uk.ac.ebi.pride.toolsuite.gui.component.message.MessageType;
  */
 public class RetrieveChromatogramTask extends AbstractDataAccessTask<Chromatogram, Void> {
     private static final Logger logger = LoggerFactory.getLogger(RetrieveEntryTask.class);
+    private static final String DEFAULT_TASK_TITLE = "Retrieving chromatogram";
+    private static final String DEFAULT_TASK_DESCRIPTION = "Retrieving chromatogram";
 
     private Comparable chromaId;
 
     public RetrieveChromatogramTask(DataAccessController controller, Comparable chromaId) {
         super(controller);
         this.chromaId = chromaId;
+
+        this.setName(DEFAULT_TASK_TITLE);
+        this.setDescription(DEFAULT_TASK_DESCRIPTION);
     }
 
     @Override
@@ -30,6 +35,8 @@ public class RetrieveChromatogramTask extends AbstractDataAccessTask<Chromatogra
         Chromatogram result = null;
 
         try {
+            checkInterruption();
+
             result = controller.getChromatogramById(chromaId);
         } catch (DataAccessException dex) {
             String msg = "Failed to retrieve data entry from data source";

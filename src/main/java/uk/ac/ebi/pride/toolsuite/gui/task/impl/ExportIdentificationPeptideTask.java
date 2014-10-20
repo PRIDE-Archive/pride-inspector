@@ -102,9 +102,7 @@ public class ExportIdentificationPeptideTask extends AbstractDataAccessTask<Void
                 writer.flush();
 
                 // this is important for cancelling
-                if (Thread.interrupted()) {
-                    throw new InterruptedException();
-                }
+                checkInterruption();
             }
         } catch (DataAccessException e2) {
             String msg = "Failed to retrieve data from data source";
@@ -114,8 +112,6 @@ public class ExportIdentificationPeptideTask extends AbstractDataAccessTask<Void
             String msg = "Failed to write data to the output file, please check you have the right permission";
             logger.error(msg, e1);
             GUIUtilities.error(Desktop.getInstance().getMainComponent(), msg, "Export Error");
-        } catch (InterruptedException e3) {
-            logger.warn("Exporting identification and peptide relationship has been interrupted");
         } finally {
             if (writer != null) {
                 writer.close();

@@ -54,13 +54,17 @@ public class GetPrideExperimentDetailTask extends AbstractConnectPrideTask {
             metadata = downloadMetaData(url);
 
             // this is important for cancelling
-            if (Thread.interrupted()) {
-                throw new InterruptedException();
-            }
+            checkInterruption();
         } catch (InterruptedException ex) {
             logger.warn("Download session has been cancelled");
         }
 
         return metadata;
+    }
+
+    private void checkInterruption() throws InterruptedException {
+        if (Thread.currentThread().interrupted()) {
+            throw new InterruptedException();
+        }
     }
 }

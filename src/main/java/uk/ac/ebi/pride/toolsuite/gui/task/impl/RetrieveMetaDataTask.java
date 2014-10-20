@@ -41,9 +41,12 @@ public class RetrieveMetaDataTask extends AbstractDataAccessTask<GeneralMetaData
 
         try {
             if (controller.hasMetaDataInformation()) {
+                checkInterruption();
+
                 ExperimentMetaData metaData = controller.getExperimentMetaData();
                 MzGraphMetaData mzGraphMetaData = null;
                 IdentificationMetaData identificationMetaData = null;
+
                 if (controller.hasSpectrum()) {
                     mzGraphMetaData = controller.getMzGraphMetaData();
                 }

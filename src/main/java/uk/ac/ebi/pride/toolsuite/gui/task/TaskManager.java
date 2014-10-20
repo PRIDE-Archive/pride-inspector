@@ -65,7 +65,9 @@ public class TaskManager extends PropertyChangeHelper {
         int numberOfThreads = ThreadCalculator.calculateNumberOfThreads(8);
 
         // thread pool
-        this.executor = Executors.newFixedThreadPool(numberOfThreads);
+        this.executor = new ThreadPoolExecutor(5, numberOfThreads,
+                                               0L, TimeUnit.MILLISECONDS,
+                                               new LinkedBlockingQueue<Runnable>());
 
         // a list of tasks
         this.tasks = new CopyOnWriteArrayList<Task>();
