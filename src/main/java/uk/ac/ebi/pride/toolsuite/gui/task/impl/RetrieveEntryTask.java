@@ -35,6 +35,8 @@ public class RetrieveEntryTask<T> extends AbstractDataAccessTask<T, String> {
         Object result = null;
 
         try {
+            checkInterruption();
+
             if (Spectrum.class.equals(classType)) {
                 result = controller.getSpectrumById(id);
             } else if (Chromatogram.class.equals(classType)) {

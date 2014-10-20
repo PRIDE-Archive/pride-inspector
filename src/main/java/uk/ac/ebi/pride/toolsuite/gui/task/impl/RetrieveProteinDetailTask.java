@@ -3,18 +3,17 @@ package uk.ac.ebi.pride.toolsuite.gui.task.impl;
 import org.bushe.swing.event.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.utilities.util.Tuple;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.tools.protein_details_fetcher.ProteinDetailFetcher;
+import uk.ac.ebi.pride.tools.protein_details_fetcher.model.Protein;
+import uk.ac.ebi.pride.tools.utils.AccessionResolver;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorCacheManager;
 import uk.ac.ebi.pride.toolsuite.gui.component.sequence.AnnotatedProtein;
 import uk.ac.ebi.pride.toolsuite.gui.component.sequence.PeptideAnnotation;
 import uk.ac.ebi.pride.toolsuite.gui.component.sequence.PeptideFitState;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.TableContentType;
 import uk.ac.ebi.pride.toolsuite.gui.event.container.SortProteinTableEvent;
-import uk.ac.ebi.pride.toolsuite.gui.task.TaskAdapter;
-import uk.ac.ebi.pride.tools.protein_details_fetcher.ProteinDetailFetcher;
-import uk.ac.ebi.pride.tools.protein_details_fetcher.model.Protein;
-import uk.ac.ebi.pride.tools.utils.AccessionResolver;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.util.Tuple;
 
 import java.util.*;
 
@@ -25,7 +24,7 @@ import java.util.*;
  * Date: 16-Sep-2010
  * Time: 15:53:16
  */
-public class RetrieveProteinDetailTask extends TaskAdapter<Void, Tuple<TableContentType, Object>> {
+public class RetrieveProteinDetailTask extends AbstractDataAccessTask<Void, Tuple<TableContentType, Object>> {
 
     private static final Logger logger = LoggerFactory.getLogger(RetrieveProteinDetailTask.class);
 
@@ -39,11 +38,6 @@ public class RetrieveProteinDetailTask extends TaskAdapter<Void, Tuple<TableCont
     private static final int MAX_BATCH_DOWNLOAD_SIZE = 10;
 
     /**
-     * data access controller
-     */
-    private DataAccessController controller;
-
-    /**
      * Fetcher to download protein details
      */
     private ProteinDetailFetcher fetcher;
@@ -55,18 +49,17 @@ public class RetrieveProteinDetailTask extends TaskAdapter<Void, Tuple<TableCont
      * @param controller data access controller
      */
     public RetrieveProteinDetailTask(DataAccessController controller) {
+        super(controller);
 
         // set name and description
         this.setName(DEFAULT_TASK_NAME);
         this.setDescription(DEFAULT_TASK_DESC);
 
-        this.controller = controller;
-
         this.fetcher = new ProteinDetailFetcher();
     }
 
     @Override
-    protected Void doInBackground() throws Exception {
+    protected Void retrieve() throws Exception {
         // protein identification id
         Collection<Comparable> protIdentIds = controller.getProteinIds();
 
@@ -77,69 +70,62 @@ public class RetrieveProteinDetailTask extends TaskAdapter<Void, Tuple<TableCont
         // protein map
         Map<String, Protein> proteins = new HashMap<String, Protein>();
 
-        if(controller.hasProteinAmbiguityGroup())
+        if (controller.hasProteinAmbiguityGroup())
             EventBus.publish(new SortProteinTableEvent(controller, SortProteinTableEvent.Type.DISABLE_SORT));
 
-        try {
+        // iterate over each protein
+        for (Comparable protIdentId : protIdentIds) {
+            // get mapped protein accession
+            String protAcc = controller.getProteinAccession(protIdentId);
+            String protAccVersion = controller.getProteinAccessionVersion(protIdentId);
+            String database = controller.getSearchDatabase(protIdentId).getName();
+
+            try {
+                AccessionResolver resolver = new AccessionResolver(protAcc, protAccVersion, database, true);
+                String mappedProtAcc = resolver.isValidAccession() ? resolver.getAccession() : null;
 
 
-
-            // iterate over each protein
-            for (Comparable protIdentId : protIdentIds) {
-                // get mapped protein accession
-                String protAcc = controller.getProteinAccession(protIdentId);
-                String protAccVersion = controller.getProteinAccessionVersion(protIdentId);
-                String database = controller.getSearchDatabase(protIdentId).getName();
-
-                try {
-                    AccessionResolver resolver = new AccessionResolver(protAcc, protAccVersion, database, true);
-                    String mappedProtAcc = resolver.isValidAccession() ? resolver.getAccession() : null;
-
-
-                    if (mappedProtAcc != null) {
-                        // get existing protein details
-                        Protein protDetails = PrideInspectorCacheManager.getInstance().getProteinDetails(mappedProtAcc);
-                        if (protDetails != null) {
-                            proteins.put(mappedProtAcc, protDetails);
-                        }
-
-                        accBuffer.put(protIdentId, mappedProtAcc);
-                        if (accBuffer.size() == MAX_BATCH_DOWNLOAD_SIZE) {
-                            // fetch and publish protein details
-                            fetchAndPublish(accBuffer, proteins);
-
-                            // clear accession buffer
-                            accBuffer.clear();
-
-                            // clear protein map
-                            proteins = new HashMap<String, Protein>();
-                        }
+                if (mappedProtAcc != null) {
+                    // get existing protein details
+                    Protein protDetails = PrideInspectorCacheManager.getInstance().getProteinDetails(mappedProtAcc);
+                    if (protDetails != null) {
+                        proteins.put(mappedProtAcc, protDetails);
                     }
-                    // clear protein map
-                    proteins = new HashMap<String, Protein>();
-                } catch (IllegalArgumentException ex) {
-                    Protein protein = new Protein(protAcc);
-                    protein.setStatus(Protein.STATUS.UNKNOWN);
-                    proteins.put(protAcc, protein);
+
+                    accBuffer.put(protIdentId, mappedProtAcc);
+                    if (accBuffer.size() == MAX_BATCH_DOWNLOAD_SIZE) {
+                        // fetch and publish protein details
+                        fetchAndPublish(accBuffer, proteins);
+
+                        // clear accession buffer
+                        accBuffer.clear();
+
+                        // clear protein map
+                        proteins = new HashMap<String, Protein>();
+                    }
                 }
+                // clear protein map
+                proteins = new HashMap<String, Protein>();
+            } catch (IllegalArgumentException ex) {
+                Protein protein = new Protein(protAcc);
+                protein.setStatus(Protein.STATUS.UNKNOWN);
+                proteins.put(protAcc, protein);
             }
 
-            // this is important for cancelling
-            if (Thread.interrupted()) {
-                throw new InterruptedException();
-            }
-
-            if (!accBuffer.isEmpty() || !proteins.isEmpty()) {
-                fetchAndPublish(accBuffer, proteins);
-            }
-        } catch (InterruptedException e) {
-            logger.warn("Protein name download has been cancelled");
+            checkInterruption();
         }
-        if(controller.hasProteinAmbiguityGroup())
+
+        if (!accBuffer.isEmpty() || !proteins.isEmpty()) {
+            fetchAndPublish(accBuffer, proteins);
+        }
+
+
+        if (controller.hasProteinAmbiguityGroup())
             EventBus.publish(new SortProteinTableEvent(controller, SortProteinTableEvent.Type.ENABLE_SORT));
+
+
         return null;
     }
-
 
     /**
      * Fetch then publish
@@ -228,8 +214,11 @@ public class RetrieveProteinDetailTask extends TaskAdapter<Void, Tuple<TableCont
                     }
                     PrideInspectorCacheManager.getInstance().addPeptideFitState(controller.getUid(), protIdentId, peptideIdentId, state);
                 }
+
                 peptideFits.put(new Tuple<Comparable, Comparable>(protIdentId, peptideIdentId), state);
             }
+
+            checkInterruption();
 
         }
 

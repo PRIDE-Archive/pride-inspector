@@ -1,11 +1,10 @@
 package uk.ac.ebi.pride.toolsuite.gui.task.impl;
 
-import uk.ac.ebi.pride.utilities.util.Tuple;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.TableDataRetriever;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableRow;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.TableContentType;
-import uk.ac.ebi.pride.toolsuite.gui.task.TaskAdapter;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.util.Tuple;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,16 +14,16 @@ import java.util.List;
  * Date: 16/08/2011
  * Time: 16:24
  */
-public class RetrieveQuantProteinTableTask extends TaskAdapter<Void, Tuple<TableContentType, Object>> {
+public class RetrieveQuantProteinTableTask extends AbstractDataAccessTask<Void, Tuple<TableContentType, Object>> {
 
     private static final String DEFAULT_TASK_NAME = "Updating Protein Table";
 
     private static final String DEFAULT_TASK_DESC = "Updating Protein Table";
 
-    private DataAccessController controller;
     private int referenceSampleIndex;
 
     public RetrieveQuantProteinTableTask(DataAccessController controller, int referenceSampleIndex) {
+        super(controller);
         this.setName(DEFAULT_TASK_NAME);
         this.setDescription(DEFAULT_TASK_DESC);
         this.controller = controller;
@@ -32,7 +31,7 @@ public class RetrieveQuantProteinTableTask extends TaskAdapter<Void, Tuple<Table
     }
 
     @Override
-    protected Void doInBackground() throws Exception {
+    protected Void retrieve() throws Exception {
         // get list of protein ids
         Collection<Comparable> identIds = controller.getProteinIds();
 
@@ -57,18 +56,12 @@ public class RetrieveQuantProteinTableTask extends TaskAdapter<Void, Tuple<Table
                 proteinTableRow.addQuantifications(identQuantContent);
             }
 
+            // check for interruption
+            checkInterruption();
+
             publish(new Tuple<TableContentType, Object>(TableContentType.PROTEIN_QUANTITATION, proteinTableRow));
         }
 
-        // check for interruption
-        checkInterruption();
-
         return null;
-    }
-
-    private void checkInterruption() throws InterruptedException {
-        if (Thread.interrupted()) {
-            throw new InterruptedException();
-        }
     }
 }

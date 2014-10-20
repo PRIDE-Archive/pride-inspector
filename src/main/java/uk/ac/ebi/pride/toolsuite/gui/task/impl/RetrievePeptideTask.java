@@ -42,12 +42,7 @@ public class RetrievePeptideTask extends AbstractDataAccessTask<Peptide, String>
             logger.error(msg, dex);
             appContext.addThrowableEntry(new ThrowableEntry(MessageType.ERROR, msg, dex));
         }
-        return peptide;
-    }
 
-    private void checkInterruption() throws InterruptedException {
-        if (Thread.interrupted()) {
-            throw new InterruptedException();
-        }
+        return peptide;
     }
 }

@@ -67,6 +67,8 @@ public class ExportTableDataTask extends TaskAdapter<Void, Void>{
                     row += (value == null ? "" : value) + Constants.TAB;
                 }
                 writer.println(row);
+
+                checkInterruption();
             }
 
             writer.flush();
@@ -80,5 +82,11 @@ public class ExportTableDataTask extends TaskAdapter<Void, Void>{
             }
         }
         return null;
+    }
+
+    private void checkInterruption() throws InterruptedException {
+        if (Thread.currentThread().interrupted()) {
+            throw new InterruptedException();
+        }
     }
 }

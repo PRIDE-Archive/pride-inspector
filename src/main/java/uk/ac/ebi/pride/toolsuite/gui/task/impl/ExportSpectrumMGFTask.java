@@ -122,6 +122,8 @@ public class ExportSpectrumMGFTask extends AbstractDataAccessTask<Void, Void> {
                     }
                     writer.flush();
                 }
+
+                checkInterruption();
             }
             writer.flush();
         } catch (DataAccessException e2) {
@@ -132,8 +134,6 @@ public class ExportSpectrumMGFTask extends AbstractDataAccessTask<Void, Void> {
             String msg = "Failed to write data to the output file, please check you have the right permission";
             logger.error(msg, e1);
             GUIUtilities.error(Desktop.getInstance().getMainComponent(), msg, "Export Error");
-        } catch (InterruptedException e3) {
-            logger.warn("Exporting spectrum in MGF format has been interrupted");
         } finally {
             if (writer != null) {
                 writer.close();
@@ -141,4 +141,5 @@ public class ExportSpectrumMGFTask extends AbstractDataAccessTask<Void, Void> {
         }
         return null;
     }
+
 }

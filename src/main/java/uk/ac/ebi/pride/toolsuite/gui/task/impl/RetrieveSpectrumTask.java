@@ -95,10 +95,4 @@ public class RetrieveSpectrumTask extends AbstractDataAccessTask<Spectrum, Void>
         }
         return spectrum;
     }
-
-    private void checkInterruption() throws InterruptedException {
-        if (Thread.interrupted()) {
-            throw new InterruptedException();
-        }
-    }
 }

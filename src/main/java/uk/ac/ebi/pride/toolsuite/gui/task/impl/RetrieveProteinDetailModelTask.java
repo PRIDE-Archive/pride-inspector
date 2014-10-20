@@ -25,6 +25,8 @@ import java.util.Collection;
  */
 public class RetrieveProteinDetailModelTask extends AbstractDataAccessTask<AnnotatedProtein, Void> {
     private static final Logger logger = LoggerFactory.getLogger(RetrieveProteinDetailModelTask.class);
+    private static final String DEFAULT_TASK_TITLE = "Retrieving protein details";
+    private static final String DEFAULT_TASK_DESCRIPTION = "Retrieving protein details";
     /**
      * protein identification id
      */
@@ -47,6 +49,9 @@ public class RetrieveProteinDetailModelTask extends AbstractDataAccessTask<Annot
         super(controller);
         this.identId = identId;
         this.peptideId = peptideId;
+
+        this.setName(DEFAULT_TASK_TITLE);
+        this.setDescription(DEFAULT_TASK_DESCRIPTION);
     }
 
     @Override
@@ -54,6 +59,8 @@ public class RetrieveProteinDetailModelTask extends AbstractDataAccessTask<Annot
         AnnotatedProtein protein = null;
         try {
             Protein proteinDetails = getExistingProteinDetails();
+
+            checkInterruption();
 
             if (proteinDetails != null) {
                 // create a new annotated protein

@@ -102,19 +102,15 @@ public class RetrieveChromatogramTableTask extends AbstractDataAccessTask<Void, 
                     content.add(chromaId);
                     publish(new Tuple<TableContentType, List<Object>>(TableContentType.CHROMATOGRAM, content));
 
-                    // this is important for cancelling
-                    if (Thread.interrupted()) {
-                        throw new InterruptedException();
-                    }
+                    checkInterruption();
                 }
             }
         } catch (DataAccessException dex) {
             String msg = "Failed to retrieve chromatogram related data";
             logger.error(msg, dex);
             appContext.addThrowableEntry(new ThrowableEntry(MessageType.ERROR, msg, dex));
-        } catch (InterruptedException e) {
-            logger.warn("Chromatogram table update has been cancelled");
         }
+
         return null;
     }
 }
