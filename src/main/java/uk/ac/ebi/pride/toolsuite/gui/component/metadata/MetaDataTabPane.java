@@ -10,7 +10,7 @@ import uk.ac.ebi.pride.toolsuite.gui.access.GeneralMetaDataGroup;
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.report.SummaryReportMessage;
 import uk.ac.ebi.pride.toolsuite.gui.event.SummaryReportEvent;
-import uk.ac.ebi.pride.util.NumberUtilities;
+import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.core.CvParam;
 import uk.ac.ebi.pride.utilities.data.core.UserParam;

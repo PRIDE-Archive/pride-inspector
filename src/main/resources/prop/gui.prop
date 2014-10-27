@@ -213,6 +213,7 @@ load.next.mzdata.small.icon=icon/16x16/load_next.png
 #download protein name
 load.protein.detail.small.icon=icon/16x16/load_next.png
 load.protein.detail.title=Obtain Protein Details
+load.protein.detail.test.uniprot.protein=P31946
 
 #Protein Groups details
 load.protein.groups.detail.small.icon=icon/16x16/find_experiment.png

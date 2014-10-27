@@ -21,7 +21,8 @@ import java.util.*;
 /**
  * Retrieve protein name for a given set of proteins
  * <p/>
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 16-Sep-2010
  * Time: 15:53:16
  */
@@ -81,8 +82,6 @@ public class RetrieveProteinDetailTask extends TaskAdapter<Void, Tuple<TableCont
             EventBus.publish(new SortProteinTableEvent(controller, SortProteinTableEvent.Type.DISABLE_SORT));
 
         try {
-
-
 
             // iterate over each protein
             for (Comparable protIdentId : protIdentIds) {

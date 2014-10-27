@@ -140,7 +140,7 @@ public class PeptideSelectionPane extends DataAccessControllerPane<Peptide, Void
         ptmLabel = new JLabel(PTM_LABEL + "NONE</html>");
         messagePanel.add(ptmLabel);
         messagePanel.add(Box.createHorizontalGlue());
-
+        /*
         String name = uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop.getInstance().getDesktopContext().getProperty("load.protein.groups.detail.title");
         Icon icon = GUIUtilities.loadIcon(Desktop.getInstance().getDesktopContext().getProperty("load.protein.groups.detail.small.icon"));
         proteinGroupButton = new JButton(name,icon);
@@ -173,12 +173,12 @@ public class PeptideSelectionPane extends DataAccessControllerPane<Peptide, Void
 
         }else{
             proteinGroupButton.setEnabled(false);
-        }
+        }*/
         metaDataPanel.add(messagePanel);
         // add a glue to fill the empty space
         metaDataPanel.add(Box.createHorizontalGlue());
 
-        metaDataPanel.add(proteinGroupButton);
+       // metaDataPanel.add(proteinGroupButton);
 
         this.add(metaDataPanel, BorderLayout.NORTH);
 

@@ -107,7 +107,7 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
     @Override
     protected void addComponents() {
         dataset = new QuantCategoryDataset();
-        JFreeChart chart = ChartFactory.createBarChart(appContext.getProperty("quant.protein.histogram.title"),
+        JFreeChart chart = ChartFactory.createBarChart(null,
                 appContext.getProperty("quant.histogram.x.axis"),
                 appContext.getProperty("quant.histogram.y.axis"),
                 dataset,
@@ -116,8 +116,8 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
                 true,
                 false);
         // set chart title size
-        TextTitle title = chart.getTitle();
-        title.setFont(title.getFont().deriveFont(15f));
+        //TextTitle title = chart.getTitle();
+        //title.setFont(title.getFont().deriveFont(15f));
         // plot
         CategoryPlot plot = chart.getCategoryPlot();
         plot.setBackgroundPaint(Color.white);
@@ -411,7 +411,7 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
                         java.util.List<Comparable> columns = idMapping.get(id);
                         if (columns == null) {
                             columns = new ArrayList<Comparable>();
-                            idMapping.put(studyVariablesTitles.get(column).getDescription(), columns);
+                            idMapping.put(id, columns);
                         }
                         columns.add(studyVariablesTitles.get(column).getDescription());
                     }
@@ -421,7 +421,7 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
                         java.util.List<Comparable> columns = idMapping.get(id);
                         if (columns == null) {
                             columns = new ArrayList<Comparable>();
-                            idMapping.put(studyVariablesTitles.get(column).getDescription(), columns);
+                            idMapping.put(id, columns);
                         }
                         columns.add(studyVariablesTitles.get(column).getDescription());
                     }

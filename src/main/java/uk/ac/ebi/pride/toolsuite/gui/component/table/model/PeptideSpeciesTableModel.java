@@ -4,7 +4,7 @@ import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.utilities.data.core.Modification;
 import uk.ac.ebi.pride.utilities.data.core.PeptideSequence;
 import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
-import uk.ac.ebi.pride.util.NumberUtilities;
+import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 
 import java.util.*;
 

@@ -15,10 +15,12 @@ import java.awt.*;
  * <p>Abstract class to define the chart common characteristics.</p>
  *
  * @author Antonio Fabregat
+ * @author ypriverol
  * Date: 25-ago-2010
  * Time: 15:25:59
  */
 public abstract class PrideChartPane extends JPanel {
+
     protected PrideDataReader reader;
 
     /**

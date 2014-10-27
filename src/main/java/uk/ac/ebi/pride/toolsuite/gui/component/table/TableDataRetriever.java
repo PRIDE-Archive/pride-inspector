@@ -15,7 +15,7 @@ import uk.ac.ebi.pride.utilities.mol.MoleculeUtilities;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.tools.protein_details_fetcher.model.Protein;
 import uk.ac.ebi.pride.tools.utils.AccessionResolver;
-import uk.ac.ebi.pride.util.NumberUtilities;
+import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 import uk.ac.ebi.pride.utilities.term.QuantCvTermReference;
 
 import java.util.ArrayList;

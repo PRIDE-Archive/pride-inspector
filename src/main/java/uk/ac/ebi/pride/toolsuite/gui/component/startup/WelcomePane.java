@@ -11,7 +11,7 @@ import uk.ac.ebi.pride.toolsuite.gui.task.TaskListener;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.CheckUpdateTask;
 import uk.ac.ebi.pride.toolsuite.gui.utils.UpdateChecker;
-import uk.ac.ebi.pride.util.IOUtilities;
+import uk.ac.ebi.pride.utilities.util.IOUtilities;
 
 import javax.help.CSH;
 import javax.swing.*;

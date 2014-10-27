@@ -9,6 +9,7 @@ import uk.ac.ebi.pride.toolsuite.chart.io.ElderJSONReader;
 import uk.ac.ebi.pride.toolsuite.chart.io.PrideDataReader;
 import uk.ac.ebi.pride.toolsuite.chart.io.QuartilesType;
 import uk.ac.ebi.pride.toolsuite.chart.plot.AverageMSPlot;
+import uk.ac.ebi.pride.toolsuite.chart.plot.DeltaMZPlot;
 import uk.ac.ebi.pride.toolsuite.chart.plot.PeakIntensityPlot;
 import uk.ac.ebi.pride.toolsuite.chart.plot.PrecursorMassesPlot;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
@@ -61,6 +62,7 @@ public class PrideChartBigPane extends PrideChartPane {
     }
 
     private JPanel getAvgOptionPane(final AverageMSPlot plot) {
+
         JPanel optionPane = new JPanel(new VerticalLayout());
 
         //Options title
@@ -181,6 +183,7 @@ public class PrideChartBigPane extends PrideChartPane {
     }
 
     private JPanel getPeakIntensityOptionPane(final PeakIntensityPlot plot) {
+
         JPanel optionPane = new JPanel(new VerticalLayout());
 
         //Options title
@@ -218,6 +221,45 @@ public class PrideChartBigPane extends PrideChartPane {
         return optionPane;
     }
 
+    private JPanel getDeltaMassOptionPane(final DeltaMZPlot plot) {
+
+        JPanel optionPane = new JPanel(new VerticalLayout());
+
+        //Options title
+        JLabel title = new JLabel("Chart Options");
+        Font titleFont = new Font(title.getFont().getFontName(), Font.BOLD, 15);
+        title.setFont(titleFont);
+        JPanel titleBar = new JPanel();
+        titleBar.add(title);
+        titleBar.setBackground(Color.WHITE);
+        optionPane.add(titleBar);
+
+        Map<PrideDataType, Boolean> optionList = plot.getOptionList();
+        final java.util.List<JToggleButton> jtbList = new ArrayList<JToggleButton>();
+        JToggleButton jtb;
+        for (PrideDataType dataType : optionList.keySet()) {
+            jtb = new JCheckBox(dataType.getTitle());
+            jtb.setEnabled(optionList.get(dataType));
+            jtb.setSelected(dataType == PrideDataType.IDENTIFIED_SPECTRA);
+            jtb.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    Iterator<JToggleButton> it = jtbList.iterator();
+                    AbstractButton option;
+                    while (it.hasNext()) {
+                        option = it.next();
+                        plot.setVisible(option.isSelected(), PrideDataType.findBy(option.getText()));
+                    }
+                }
+            });
+            jtb.setOpaque(false);
+            optionPane.add(jtb);
+            jtbList.add(jtb);
+        }
+
+        return optionPane;
+    }
+
     @Override
     protected JPanel getMainPanel(JFreeChart chart, PrideChartType chartType) {
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -233,6 +275,9 @@ public class PrideChartBigPane extends PrideChartPane {
                 break;
             case PEAK_INTENSITY:
                 optionPane = getPeakIntensityOptionPane((PeakIntensityPlot) chart.getPlot());
+                break;
+            case DELTA_MASS:
+                optionPane = getDeltaMassOptionPane((DeltaMZPlot) chart.getPlot());
                 break;
             default:
                 optionPane = null;
@@ -317,7 +362,7 @@ public class PrideChartBigPane extends PrideChartPane {
         String optionTooltip = propMgr.getProperty("chart_options.tooltip");
         final PrideChartButton btnOptions = new PrideChartButton(optionIcon, optionTooltip);
 
-        btnOptions.setEnabled(chartType == PrideChartType.AVERAGE_MS || chartType == PrideChartType.PRECURSOR_MASSES || chartType == PrideChartType.PEAK_INTENSITY);
+        btnOptions.setEnabled(chartType == PrideChartType.AVERAGE_MS || chartType == PrideChartType.PRECURSOR_MASSES || chartType == PrideChartType.PEAK_INTENSITY || chartType == PrideChartType.DELTA_MASS);
 
         // If the chart has options, the behaviour of the options button has to be like a standard JToggleButton
         if (btnOptions.isEnabled()) {

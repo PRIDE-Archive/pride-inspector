@@ -7,7 +7,7 @@ import org.bushe.swing.event.annotation.EventSubscriber;
 import org.jdesktop.swingx.JXTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.engine.SearchEngineType;
+import uk.ac.ebi.pride.utilities.engine.SearchEngineType;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.action.impl.ExtraProteinDetailAction;
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;

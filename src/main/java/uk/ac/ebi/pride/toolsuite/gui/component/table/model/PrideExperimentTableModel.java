@@ -1,6 +1,6 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
-import uk.ac.ebi.pride.util.NumberUtilities;
+import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 
 import java.io.Serializable;
 import java.util.*;

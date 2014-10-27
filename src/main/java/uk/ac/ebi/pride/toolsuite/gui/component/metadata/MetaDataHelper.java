@@ -2,8 +2,8 @@ package uk.ac.ebi.pride.toolsuite.gui.component.metadata;
 
 import uk.ac.ebi.pride.utilities.data.core.*;
 import uk.ac.ebi.pride.toolsuite.gui.utils.Constants;
-import uk.ac.ebi.pride.util.NumberUtilities;
-import uk.ac.ebi.pride.util.RegExUtilities;
+import uk.ac.ebi.pride.utilities.util.NumberUtilities;
+import uk.ac.ebi.pride.utilities.util.RegExUtilities;
 
 import java.util.ArrayList;
 import java.util.Collection;

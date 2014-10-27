@@ -2,7 +2,7 @@ package uk.ac.ebi.pride.toolsuite.gui;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.util.IOUtilities;
+import uk.ac.ebi.pride.utilities.util.IOUtilities;
 
 import java.io.*;
 import java.net.URL;
@@ -11,7 +11,8 @@ import java.util.Properties;
 /**
  * PrideInspectorBootstrap calls PrideInspector with specific settings.
  *
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 06-Oct-2010
  * Time: 15:04:32
  */

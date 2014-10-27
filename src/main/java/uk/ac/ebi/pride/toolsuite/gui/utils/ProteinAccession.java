@@ -5,6 +5,7 @@ package uk.ac.ebi.pride.toolsuite.gui.utils;
  * @version $Id$
  */
 public class ProteinAccession implements Comparable{
+
     private String accession;
     private String mappedAccession;
 

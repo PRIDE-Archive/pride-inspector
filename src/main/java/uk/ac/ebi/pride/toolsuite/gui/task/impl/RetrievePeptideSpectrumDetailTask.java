@@ -10,7 +10,7 @@ import uk.ac.ebi.pride.toolsuite.gui.component.table.model.TableContentType;
 import uk.ac.ebi.pride.toolsuite.gui.event.ProcessingDataSourceEvent;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskAdapter;
 import uk.ac.ebi.pride.utilities.mol.MoleculeUtilities;
-import uk.ac.ebi.pride.util.NumberUtilities;
+import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 
 import java.util.*;
 
