@@ -1180,4 +1180,52 @@ public class TableFactory {
         return ma;
     }
 
+    public static JXTable createProjectDetailTable() {
+        ProjectTableModel projectTableModel = new ProjectTableModel();
+        JXTable table = createDefaultJXTable(projectTableModel);
+
+        // add hyper link click listener
+        String projectAccessionHeader = ProjectTableModel.TableHeader.ACCESSION.getHeader();
+
+        TableColumnExt projectAccessionColumn = (TableColumnExt) table.getColumn(projectAccessionHeader);
+        projectAccessionColumn.setCellRenderer(new HyperLinkCellRenderer());
+
+        String projectUrl = Desktop.getInstance().getDesktopContext().getProperty("prider.project.url");
+        table.addMouseMotionListener(new TableCellMouseMotionListener(table, projectAccessionHeader));
+        table.addMouseListener(new HyperLinkCellMouseClickListener(table, projectAccessionHeader, new PrefixedHyperLinkGenerator(projectUrl)));
+
+        // title column
+        TableColumnExt projectTitleColumn = (TableColumnExt) table.getColumn(ProjectTableModel.TableHeader.TITLE.getHeader());
+        projectTitleColumn.setPreferredWidth(200);
+
+
+        // publication date
+        TableColumnExt publicationDateColumn = (TableColumnExt) table.getColumn(ProjectTableModel.TableHeader.PUBLICATION_DATE.getHeader());
+        publicationDateColumn.setCellRenderer(new DateRenderer());
+
+        return table;
+    }
+
+    public static JXTable createAssayDetailTable() {
+        AssayTableModel assayTableModel = new AssayTableModel();
+        JXTable table = createDefaultJXTable(assayTableModel);
+
+        // add hyper link click listener
+        String assayAccessionHeader = AssayTableModel.TableHeader.ACCESSION.getHeader();
+
+        TableColumnExt assayAccessionColumn = (TableColumnExt) table.getColumn(assayAccessionHeader);
+        assayAccessionColumn.setCellRenderer(new HyperLinkCellRenderer());
+
+        String assayUrl = Desktop.getInstance().getDesktopContext().getProperty("prider.assay.url");
+        table.addMouseMotionListener(new TableCellMouseMotionListener(table, assayAccessionHeader));
+        table.addMouseListener(new HyperLinkCellMouseClickListener(table, assayAccessionHeader, new PrefixedHyperLinkGenerator(assayUrl)));
+
+        // title column
+        TableColumnExt assayTitleColumn = (TableColumnExt) table.getColumn(AssayTableModel.TableHeader.TITLE.getHeader());
+        // set protein name width
+        assayTitleColumn.setPreferredWidth(200);
+
+
+        return table;
+    }
 }

@@ -43,6 +43,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
 
     // lock for owners collection
     private final Object ownersLock = new Object();
+
     @GuardedBy("ownersLock")
     private final Collection<Object> owners;
 
