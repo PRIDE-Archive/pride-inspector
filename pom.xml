@@ -86,6 +86,7 @@
         <commons-lang3.version>3.3.2</commons-lang3.version>
         <jcip-annotations.version>1.0</jcip-annotations.version>
         <jsparklines.version>1.0.1</jsparklines.version>
+        <aspera-faspmanager.version>2.7.0.42750</aspera-faspmanager.version>
     </properties>
 
     <dependencies>
@@ -283,6 +284,12 @@
             <version>${jcip-annotations.version}</version>
         </dependency>
 
+        <!--Aspera manager-->
+        <dependency>
+            <groupId>com.asperasoft</groupId>
+            <artifactId>aspera-faspmanager</artifactId>
+            <version>${aspera-faspmanager.version}</version>
+        </dependency>
 
     </dependencies>
 

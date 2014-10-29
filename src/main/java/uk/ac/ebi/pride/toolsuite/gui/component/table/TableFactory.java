@@ -1233,8 +1233,6 @@ public class TableFactory {
         downloadColumn.setCellRenderer(new ButtonCellRenderer(downloadText, null));
         downloadColumn.setCellEditor(new AssayDownloadButtonCellEditor(downloadText, null));
 
-//        table.addMouseMotionListener(new TableCellMouseMotionListener(table, downloadHeader));
-
         return table;
     }
 }
