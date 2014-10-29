@@ -1,5 +1,8 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.filter;
 
+import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
+import uk.ac.ebi.pride.toolsuite.gui.component.dialog.AssayFileDownloadDialog;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -24,11 +27,12 @@ public class AssayDownloadButtonCellEditor extends ButtonCellEditor {
     @Override
     public Object getCellEditorValue() {
         if (isPushed) {
-//            SampleMetaDataDialog dialog = new SampleMetaDataDialog(((App)App.getInstance()).getMainFrame(), (DataFile)value);
-//            dialog.setLocationRelativeTo(((App)App.getInstance()).getMainFrame());
-//            dialog.setVisible(true);
-            System.out.println("ahahah");
+            JFrame mainComponent = PrideInspector.getInstance().getMainComponent();
+            AssayFileDownloadDialog dialog = new AssayFileDownloadDialog(mainComponent, (String) value);
+            dialog.setLocationRelativeTo(mainComponent);
+            dialog.setVisible(true);
         }
+
         return super.getCellEditorValue();
     }
 }

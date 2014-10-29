@@ -1223,7 +1223,6 @@ public class TableFactory {
 
         // title column
         TableColumnExt assayTitleColumn = (TableColumnExt) table.getColumn(AssayTableModel.TableHeader.TITLE.getHeader());
-        // set protein name width
         assayTitleColumn.setPreferredWidth(200);
 
         //download column
@@ -1232,6 +1231,31 @@ public class TableFactory {
         String downloadText = "Download";
         downloadColumn.setCellRenderer(new ButtonCellRenderer(downloadText, null));
         downloadColumn.setCellEditor(new AssayDownloadButtonCellEditor(downloadText, null));
+
+        return table;
+    }
+
+    public static JTable createAssayFileDownloadTable() {
+
+        AssayFileDownloadTableModel assayFileDownloadTableModel = new AssayFileDownloadTableModel();
+        JXTable table = createDefaultJXTable(assayFileDownloadTableModel);
+
+        // set file selection column width
+        TableColumnExt selectionColumn = (TableColumnExt) table.getColumn(AssayFileDownloadTableModel.TableHeader.SELECTION.getHeader());
+        selectionColumn.setMaxWidth(20);
+        selectionColumn.setMinWidth(20);
+
+        // file selection checkbox
+        selectionColumn.setCellRenderer(new CheckboxCellRenderer());
+        DefaultCellEditor checkBoxCellEditor = new DefaultCellEditor(new JCheckBox());
+        selectionColumn.setCellEditor(checkBoxCellEditor);
+
+        // title column
+        TableColumnExt assayFileNameColumn = (TableColumnExt) table.getColumn(AssayFileDownloadTableModel.TableHeader.FILE_NAME.getHeader());
+        assayFileNameColumn.setPreferredWidth(200);
+
+        // add mouse motion listener
+        table.addMouseListener(new AssayFileDownloadSelectionListener(table));
 
         return table;
     }
