@@ -5,6 +5,7 @@ import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.table.DefaultTableColumnModelExt;
 import org.jdesktop.swingx.table.TableColumnExt;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.filter.AssayDownloadButtonCellEditor;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.listener.*;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.*;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.renderer.*;
@@ -1225,6 +1226,14 @@ public class TableFactory {
         // set protein name width
         assayTitleColumn.setPreferredWidth(200);
 
+        //download column
+        String downloadHeader = AssayTableModel.TableHeader.DOWNLOAD.getHeader();
+        TableColumnExt downloadColumn = (TableColumnExt) table.getColumn(downloadHeader);
+        String downloadText = "Download";
+        downloadColumn.setCellRenderer(new ButtonCellRenderer(downloadText, null));
+        downloadColumn.setCellEditor(new AssayDownloadButtonCellEditor(downloadText, null));
+
+//        table.addMouseMotionListener(new TableCellMouseMotionListener(table, downloadHeader));
 
         return table;
     }

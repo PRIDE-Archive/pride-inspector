@@ -235,4 +235,38 @@ public class PrideArchiveWSSearchPane extends JPanel {
         }
     }
 
+
+    private class AssayDownloadListener implements ListSelectionListener {
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            if (!e.getValueIsAdjusting()) {
+                int rowNum = projectDetailTable.getSelectedRow();
+                int rowCnt = projectDetailTable.getRowCount();
+                if (rowCnt > 0 && rowNum >= 0) {
+                    ProjectTableModel projectTableModel = (ProjectTableModel) projectDetailTable.getModel();
+
+                    // get project accession
+                    int projectAccessionColumn = projectTableModel.getColumnIndex(ProjectTableModel.TableHeader.ACCESSION.getHeader());
+                    int projectAccessionModelRowIndex = projectDetailTable.convertRowIndexToModel(rowNum);
+                    String projectAccession = (String) projectTableModel.getValueAt(projectAccessionModelRowIndex, projectAccessionColumn);
+
+                    // get number of assays
+                    int numberOfAssaysColumn = projectTableModel.getColumnIndex(ProjectTableModel.TableHeader.NUM_OF_ASSAY.getHeader());
+                    int numberOfAssaysModelRowIndex = projectDetailTable.convertRowIndexToModel(rowNum);
+                    int numberOfAssays = (Integer) projectTableModel.getValueAt(numberOfAssaysModelRowIndex, numberOfAssaysColumn);
+
+                    // clear assay table model
+                    AssayTableModel assayDetailTableModel = (AssayTableModel) assayDetailTable.getModel();
+                    assayDetailTableModel.removeAllRows();
+
+                    // start retrieving assay summaries
+                    Task task = new GetAssayMetadataTask(projectAccession, numberOfAssays);
+                    task.addTaskListener(assayDetailTableModel);
+                    TaskUtil.startBackgroundTask(task);
+                }
+            }
+        }
+    }
+
 }

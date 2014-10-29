@@ -20,7 +20,8 @@ public class AssayTableModel extends ProgressiveListTableModel<Void, AssayDetail
         NUM_OF_PEPTIDE ("#Peptides", "Number of peptides"),
         NUM_OF_UNIQUE_PEPTIDE ("#Unique peptides", "Number of unique peptides"),
         NUM_OF_IDENTIFIED_SPECTRA ("#Identified spectra", "Number of identified spectra"),
-        NUM_OF_SPECTRA ("#Spectra", "Number of spectra");
+        NUM_OF_SPECTRA ("#Spectra", "Number of spectra"),
+        DOWNLOAD("Download", "Download and open assay files");
 
         private final String header;
         private final String toolTip;
@@ -86,8 +87,16 @@ public class AssayTableModel extends ProgressiveListTableModel<Void, AssayDetail
             return assayDetail.getIdentifiedSpectrumCount();
         } else if (TableHeader.NUM_OF_SPECTRA.getHeader().equals(columnName)) {
             return assayDetail.getTotalSpectrumCount();
+        } else if (TableHeader.DOWNLOAD.getHeader().equals(columnName)) {
+            return assayDetail.getAssayAccession();
         }
 
         return null;
     }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return TableHeader.DOWNLOAD.getHeader().equals(getColumnName(columnIndex)) || super.isCellEditable(rowIndex, columnIndex);
+    }
+
 }
