@@ -34,6 +34,11 @@ public class AssayFileDownloadDialog extends JDialog implements ActionListener {
     private JTable fileDownloadSelectionTable;
 
     /**
+     * Open file after download
+     */
+    private JCheckBox openFileOptionCheckbox;
+
+    /**
      * Accession for the assay to download
      */
     private final String assayAccession;
@@ -124,6 +129,13 @@ public class AssayFileDownloadDialog extends JDialog implements ActionListener {
         JPanel controlPanel = new JPanel();
         controlPanel.setLayout(new BorderLayout());
 
+        // open file after download checkbox
+        JPanel openFileOptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        openFileOptionCheckbox = new JCheckBox("Open after download");
+        openFileOptionCheckbox.setSelected(true);
+        openFileOptionPanel.add(openFileOptionCheckbox);
+        controlPanel.add(openFileOptionPanel, BorderLayout.WEST);
+
         // control pane
         JPanel ctrlPane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
@@ -190,16 +202,14 @@ public class AssayFileDownloadDialog extends JDialog implements ActionListener {
     private void downloadFiles(String folderPath, java.util.List<FileDetail> filesToDownload) {
         File path = new File(folderPath);
 
-        int confirmed = JOptionPane.showConfirmDialog(this, "Would you like Inspector try to open the files after downloading?", "Download assay files", JOptionPane.YES_NO_OPTION);
-        if (confirmed != 0) {
-            return;
-        }
+        // open file after download
+        boolean selected = openFileOptionCheckbox.isSelected();
 
         // create a dialog to show progress
         TaskDialog dialog = new TaskDialog(PrideInspector.getInstance().getMainComponent(), "Download assay files from PRIDE", "Downloading in progress...please wait");
         dialog.setVisible(true);
 
-        AsperaDownloadTask downloadTask = new AsperaDownloadTask(filesToDownload, path, true);
+        AsperaDownloadTask downloadTask = new AsperaDownloadTask(filesToDownload, path, selected);
         downloadTask.addTaskListener(dialog);
         TaskUtil.startBackgroundTask(downloadTask);
     }
