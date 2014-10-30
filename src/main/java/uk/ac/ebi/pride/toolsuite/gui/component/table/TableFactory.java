@@ -1254,6 +1254,14 @@ public class TableFactory {
         TableColumnExt assayFileNameColumn = (TableColumnExt) table.getColumn(AssayFileDownloadTableModel.TableHeader.FILE_NAME.getHeader());
         assayFileNameColumn.setPreferredWidth(200);
 
+        // file type
+        TableColumnExt assayFileTypeColumn = (TableColumnExt) table.getColumn(AssayFileDownloadTableModel.TableHeader.TYPE.getHeader());
+        assayFileTypeColumn.setMaxWidth(80);
+
+        // file size
+        TableColumnExt assayFileSizeColumn = (TableColumnExt) table.getColumn(AssayFileDownloadTableModel.TableHeader.SIZE.getHeader());
+        assayFileSizeColumn.setMaxWidth(80);
+
         // add mouse motion listener
         table.addMouseListener(new AssayFileDownloadSelectionListener(table));
 

@@ -65,8 +65,6 @@ prider.file.download.url=/pride/ws/archive/file/{accession}/{file}
 prider.host.url=www.ebi.ac.uk
 prider.host.port=80
 
-
-
 # URL for link to Ensembl Genome Browser
 ensembl.genome.browser.url=http://www.ensembl.org/%1$s/Location/Genome?type=ProteinAlignFeature
 
@@ -82,3 +80,27 @@ pride.inspector.pride.out.message = Be aware that PRIDE public database instance
 # Delta m/z limits
 delta.mz.max.limit = 4
 delta.mz.min.limit = -4
+
+# aspera client binary
+aspera.client.mac.binary = aspera/bin/mac-intel/ascp
+aspera.client.linux32.binary = aspera/bin/linux-32/ascp
+aspera.client.linux64.binary = aspera/bin/linux-64/ascp
+aspera.client.windows.binary = aspera/bin/windows-32/ascp.exe
+
+# aspera private key
+aspera.client.private.key = aspera/etc/asperaweb_id_dsa.openssh
+
+# EBI aspera server details, not necessary for upload functionality
+aspera.EBI.host = fasp.ebi.ac.uk
+aspera.EBI.user = prd_ascp
+aspera.EBI.password = 9INbvrWR
+
+# aspera transfer parameters
+aspera.xfer.tcpPort = 22
+aspera.xfer.udpPort = 33001
+aspera.xfer.targetRateKbps = 10000000
+aspera.xfer.minimumRateKbps = 100
+aspera.xfer.cookie = PRIDE-Aspera-1-Cookie
+aspera.xfer.token = PRIDE-Aspera-1-Token
+aspera.xfer.preCalculateJobSize = false
+aspera.xfer.createPath = true

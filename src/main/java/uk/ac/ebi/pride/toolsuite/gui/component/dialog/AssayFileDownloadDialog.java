@@ -1,16 +1,22 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.dialog;
 
+import uk.ac.ebi.pride.archive.web.service.model.file.FileDetail;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
+import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.TableFactory;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.AssayFileDownloadTableModel;
-import uk.ac.ebi.pride.toolsuite.gui.desktop.DesktopContext;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
+import uk.ac.ebi.pride.toolsuite.gui.task.impl.AsperaDownloadTask;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.GetAssayFileMetadataTask;
+import uk.ac.ebi.pride.utilities.util.Tuple;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Dialog for download files belongs to assay
@@ -35,17 +41,16 @@ public class AssayFileDownloadDialog extends JDialog implements ActionListener {
     /**
      * Application context
      */
-    private final DesktopContext prideInspectorContext;
+    private final PrideInspectorContext prideInspectorContext;
 
     /**
      * File mapping table model
      */
 //    private FileMappingTableModel fileMappingTableModel;
-
     public AssayFileDownloadDialog(Frame owner, String assayAccession) {
         super(owner);
         this.assayAccession = assayAccession;
-        this.prideInspectorContext = PrideInspector.getInstance().getDesktopContext();
+        this.prideInspectorContext = (PrideInspectorContext) PrideInspector.getInstance().getDesktopContext();
         initComponents();
         postComponents();
     }
@@ -53,7 +58,7 @@ public class AssayFileDownloadDialog extends JDialog implements ActionListener {
     public AssayFileDownloadDialog(Dialog owner, String assayAccession) {
         super(owner);
         this.assayAccession = assayAccession;
-        this.prideInspectorContext = PrideInspector.getInstance().getDesktopContext();
+        this.prideInspectorContext = (PrideInspectorContext) PrideInspector.getInstance().getDesktopContext();
         initComponents();
         postComponents();
     }
@@ -148,8 +153,54 @@ public class AssayFileDownloadDialog extends JDialog implements ActionListener {
         if (CANCEL_ACTION_COMMAND.equals(evtName)) {
             this.dispose();
         } else if (DOWNLOAD_ACTION_COMMAND.equals(evtName)) {
+            List<FileDetail> filesToDownload = getFilesToDownload();
 
-            this.dispose();
+            if (filesToDownload.size() > 0) {
+                SimpleFileDialog ofd = new SimpleFileDialog(prideInspectorContext.getOpenFilePath(), "Select Path Save To", true, null, false);
+                ofd.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                ofd.setMultiSelectionEnabled(false);
+
+                int result = ofd.showOpenDialog(AssayFileDownloadDialog.this);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = ofd.getSelectedFile();
+                    String folderPath = selectedFile.getPath();
+                    prideInspectorContext.setOpenFilePath(folderPath.replace(selectedFile.getName(), ""));
+                    downloadFiles(folderPath, filesToDownload);
+                    this.dispose();
+                }
+            }
         }
+    }
+
+    private java.util.List<FileDetail> getFilesToDownload() {
+        AssayFileDownloadTableModel assayFileDownloadTableModel = (AssayFileDownloadTableModel) fileDownloadSelectionTable.getModel();
+        java.util.List<Tuple<FileDetail, Boolean>> data = assayFileDownloadTableModel.getData();
+
+        java.util.List<FileDetail> fileDetails = new ArrayList<FileDetail>();
+
+        for (Tuple<FileDetail, Boolean> fileDetailBooleanTuple : data) {
+            if (fileDetailBooleanTuple.getValue()) {
+                fileDetails.add(fileDetailBooleanTuple.getKey());
+            }
+        }
+
+        return fileDetails;
+    }
+
+    private void downloadFiles(String folderPath, java.util.List<FileDetail> filesToDownload) {
+        File path = new File(folderPath);
+
+        int confirmed = JOptionPane.showConfirmDialog(this, "Would you like Inspector try to open the files after downloading?", "Download assay files", JOptionPane.YES_NO_OPTION);
+        if (confirmed != 0) {
+            return;
+        }
+
+        // create a dialog to show progress
+        TaskDialog dialog = new TaskDialog(PrideInspector.getInstance().getMainComponent(), "Download assay files from PRIDE", "Downloading in progress...please wait");
+        dialog.setVisible(true);
+
+        AsperaDownloadTask downloadTask = new AsperaDownloadTask(filesToDownload, path, true);
+        downloadTask.addTaskListener(dialog);
+        TaskUtil.startBackgroundTask(downloadTask);
     }
 }
