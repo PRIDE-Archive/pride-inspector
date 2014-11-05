@@ -11,6 +11,7 @@ import uk.ac.ebi.pride.toolsuite.gui.desktop.DesktopContext;
 import uk.ac.ebi.pride.toolsuite.gui.utils.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -164,7 +165,13 @@ public class AsperaDownloadTask extends FileDownloadTask implements TransferList
 
                 // open file
                 if (openFile) {
-                    openFiles();
+                    try {
+                        openFiles();
+                    } catch (IOException e) {
+                        String msg = "Failed to open downloaded files";
+                        logger.error(msg, e);
+                        publish(msg);
+                    }
                 }
 
                 break;

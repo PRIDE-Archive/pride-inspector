@@ -256,6 +256,7 @@ public class AssayFileDownloadDialog extends JDialog implements ActionListener, 
         String asperaHost = prideInspectorContext.getProperty("aspera.EBI.host");
         int asperaTcpPort = Integer.parseInt(prideInspectorContext.getProperty("aspera.xfer.tcpPort"));
         int asperaUdpPort = Integer.parseInt(prideInspectorContext.getProperty("aspera.xfer.udpPort"));
+
         DataTransferConfiguration asperaProtocolConfiguration = new DataTransferConfiguration(DataTransferProtocol.ASPERA, asperaHost,
                 new DataTransferPort(DataTransferPort.Type.TCP, asperaTcpPort), new DataTransferPort(DataTransferPort.Type.UDP, asperaUdpPort));
 
@@ -290,7 +291,10 @@ public class AssayFileDownloadDialog extends JDialog implements ActionListener, 
 
         if (value.size() == 0) {
             // show warning
-            JOptionPane.showMessageDialog(PrideInspector.getInstance().getMainComponent(), "<html>FTP or ASPERA are required for file download. <br/> Please ensure that either port 21 is opened for FTP or ports 22, 33001 are opened for ASPERA</html>", "File Download", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(PrideInspector.getInstance().getMainComponent(),
+                    "<html>FTP or ASPERA are required for file download. <br/> Please ensure " +
+                    "that either port 21 is opened for FTP or ports 22, 33001 are opened for ASPERA</html>",
+                    "File Download", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
@@ -314,6 +318,5 @@ public class AssayFileDownloadDialog extends JDialog implements ActionListener, 
 
     @Override
     public void progress(TaskEvent<Integer> progress) {
-
     }
 }
