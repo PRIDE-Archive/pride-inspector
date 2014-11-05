@@ -87,6 +87,7 @@
         <jcip-annotations.version>1.0</jcip-annotations.version>
         <jsparklines.version>1.0.1</jsparklines.version>
         <aspera-faspmanager.version>2.7.0.42750</aspera-faspmanager.version>
+        <commons-net.version>3.3</commons-net.version>
     </properties>
 
     <dependencies>
@@ -290,6 +291,14 @@
             <artifactId>aspera-faspmanager</artifactId>
             <version>${aspera-faspmanager.version}</version>
         </dependency>
+
+        <!-- apache commons net api for FTP -->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>${commons-net.version}</version>
+        </dependency>
+
 
     </dependencies>
 

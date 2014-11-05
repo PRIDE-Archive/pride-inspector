@@ -81,6 +81,10 @@ pride.inspector.pride.out.message = Be aware that PRIDE public database instance
 delta.mz.max.limit = 4
 delta.mz.min.limit = -4
 
+# EBI ftp server and port
+ftp.EBI.host = ftp.pride.ebi.ac.uk
+ftp.EBI.port = 21
+
 # aspera client binary
 aspera.client.mac.binary = aspera/bin/mac-intel/ascp
 aspera.client.linux32.binary = aspera/bin/linux-32/ascp
@@ -93,7 +97,6 @@ aspera.client.private.key = aspera/etc/asperaweb_id_dsa.openssh
 # EBI aspera server details, not necessary for upload functionality
 aspera.EBI.host = fasp.ebi.ac.uk
 aspera.EBI.user = prd_ascp
-aspera.EBI.password = 9INbvrWR
 
 # aspera transfer parameters
 aspera.xfer.tcpPort = 22

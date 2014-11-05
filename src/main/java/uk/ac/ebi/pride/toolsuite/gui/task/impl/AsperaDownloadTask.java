@@ -5,11 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.archive.web.service.model.file.FileDetail;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
-import uk.ac.ebi.pride.toolsuite.gui.action.impl.OpenFileAction;
 import uk.ac.ebi.pride.toolsuite.gui.aspera.AsperaFileUploader;
 import uk.ac.ebi.pride.toolsuite.gui.component.utils.OSDetector;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.DesktopContext;
-import uk.ac.ebi.pride.toolsuite.gui.task.TaskAdapter;
 import uk.ac.ebi.pride.toolsuite.gui.utils.FileUtils;
 
 import java.io.File;
@@ -19,42 +17,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Download files using Aspera protocol
+ *
  * @author Rui Wang
  * @version $Id$
  */
-public class AsperaDownloadTask extends TaskAdapter<Void, String> implements TransferListener {
+public class AsperaDownloadTask extends FileDownloadTask implements TransferListener {
 
     public static final Logger logger = LoggerFactory.getLogger(AsperaDownloadTask.class);
-
-    private final List<FileDetail> filesToDownload;
-
-    private final boolean openFile;
-
-    private final File outputFolder;
-
-    /**
-     * Total file size need to be uploaded
-     */
-    private long totalFileSize;
 
     /**
      * Constructor used for a new submission
      */
     public AsperaDownloadTask(List<FileDetail> filesToDownload, File outputFolder, boolean openFile) {
-        this.filesToDownload= filesToDownload;
-        this.outputFolder = outputFolder;
-        this.openFile = openFile;
-        this.totalFileSize = calculateTotalFileSize();
-    }
+        super(filesToDownload, outputFolder, openFile);
 
-    private long calculateTotalFileSize() {
-        long fileSize = 0;
-
-        for (FileDetail fileDetail : filesToDownload) {
-            fileSize += fileDetail.getFileSize();
-        }
-
-        return fileSize;
     }
 
     @Override
@@ -163,12 +140,6 @@ public class AsperaDownloadTask extends TaskAdapter<Void, String> implements Tra
     }
 
 
-
-    @Override
-    protected void cancelled() {
-        publish("Download has been cancelled");
-    }
-
     @Override
     public void fileSessionEvent(TransferEvent transferEvent, SessionStats sessionStats, FileInfo fileInfo) {
 
@@ -181,8 +152,9 @@ public class AsperaDownloadTask extends TaskAdapter<Void, String> implements Tra
                 logger.debug("Files downloaded: " + numberOfDownloadedFiles);
                 logger.debug("Total file size " + totalFileSize);
                 logger.debug("Uploaded file size " + sessionStats.getTotalTransferredBytes());
-                int progress = (int) ((sessionStats.getTotalTransferredBytes() * 1.0 / totalFileSize)*100);
-                setProgress(progress);
+
+                // track progress
+                setDownloadProgress(sessionStats.getTotalTransferredBytes());
                 break;
             case SESSION_STOP:
                 FaspManager.destroy();
@@ -202,19 +174,5 @@ public class AsperaDownloadTask extends TaskAdapter<Void, String> implements Tra
                 publish("Failed to upload via Aspera: " + transferEvent.getDescription());
                 break;
         }
-    }
-
-    private void openFiles() {
-        List<File> downloadedFiles = new ArrayList<File>();
-
-        for (FileDetail fileDetail : filesToDownload) {
-            File downloadedFile = new File(outputFolder.getAbsolutePath(), fileDetail.getFileName());
-            if (downloadedFile.exists()) {
-                downloadedFiles.add(downloadedFile);
-            }
-        }
-
-        OpenFileAction openFileAction = new OpenFileAction(null, null, downloadedFiles);
-        openFileAction.actionPerformed(null);
     }
 }
