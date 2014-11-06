@@ -74,16 +74,6 @@ public class RetrieveProteinDetailTask extends AbstractDataAccessTask<Void, Tupl
         if (controller.hasProteinAmbiguityGroup())
             EventBus.publish(new SortProteinTableEvent(controller, SortProteinTableEvent.Type.DISABLE_SORT));
 
-<<<<<<< HEAD
-        try {
-
-            // iterate over each protein
-            for (Comparable protIdentId : protIdentIds) {
-                // get mapped protein accession
-                String protAcc = controller.getProteinAccession(protIdentId);
-                String protAccVersion = controller.getProteinAccessionVersion(protIdentId);
-                String database = controller.getSearchDatabase(protIdentId).getName();
-=======
         // iterate over each protein
         for (Comparable protIdentId : protIdentIds) {
             // get mapped protein accession
@@ -95,7 +85,6 @@ public class RetrieveProteinDetailTask extends AbstractDataAccessTask<Void, Tupl
                 AccessionResolver resolver = new AccessionResolver(protAcc, protAccVersion, database, true);
                 String mappedProtAcc = resolver.isValidAccession() ? resolver.getAccession() : null;
 
->>>>>>> 06e7d300151aad438bcb483bea79fc9da0d03544
 
                 if (mappedProtAcc != null) {
                     // get existing protein details

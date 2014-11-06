@@ -3,17 +3,14 @@ package uk.ac.ebi.pride.toolsuite.gui.task.impl;
 import org.bushe.swing.event.EventBus;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.TableContentType;
 import uk.ac.ebi.pride.toolsuite.gui.event.ProcessingDataSourceEvent;
-<<<<<<< HEAD
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskAdapter;
 import uk.ac.ebi.pride.utilities.mol.MoleculeUtilities;
 import uk.ac.ebi.pride.utilities.util.NumberUtilities;
-=======
-import uk.ac.ebi.pride.util.NumberUtilities;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.core.Modification;
 import uk.ac.ebi.pride.utilities.mol.MoleculeUtilities;
 import uk.ac.ebi.pride.utilities.util.Tuple;
->>>>>>> 06e7d300151aad438bcb483bea79fc9da0d03544
+
 
 import java.util.*;
 
