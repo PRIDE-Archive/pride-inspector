@@ -5,6 +5,7 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.reviewer;
 
 import org.jdesktop.swingx.JXTreeTable;
+import uk.ac.ebi.pride.archive.dataprovider.file.ProjectFileType;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.component.dialog.SimpleFileDialog;
@@ -135,7 +136,7 @@ public class MyProjectDownloadDialog extends JDialog implements TreeModelListene
             if (((SubmissionFileDetail) leaf).isDownload()) {
                 SubmissionFileDetail entry = (SubmissionFileDetail) leaf;
                 submissionFileDetails.add(entry);
-                if (entry.getFileType().equalsIgnoreCase("RESULT")) {
+                if (entry.getFileType().equals(ProjectFileType.RESULT)) {
                     toDownload = false;
                 }
             }

@@ -4,12 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.toolsuite.gui.access.DataAccessMonitor;
 import uk.ac.ebi.pride.toolsuite.gui.action.PrideAction;
-import uk.ac.ebi.pride.toolsuite.gui.component.db.DatabaseSearchPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.report.ReportListModel;
 import uk.ac.ebi.pride.toolsuite.gui.component.reviewer.LoginRecord;
 import uk.ac.ebi.pride.toolsuite.gui.component.startup.WelcomePane;
+import uk.ac.ebi.pride.toolsuite.gui.component.ws.PrideArchiveWSSearchPane;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.DesktopContext;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskManager;
+import uk.ac.ebi.pride.toolsuite.gui.utils.DataTransferProtocol;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 
 import javax.help.HelpBroker;
@@ -101,7 +102,12 @@ public class PrideInspectorContext extends DesktopContext {
     /**
      * database search pane
      */
-    private DatabaseSearchPane databaseSearchPane = null;
+    private PrideArchiveWSSearchPane prideArchiveWSSearchPane = null;
+
+    /**
+     * selected data transfter protocol
+     */
+    private DataTransferProtocol dataTransferProtocol;
 
     /**
      * Constructor
@@ -127,6 +133,18 @@ public class PrideInspectorContext extends DesktopContext {
 
         // set the default path for opening/saving files
         this.setOpenFilePath(System.getProperty("user.dir"));
+
+        // set the default protocol to aspera
+        this.setDataTransferProtocol(DataTransferProtocol.NONE);
+
+    }
+
+    public synchronized DataTransferProtocol getDataTransferProtocol() {
+        return dataTransferProtocol;
+    }
+
+    public synchronized void setDataTransferProtocol(DataTransferProtocol dataTransferProtocol) {
+        this.dataTransferProtocol = dataTransferProtocol;
     }
 
     /**
@@ -146,12 +164,12 @@ public class PrideInspectorContext extends DesktopContext {
         this.welcomePane = welcomePane;
     }
 
-    public DatabaseSearchPane getDatabaseSearchPane() {
-        return databaseSearchPane;
+    public PrideArchiveWSSearchPane getPrideArchiveWSSearchPane() {
+        return prideArchiveWSSearchPane;
     }
 
-    public void setDatabaseSearchPane(DatabaseSearchPane databaseSearchPane) {
-        this.databaseSearchPane = databaseSearchPane;
+    public void setPrideArchiveWSSearchPane(PrideArchiveWSSearchPane prideArchiveWSSearchPane) {
+        this.prideArchiveWSSearchPane = prideArchiveWSSearchPane;
     }
 
     /**

@@ -2,14 +2,14 @@ package uk.ac.ebi.pride.toolsuite.gui.task.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
-import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.MzIdentMLControllerImpl;
-import uk.ac.ebi.pride.utilities.data.core.SpectraData;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.access.EmptyDataAccessController;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskAdapter;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
+import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.MzIdentMLControllerImpl;
+import uk.ac.ebi.pride.utilities.data.core.SpectraData;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -55,7 +55,8 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
         context = ((PrideInspectorContext) Desktop.getInstance().getDesktopContext());
     }
 
-    public OpenFileTask(File inputFile, List<File> msFiles, Class<D> dataAccessControllerClass, String name, String description, Boolean inMemory) {
+    public OpenFileTask(File inputFile, List<File> msFiles, Class<D> dataAccessControllerClass,
+                        String name, String description, Boolean inMemory) {
         this.inputFile = inputFile;
         this.dataAccessControllerClass = dataAccessControllerClass;
         this.setName(name);
@@ -72,6 +73,7 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
         if (opened) {
             openExistingDataAccessController(inputFile);
         } else {
+            checkInterruption();
             // publish a notice for starting the file loading
             publish("Loading " + inputFile.getName());
             if(inMemory)
@@ -81,6 +83,12 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
         }
 
         return null;
+    }
+
+    private void checkInterruption() throws InterruptedException {
+        if (Thread.currentThread().interrupted()) {
+            throw new InterruptedException();
+        }
     }
 
     /**

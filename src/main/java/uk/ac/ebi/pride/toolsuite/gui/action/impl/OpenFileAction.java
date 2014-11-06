@@ -2,6 +2,7 @@ package uk.ac.ebi.pride.toolsuite.gui.action.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
 import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.*;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
@@ -54,7 +55,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        context = (PrideInspectorContext) uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop.getInstance().getDesktopContext();
+        context = (PrideInspectorContext) PrideInspector.getInstance().getDesktopContext();
         // create a open file dialog
         List<File> filesToOpen = inputFilesToOpen == null ? createFileOpenDialog() : inputFilesToOpen;
 

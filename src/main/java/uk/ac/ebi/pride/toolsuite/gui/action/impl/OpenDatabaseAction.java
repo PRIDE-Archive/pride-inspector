@@ -1,11 +1,11 @@
 package uk.ac.ebi.pride.toolsuite.gui.action.impl;
 
-import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.action.PrideAction;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
-import uk.ac.ebi.pride.toolsuite.gui.task.impl.OpenDatabaseSearchPaneTask;
 import uk.ac.ebi.pride.utilities.util.InternetChecker;
+import uk.ac.ebi.pride.toolsuite.gui.task.impl.OpenPrideArchiveWSSearchPaneTask;
+
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -27,11 +27,8 @@ public class OpenDatabaseAction extends PrideAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (InternetChecker.check()) {
-            // get desktop context
-            PrideInspectorContext context = (PrideInspectorContext) Desktop.getInstance().getDesktopContext();
-
             // create a new connection to pride database
-            OpenDatabaseSearchPaneTask newTask = new OpenDatabaseSearchPaneTask();
+            OpenPrideArchiveWSSearchPaneTask newTask = new OpenPrideArchiveWSSearchPaneTask();
             TaskUtil.startBackgroundTask(newTask);
         } else {
             String msg = Desktop.getInstance().getDesktopContext().getProperty("internet.connection.warning.message");

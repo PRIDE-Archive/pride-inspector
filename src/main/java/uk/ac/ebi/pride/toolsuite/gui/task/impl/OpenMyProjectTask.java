@@ -23,6 +23,8 @@ import java.util.List;
  */
 public class OpenMyProjectTask extends TaskAdapter<Void, Void> implements TaskListener<FileDetailList, String> {
 
+    private static final String DEFAULT_TASK_TITLE = "Open project";
+    private static final String DEFAULT_TASK_DESCRIPTION = "Open project";
     /**
      * list of proteomexchange accession
      */
@@ -41,6 +43,9 @@ public class OpenMyProjectTask extends TaskAdapter<Void, Void> implements TaskLi
         this.accession = accession;
         this.username = username;
         this.password = password;
+
+        this.setName(DEFAULT_TASK_TITLE);
+        this.setDescription(DEFAULT_TASK_DESCRIPTION);
 
     }
 
@@ -117,7 +122,9 @@ public class OpenMyProjectTask extends TaskAdapter<Void, Void> implements TaskLi
     }
 
     private void warning() {
-        JOptionPane.showMessageDialog(Desktop.getInstance().getMainComponent(), "Sorry, failed to retrieve details for " + accession, "Download Warning", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(Desktop.getInstance().getMainComponent(),
+                "Sorry, failed to retrieve details for " + accession,
+                "Download Warning", JOptionPane.WARNING_MESSAGE);
     }
 
     @Override

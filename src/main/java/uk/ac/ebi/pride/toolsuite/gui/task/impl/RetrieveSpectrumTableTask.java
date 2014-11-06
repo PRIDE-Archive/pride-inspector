@@ -118,11 +118,11 @@ public class RetrieveSpectrumTableTask extends AbstractDataAccessTask<Void, Tupl
                     content.add(NumberUtilities.scaleDouble(controller.getSumOfIntensity(specId), 1));
                     // Number of peaks
                     content.add(controller.getNumberOfSpectrumPeaks(specId));
-                    publish(new Tuple<TableContentType, List<Object>>(TableContentType.SPECTRUM, content));
+
                     // this is important for cancelling
-                    if (Thread.interrupted()) {
-                        throw new InterruptedException();
-                    }
+                    checkInterruption();
+
+                    publish(new Tuple<TableContentType, List<Object>>(TableContentType.SPECTRUM, content));
                 }
 
             }
@@ -131,9 +131,8 @@ public class RetrieveSpectrumTableTask extends AbstractDataAccessTask<Void, Tupl
             String msg = "Failed to retrieve spectrum related data";
             logger.error(msg, dex);
             appContext.addThrowableEntry(new ThrowableEntry(MessageType.ERROR, msg, dex));
-        } catch (InterruptedException ex) {
-            logger.warn("Spectrum table update has been cancelled");
         }
+
         return null;
     }
 }

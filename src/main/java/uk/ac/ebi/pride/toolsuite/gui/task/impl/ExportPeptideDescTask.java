@@ -198,9 +198,7 @@ public class ExportPeptideDescTask extends AbstractDataAccessTask<Void, Void> {
                         writer.print(LINE_SEPARATOR);
 
                         // this is important for cancelling
-                        if (Thread.interrupted()) {
-                            throw new InterruptedException();
-                        }
+                        checkInterruption();
                     }
                 }
             }
@@ -213,8 +211,6 @@ public class ExportPeptideDescTask extends AbstractDataAccessTask<Void, Void> {
             String msg = "Failed to write data to the output file, please check you have the right permission";
             logger.error(msg, e1);
             GUIUtilities.error(Desktop.getInstance().getMainComponent(), msg, "Export Error");
-        } catch (InterruptedException e3) {
-            logger.warn("Exporting peptide description has been interrupted");
         } finally {
             if (writer != null) {
                 writer.close();

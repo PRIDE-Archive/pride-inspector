@@ -4,11 +4,16 @@ open.file.icon.small=icon/16x16/open_file.png
 open.file.icon.medium=icon/24x24/open_file.png
 open.file.icon.large=icon/64x64/open_file.png
 
+pride.archive.project.detail = Projects
+pride.archive.assay.detail = Assays
+
 open.database.title=Search PRIDE
 open.database.tooltip=Connect and Search PRIDE Public Database
 open.database.icon.small=icon/16x16/search_database.png
 open.database.icon.medium=icon/24x24/search_database.png
 open.database.icon.large=icon/64x64/search_database.png
+
+reset.search.icon.small=icon/16x16/close_data_source.gif
 
 close.source.title=Close
 close.all.source.title=Close All

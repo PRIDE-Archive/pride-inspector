@@ -2,7 +2,7 @@ package uk.ac.ebi.pride.toolsuite.gui.component.reviewer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.prider.dataprovider.file.ProjectFileType;
+import uk.ac.ebi.pride.archive.dataprovider.file.ProjectFileType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -104,17 +104,17 @@ public class SummaryItemPanel extends JPanel {
         count[0] = submissionFileDetails.size();
         for (SubmissionFileDetail fileDetail : submissionFileDetails) {
 
-            final String fileType = fileDetail.getFileType();
+            final ProjectFileType fileType = fileDetail.getFileType();
 
-            if (fileType.equalsIgnoreCase("RESULT")) {
+            if (fileType.equals(ProjectFileType.RESULT)) {
                 count[1]++;
-            } else if (fileType.equalsIgnoreCase("RAW")) {
+            } else if (fileType.equals(ProjectFileType.RAW)) {
                 count[2]++;
-            } else if (fileType.equalsIgnoreCase("PEAK")) {
+            } else if (fileType.equals(ProjectFileType.PEAK)) {
                 count[3]++;
-            } else if (fileType.equalsIgnoreCase("SEARCH")) {
+            } else if (fileType.equals(ProjectFileType.SEARCH)) {
                 count[4]++;
-            } else if (fileType.equalsIgnoreCase("OTHER")) {
+            } else if (fileType.equals(ProjectFileType.OTHER)) {
                 count[5]++;
             }
         }

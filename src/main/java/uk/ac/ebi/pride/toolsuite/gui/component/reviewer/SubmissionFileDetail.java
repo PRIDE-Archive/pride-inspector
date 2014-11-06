@@ -1,5 +1,6 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.reviewer;
 
+import uk.ac.ebi.pride.archive.dataprovider.file.ProjectFileType;
 import uk.ac.ebi.pride.archive.web.service.model.file.FileDetail;
 
 import java.util.ArrayList;
@@ -62,11 +63,11 @@ public class SubmissionFileDetail {
 //        fileDetail.setId(id);
 //    }
 
-    public void setFileType(String fileType) {
+    public void setFileType(ProjectFileType fileType) {
         fileDetail.setFileType(fileType);
     }
 
-    public String getFileType() {
+    public ProjectFileType getFileType() {
         return fileDetail.getFileType();
     }
 

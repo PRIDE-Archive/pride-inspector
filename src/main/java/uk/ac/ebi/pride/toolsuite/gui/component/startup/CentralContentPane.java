@@ -129,7 +129,7 @@ public class CentralContentPane extends JPanel {
         if (DatabaseSearchEvent.Status.SHOW.equals(evt.getStatus())) {
             logger.debug("Database search pane is to be displayed, event status: " + evt.getStatus().name());
             // show database search pane
-            setContentPane(inspectorContext.getDatabaseSearchPane());
+            setContentPane(inspectorContext.getPrideArchiveWSSearchPane());
             // lock the central content panel
             setLocked(true);
             // deselect the foreground data access controller

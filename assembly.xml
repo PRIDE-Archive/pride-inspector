@@ -11,7 +11,8 @@
             <outputDirectory>${assembly.dir}/lib</outputDirectory>
             <unpack>false</unpack>
             <scope>runtime</scope>
-            <outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}.${artifact.extension}</outputFileNameMapping>
+            <outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}.${artifact.extension}
+            </outputFileNameMapping>
         </dependencySet>
     </dependencySets>
 
@@ -23,6 +24,7 @@
             </includes>
             <outputDirectory>${assembly.dir}</outputDirectory>
         </fileSet>
+
         <fileSet>
             <directory>${project.basedir}</directory>
             <outputDirectory>${assembly.dir}/log</outputDirectory>
@@ -30,6 +32,7 @@
                 <exclude>**/*</exclude>
             </excludes>
         </fileSet>
+
         <fileSet>
             <directory>${project.basedir}/examples</directory>
             <outputDirectory>${assembly.dir}/examples</outputDirectory>
@@ -37,9 +40,18 @@
                 <include>**/**</include>
             </includes>
         </fileSet>
+
         <fileSet>
             <directory>${project.basedir}/config</directory>
             <outputDirectory>${assembly.dir}/config</outputDirectory>
+            <includes>
+                <include>**/**</include>
+            </includes>
+        </fileSet>
+
+        <fileSet>
+            <directory>${project.basedir}/aspera</directory>
+            <outputDirectory>${assembly.dir}/aspera</outputDirectory>
             <includes>
                 <include>**/**</include>
             </includes>

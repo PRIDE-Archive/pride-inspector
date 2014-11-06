@@ -63,39 +63,38 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
     @Override
     protected Void doInBackground() throws Exception {
         if (folder != null) {
-            try {
+            for (SubmissionFileDetail submissionEntry : submissionEntries) {
+                // create a http connection
+                DesktopContext context = Desktop.getInstance().getDesktopContext();
 
-                for (SubmissionFileDetail submissionEntry : submissionEntries) {
-                    // create a http connection
-                    DesktopContext context = Desktop.getInstance().getDesktopContext();
+                // initialize the download
+                String url = buildFileDownloadUrl(context.getProperty("prider.file.download.url"), submissionEntry.getProjectAccession(), submissionEntry.getFileName());
 
-                    // initialize the download
-                    String url = buildFileDownloadUrl(context.getProperty("prider.file.download.url"), submissionEntry.getProjectAccession(), submissionEntry.getFileName());
+                // get output file path
+                File output = new File(folder.getAbsolutePath() + File.separator + submissionEntry.getFileName());
 
-                    // get output file path
-                    File output = new File(folder.getAbsolutePath() + File.separator + submissionEntry.getFileName());
+                // download submission file
+                String host = context.getProperty("prider.host.url");
+                int port = Integer.parseInt(context.getProperty("prider.host.port"));
+                output = downloadFile(host, port, url, output, user, password, submissionEntry.getFileSize());
 
-                    // download submission file
-                    String host = context.getProperty("prider.host.url");
-                    int port = Integer.parseInt(context.getProperty("prider.host.port"));
-                    output = downloadFile(host, port, url, output, user, password, submissionEntry.getFileSize());
-
-                    // open file
-                    if (toOpenFile && output != null) {
-                        OpenFileAction openFileAction = new OpenFileAction(null, null, Arrays.asList(output));
-                        openFileAction.actionPerformed(null);
-                    }
-
-                    // this is important for cancelling
-                    if (Thread.interrupted()) {
-                        throw new InterruptedException();
-                    }
+                // open file
+                if (toOpenFile && output != null) {
+                    OpenFileAction openFileAction = new OpenFileAction(null, null, Arrays.asList(output));
+                    openFileAction.actionPerformed(null);
                 }
-            } catch (InterruptedException e) {
-                logger.warn("Experiment downloading has been interrupted");
+
+                // this is important for cancelling
+                checkInterruption();
             }
         }
         return null;
+    }
+
+    private void checkInterruption() throws InterruptedException {
+        if (Thread.currentThread().interrupted()) {
+            throw new InterruptedException();
+        }
     }
 
     private String buildFileDownloadUrl(String url, String accession, String fileName) throws UnsupportedEncodingException {
@@ -114,7 +113,7 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
             // credential provider
             BasicCredentialsProvider basicCredentialsProvider = new BasicCredentialsProvider();
             basicCredentialsProvider.setCredentials(new AuthScope(AuthScope.ANY),
-                                                    new UsernamePasswordCredentials(userName, password));
+                    new UsernamePasswordCredentials(userName, password));
 
             client = HttpClients.custom().setDefaultCredentialsProvider(basicCredentialsProvider).build();
 

@@ -76,8 +76,16 @@ public class OpenGzippedFileTask extends TaskAdapter<Void, File> {
                     bos.close();
                 }
             }
+
+            checkInterruption();
         }
 
         return null;
+    }
+
+    private void checkInterruption() throws InterruptedException {
+        if (Thread.currentThread().interrupted()) {
+            throw new InterruptedException();
+        }
     }
 }
