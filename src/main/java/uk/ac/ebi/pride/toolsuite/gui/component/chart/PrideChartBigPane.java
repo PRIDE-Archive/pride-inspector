@@ -8,14 +8,12 @@ import uk.ac.ebi.pride.toolsuite.chart.dataset.PrideDataType;
 import uk.ac.ebi.pride.toolsuite.chart.io.ElderJSONReader;
 import uk.ac.ebi.pride.toolsuite.chart.io.PrideDataReader;
 import uk.ac.ebi.pride.toolsuite.chart.io.QuartilesType;
-import uk.ac.ebi.pride.toolsuite.chart.plot.AverageMSPlot;
-import uk.ac.ebi.pride.toolsuite.chart.plot.DeltaMZPlot;
-import uk.ac.ebi.pride.toolsuite.chart.plot.PeakIntensityPlot;
-import uk.ac.ebi.pride.toolsuite.chart.plot.PrecursorMassesPlot;
+import uk.ac.ebi.pride.toolsuite.chart.plot.*;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.DesktopContext;
 import uk.ac.ebi.pride.toolsuite.gui.prop.PropertyManager;
+import uk.ac.ebi.pride.utilities.util.Tuple;
 
 import javax.help.CSH;
 import javax.swing.*;
@@ -33,8 +31,8 @@ import java.util.Map;
  * <p>Class to show a big size chart with a toolbar for browsing and manage the charts contained in PRIDE Inspector.</p>
  *
  * @author Antonio Fabregat
- * Date: 23-ago-2010
- * Time: 14:36:02
+ * @author ypriverol
+ *
  */
 public class PrideChartBigPane extends PrideChartPane {
 
@@ -97,6 +95,84 @@ public class PrideChartBigPane extends PrideChartPane {
             jtb.setOpaque(false);
             optionPane.add(jtb);
             btnOptions.add(jtb);
+        }
+
+        return optionPane;
+    }
+
+    private JPanel getQuantitationOptionPane(final QuantitationChart plot) {
+
+//        JPanel optionPane = new JPanel(new VerticalLayout());
+//
+//        //Options title
+//        JLabel title = new JLabel("Chart Options");
+//        Font titleFont = new Font(title.getFont().getFontName(), Font.BOLD, 15);
+//        title.setFont(titleFont);
+//        JPanel titleBar = new JPanel();
+//        titleBar.add(title);
+//        titleBar.setBackground(Color.WHITE);
+//        optionPane.add(titleBar);
+//
+//        Map<String, Boolean> optionList = plot.getOptionStudyList();
+//        final ButtonGroup btnOptions = new ButtonGroup();
+//        JToggleButton jtb;
+//        for (String dataType : optionList.keySet()) {
+//            jtb = new JRadioButton(dataType);
+//            jtb.setEnabled(optionList.get(dataType));
+//            jtb.setSelected(dataType == PrideDataType.ALL_SPECTRA.getTitle());
+//            jtb.addMouseListener(new MouseAdapter() {
+//                @Override
+//                public void mouseClicked(MouseEvent e) {
+//                    Enumeration<AbstractButton> it = btnOptions.getElements();
+//                    AbstractButton option;
+//                    while (it.hasMoreElements()) {
+//                        option = it.nextElement();
+//                        if (option.isSelected()) {
+//                            plot.updateSpectraSeries(option.getText());
+//                        }
+//                    }
+//                }
+//            });
+//            jtb.setOpaque(false);
+//            optionPane.add(jtb);
+//            btnOptions.add(jtb);
+//        }
+//
+//        return optionPane;
+
+        JPanel optionPane = new JPanel(new VerticalLayout());
+
+        //Options title
+        JLabel title = new JLabel("Chart Options");
+        Font titleFont = new Font(title.getFont().getFontName(), Font.BOLD, 15);
+        title.setFont(titleFont);
+        JPanel titleBar = new JPanel();
+        titleBar.add(title);
+        titleBar.setBackground(Color.WHITE);
+        optionPane.add(titleBar);
+
+        Map<String, Tuple<Boolean, Boolean>> optionList = plot.getOptionStudyList();
+        final java.util.List<JToggleButton> jtbList = new ArrayList<JToggleButton>();
+        JToggleButton jtb;
+        for (String dataType : optionList.keySet()) {
+            jtb = new JCheckBox(dataType);
+            jtb.setEnabled(optionList.get(dataType).getKey());
+            jtb.setSelected(optionList.get(dataType).getValue());
+            jtb.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    Iterator<JToggleButton> it = jtbList.iterator();
+                    AbstractButton option;
+                    while (it.hasNext()) {
+                        option = it.next();
+                        //plot.setVisible(option.isSelected(), PrideDataType.findBy(option.getText()));
+                        plot.updateSpectraSeries(option.isSelected(), option.getText());
+                    }
+                }
+            });
+            jtb.setOpaque(false);
+            optionPane.add(jtb);
+            jtbList.add(jtb);
         }
 
         return optionPane;
@@ -221,7 +297,85 @@ public class PrideChartBigPane extends PrideChartPane {
         return optionPane;
     }
 
+    private JPanel getPeakMSOptionPane(final PeaksMSPlot plot) {
+
+        JPanel optionPane = new JPanel(new VerticalLayout());
+
+        //Options title
+        JLabel title = new JLabel("Chart Options");
+        Font titleFont = new Font(title.getFont().getFontName(), Font.BOLD, 15);
+        title.setFont(titleFont);
+        JPanel titleBar = new JPanel();
+        titleBar.add(title);
+        titleBar.setBackground(Color.WHITE);
+        optionPane.add(titleBar);
+
+        Map<PrideDataType, Boolean> optionList = plot.getOptionList();
+        final java.util.List<JToggleButton> jtbList = new ArrayList<JToggleButton>();
+        JToggleButton jtb;
+        for (PrideDataType dataType : optionList.keySet()) {
+            jtb = new JCheckBox(dataType.getTitle());
+            jtb.setEnabled(optionList.get(dataType));
+            jtb.setSelected(dataType == PrideDataType.ALL_SPECTRA);
+            jtb.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    Iterator<JToggleButton> it = jtbList.iterator();
+                    AbstractButton option;
+                    while (it.hasNext()) {
+                        option = it.next();
+                        plot.setVisible(option.isSelected(), PrideDataType.findBy(option.getText()));
+                    }
+                }
+            });
+            jtb.setOpaque(false);
+            optionPane.add(jtb);
+            jtbList.add(jtb);
+        }
+
+        return optionPane;
+    }
+
     private JPanel getDeltaMassOptionPane(final DeltaMZPlot plot) {
+
+        JPanel optionPane = new JPanel(new VerticalLayout());
+
+        //Options title
+        JLabel title = new JLabel("Chart Options");
+        Font titleFont = new Font(title.getFont().getFontName(), Font.BOLD, 15);
+        title.setFont(titleFont);
+        JPanel titleBar = new JPanel();
+        titleBar.add(title);
+        titleBar.setBackground(Color.WHITE);
+        optionPane.add(titleBar);
+
+        Map<PrideDataType, Boolean> optionList = plot.getOptionList();
+        final java.util.List<JToggleButton> jtbList = new ArrayList<JToggleButton>();
+        JToggleButton jtb;
+        for (PrideDataType dataType : optionList.keySet()) {
+            jtb = new JCheckBox(dataType.getTitle());
+            jtb.setEnabled(optionList.get(dataType));
+            jtb.setSelected(dataType == PrideDataType.IDENTIFIED_SPECTRA);
+            jtb.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    Iterator<JToggleButton> it = jtbList.iterator();
+                    AbstractButton option;
+                    while (it.hasNext()) {
+                        option = it.next();
+                        plot.setVisible(option.isSelected(), PrideDataType.findBy(option.getText()));
+                    }
+                }
+            });
+            jtb.setOpaque(false);
+            optionPane.add(jtb);
+            jtbList.add(jtb);
+        }
+
+        return optionPane;
+    }
+
+    private JPanel getMissCleavageOptionPane(final MissedCleavagesPlot plot) {
 
         JPanel optionPane = new JPanel(new VerticalLayout());
 
@@ -278,6 +432,15 @@ public class PrideChartBigPane extends PrideChartPane {
                 break;
             case DELTA_MASS:
                 optionPane = getDeltaMassOptionPane((DeltaMZPlot) chart.getPlot());
+                break;
+            case MISSED_CLEAVAGES:
+                optionPane = getMissCleavageOptionPane((MissedCleavagesPlot) chart.getPlot());
+                break;
+            case PEAKS_MS:
+                optionPane = getPeakMSOptionPane((PeaksMSPlot) chart.getPlot());
+                break;
+            case QUANTITATION_PEPTIDES:
+                optionPane = getQuantitationOptionPane((QuantitationChart) chart.getPlot());
                 break;
             default:
                 optionPane = null;
@@ -362,7 +525,14 @@ public class PrideChartBigPane extends PrideChartPane {
         String optionTooltip = propMgr.getProperty("chart_options.tooltip");
         final PrideChartButton btnOptions = new PrideChartButton(optionIcon, optionTooltip);
 
-        btnOptions.setEnabled(chartType == PrideChartType.AVERAGE_MS || chartType == PrideChartType.PRECURSOR_MASSES || chartType == PrideChartType.PEAK_INTENSITY || chartType == PrideChartType.DELTA_MASS);
+        btnOptions.setEnabled(chartType == PrideChartType.AVERAGE_MS ||
+                chartType == PrideChartType.PRECURSOR_MASSES ||
+                chartType == PrideChartType.PEAK_INTENSITY ||
+                chartType == PrideChartType.DELTA_MASS ||
+                chartType == PrideChartType.PEAKS_MS ||
+                chartType == PrideChartType.MISSED_CLEAVAGES ||
+                chartType == PrideChartType.QUANTITATION_PEPTIDES
+        );
 
         // If the chart has options, the behaviour of the options button has to be like a standard JToggleButton
         if (btnOptions.isEnabled()) {

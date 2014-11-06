@@ -512,8 +512,6 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
             return legendMap.get(rowKey);
         }
 
-
-
     }
 
     private class QuantCategoryItemLabelGenerator extends StandardCategoryItemLabelGenerator {
