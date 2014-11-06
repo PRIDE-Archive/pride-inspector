@@ -33,6 +33,7 @@ public class HyperLinkCellRenderer extends JLabel implements TableCellRenderer {
 
     public HyperLinkCellRenderer(Pattern pattern, boolean shorten) {
         this.setOpaque(true);
+        this.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 0));
         this.pattern = pattern;
         this.shorten = shorten;
     }

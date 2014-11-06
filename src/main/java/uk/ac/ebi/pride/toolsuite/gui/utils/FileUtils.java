@@ -3,6 +3,8 @@ package uk.ac.ebi.pride.toolsuite.gui.utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 /**
  * @author Rui Wang
@@ -31,5 +33,32 @@ public final class FileUtils {
             if (fileHandler != null)
                 fileHandler.close();
         }
+    }
+
+
+    /**
+     * Get the root path from the jar
+     *
+     * @return root path in string
+     */
+    public static String getAbsolutePath() throws UnsupportedEncodingException {
+        String jarDir;
+
+        //get absolute path including jar filename
+        String jarPath = FileUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+
+        String decodedJarPath = URLDecoder.decode(jarPath, "UTF-8");
+        //convert String object to File object in order to be able to use getParent()
+        File jarFile = new File(decodedJarPath);
+        //this is the directory one level above the jar file
+        File jarParent = new File(jarFile.getParent());
+        // this is the directory two levels above the jar file
+        if (!decodedJarPath.endsWith("jar"))
+            jarDir = jarParent.getParent();
+        else
+            jarDir = jarParent.getAbsolutePath();
+
+
+        return jarDir;
     }
 }

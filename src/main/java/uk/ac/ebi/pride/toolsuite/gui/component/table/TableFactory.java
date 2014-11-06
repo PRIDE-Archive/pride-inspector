@@ -5,6 +5,7 @@ import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.table.DefaultTableColumnModelExt;
 import org.jdesktop.swingx.table.TableColumnExt;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.filter.AssayDownloadButtonCellEditor;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.listener.*;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.*;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.renderer.*;
@@ -1181,4 +1182,90 @@ public class TableFactory {
         return ma;
     }
 
+    public static JXTable createProjectDetailTable() {
+        ProjectTableModel projectTableModel = new ProjectTableModel();
+        JXTable table = createDefaultJXTable(projectTableModel);
+
+        // add hyper link click listener
+        String projectAccessionHeader = ProjectTableModel.TableHeader.ACCESSION.getHeader();
+
+        TableColumnExt projectAccessionColumn = (TableColumnExt) table.getColumn(projectAccessionHeader);
+        projectAccessionColumn.setCellRenderer(new HyperLinkCellRenderer());
+
+        String projectUrl = Desktop.getInstance().getDesktopContext().getProperty("prider.project.url");
+        table.addMouseMotionListener(new TableCellMouseMotionListener(table, projectAccessionHeader));
+        table.addMouseListener(new HyperLinkCellMouseClickListener(table, projectAccessionHeader, new PrefixedHyperLinkGenerator(projectUrl)));
+
+        // title column
+        TableColumnExt projectTitleColumn = (TableColumnExt) table.getColumn(ProjectTableModel.TableHeader.TITLE.getHeader());
+        projectTitleColumn.setPreferredWidth(200);
+
+
+        // publication date
+        TableColumnExt publicationDateColumn = (TableColumnExt) table.getColumn(ProjectTableModel.TableHeader.PUBLICATION_DATE.getHeader());
+        publicationDateColumn.setCellRenderer(new DateRenderer());
+
+        return table;
+    }
+
+    public static JXTable createAssayDetailTable() {
+        AssayTableModel assayTableModel = new AssayTableModel();
+        JXTable table = createDefaultJXTable(assayTableModel);
+
+        // add hyper link click listener
+        String assayAccessionHeader = AssayTableModel.TableHeader.ACCESSION.getHeader();
+
+        TableColumnExt assayAccessionColumn = (TableColumnExt) table.getColumn(assayAccessionHeader);
+        assayAccessionColumn.setCellRenderer(new HyperLinkCellRenderer());
+
+        String assayUrl = Desktop.getInstance().getDesktopContext().getProperty("prider.assay.url");
+        table.addMouseMotionListener(new TableCellMouseMotionListener(table, assayAccessionHeader));
+        table.addMouseListener(new HyperLinkCellMouseClickListener(table, assayAccessionHeader, new PrefixedHyperLinkGenerator(assayUrl)));
+
+        // title column
+        TableColumnExt assayTitleColumn = (TableColumnExt) table.getColumn(AssayTableModel.TableHeader.TITLE.getHeader());
+        assayTitleColumn.setPreferredWidth(200);
+
+        //download column
+        String downloadHeader = AssayTableModel.TableHeader.DOWNLOAD.getHeader();
+        TableColumnExt downloadColumn = (TableColumnExt) table.getColumn(downloadHeader);
+        String downloadText = "Download";
+        downloadColumn.setCellRenderer(new ButtonCellRenderer(downloadText, null));
+        downloadColumn.setCellEditor(new AssayDownloadButtonCellEditor(downloadText, null));
+
+        return table;
+    }
+
+    public static JTable createAssayFileDownloadTable() {
+
+        AssayFileDownloadTableModel assayFileDownloadTableModel = new AssayFileDownloadTableModel();
+        JXTable table = createDefaultJXTable(assayFileDownloadTableModel);
+
+        // set file selection column width
+        TableColumnExt selectionColumn = (TableColumnExt) table.getColumn(AssayFileDownloadTableModel.TableHeader.SELECTION.getHeader());
+        selectionColumn.setMaxWidth(20);
+        selectionColumn.setMinWidth(20);
+
+        // file selection checkbox
+        selectionColumn.setCellRenderer(new CheckboxCellRenderer());
+        DefaultCellEditor checkBoxCellEditor = new DefaultCellEditor(new JCheckBox());
+        selectionColumn.setCellEditor(checkBoxCellEditor);
+
+        // title column
+        TableColumnExt assayFileNameColumn = (TableColumnExt) table.getColumn(AssayFileDownloadTableModel.TableHeader.FILE_NAME.getHeader());
+        assayFileNameColumn.setPreferredWidth(200);
+
+        // file type
+        TableColumnExt assayFileTypeColumn = (TableColumnExt) table.getColumn(AssayFileDownloadTableModel.TableHeader.TYPE.getHeader());
+        assayFileTypeColumn.setMaxWidth(80);
+
+        // file size
+        TableColumnExt assayFileSizeColumn = (TableColumnExt) table.getColumn(AssayFileDownloadTableModel.TableHeader.SIZE.getHeader());
+        assayFileSizeColumn.setMaxWidth(80);
+
+        // add mouse motion listener
+        table.addMouseListener(new AssayFileDownloadSelectionListener(table));
+
+        return table;
+    }
 }
