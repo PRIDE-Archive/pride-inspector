@@ -4,8 +4,8 @@
     <groupId>uk.ac.ebi.pride.toolsuite</groupId>
     <artifactId>pride-inspector</artifactId>
     <packaging>jar</packaging>
-    <version>2.1.1</version>
-    <name>Pride Inspector Tool</name>
+    <version>2.5.0-SNAPSHOT</version>
+    <name>pride-inspector</name>
     <url>http://code.google.com/p/pride-toolsuite/wiki/PRIDEInspector</url>
 
 
@@ -62,7 +62,7 @@
         <junit.version>4.11</junit.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <logback-core.version>1.0.11</logback-core.version>
-        <ms-data-core-api.version>0.11.25-SNAPSHOT</ms-data-core-api.version>
+        <ms-data-core-api.version>0.11.27-SNAPSHOT</ms-data-core-api.version>
         <inspector-mzgraph-browser.version>2.0.0-SNAPSHOT</inspector-mzgraph-browser.version>
         <inspector-quality-chart.version>2.0.0-SNAPSHOT</inspector-quality-chart.version>
         <inspector-swing-utils.version>2.0.0-SNAPSHOT</inspector-swing-utils.version>
@@ -361,7 +361,7 @@
                     </excludes>
                     <archive>
                         <manifest>
-                            <mainClass>uk.ac.ebi.pride.toolsuitegui.PrideInspectorBootstrap</mainClass>
+                            <mainClass>uk.ac.ebi.pride.toolsuite.gui.PrideInspectorBootstrap</mainClass>
                             <!--use this if want to extract metadata from public mysql instance-->
                             <!--<mainClass>uk.ac.ebi.pride.data.io.db.DBMetadataExtractor</mainClass>-->
                             <!--use this if want to run batch dbtest-->

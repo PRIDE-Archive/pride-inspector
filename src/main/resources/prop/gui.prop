@@ -13,6 +13,8 @@ open.database.icon.small=icon/16x16/search_database.png
 open.database.icon.medium=icon/24x24/search_database.png
 open.database.icon.large=icon/64x64/search_database.png
 
+reset.search.icon.small=icon/16x16/close_data_source.gif
+
 close.source.title=Close
 close.all.source.title=Close All
 close.source.tooltip=Close file/database connection

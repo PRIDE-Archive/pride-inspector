@@ -1,6 +1,7 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.ws;
 
 import org.jdesktop.swingx.JXTable;
+import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.TableFactory;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.AssayTableModel;
@@ -30,6 +31,8 @@ public class PrideArchiveWSSearchPane extends JPanel {
     private JTextField searchField;
     private JXTable projectDetailTable;
     private JXTable assayDetailTable;
+    private JLabel searchResultLabel;
+    private JPanel searchResultPanel;
 
 
     public PrideArchiveWSSearchPane() {
@@ -42,7 +45,7 @@ public class PrideArchiveWSSearchPane extends JPanel {
         addComponents();
 
         // perform the initial search
-        search();
+        search("");
 
     }
 
@@ -92,7 +95,7 @@ public class PrideArchiveWSSearchPane extends JPanel {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                search();
+                search(searchField.getText().trim());
             }
         });
         searchButton.setPreferredSize(new Dimension(100, 40));
@@ -105,7 +108,7 @@ public class PrideArchiveWSSearchPane extends JPanel {
             @Override
             public void keyTyped(KeyEvent e) {
                 if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-                    search();
+                    search(searchField.getText().trim());
                 }
             }
         });
@@ -139,6 +142,33 @@ public class PrideArchiveWSSearchPane extends JPanel {
         projectDetailLabel.setFont(projectDetailLabel.getFont().deriveFont(Font.BOLD));
         projectDetailLabel.setOpaque(false);
         projectDetailLabelPanel.add(projectDetailLabel, BorderLayout.WEST);
+
+
+        // search result label
+        searchResultPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        searchResultLabel = new JLabel();
+        searchResultLabel.setFont(searchResultLabel.getFont().deriveFont(Font.BOLD).deriveFont(Font.ITALIC).deriveFont(14f));
+        searchResultLabel.setForeground(new Color(0, 60, 200, 200));
+        searchResultLabel.setOpaque(false);
+        searchResultPanel.add(searchResultLabel);
+
+        String resetImageProperty = appContext.getProperty("reset.search.icon.small");
+        Icon resetIcon = GUIUtilities.loadIcon(resetImageProperty);
+        JButton resetSearchButton = GUIUtilities.createLabelLikeButton(resetIcon, "");
+        resetSearchButton.setBorder(BorderFactory.createEmptyBorder());
+        resetSearchButton.setPreferredSize(new Dimension(16, 16));
+        resetSearchButton.setOpaque(false);
+        resetSearchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                search("");
+            }
+        });
+        searchResultPanel.add(resetSearchButton);
+
+        searchResultPanel.setVisible(false);
+        projectDetailLabelPanel.add(searchResultPanel, BorderLayout.EAST);
+
         projectDetailPanel.add(projectDetailLabelPanel, BorderLayout.NORTH);
 
         // project detail table
@@ -188,9 +218,14 @@ public class PrideArchiveWSSearchPane extends JPanel {
     /**
      * Search to retrieve the results
      */
-    private void search() {
-        // get the text for search field
-        String searchTerm = searchField.getText().trim();
+    private void search(String searchTerm) {
+        if (searchTerm != null && searchTerm.length() > 0) {
+            searchResultPanel.setVisible(true);
+            searchResultLabel.setText("Search results for \"" + searchTerm + "\"");
+        } else {
+            searchResultPanel.setVisible(false);
+            searchResultLabel.setText("");
+        }
 
         // clear assay table model
         AssayTableModel assayDetailTableModel = (AssayTableModel) assayDetailTable.getModel();
