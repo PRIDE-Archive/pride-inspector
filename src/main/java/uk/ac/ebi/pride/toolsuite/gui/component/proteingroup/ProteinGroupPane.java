@@ -1,12 +1,21 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.proteingroup;
 
-import edu.uci.ics.jung.algorithms.cluster.EdgeBetweennessClusterer;
-import edu.uci.ics.jung.algorithms.layout.*;
-import edu.uci.ics.jung.graph.*;
-import edu.uci.ics.jung.graph.util.Graphs;
+import de.mpc.pia.core.intermediate.IntermediateGroup;
+import de.mpc.pia.core.intermediate.IntermediatePeptide;
+import de.mpc.pia.core.intermediate.IntermediatePeptideSpectrumMatch;
+import de.mpc.pia.core.intermediate.IntermediateProtein;
+import de.mpc.pia.core.intermediate.IntermediateStructure;
+import de.mpc.pia.core.intermediate.prideimpl.PrideImportController;
+import de.mpc.pia.core.modeller.PIAModeller;
+import edu.uci.ics.jung.algorithms.layout.CircleLayout;
+import edu.uci.ics.jung.algorithms.layout.FRLayout2;
+import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.StaticLayout;
+import edu.uci.ics.jung.algorithms.layout.util.Relaxer;
+import edu.uci.ics.jung.algorithms.layout.util.VisRunner;
+import edu.uci.ics.jung.algorithms.util.IterativeContext;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import edu.uci.ics.jung.visualization.Layer;
-import edu.uci.ics.jung.visualization.VisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -14,614 +23,1113 @@ import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.LayoutTransition;
+import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.util.Animator;
-import org.apache.commons.collections15.Factory;
+
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 import org.apache.commons.collections15.functors.MapTransformer;
 import org.apache.commons.collections15.map.LazyMap;
+
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskEvent;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
-import uk.ac.ebi.pride.utilities.data.core.Peptide;
-import uk.ac.ebi.pride.utilities.data.core.PeptideSequence;
 import uk.ac.ebi.pride.utilities.data.core.Protein;
-import uk.ac.ebi.pride.utilities.mol.PTModification;
-import uk.ac.ebi.pride.utilities.util.Tuple;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
+import javax.swing.table.DefaultTableModel;
+
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Paint;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Ellipse2D;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.geom.Point2D;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.Map;
+import java.util.Set;
+
 
 /**
- * This panel will show the information of the Protein Groups and the peptides and proteins that are connected
- * @author ypriverol
+ * This panel will show the information of the Protein Groups and the peptides
+ * and proteins that are connected
+ * 
+ * @author ypriverol, julianu
  */
-public class ProteinGroupPane extends DataAccessControllerPane<Void, Protein>{
+public class ProteinGroupPane
+		extends DataAccessControllerPane<Void, Protein>
+		implements ItemListener, ActionListener {
+	
+	/** access controller to access the data (proteins, peptides, PSMs...) */
+	private DataAccessController controller;
+	
+	/** id of the selected protein */
+	private Comparable selectedProteinId;
+	
+	/** the accession of the selected protein (created while building the intermediate structure) */
+	private String selectedProteinAccession;
+	
+	/** id of the selected protein group */
+	private Comparable selectedProteinGroupId;
+	
+	/** the PIA intermediate structure for the visualization */
+	private IntermediateStructure intermediateStructure;
+	
+	
+	/** the viewer for the graphical visualization  */
+	private VisualizationViewer<VertexObject, String> visualizationViewer;
+	
+	/** the shown graph */
+	private DirectedSparseGraph<VertexObject, String> graph;
+	
+	/** the picked status of the graph, i.e. which vertex is selected */
+	private PickedState<VertexObject> pickedState;
+	
+	/** the picked status of the graph, i.e. which vertex is selected */
+	private Layout<VertexObject, String> layout;
+	
+	/** the mouse handler for the graph */
+	private DefaultModalGraphMouse<VertexObject, String> graphMouse;
+	
+	
+	/** the currently selected vertex */
+	private VertexObject selectedVertex;
+	
+	/** mapping from the group's label to whether its accessions are shown */
+	private Map<String, Boolean> expandedAccessions;
+	
+	/** mapping from the group's label to whether its peptides are shown */
+	private Map<String, Boolean> expandedPeptides;
+	
+	/** mapping from the peptide's label to whether its spectra a shown */
+	private Map<String, Boolean> showPSMs;
+	
+	
+	/** mapping from the group ID to the vertex in the graph */
+	private Map<Integer, VertexObject> groupVertices;
+	
+	
+	/** button to collapse/uncollapse proteins */
+	private JButton btnCollapseUncollapseProteins;
+	
+	/** button to collapse/uncollapse peptides */
+	private JButton btnCollapseUncollapsePeptides;
+	
+	/** button to show/hide PSMs */
+	private JButton btnShowHidePSMs;
+	
+	/** table showing information of selected vertex */
+	private JTable informationTable;
+	
+	/** comboBox for layout changing */
+	private JComboBox layoutComboBox;
+	
+	
+	/** title for the score threshold slider */
+	private static final String TITLE_SCORE_THRESHOLD = "Score Threshold: ";
+	
+	/** the default used layout */
+	private static final Class<? extends Layout> defaultLayout = FRLayout2.class;
+	
+	
+	/** the painting information for the vertices (PSMs, peptides, proteins, "groups") */
+	private Map<VertexObject, Paint> vertexPaints;
+	
+	/** the painting information for the edges */
+	private Map<String, Paint> edgePaints;
+	
+	
+	
+	private static final Color FADED_COLOR = Color.LIGHT_GRAY;
+	private static final Color SELECTED_COLOR = Color.RED;
+	private static final Color GROUP_COLOR = new Color(0x000080);
+	private static final Color PROTEIN_COLOR = new Color(0x008000);
+	private static final Color PEPTIDE_COLOR = new Color(0xffa500);
+	private static final Color PSM_COLOR = new Color(0x87ceeb);
+	private static final Color EDGE_COLOR = Color.BLACK;
+	
+	private static final String PROTEINS_OF_PREFIX = "proteins_of_";
+	private static final String PEPTIDES_OF_PREFIX = "peptides_of_";
 
-    DataAccessController controller;
-
-    private VisualizationViewer<String,String> visualizationViewer;
-
-    //To be used with two main layout Tree Layout and FreeLayout
-    ConcurrentMap<uk.ac.ebi.pride.utilities.mol.Peptide, String>   peptideVertices = null;
-
-    ConcurrentMap<Protein, String>           proteinVertices = null;
-
-    ConcurrentMap<Peptide, String>           psmVertices = null;
-
-    List<Tuple<Protein, uk.ac.ebi.pride.utilities.mol.Peptide>> edgestProteinPeptides;
-
-    Forest<String, String> graph;
-
-    Map<String,Paint> vertexPaints;
-
-    Map<String,Paint> edgePaints;
-
-    Comparable idProtein = null;
-
-    ScalingControl scaler = new CrossoverScalingControl();
-
-    final String COMMAND_STRING = "Score Threshold: ";
-
-    Factory<DirectedGraph<String,String>> graphFactory;
-
-    Factory<Tree<String,String>> treeFactory;
-    Factory<String> edgeFactory;
-
-    Factory<String> vertexFactory;
-
-    private Comparable proteinGroupId;
-
-
-
+	
+	
+	
     public ProteinGroupPane(DataAccessController controller, Comparable proteinId, Comparable proteinGroupId) {
         super(controller);
+        
+        this.intermediateStructure = null;
+        this.selectedProteinAccession = null;
+        
         this.controller = controller;
-        this.idProtein = proteinId;
-        this.proteinGroupId = proteinGroupId;
-        peptideVertices = new ConcurrentHashMap<uk.ac.ebi.pride.utilities.mol.Peptide, String>();
-        proteinVertices = new ConcurrentHashMap<Protein, String>();
-        psmVertices     = new ConcurrentHashMap<Peptide, String>();
-        edgestProteinPeptides = new ArrayList<Tuple<Protein, uk.ac.ebi.pride.utilities.mol.Peptide>>();
-        try {
-            setUpView();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        this.selectedProteinId = proteinId;
+        this.selectedProteinGroupId = proteinGroupId;
+        
+        this.expandedAccessions = new HashMap<String, Boolean>();
+        this.expandedPeptides = new HashMap<String, Boolean>();
+        this.showPSMs = new HashMap<String, Boolean>();
+        
+        setUpPaneComponents();
     }
-
+    
+    
     @Override
     protected void setupMainPane() {
         // setup the main pane
-        this.setLayout(new BorderLayout());
-        this.setBorder(BorderFactory.createEmptyBorder());
-
+		this.setLayout(new GridLayout(1, 1, 0, 0));
     }
-
-    @Override
-    public void process(TaskEvent<List<Protein>> listTaskEvent) {
-        for(Protein protein: listTaskEvent.getValue()){
-            if(!proteinVertices.containsKey(protein)) {
-                proteinVertices.put(protein, protein.getId().toString());
-            }
-            for(Peptide peptide: protein.getPeptides()){
-                PeptideSequence peptideSequence = peptide.getPeptideSequence();
-                uk.ac.ebi.pride.utilities.mol.Peptide peptideSequenceNew = translate(peptideSequence);
-                if(!peptideVertices.containsKey(peptideSequenceNew)){
-                  peptideVertices.put(peptideSequenceNew, peptideSequenceNew.toString());
-                }
-                if(!psmVertices.containsKey(peptide)){
-                    String id = String.valueOf(psmVertices.size() + 1);
-                    psmVertices.put(peptide, id);
-                }
-            }
-        }
-    }
-    public uk.ac.ebi.pride.utilities.mol.Peptide translate(PeptideSequence peptideSequence) {
-        uk.ac.ebi.pride.utilities.mol.Peptide newPeptide = new uk.ac.ebi.pride.utilities.mol.Peptide(peptideSequence.getSequence());
-        PTModification newModification;
-
-        String name;
-        String type = null;
-        String label;
-        List<Double> monoMassDeltas;
-        List<Double> avgMassDeltas;
-        int position;
-        for (uk.ac.ebi.pride.utilities.data.core.Modification oldModification : peptideSequence.getModifications()) {
-            name = oldModification.getName();
-            label = null;
-            monoMassDeltas = oldModification.getMonoisotopicMassDelta();
-            avgMassDeltas = oldModification.getAvgMassDelta();
-            newModification = new PTModification(name, type, label, monoMassDeltas, avgMassDeltas);
-
-            /**
-             * old modification position from [0..length], 0 means the position locate in c-terminal.
-             * the new modification from [0..length-1], 0 means the first amino acid of peptide.
-             * The modification worked in c-terminal or first amino acid, the theoretical mass are same.
-             */
-            position = oldModification.getLocation() - 1;
-            if (position == -1) {
-                position = 0;
-            }
-
-            newPeptide.addModification(position, newModification);
-        }
-
-        return newPeptide;
-    }
-
-    @Override
-    public void succeed(TaskEvent<Void> voidTaskEvent) {
-
-    }
-
-    @Override
-    public void finished(TaskEvent<Void> event) {
-        for(Protein protein: proteinVertices.keySet()){
-            graph.addVertex(protein.getId().toString());
-            if(protein.getId() == idProtein)
-                vertexPaints.put(protein.getId().toString(), Color.RED);
-            else
-                vertexPaints.put(protein.getId().toString(), Color.LIGHT_GRAY);
-        }
-        for(uk.ac.ebi.pride.utilities.mol.Peptide peptideSequence: peptideVertices.keySet()){
-            graph.addVertex(peptideVertices.get(peptideSequence));
-            vertexPaints.put(peptideVertices.get(peptideSequence), Color.green);
-            for(Protein protein: proteinVertices.keySet()){
-                for(Peptide peptide: protein.getPeptides()){
-                    Tuple<Protein, uk.ac.ebi.pride.utilities.mol.Peptide> edge = new Tuple<Protein, uk.ac.ebi.pride.utilities.mol.Peptide>(protein, peptideSequence);
-                    if(peptideSequence.equals(translate(peptide.getPeptideSequence())) && !edgestProteinPeptides.contains(edge)){
-                        graph.addEdge(String.valueOf(graph.getEdgeCount()), proteinVertices.get(protein), peptideVertices.get(peptideSequence));
-                        edgestProteinPeptides.add(edge);
-                    }
-                }
-            }
-        }
-
-        Layout<String,String> l = visualizationViewer.getGraphLayout();
-
-        LayoutTransition<String,String> lt =
-                new LayoutTransition<String,String>(visualizationViewer, visualizationViewer.getGraphLayout(), l);
-        Animator animator = new Animator(lt);
-        animator.start();
-        visualizationViewer.getRenderContext().getMultiLayerTransformer().setToIdentity();
-
-        Forest<String, String> graphLayout = (Forest<String, String>) graph;
-        visualizationViewer.validate();
-        visualizationViewer.repaint();
-    }
-
+    
     @Override
     protected void addComponents() {
-        vertexPaints = LazyMap.<String,Paint>decorate(new HashMap<String, Paint>(), new ConstantTransformer(Color.white));
-        edgePaints   = LazyMap.<String,Paint>decorate(new HashMap<String,Paint>(), new ConstantTransformer(Color.BLUE));
-        graph        = Graphs.<String,String>synchronizedForest(new DelegateForest<String, String>());
+    	// initiate vertex painting and set all not specially set vertices to white
+		vertexPaints = LazyMap.<VertexObject, Paint>decorate(new HashMap<VertexObject, Paint>(), new ConstantTransformer(FADED_COLOR));
+		
+    	// initiate edge painting and set all not specially set edges to blue
+		edgePaints = LazyMap.<String, Paint>decorate(new HashMap<String, Paint>(), new ConstantTransformer(FADED_COLOR));
+		
+		// initialize the graph to be a forest
+		graph = new DirectedSparseGraph<VertexObject, String>();
     }
-
-    /**
-     * Add the rest of components
-     */
+    
+    
     @Override
-    public void populate() {
-        //removeAll();
-        //createTree();
+    public void process(TaskEvent<List<Protein>> listTaskEvent) {
+    	createGraphFromProteins(listTaskEvent.getValue());
     }
-
-    public ProteinGroupPane(DataAccessController controller, JComponent parentComponent) {
-        super(controller, parentComponent);
+    
+    
+    @Override
+    public void finished(TaskEvent<Void> event) {
+    	// would be called after process
     }
+    
+    
+    /**
+     * Create and set up everything for the viewer
+     * 
+     * @throws IOException
+     */
+    private void setUpPaneComponents() {
+    	// use a splitPane as basic layout
+		JSplitPane splitPane = new JSplitPane();
+		splitPane.setResizeWeight(1.0);
+		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		this.add(splitPane);
+    	
+		// add the graph visualization to the top
+		setUpVisualizationViewer();
+		splitPane.setTopComponent(new GraphZoomScrollPane(visualizationViewer));
+		
+		// the panel for the bottom
+		JPanel bottomPanel = new JPanel();
+		GridBagLayout gbl_bottomPanel = new GridBagLayout();
+		gbl_bottomPanel.columnWidths = new int[]{0, 0, 0, 0};
+		gbl_bottomPanel.rowHeights = new int[]{0, 0};
+		gbl_bottomPanel.columnWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_bottomPanel.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+		bottomPanel.setLayout(gbl_bottomPanel);
+		splitPane.setBottomComponent(bottomPanel);
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		
+		
+		// information panel
+		JPanel informationPanel = new JPanel();
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		bottomPanel.add(informationPanel, gbc);
+		GridBagLayout gbl_informationPanel = new GridBagLayout();
+		gbl_informationPanel.columnWidths = new int[]{0, 0};
+		gbl_informationPanel.rowHeights = new int[]{0, 0, 0};
+		gbl_informationPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_informationPanel.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		informationPanel.setLayout(gbl_informationPanel);
+		
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new GridLayout(0, 3, 0, 0));
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		informationPanel.add(buttonPanel, gbc);
+		
+		btnCollapseUncollapseProteins = new JButton("Proteins");
+		btnCollapseUncollapseProteins.setEnabled(false);
+		btnCollapseUncollapseProteins.addActionListener(this);
+		buttonPanel.add(btnCollapseUncollapseProteins);
+		
+		btnCollapseUncollapsePeptides = new JButton("Proteins");
+		btnCollapseUncollapsePeptides.setEnabled(false);
+		btnCollapseUncollapsePeptides.addActionListener(this);
+		buttonPanel.add(btnCollapseUncollapsePeptides);
 
-    public ProteinGroupPane(DataAccessController controller, JComponent parentComponent, String title) {
-        super(controller, parentComponent, title);
+		btnShowHidePSMs = new JButton("PSMs");
+		btnShowHidePSMs.setEnabled(false);
+		btnShowHidePSMs.addActionListener(this);
+		buttonPanel.add(btnShowHidePSMs);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		informationPanel.add(scrollPane, gbc);
+		
+		informationTable = new JTable();
+		informationTable.setFillsViewportHeight(true);
+		scrollPane.setViewportView(informationTable);
+		
+		updateInformationPanel();
+		
+		// the score threshold panel
+		JPanel scoreThresholdPanel = setUpScoreThresholdPanel();
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		bottomPanel.add(scoreThresholdPanel, gbc);
+		
+		// the visualization controls
+		JPanel visualizationControlsPanel = setUpVisualizationControls();
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 2;
+		gbc.gridy = 0;
+		bottomPanel.add(visualizationControlsPanel, gbc);
+	}
+	
+    
+    /**
+     * set up the graph rendering and visualization
+     */
+    private void setUpVisualizationViewer() {
+    	// set up the layout
+		layout = new FRLayout2<VertexObject, String>(graph);
+		layout.setSize(new Dimension(600, 600));
+		Relaxer relaxer = new VisRunner((IterativeContext)layout);
+		relaxer.stop();
+		relaxer.prerelax();
+		Layout<VertexObject, String> staticLayout = new StaticLayout<VertexObject, String>(graph, layout);
+			
+		visualizationViewer = new VisualizationViewer<VertexObject,String>(staticLayout, new Dimension(600, 600));
+		visualizationViewer.setBackground(Color.white);
+		
+		// listen to viewer resizing
+		visualizationViewer.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				super.componentResized(e);
+				layout.setSize(e.getComponent().getSize());
+			}});
+		
+		// let the pane listen to the vertex-picking
+		pickedState = visualizationViewer.getPickedVertexState();
+		pickedState.addItemListener(this);
+		
+		// tell the renderer to use our own customized colors for the vertices
+		visualizationViewer.getRenderContext().setVertexFillPaintTransformer(MapTransformer.<VertexObject, Paint>getInstance(vertexPaints));
+		
+		// give a clicked vertex red edges, others the same color as the shape edge
+		visualizationViewer.getRenderContext().setVertexDrawPaintTransformer(new Transformer<VertexObject, Paint>() {
+			@Override
+		    public Paint transform(VertexObject v) {
+		        if (pickedState.isPicked(v)) {
+		            return SELECTED_COLOR;
+		        } else {
+		            return vertexPaints.get(v);
+		        }
+		    }
+		});
+		
+		// set the special vertex and labeller for the nodes
+		ProteinVertexLabeller labeller = new ProteinVertexLabeller(visualizationViewer.getRenderContext(), 5);
+		visualizationViewer.getRenderContext().setVertexShapeTransformer(labeller);
+		visualizationViewer.getRenderer().setVertexLabelRenderer(labeller);
+		
+		
+		// customize the edges
+		visualizationViewer.getRenderContext().setEdgeDrawPaintTransformer(MapTransformer.<String, Paint>getInstance(edgePaints));
+		visualizationViewer.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<VertexObject, String>());
+		
+		// colors for arrowheads are same as the edge
+		visualizationViewer.getRenderContext().setArrowDrawPaintTransformer(MapTransformer.<String, Paint>getInstance(edgePaints));
+		visualizationViewer.getRenderContext().setArrowFillPaintTransformer(MapTransformer.<String, Paint>getInstance(edgePaints));
+		
+		
+		// always show the vertex name as tooltip
+		visualizationViewer.setVertexToolTipTransformer(new ToStringLabeller<VertexObject>());
+		
+		// show all vertex labels for now
+		// TODO: cluster labels...
+		visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<VertexObject>());
+		
+		// gray (= faded out) edges are thin, all others thick
+		visualizationViewer.getRenderContext().setEdgeStrokeTransformer(new Transformer<String,Stroke>() {
+		    protected final Stroke THIN = new BasicStroke(1);
+		    protected final Stroke THICK= new BasicStroke(2);
+		    
+		    @Override
+		    public Stroke transform(String e)
+		    {
+		        Paint c = edgePaints.get(e);
+		        if (c == FADED_COLOR)
+		            return THIN;
+		        else
+		            return THICK;
+		    }
+		});
+		
+		// define a manipulation mouse
+		graphMouse = new DefaultModalGraphMouse<VertexObject, String>();
+		visualizationViewer.setGraphMouse(graphMouse);
     }
-    private void setUpView() throws IOException {
-
-        final AggregateLayout<String,String> layout = new AggregateLayout<String,String>(new FRLayout2<String, String>(graph));
-
-        visualizationViewer = new VisualizationViewer<String,String>(layout);
-        visualizationViewer.setBackground( Color.white );
-        //Tell the renderer to use our own customized color rendering
-        visualizationViewer.getRenderContext().setVertexFillPaintTransformer(MapTransformer.<String,Paint>getInstance(vertexPaints));
-
-        visualizationViewer.getRenderContext().setVertexDrawPaintTransformer(new Transformer<String, Paint>() {
-            public Paint transform(String v) {
-                if (visualizationViewer.getPickedVertexState().isPicked(v)) {
-                    return Color.cyan;
-                } else {
-                    return Color.BLACK;
-                }
-            }
-        });
-
-        visualizationViewer.getRenderContext().setArrowFillPaintTransformer(new ConstantTransformer(Color.lightGray));
-        visualizationViewer.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
-
-        visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
-        // add a listener for ToolTips
-        visualizationViewer.setVertexToolTipTransformer(new ToStringLabeller());
-
-        visualizationViewer.getRenderContext().setEdgeDrawPaintTransformer(MapTransformer.<String,Paint>getInstance(edgePaints));
-
-        visualizationViewer.getRenderContext().setEdgeStrokeTransformer(new Transformer<String,Stroke>() {
-            protected final Stroke THIN = new BasicStroke(1);
-            protected final Stroke THICK= new BasicStroke(2);
-            public Stroke transform(String e)
-            {
-                Paint c = edgePaints.get(e);
-                if (c == Color.LIGHT_GRAY)
-                    return THIN;
-                else
-                    return THICK;
-            }
-        });
-
-        DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
-        visualizationViewer.setGraphMouse(gm);
-
-        // Visual Controls
-        JButton plus = new JButton("+");
-        plus.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                scaler.scale(visualizationViewer, 1.1f, visualizationViewer.getCenter());
-            }
-        });
-
-        JButton minus = new JButton("-");
-        minus.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                scaler.scale(visualizationViewer, 1/1.1f, visualizationViewer.getCenter());
-            }
-        });
-
-        Class[] combos = getCombos();
-        final JComboBox comboBoxLayout = new JComboBox(combos);
-        // use a renderer to shorten the layout name presentation
-        comboBoxLayout.setRenderer(new DefaultListCellRenderer() {
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                String valueString = value.toString();
-                valueString = valueString.substring(valueString.lastIndexOf('.')+1);
-                return super.getListCellRendererComponent(list, valueString, index, isSelected,
-                        cellHasFocus);
-            }
-        });
-        comboBoxLayout.addActionListener(new LayoutChooser(comboBoxLayout, visualizationViewer,graph));
-        comboBoxLayout.setSelectedItem(FRLayout2.class);
-
-        JPanel controlsPanel = new JPanel(new BorderLayout());
-        controlsPanel.setBorder(BorderFactory.createTitledBorder("Visual Options"));
-        JPanel sliderPanel = new JPanel(new GridLayout(3,1));
-        JPanel sliderLabelPanel = new JPanel(new GridLayout(3,1));
-        JPanel zoomPanel = new JPanel();
-        zoomPanel.setLayout(new FlowLayout());
-        zoomPanel.add(minus);
-        zoomPanel.add(plus);
-        sliderPanel.add(comboBoxLayout);
-        sliderPanel.add(gm.getModeComboBox());
-        sliderPanel.add(zoomPanel);
-        sliderLabelPanel.add(new JLabel("Layout:", JLabel.RIGHT));
-        sliderLabelPanel.add(new JLabel("Mouse Mode:", JLabel.RIGHT));
-        sliderLabelPanel.add(new JLabel("Zoom:", JLabel.RIGHT));
-        controlsPanel.add(sliderLabelPanel, BorderLayout.WEST);
-        controlsPanel.add(sliderPanel);
-
-        //Create slider to adjust the number of edges to remove when clustering
-        final JSlider edgeBetweennessSlider = new JSlider(JSlider.HORIZONTAL);
-        edgeBetweennessSlider.setBackground(Color.WHITE);
-        //edgeBetweennessSlider.setPreferredSize(new Dimension(210, 50));
-        edgeBetweennessSlider.setPaintTicks(true);
-        edgeBetweennessSlider.setMaximum(graph.getEdgeCount());
-        edgeBetweennessSlider.setMinimum(0);
-        edgeBetweennessSlider.setValue(0);
-        edgeBetweennessSlider.setMajorTickSpacing(10);
-        edgeBetweennessSlider.setPaintLabels(true);
-        edgeBetweennessSlider.setPaintTicks(true);
-
-//		edgeBetweennessSlider.setBorder(BorderFactory.createLineBorder(Color.black));
-        //TO DO: edgeBetweennessSlider.add(new JLabel("Node Size (PageRank With Priors):"));
-        //I also want the slider value to appear
-        final JPanel eastControls = new JPanel();
-        eastControls.setOpaque(true);
-        eastControls.setLayout(new BoxLayout(eastControls, BoxLayout.Y_AXIS));
-        eastControls.add(Box.createVerticalGlue());
-        eastControls.add(edgeBetweennessSlider);
-
-
-        final String eastSize = COMMAND_STRING + edgeBetweennessSlider.getValue();
-
-        final TitledBorder sliderBorder = BorderFactory.createTitledBorder(eastSize);
-        eastControls.setBorder(sliderBorder);
-        //eastControls.add(eastSize);
-        eastControls.add(Box.createVerticalGlue());
-
-        edgeBetweennessSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                JSlider source = (JSlider) e.getSource();
-                if (!source.getValueIsAdjusting()) {
-                    int numEdgesToRemove = source.getValue();
-                    clusterAndRecolor(layout, numEdgesToRemove, similarColors,
-                            true);
-                    sliderBorder.setTitle(
-                            COMMAND_STRING + edgeBetweennessSlider.getValue());
-                    eastControls.repaint();
-                    visualizationViewer.validate();
-                    visualizationViewer.repaint();
-                }
-            }
-        });
-
-//        Container content = this.getContentPane();
-        add(new GraphZoomScrollPane(visualizationViewer));
-        JPanel south = new JPanel();
-        JPanel grid = new JPanel(new GridLayout(2,1));
-        south.add(grid);
-        south.add(eastControls);
-        south.add(controlsPanel);
-        add(south, BorderLayout.SOUTH);
+    
+    
+    /**
+     * set up the score threshold panel
+     */
+    private JPanel setUpScoreThresholdPanel() {
+		//---------------------------------------------------------------------
+		// create the slider for the score threshold
+		
+		final JSlider scoreThresholdSlider = new JSlider(JSlider.HORIZONTAL);
+		scoreThresholdSlider.setBackground(Color.WHITE);
+		scoreThresholdSlider.setPaintTicks(true);
+		scoreThresholdSlider.setMaximum(10);	// this must be set, when the graph is completely built
+		scoreThresholdSlider.setMinimum(0);
+		scoreThresholdSlider.setValue(0);
+		scoreThresholdSlider.setMajorTickSpacing(10);
+		scoreThresholdSlider.setPaintLabels(true);
+		scoreThresholdSlider.setPaintTicks(true);
+		
+		JPanel scoreThresholdControls = new JPanel();
+		scoreThresholdControls.setOpaque(true);
+		scoreThresholdControls.setLayout(new BoxLayout(scoreThresholdControls, BoxLayout.Y_AXIS));
+		scoreThresholdControls.add(Box.createVerticalGlue());
+		scoreThresholdControls.add(scoreThresholdSlider);
+		
+		TitledBorder sliderBorder = BorderFactory.createTitledBorder(
+				TITLE_SCORE_THRESHOLD + scoreThresholdSlider.getValue());
+		scoreThresholdControls.setBorder(sliderBorder);
+		scoreThresholdControls.add(Box.createVerticalGlue());
+		
+		scoreThresholdSlider.addChangeListener(new ChangeListener() {
+		    public void stateChanged(ChangeEvent e) {
+		        JSlider source = (JSlider) e.getSource();
+		        if (!source.getValueIsAdjusting()) {
+		        	// the slider was moved
+		        	/*
+		            int numEdgesToRemove = source.getValue();
+		            clusterAndRecolor(layout, numEdgesToRemove, similarColors,
+		                    true);
+		            sliderBorder.setTitle(
+		            		TITLE_SCORE_THRESHOLD + scoreThresholdSlider.getValue());
+		            scoreThresholdControls.repaint();
+		            visualizationViewer.validate();
+		            visualizationViewer.repaint();
+		            */
+		        }
+		    }
+		});
+		
+		return scoreThresholdControls;
     }
-
-    public void clusterAndRecolor(AggregateLayout<String,String> layout,
-                                  int numEdgesToRemove,
-                                  Color[] colors, boolean groupClusters) {
-
-        Graph<String,String> g = layout.getGraph();
-        layout.removeAll();
-
-        EdgeBetweennessClusterer<String,String> clusterer =
-                new EdgeBetweennessClusterer<String,String>(numEdgesToRemove);
-        Set<Set<String>> clusterSet = clusterer.transform(g);
-        java.util.List<String> edges = clusterer.getEdgesRemoved();
-
-        int i = 0;
-        //Set the colors of each node so that each cluster's vertices have the same color
-        for (Iterator<Set<String>> cIt = clusterSet.iterator(); cIt.hasNext();) {
-
-            Set<String> vertices = cIt.next();
-            Color c = colors[i % colors.length];
-
-            colorCluster(vertices, c);
-            if(groupClusters == true) {
-                groupCluster(layout, vertices);
-            }
-            i++;
-        }
-        for (String e : g.getEdges()) {
-
-            if (edges.contains(e)) {
-                edgePaints.put(e, Color.lightGray);
-            } else {
-                edgePaints.put(e, Color.black);
-            }
-        }
-
+    
+    
+    /**
+     * set up the controls panel
+     */
+    private JPanel setUpVisualizationControls() {
+		final ScalingControl scaler = new CrossoverScalingControl();
+		
+		JButton plus = new JButton("+");
+		plus.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        scaler.scale(visualizationViewer, 1.1f, visualizationViewer.getCenter());
+		    }
+		});
+		
+		JButton minus = new JButton("-");
+		minus.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        scaler.scale(visualizationViewer, 1/1.1f, visualizationViewer.getCenter());
+		    }
+		});
+		
+		
+		Class<? extends Layout>[] combos = getAvailableLayoutClasses();
+		
+		layoutComboBox = new JComboBox(combos);
+		// use a renderer to shorten the layout name presentation
+		layoutComboBox.setRenderer(new DefaultListCellRenderer() {
+		    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		        String valueString = value.toString();
+		        valueString = valueString.substring(valueString.lastIndexOf('.')+1);
+		        
+		        return super.getListCellRendererComponent(list, valueString, index, isSelected, cellHasFocus);
+		    }
+		});
+		layoutComboBox.addActionListener(this);
+		layoutComboBox.setSelectedItem(defaultLayout);
+		
+		JPanel visualizationControlsPanel = new JPanel(new BorderLayout());
+		visualizationControlsPanel.setBorder(BorderFactory.createTitledBorder("Visualization Options"));
+		JPanel sliderPanel = new JPanel(new GridLayout(3,1));
+		JPanel sliderLabelPanel = new JPanel(new GridLayout(3,1));
+		JPanel zoomPanel = new JPanel();
+		zoomPanel.setLayout(new FlowLayout());
+		zoomPanel.add(minus);
+		zoomPanel.add(plus);
+		sliderPanel.add(layoutComboBox);
+		sliderPanel.add(graphMouse.getModeComboBox());
+		sliderPanel.add(zoomPanel);
+		sliderLabelPanel.add(new JLabel("Layout:", JLabel.RIGHT));
+		sliderLabelPanel.add(new JLabel("Mouse Mode:", JLabel.RIGHT));
+		sliderLabelPanel.add(new JLabel("Zoom:", JLabel.RIGHT));
+		visualizationControlsPanel.add(sliderLabelPanel, BorderLayout.WEST);
+		visualizationControlsPanel.add(sliderPanel);
+		
+		return visualizationControlsPanel;
     }
-
-    private void colorCluster(Set<String> vertices, Color c) {
-        for (String v : vertices) {
-            vertexPaints.put(v, c);
-        }
+    
+    
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		Object subject = e.getItem();
+		
+		if (subject instanceof VertexObject) {
+			updateInformationPanel();
+		}
+	}
+	
+	
+	/**
+	 * Returns an array of available layout classes
+	 * @return
+	 */
+	private static Class<Layout>[] getAvailableLayoutClasses() {
+		List<Class<? extends Layout>> layouts = new ArrayList<Class<? extends Layout>>();
+		layouts.add(CircleLayout.class);
+		layouts.add(FRLayout2.class);
+		
+		return layouts.toArray(new Class[0]);
+	}
+    
+    
+    /**
+     * Creates the graph from a list of proteins
+     * @param proteins
+     */
+    private void createGraphFromProteins(List<Protein> proteinList) {
+    	// create the intermediate structure
+    	PIAModeller piaModeller = new PIAModeller();
+    	Integer fileID = piaModeller.addPrideControllerAsInput(controller);
+    	PrideImportController importController = (PrideImportController) piaModeller.getImportController(fileID);
+    	
+		for (Comparable protID : controller.getProteinAmbiguityGroupById(selectedProteinGroupId).getProteinIds()) {
+			String acc = importController.addProteinsSpectrumIdentificationsToStructCreator(protID, piaModeller.getIntermediateStructureCreator(), null);
+			if (selectedProteinId.equals(protID)) {
+				selectedProteinAccession = acc;
+			}
+		}
+    	
+		intermediateStructure = piaModeller.buildIntermediateStructure();
+		createGraphFromIntermediateStructure();
     }
-
-    private void groupCluster(AggregateLayout<String,String> layout, Set<String> vertices) {
-        if(vertices.size() < layout.getGraph().getVertexCount()) {
-            Point2D center = layout.transform(vertices.iterator().next());
-            Graph<String,String> subGraph = SparseMultigraph.<String,String>getFactory().create();
-            for(String v : vertices) {
-                subGraph.addVertex(v);
-            }
-            Layout<String,String> subLayout =
-                    new CircleLayout<String,String>(subGraph);
-            subLayout.setInitializer(visualizationViewer.getGraphLayout());
-            subLayout.setSize(new Dimension(40,40));
-
-            layout.put(subLayout,center);
-            visualizationViewer.repaint();
-        }
+    
+    
+	/**
+	 * creates the graph from the intermediate structure, also clusters using
+	 * the given settings
+	 */
+	private void createGraphFromIntermediateStructure() {
+		groupVertices = new HashMap<Integer, VertexObject>();
+		
+		// go through the clusters and create the graph
+		for (Set<IntermediateGroup> cluster : intermediateStructure.getClusters().values()) {
+			for (IntermediateGroup group : cluster) {
+				VertexObject groupV = addGroupVertex(group);
+				String groupLabel = groupV.getLabel();
+				
+				// connect to the child-groups
+				if (group.getChildren() != null) {
+					for (IntermediateGroup child : group.getChildren()) {
+						VertexObject childV = addGroupVertex(child);
+						String childLabel = childV.getLabel();
+						
+						String edgeName = "groupGroup_" + groupV.getLabel() + "_" + childV.getLabel();
+						
+						graph.addEdge(edgeName, groupV, childV);
+						edgePaints.put(edgeName, EDGE_COLOR);
+					}
+				}
+				
+				// add the proteins collapsed
+				if ((group.getProteins() != null) && (group.getProteins().size() > 0)) {
+					addProteinVertices(groupV, true, null);
+				}
+				
+				// add the peptides
+				if ((group.getPeptides() != null) && (group.getPeptides().size() > 0)) {
+					addPeptideVertices(groupV, true, null);
+				}
+			}
+		}
     }
-
-    public static final Color[] similarColors =
-            {
-                    new Color(216, 134, 134),
-                    new Color(135, 137, 211),
-                    new Color(134, 206, 189),
-                    new Color(206, 176, 134),
-                    new Color(194, 204, 134),
-                    new Color(145, 214, 134),
-                    new Color(133, 178, 209),
-                    new Color(103, 148, 255),
-                    new Color(60, 220, 220),
-                    new Color(30, 250, 100)
-            };
-
-    public static final Color currentProtein = Color.RED;
-
-
-    private static final class LayoutChooser implements ActionListener {
-
-        private JComboBox layoutCombo;
-
-        private VisualizationViewer<String,String> visualizationViewer;
-
-        final Graph<String, String> graph;
-
-        private LayoutChooser(JComboBox layoutCombo, VisualizationViewer<String,String> visualizationViewer, Graph<String, String> graph){
-            super();
-            this.layoutCombo = layoutCombo;
-            this.visualizationViewer = visualizationViewer;
-            this.graph = graph;
-        }
-
-        public void actionPerformed(ActionEvent arg0){
-
-            Class layoutC = (Class) layoutCombo.getSelectedItem();
-
-            try {
-                Layout<String, String> previousLayout = visualizationViewer.getGraphLayout();
-                if (previousLayout.getClass() == RadialTreeLayout.class) {
-                    Rings rings = new Rings((RadialTreeLayout<String, String>) previousLayout);
-                    visualizationViewer.removePreRenderPaintable(rings);
-                }
-
-                Object o;
-                Constructor<? extends Layout<String, String>> constructor;
-                if (layoutC != TreeLayout.class && layoutC != RadialTreeLayout.class){
-                    constructor = layoutC.getConstructor(new Class[]{Graph.class});
-                    o = constructor.newInstance(graph);
-                }else if (layoutC != TreeLayout.class){
-                    constructor = layoutC.getConstructor(new Class[]{Forest.class});
-                    o = constructor.newInstance(graph);
-                }else
-                    o = new TreeLayout<String, String>((Forest<String, String>)graph, 80, 200);
-
-                Layout<String,String> l = (Layout<String,String>) o;
-
-                l.setInitializer(visualizationViewer.getGraphLayout());
-
-                if(layoutC != TreeLayout.class)
-                     l.setSize(visualizationViewer.getSize());
-
-                LayoutTransition<String,String> lt =
-                        new LayoutTransition<String,String>(visualizationViewer, visualizationViewer.getGraphLayout(), l);
-                Animator animator = new Animator(lt);
-                animator.start();
-                visualizationViewer.getRenderContext().getMultiLayerTransformer().setToIdentity();
-
-                Forest<String, String> graphLayout = (Forest<String, String>) graph;
-                RadialTreeLayout<String, String> radialTreeLayout = new RadialTreeLayout<String, String>(graphLayout);
-                Rings rings = new Rings(radialTreeLayout);
-                if(layoutC == RadialTreeLayout.class){
-                //    visualizationViewer.addPreRenderPaintable(rings);
-                }else{
-                    visualizationViewer.removePreRenderPaintable(rings);
-                }
-
-                visualizationViewer.repaint();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        class Rings implements VisualizationServer.Paintable {
-
-            Collection<Double> depths;
-            RadialTreeLayout radialLayout;
-
-            public Rings(RadialTreeLayout radialLayout) {
-                this.radialLayout = radialLayout;
-                depths = getDepths();
-            }
-
-            private Collection<Double> getDepths() {
-                Set<Double> depths = new HashSet<Double>();
-                Map<String,PolarPoint> polarLocations = radialLayout.getPolarLocations();
-                for(String v : graph.getVertices()) {
-                    PolarPoint pp = polarLocations.get(v);
-                    depths.add(pp.getRadius());
-                }
-                return depths;
-            }
-
-            public void paint(Graphics g) {
-                g.setColor(Color.lightGray);
-
-                Graphics2D g2d = (Graphics2D)g;
-                Point2D center = radialLayout.getCenter();
-
-                Ellipse2D ellipse = new Ellipse2D.Double();
-                for(double d : depths) {
-                    ellipse.setFrameFromDiagonal(center.getX()-d, center.getY()-d,
-                            center.getX()+d, center.getY()+d);
-                    Shape shape = visualizationViewer.getRenderContext().getMultiLayerTransformer().getTransformer(Layer.LAYOUT).transform(ellipse);
-                    g2d.draw(shape);
-                }
-            }
-
-            public boolean useTransform() {
-                return true;
-            }
-        }
-    }
-
-    private static Class<? extends Layout>[] getCombos()
-    {
-        List<Class<? extends Layout>> layouts = new ArrayList<Class<? extends Layout>>();
-        layouts.add(TreeLayout.class);
-        layouts.add(CircleLayout.class);
-        layouts.add(RadialTreeLayout.class);
-        layouts.add(FRLayout2.class);
-        return layouts.toArray(new Class[0]);
-    }
-
-    private void createTreeOld() {
-
-
-        graphFactory = new Factory<DirectedGraph<String,String>>() {
-
-            public DirectedGraph<String, String> create() {
-                return new DirectedSparseMultigraph<String,String>();
-            }
-        };
-
-        treeFactory = new Factory<Tree<String,String>> () {
-
-            public Tree<String, String> create() {
-                return new DelegateTree<String,String>(graphFactory);
-            }
-        };
-
-        edgeFactory = new Factory<String>() {
-            int i=0;
-            public String create() {
-                return String.valueOf(i++);
-            }};
-        vertexFactory = new Factory<String>() {
-            int i=0;
-            public String create() {
-                return "V"+i++;
-            }};
-
-        graph.addVertex("V0");
-        graph.addEdge(edgeFactory.create(), "V0", "V1");
-        graph.addEdge(edgeFactory.create(), "V0", "V2");
-        graph.addEdge(edgeFactory.create(), "V1", "V4");
-        graph.addEdge(edgeFactory.create(), "V2", "V3");
-        graph.addEdge(edgeFactory.create(), "V2", "V5");
-        graph.addEdge(edgeFactory.create(), "V4", "V6");
-        graph.addEdge(edgeFactory.create(), "V4", "V7");
-        graph.addEdge(edgeFactory.create(), "V3", "V8");
-        graph.addEdge(edgeFactory.create(), "V6", "V9");
-        graph.addEdge(edgeFactory.create(), "V4", "V10");
-
-        graph.addVertex("A0");
-        graph.addEdge(edgeFactory.create(), "A0", "A1");
-        graph.addEdge(edgeFactory.create(), "A0", "A2");
-        graph.addEdge(edgeFactory.create(), "A0", "A3");
-
-        graph.addVertex("B0");
-        graph.addEdge(edgeFactory.create(), "B0", "B1");
-        graph.addEdge(edgeFactory.create(), "B0", "B2");
-        graph.addEdge(edgeFactory.create(), "B1", "B4");
-        graph.addEdge(edgeFactory.create(), "B2", "B3");
-        graph.addEdge(edgeFactory.create(), "B2", "B5");
-        graph.addEdge(edgeFactory.create(), "B4", "B6");
-        graph.addEdge(edgeFactory.create(), "B4", "B7");
-        graph.addEdge(edgeFactory.create(), "B3", "B8");
-        graph.addEdge(edgeFactory.create(), "B6", "B9");
-
-    }
+    
+	
+	/**
+	 * adds a group vertex to the graph, if not a vertex for this group is
+	 * already added
+	 * 
+	 * @param group
+	 * @return group's VertexObject (either newly created or already from the graph)
+	 */
+	private VertexObject addGroupVertex(IntermediateGroup group) {
+		String groupLabel = group.getID().toString();
+		VertexObject groupV = groupVertices.get(group.getID());
+		if (groupV == null) {
+			groupV = new VertexObject(groupLabel, group);
+			graph.addVertex(groupV);
+			
+			vertexPaints.put(groupV, GROUP_COLOR);
+			groupVertices.put(group.getID(), groupV);
+		}
+		
+		return groupV;
+	}
+	
+	
+	/**
+	 * updates information shown on the information panel
+	 */
+	private void updateInformationPanel() {
+		selectedVertex = null;
+		
+		if ((pickedState.getSelectedObjects().length > 0) &&
+				(pickedState.getSelectedObjects()[0] instanceof VertexObject)) {
+			selectedVertex = (VertexObject)pickedState.getSelectedObjects()[0];
+		}
+		
+		// reset all the information
+		btnCollapseUncollapseProteins.setText("Proteins");
+		btnCollapseUncollapseProteins.setEnabled(false);
+		btnCollapseUncollapsePeptides.setText("Peptides");
+		btnCollapseUncollapsePeptides.setEnabled(false);
+		btnShowHidePSMs.setText("PSMs");
+		btnShowHidePSMs.setEnabled(false);
+		informationTable.setModel(new DefaultTableModel());
+		
+		if (selectedVertex != null) {
+			Object selectedObject = selectedVertex.getObject();
+			
+			if (selectedObject instanceof Collection) {
+				// the object contains collapsed information
+				Iterator<?> objectIterator = ((Collection<?>)selectedObject).iterator();
+				
+				if (objectIterator.hasNext()) {
+					Object firstObject = objectIterator.next();
+					
+					if (firstObject instanceof IntermediateProtein) {
+						informationTable.setModel(
+								new ProteinInformationTableModel((Collection<?>)selectedObject));
+						btnCollapseUncollapseProteins.setText("Uncollapse Proteins");
+						btnCollapseUncollapseProteins.setEnabled(true);
+					} else if (firstObject instanceof IntermediatePeptide) {
+						informationTable.setModel(
+								new PeptideInformationTableModel((Collection<?>)selectedObject));
+						btnCollapseUncollapsePeptides.setText("Uncollapse Peptides");
+						btnCollapseUncollapsePeptides.setEnabled(true);
+					}
+				}
+			} else {
+				
+				if (selectedObject instanceof IntermediateProtein) {
+					informationTable.setModel(
+							new ProteinInformationTableModel(Arrays.asList(new Object[]{selectedObject})));
+				} else if (selectedObject instanceof IntermediatePeptide) {
+					informationTable.setModel(
+							new PeptideInformationTableModel(Arrays.asList(new Object[]{selectedObject})));
+					
+					btnShowHidePSMs.setEnabled(true);
+					if ((showPSMs.get(selectedVertex.getLabel()) != null ) &&
+							showPSMs.get(selectedVertex.getLabel())) {
+						btnShowHidePSMs.setText("Hide PSMs");
+					} else {
+						btnShowHidePSMs.setText("Show PSMs");
+					}
+				} else if (selectedObject instanceof IntermediateGroup) {
+					
+					if ((((IntermediateGroup) selectedObject).getProteins() != null) &&
+							(((IntermediateGroup) selectedObject).getProteins().size() > 1)) {
+						btnCollapseUncollapseProteins.setEnabled(true);
+						if ((expandedAccessions.get(selectedVertex.getLabel()) != null ) &&
+								expandedAccessions.get(selectedVertex.getLabel())) {
+							btnCollapseUncollapseProteins.setText("Collapse Proteins");
+						} else {
+							btnCollapseUncollapseProteins.setText("Uncollapse Proteins");
+						}
+					}
+					
+					if ((((IntermediateGroup) selectedObject).getPeptides() != null) &&
+							(((IntermediateGroup) selectedObject).getPeptides().size() > 1)) {
+						btnCollapseUncollapsePeptides.setEnabled(true);
+						if ((expandedPeptides.get(selectedVertex.getLabel()) != null ) &&
+								expandedPeptides.get(selectedVertex.getLabel())) {
+							btnCollapseUncollapsePeptides.setText("Collapse Peptides");
+						} else {
+							btnCollapseUncollapsePeptides.setText("Uncollapse Peptides");
+						}
+					}
+				}
+			}
+		}
+	}
+    
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource().equals(btnCollapseUncollapseProteins)) {
+			// the proteins (un-)collapse button was pressed
+			if (selectedVertex == null) {
+				return;
+			}
+			
+			if (selectedVertex.getObject() instanceof Collection<?>) {
+				// this is a collection of proteins, select the group
+				VertexObject groupV = null;
+				for (String edge : graph.getOutEdges(selectedVertex)) {
+					VertexObject v = graph.getOpposite(selectedVertex, edge);
+					if (v.getObject() instanceof IntermediateGroup) {
+						groupV = v;
+					}
+					if (groupV != null) {
+						selectedVertex = groupV;
+						break;
+					}
+				}
+			}
+			
+			if ((expandedAccessions.get(selectedVertex.getLabel()) == null) || 
+					!expandedAccessions.get(selectedVertex.getLabel())) {
+				uncollapseProteins(selectedVertex);
+			} else {
+				collapseProteins(selectedVertex);
+			}
+			
+			updateInformationPanel();
+		} else if (e.getSource().equals(btnCollapseUncollapsePeptides)) {
+			// the peptides (un-)collapse button was pressed
+			if (selectedVertex == null) {
+				return;
+			}
+			
+			if (selectedVertex.getObject() instanceof Collection<?>) {
+				// this is a collection of peptides, select the group
+				VertexObject groupV = null;
+				for (String edge : graph.getInEdges(selectedVertex)) {
+					VertexObject v = graph.getOpposite(selectedVertex, edge);
+					if (v.getObject() instanceof IntermediateGroup) {
+						groupV = v;
+					}
+					if (groupV != null) {
+						selectedVertex = groupV;
+						break;
+					}
+				}
+			}
+			
+			if ((expandedPeptides.get(selectedVertex.getLabel()) == null) || 
+					!expandedPeptides.get(selectedVertex.getLabel())) {
+				uncollapsePeptides(selectedVertex);
+			} else {
+				collapsePeptides(selectedVertex);
+			}
+			
+			updateInformationPanel();
+		} else if (e.getSource().equals(btnShowHidePSMs)) {
+			// the show/hide PSMs button was pressed
+			if (selectedVertex == null) {
+				return;
+			}
+			
+			if ((showPSMs.get(selectedVertex.getLabel()) == null) || 
+					!showPSMs.get(selectedVertex.getLabel())) {
+				showPSMs(selectedVertex);
+			} else {
+				hidePSMs(selectedVertex);
+			}
+			
+			updateInformationPanel();
+		} else if (e.getSource().equals(layoutComboBox)) {
+			Dimension dim = layout.getSize();
+			
+			if (layoutComboBox.getSelectedItem() == FRLayout2.class) {
+				layout = new FRLayout2<VertexObject, String>(graph);
+			} else if (layoutComboBox.getSelectedItem() == CircleLayout.class) {
+				layout = new CircleLayout<VertexObject, String>(graph);
+			} else {
+				layout = new FRLayout2<VertexObject, String>(graph);
+			}
+			
+			layout.setSize(dim);
+			recalculateAndAnimateGraphChanges();
+		}
+	}
+	
+	
+	/**
+	 * Uncollapses the proteins of the given {@link VertexObject}, which should
+	 * be an {@link IntermediateGroup} representative
+	 * @param groupV
+	 */
+	private void uncollapseProteins(VertexObject groupV) {
+		if ((groupV == null) ||
+				!(groupV.getObject() instanceof IntermediateGroup) ||
+				((expandedAccessions.get(groupV.getLabel()) != null) && expandedAccessions.get(groupV.getLabel()))) {
+			return;
+		}
+		
+		// remove the collapsed proteins
+		Point2D proteinLocation = null;
+		Iterator<String> edgeIt = graph.getIncidentEdges(groupV).iterator();
+		while (edgeIt.hasNext()) {
+			String edge = edgeIt.next();
+			VertexObject proteinsV = graph.getOpposite(groupV, edge);
+			if (proteinsV.getLabel().equals(PROTEINS_OF_PREFIX + groupV.getLabel())) {
+				proteinLocation = visualizationViewer.getGraphLayout().transform(proteinsV);
+				graph.removeVertex(proteinsV);
+				vertexPaints.remove(proteinsV);
+				break;
+			}
+		}
+		
+		// add the proteins uncollapsed
+		addProteinVertices(groupV, false, proteinLocation);
+			
+		recalculateAndAnimateGraphChanges();
+	}
+	
+	
+	/**
+	 * Collapses the proteins of the given {@link VertexObject}, which should
+	 * be an {@link IntermediateGroup} representative
+	 * @param groupV
+	 */
+	private void collapseProteins(VertexObject groupV) {
+		if ((groupV == null) ||
+				!(groupV.getObject() instanceof IntermediateGroup) ||
+				(expandedAccessions.get(groupV.getLabel()) == null) ||
+				!expandedAccessions.get(groupV.getLabel()) ||
+				(((IntermediateGroup)groupV.getObject()).getProteins() == null) ||
+				(((IntermediateGroup)groupV.getObject()).getProteins().size() < 2)) {
+			return;
+		}
+		
+		// remove all the protein vertices
+		Iterator<String> edgeIt = graph.getIncidentEdges(groupV).iterator();
+		while (edgeIt.hasNext()) {
+			String edge = edgeIt.next();
+			VertexObject proteinV = graph.getOpposite(groupV, edge);
+			if (proteinV.getObject() instanceof IntermediateProtein) {
+				graph.removeVertex(proteinV);
+				vertexPaints.remove(proteinV);
+			}
+		}
+		
+		// add the proteins collapsed
+		addProteinVertices(groupV, true, null);
+		
+		recalculateAndAnimateGraphChanges();
+	}
+	
+	
+	/**
+	 * Uncollapses the peptides of the given {@link VertexObject}, which should
+	 * be an {@link IntermediateGroup} representative
+	 * @param groupV
+	 */
+	private void uncollapsePeptides(VertexObject groupV) {
+		if ((groupV == null) ||
+				!(groupV.getObject() instanceof IntermediateGroup) ||
+				((expandedPeptides.get(groupV.getLabel()) != null) && expandedPeptides.get(groupV.getLabel()))) {
+			return;
+		}
+		
+		// remove the collapsed peptides
+		Point2D peptideLocation = null;
+		Iterator<String> edgeIt = graph.getIncidentEdges(groupV).iterator();
+		while (edgeIt.hasNext()) {
+			String edge = edgeIt.next();
+			VertexObject peptidesV = graph.getOpposite(groupV, edge);
+			if (peptidesV.getLabel().equals(PEPTIDES_OF_PREFIX + groupV.getLabel())) {
+				peptideLocation = visualizationViewer.getGraphLayout().transform(peptidesV);
+				graph.removeVertex(peptidesV);
+				vertexPaints.remove(peptidesV);
+				break;
+			}
+		}
+		
+		// add the peptides uncollapsed
+		addPeptideVertices(groupV, false, peptideLocation);
+		
+		recalculateAndAnimateGraphChanges();
+	}
+	
+	
+	/**
+	 * Collapses the peptides of the given {@link VertexObject}, which should
+	 * be an {@link IntermediateGroup} representative
+	 * @param groupV
+	 */
+	private void collapsePeptides(VertexObject groupV) {
+		if ((groupV == null) ||
+				!(groupV.getObject() instanceof IntermediateGroup) ||
+				(expandedPeptides.get(groupV.getLabel()) == null) ||
+				!expandedPeptides.get(groupV.getLabel()) ||
+				(((IntermediateGroup)groupV.getObject()).getPeptides() == null) ||
+				(((IntermediateGroup)groupV.getObject()).getPeptides().size() < 2)) {
+			return;
+		}
+		
+		// remove all the peptide vertices
+		Iterator<String> edgeIt = graph.getIncidentEdges(groupV).iterator();
+		while (edgeIt.hasNext()) {
+			String edge = edgeIt.next();
+			VertexObject peptideV = graph.getOpposite(groupV, edge);
+			if (peptideV.getObject() instanceof IntermediatePeptide) {
+				graph.removeVertex(peptideV);
+				vertexPaints.remove(peptideV);
+			}
+		}
+		
+		// add the peptides collapsed
+		addPeptideVertices(groupV, true, null);
+		
+		recalculateAndAnimateGraphChanges();
+	}
+	
+	
+	/**
+	 * Shows the PSMs of the given {@link VertexObject}, which should
+	 * be an {@link IntermediatePeptide} representative
+	 * @param groupV
+	 */
+	private void showPSMs(VertexObject peptideV) {
+		if ((peptideV == null) ||
+				!(peptideV.getObject() instanceof IntermediatePeptide) ||
+				((showPSMs.get(peptideV.getLabel()) != null) && showPSMs.get(peptideV.getLabel()))) {
+			return;
+		}
+		
+		Point2D peptideLocation = visualizationViewer.getGraphLayout().transform(peptideV);
+		addPSMVertices(peptideV, peptideLocation);
+		
+		recalculateAndAnimateGraphChanges();
+	}
+	
+	
+	/**
+	 * Hides the PSMs of the given {@link VertexObject}, which should
+	 * be an {@link IntermediatePeptide} representative
+	 * @param groupV
+	 */
+	private void hidePSMs(VertexObject peptideV) {
+		if ((peptideV == null) ||
+				!(peptideV.getObject() instanceof IntermediatePeptide) ||
+				(showPSMs.get(peptideV.getLabel()) == null) ||
+				!showPSMs.get(peptideV.getLabel())) {
+			return;
+		}
+		
+		// remove the PSMs from the graph
+		Iterator<String> edgeIt = graph.getIncidentEdges(peptideV).iterator();
+		while (edgeIt.hasNext()) {
+			String edge = edgeIt.next();
+			VertexObject psmV = graph.getOpposite(peptideV, edge);
+			if (psmV.getObject() instanceof IntermediatePeptideSpectrumMatch) {
+				graph.removeVertex(psmV);
+				vertexPaints.remove(psmV);
+			}
+		}
+		
+		recalculateAndAnimateGraphChanges();
+	}
+	
+	
+	/**
+	 * Adds the proteins of the given group to the graph, either collapsed or
+	 * uncollapsed. If the location is not null, set the proteins' position to
+	 * the given location.
+	 */
+	private void addProteinVertices(VertexObject groupV, Boolean collapsed, Point2D location) {
+		IntermediateGroup group = (IntermediateGroup)groupV.getObject();
+		if (collapsed && (group.getProteins().size() > 1)) {
+			// show the proteins collapsed
+			String proteinLabel = PROTEINS_OF_PREFIX + groupV.getLabel();
+			VertexObject proteinsV =
+					new VertexObject(proteinLabel, group.getProteins());
+			
+			graph.addVertex(proteinsV);
+			vertexPaints.put(proteinsV, PROTEIN_COLOR);
+			
+			String edgeName = "proteinGroup_" + proteinLabel + "_" + groupV.getLabel();
+			graph.addEdge(edgeName, proteinsV, groupV);
+			edgePaints.put(edgeName, EDGE_COLOR);
+			
+			if (location != null) {
+				visualizationViewer.getGraphLayout().setLocation(proteinsV, location);
+			}
+			expandedAccessions.put(groupV.getLabel(), false);
+		} else {
+			for (IntermediateProtein protein : group.getProteins()) {
+				String proteinLabel = protein.getAccession();
+				VertexObject proteinV = new VertexObject(proteinLabel, protein);
+				
+				graph.addVertex(proteinV);
+				vertexPaints.put(proteinV, PROTEIN_COLOR);
+				
+				String edgeName = "proteinGroup_" + proteinLabel + "_" + groupV.getLabel();
+				graph.addEdge(edgeName, proteinV, groupV);
+				edgePaints.put(edgeName, EDGE_COLOR);
+				
+				if (location != null) {
+					visualizationViewer.getGraphLayout().setLocation(proteinV, location);
+				}
+			}
+			expandedAccessions.put(groupV.getLabel(), true);
+		}
+	}
+	
+	
+	/**
+	 * Adds the peptides of the given group to the graph, either collapsed or
+	 * uncollapsed. If the location is not null, set the peptides' position to
+	 * the given location.
+	 */
+	private void addPeptideVertices(VertexObject groupV, Boolean collapsed, Point2D location) {
+		IntermediateGroup group = (IntermediateGroup)groupV.getObject();
+		if (collapsed && (group.getPeptides().size() > 1)) {
+			// show the peptides collapsed
+			String peptidesLabel = PEPTIDES_OF_PREFIX + groupV.getLabel();
+			VertexObject peptidesV = new VertexObject(peptidesLabel, group.getPeptides());
+			
+			graph.addVertex(peptidesV);
+			vertexPaints.put(peptidesV, PEPTIDE_COLOR);
+			
+			String edgeName = "groupPeptide_" + groupV.getLabel() + "_" + peptidesLabel;
+			graph.addEdge(edgeName, groupV, peptidesV);
+			edgePaints.put(edgeName, EDGE_COLOR);
+			
+			if (location != null) {
+				visualizationViewer.getGraphLayout().setLocation(peptidesV, location);
+			}
+			expandedPeptides.put(groupV.getLabel(), false);
+		} else {
+			// uncollapsed peptides
+			for (IntermediatePeptide peptide : group.getPeptides()) {
+				String peptideLabel = peptide.getID().toString();
+				VertexObject peptideV = new VertexObject(peptideLabel, peptide);
+				
+				graph.addVertex(peptideV);
+				vertexPaints.put(peptideV, PEPTIDE_COLOR);
+				
+				String edgeName = "groupPeptide_" + groupV.getLabel() + "_" + peptideLabel;
+				graph.addEdge(edgeName, groupV, peptideV);
+				edgePaints.put(edgeName, EDGE_COLOR);
+				
+				if (location != null) {
+					visualizationViewer.getGraphLayout().setLocation(peptideV, location);
+				}
+				
+				showPSMs.put(peptideLabel, false);
+			}
+			expandedPeptides.put(groupV.getLabel(), true);
+		}
+	}
+	
+	
+	/**
+	 * Adds the PSMs of the given peptide to the graph. If the location is not
+	 * null, set the peptides' position to the given location.
+	 */
+	private void addPSMVertices(VertexObject peptideV, Point2D location) {
+		IntermediatePeptide peptide = (IntermediatePeptide)peptideV.getObject();
+		
+		// add the PSMs
+		for (IntermediatePeptideSpectrumMatch psm : peptide.getPeptideSpectrumMatches()) {
+			String psmLabel = psm.getID().toString();
+			VertexObject psmV = new VertexObject(psmLabel, psm);
+			
+			graph.addVertex(psmV);
+			vertexPaints.put(psmV, PSM_COLOR);
+			
+			String psmEdgeName = "peptidePSM_" + peptideV.getLabel() + "_" + psmLabel;
+			graph.addEdge(psmEdgeName, peptideV, psmV);
+			edgePaints.put(psmEdgeName, EDGE_COLOR);
+		}
+		
+		showPSMs.put(peptideV.getLabel(), true);
+	}
+	
+	
+	/**
+	 * Recalculates the layout and visualization of the graph for the changed
+	 * graph topology
+	 */
+	private void recalculateAndAnimateGraphChanges() {
+		layout.initialize();
+		
+		if (layout instanceof IterativeContext) {
+			Relaxer relaxer = new VisRunner((IterativeContext)layout);
+			relaxer.stop();
+			relaxer.prerelax();
+		}
+		
+		StaticLayout<VertexObject, String> staticLayout =
+			new StaticLayout<VertexObject, String>(graph, layout);
+		
+		LayoutTransition<VertexObject, String> lt =
+			new LayoutTransition<VertexObject, String>(visualizationViewer,
+					visualizationViewer.getGraphLayout(),
+					staticLayout);
+		
+		Animator animator = new Animator(lt);
+		animator.start();
+		visualizationViewer.repaint();
+	}
 }
