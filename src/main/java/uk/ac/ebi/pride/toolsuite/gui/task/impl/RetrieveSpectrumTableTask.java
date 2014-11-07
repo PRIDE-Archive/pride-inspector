@@ -11,7 +11,7 @@ import uk.ac.ebi.pride.toolsuite.gui.component.exception.ThrowableEntry;
 import uk.ac.ebi.pride.toolsuite.gui.component.message.MessageType;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.TableContentType;
 import uk.ac.ebi.pride.toolsuite.gui.event.ProcessingDataSourceEvent;
-import uk.ac.ebi.pride.util.NumberUtilities;
+import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 
 import java.util.ArrayList;
 import java.util.Collection;

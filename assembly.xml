@@ -1,5 +1,7 @@
 <assembly>
 
+    <id>pride-inspector-deployment</id>
+
     <formats>
         <format>zip</format>
     </formats>

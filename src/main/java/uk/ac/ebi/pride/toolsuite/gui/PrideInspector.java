@@ -18,7 +18,7 @@ import uk.ac.ebi.pride.toolsuite.gui.menu.MenuFactory;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.OpenMyAssayTask;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.OpenMyProjectTask;
-import uk.ac.ebi.pride.util.IOUtilities;
+import uk.ac.ebi.pride.utilities.util.IOUtilities;
 
 import javax.jnlp.ServiceManager;
 import javax.jnlp.SingleInstanceListener;

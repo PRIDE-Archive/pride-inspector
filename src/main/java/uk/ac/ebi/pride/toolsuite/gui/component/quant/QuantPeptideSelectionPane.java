@@ -5,10 +5,7 @@ import org.bushe.swing.event.EventService;
 import org.bushe.swing.event.EventSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.gui.GUIUtilities;
-import uk.ac.ebi.pride.toolsuite.gui.event.QuantSelectionEvent;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
+import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.EventBusSubscribable;
 import uk.ac.ebi.pride.toolsuite.gui.component.exception.ThrowableEntry;
@@ -18,13 +15,14 @@ import uk.ac.ebi.pride.toolsuite.gui.component.table.listener.TableCellMouseMoti
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.PeptideTableHeader;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProgressiveListTableModel;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.QuantPeptideTableModel;
-import uk.ac.ebi.pride.toolsuite.gui.component.table.sorter.NumberTableRowSorter;
+import uk.ac.ebi.pride.toolsuite.gui.event.QuantSelectionEvent;
 import uk.ac.ebi.pride.toolsuite.gui.event.ReferenceSampleChangeEvent;
 import uk.ac.ebi.pride.toolsuite.gui.event.container.PSMEvent;
-import uk.ac.ebi.pride.toolsuite.gui.event.container.ProteinIdentificationEvent;
 import uk.ac.ebi.pride.toolsuite.gui.task.Task;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.RetrieveQuantPeptideTableTask;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -33,8 +31,6 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 

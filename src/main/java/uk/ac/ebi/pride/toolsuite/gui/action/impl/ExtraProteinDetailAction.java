@@ -17,7 +17,7 @@ import uk.ac.ebi.pride.toolsuite.gui.task.TaskListener;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.RetrieveProteinDetailTask;
 import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
-import uk.ac.ebi.pride.util.InternetChecker;
+import uk.ac.ebi.pride.utilities.util.InternetChecker;
 
 import javax.swing.*;
 import javax.swing.table.TableColumn;

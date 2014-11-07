@@ -62,12 +62,12 @@
         <junit.version>4.11</junit.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <logback-core.version>1.0.11</logback-core.version>
-        <ms-data-core-api.version>0.11.27-SNAPSHOT</ms-data-core-api.version>
+        <ms-data-core-api.version>2.0.0-SNAPSHOT</ms-data-core-api.version>
         <inspector-mzgraph-browser.version>2.0.0-SNAPSHOT</inspector-mzgraph-browser.version>
         <inspector-quality-chart.version>2.0.0-SNAPSHOT</inspector-quality-chart.version>
         <inspector-swing-utils.version>2.0.0-SNAPSHOT</inspector-swing-utils.version>
         <javahelp.version>2.0.02</javahelp.version>
-        <pride-utilities.version>0.1.22</pride-utilities.version>
+        <pride-utilities.version>2.0.0-SNAPSHOT</pride-utilities.version>
         <jnlp-api.version>1.5.0</jnlp-api.version>
         <commons-cli.version>1.2</commons-cli.version>
         <eventbus.version>1.4</eventbus.version>
@@ -145,7 +145,7 @@
         </dependency>
 
         <dependency>
-            <groupId>uk.ac.ebi.pride</groupId>
+            <groupId>uk.ac.ebi.pride.utilities</groupId>
             <artifactId>pride-utilities</artifactId>
             <version>${pride-utilities.version}</version>
         </dependency>
@@ -186,12 +186,6 @@
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache</artifactId>
             <version>${ehcache.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.java.balloontip</groupId>
-            <artifactId>balloontip</artifactId>
-            <version>${balloontip.version}</version>
         </dependency>
 
         <dependency>
@@ -298,8 +292,6 @@
             <artifactId>commons-net</artifactId>
             <version>${commons-net.version}</version>
         </dependency>
-
-
     </dependencies>
 
     <build>
@@ -335,7 +327,7 @@
                 <version>2.8</version>
                 <executions>
                     <execution>
-                        <id>copy-dependencies</id>
+                        <id>copy-dependency</id>
                         <phase>package</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
@@ -345,6 +337,7 @@
                             <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
+                            <excludeTransitive>false</excludeTransitive>
                         </configuration>
                     </execution>
                 </executions>
@@ -379,96 +372,27 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptors>
+                        <descriptor>${project.basedir}/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
-    <profiles>
-
-        <profile>
-            <!-- To run this profile, you will have to use Maven command line -->
-            <id>pi-webstart-build</id>
-            <activation>
-                <property>
-                    <name>pi-webstart</name>
-                    <value>build</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo.webstart</groupId>
-                        <artifactId>webstart-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>jnlp-building</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jnlp</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <!-- Include all the dependencies -->
-                            <excludeTransitive>false</excludeTransitive>
-                            <!-- The path where the libraries are stored -->
-                            <libPath>lib</libPath>
-                            <jnlp>
-                                <inputTemplate>webstart/jnlp-template.vm</inputTemplate>
-                                <outputFile>pride-inspector.jnlp</outputFile>
-
-                                <mainClass>uk.ac.ebi.pride.toolsuite.gui.PrideInspector</mainClass>
-                            </jnlp>
-                            <sign>
-                                <keystore>${keystore.path}</keystore>
-                                <alias>${keystore.alias}</alias>
-                                <storepass>${keystore.store.password}</storepass>
-                                <keypass>${keystore.key.password}</keypass>
-
-                                <keystoreConfig>
-                                    <delete>false</delete>
-                                    <gen>false</gen>
-                                </keystoreConfig>
-                            </sign>
-                            <!-- building process -->
-                            <pack200>false</pack200>
-                            <verbose>true</verbose>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>pi-desktop-build</id>
-            <activation>
-                <property>
-                    <name>desktop</name>
-                    <value>build</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>${project.basedir}/assembly.xml</descriptor>
-                            </descriptors>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>assembly</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
     <repositories>
         <repository>

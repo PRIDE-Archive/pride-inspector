@@ -1,6 +1,6 @@
 package uk.ac.ebi.pride.toolsuite.gui.url;
 
-import uk.ac.ebi.pride.util.RegExUtilities;
+import uk.ac.ebi.pride.utilities.util.RegExUtilities;
 
 /**
  * Generate a url for email

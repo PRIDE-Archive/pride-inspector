@@ -1,6 +1,6 @@
 package uk.ac.ebi.pride.toolsuite.gui.search;
 
-import uk.ac.ebi.pride.util.NumberUtilities;
+import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 
 import java.util.List;
 

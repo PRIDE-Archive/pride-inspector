@@ -1,7 +1,7 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.renderer;
 
 import uk.ac.ebi.pride.toolsuite.gui.utils.Constants;
-import uk.ac.ebi.pride.util.NumberUtilities;
+import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;

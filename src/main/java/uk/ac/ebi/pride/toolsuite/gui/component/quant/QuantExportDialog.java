@@ -21,7 +21,7 @@ import uk.ac.ebi.pride.toolsuite.gui.url.HttpUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.utils.EnsemblSpeciesMapper;
 import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
-import uk.ac.ebi.pride.util.NumberUtilities;
+import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 
 import javax.help.CSH;
 import javax.swing.*;

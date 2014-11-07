@@ -2,7 +2,7 @@ package uk.ac.ebi.pride.toolsuite.gui;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.util.IOUtilities;
+import uk.ac.ebi.pride.utilities.util.IOUtilities;
 
 import java.io.*;
 import java.net.URL;

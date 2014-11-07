@@ -4,7 +4,7 @@ import uk.ac.ebi.pride.toolsuite.gui.action.PrideAction;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.OpenPrideArchiveWSSearchPaneTask;
-import uk.ac.ebi.pride.util.InternetChecker;
+import uk.ac.ebi.pride.utilities.util.InternetChecker;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
