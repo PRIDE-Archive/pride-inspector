@@ -82,13 +82,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
-/**
- * This panel will show the information of the Protein Groups and the peptides
- * and proteins that are connected
- * 
- * @author ypriverol, julianu
- */
 /**
  * This panel will show the information of the Protein Groups and the peptides
  * and proteins that are connected
@@ -96,8 +89,8 @@ import java.util.Set;
  * @author ypriverol, julianu
  */
 public class ProteinGroupPane
-        extends DataAccessControllerPane<Void, Protein>
-        implements ItemListener, ActionListener {
+extends DataAccessControllerPane<Void, Protein>
+implements ItemListener, ActionListener {
 
     /** access controller to access the data (proteins, peptides, PSMs...) */
     private DataAccessController controller;
@@ -115,7 +108,7 @@ public class ProteinGroupPane
     private IntermediateStructure intermediateStructure;
 
 
-    /** the viewer for the graphical visualization  */
+    /** the viewer for the graphical visualization */
     private VisualizationViewer<VertexObject, String> visualizationViewer;
 
     /** the shown graph */
@@ -207,6 +200,7 @@ public class ProteinGroupPane
         this.expandedPeptides = new HashMap<String, Boolean>();
         this.showPSMs = new HashMap<String, Boolean>();
 
+        createGraphFromSelectedProteinGroupId();
         setUpPaneComponents();
     }
 
@@ -217,13 +211,17 @@ public class ProteinGroupPane
         this.setLayout(new GridLayout(1, 1, 0, 0));
     }
 
+
     @Override
     protected void addComponents() {
-        // initiate vertex painting and set all not specially set vertices to white
-        vertexPaints = LazyMap.<VertexObject, Paint>decorate(new HashMap<VertexObject, Paint>(), new ConstantTransformer(FADED_COLOR));
+        // initiate vertex painting and set all not specially set vertices to
+        // white
+        vertexPaints = LazyMap.<VertexObject, Paint> decorate(
+                new HashMap<VertexObject, Paint>(), new ConstantTransformer(FADED_COLOR));
 
         // initiate edge painting and set all not specially set edges to blue
-        edgePaints = LazyMap.<String, Paint>decorate(new HashMap<String, Paint>(), new ConstantTransformer(FADED_COLOR));
+        edgePaints = LazyMap.<String, Paint> decorate(
+                new HashMap<String, Paint>(), new ConstantTransformer(FADED_COLOR));
 
         // initialize the graph to be a forest
         graph = new DirectedSparseGraph<VertexObject, String>();
@@ -232,7 +230,6 @@ public class ProteinGroupPane
 
     @Override
     public void process(TaskEvent<List<Protein>> listTaskEvent) {
-        createGraphFromProteins(listTaskEvent.getValue());
     }
 
 
@@ -360,7 +357,8 @@ public class ProteinGroupPane
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
                 layout.setSize(e.getComponent().getSize());
-            }});
+            }
+        });
 
         // let the pane listen to the vertex-picking
         pickedState = visualizationViewer.getPickedVertexState();
@@ -369,17 +367,18 @@ public class ProteinGroupPane
         // tell the renderer to use our own customized colors for the vertices
         visualizationViewer.getRenderContext().setVertexFillPaintTransformer(MapTransformer.<VertexObject, Paint>getInstance(vertexPaints));
 
-        // give a clicked vertex red edges, others the same color as the shape edge
-        visualizationViewer.getRenderContext().setVertexDrawPaintTransformer(new Transformer<VertexObject, Paint>() {
-            @Override
-            public Paint transform(VertexObject v) {
-                if (pickedState.isPicked(v)) {
-                    return SELECTED_COLOR;
-                } else {
-                    return vertexPaints.get(v);
-                }
-            }
-        });
+        // give a selected vertex red edges, others the same color as the shape edge
+        visualizationViewer.getRenderContext().setVertexDrawPaintTransformer(
+                new Transformer<VertexObject, Paint>() {
+                    @Override
+                    public Paint transform(VertexObject v) {
+                        if (pickedState.isPicked(v)) {
+                            return SELECTED_COLOR;
+                        } else {
+                            return vertexPaints.get(v);
+                        }
+                    }
+                });
 
         // set the special vertex and labeller for the nodes
         ProteinVertexLabeller labeller = new ProteinVertexLabeller(visualizationViewer.getRenderContext(), 5);
@@ -404,20 +403,20 @@ public class ProteinGroupPane
         visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<VertexObject>());
 
         // gray (= faded out) edges are thin, all others thick
-        visualizationViewer.getRenderContext().setEdgeStrokeTransformer(new Transformer<String,Stroke>() {
-            protected final Stroke THIN = new BasicStroke(1);
-            protected final Stroke THICK= new BasicStroke(2);
+        visualizationViewer.getRenderContext().setEdgeStrokeTransformer(
+                new Transformer<String, Stroke>() {
+                    protected final Stroke THIN = new BasicStroke(1);
+                    protected final Stroke THICK = new BasicStroke(2);
 
-            @Override
-            public Stroke transform(String e)
-            {
-                Paint c = edgePaints.get(e);
-                if (c == FADED_COLOR)
-                    return THIN;
-                else
-                    return THICK;
-            }
-        });
+                    @Override
+                    public Stroke transform(String e) {
+                        Paint c = edgePaints.get(e);
+                        if (c == FADED_COLOR)
+                            return THIN;
+                        else
+                            return THICK;
+                    }
+                });
 
         // define a manipulation mouse
         graphMouse = new DefaultModalGraphMouse<VertexObject, String>();
@@ -435,7 +434,7 @@ public class ProteinGroupPane
         final JSlider scoreThresholdSlider = new JSlider(JSlider.HORIZONTAL);
         scoreThresholdSlider.setBackground(Color.WHITE);
         scoreThresholdSlider.setPaintTicks(true);
-        scoreThresholdSlider.setMaximum(10);	// this must be set, when the graph is completely built
+        scoreThresholdSlider.setMaximum(10); // this must be set, when the graph is completely built
         scoreThresholdSlider.setMinimum(0);
         scoreThresholdSlider.setValue(0);
         scoreThresholdSlider.setMajorTickSpacing(10);
@@ -485,7 +484,8 @@ public class ProteinGroupPane
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(visualizationViewer, 1.1f, visualizationViewer.getCenter());
+                scaler.scale(visualizationViewer, 1.1f,
+                        visualizationViewer.getCenter());
             }
         });
 
@@ -502,7 +502,9 @@ public class ProteinGroupPane
         layoutComboBox = new JComboBox(combos);
         // use a renderer to shorten the layout name presentation
         layoutComboBox.setRenderer(new DefaultListCellRenderer() {
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            public Component getListCellRendererComponent(JList list,
+                    Object value, int index, boolean isSelected,
+                    boolean cellHasFocus) {
                 String valueString = value.toString();
                 valueString = valueString.substring(valueString.lastIndexOf('.')+1);
 
@@ -545,6 +547,7 @@ public class ProteinGroupPane
 
     /**
      * Returns an array of available layout classes
+     * 
      * @return
      */
     private static Class<Layout>[] getAvailableLayoutClasses() {
@@ -557,10 +560,12 @@ public class ProteinGroupPane
 
 
     /**
-     * Creates the graph from a list of proteins
-     * @param proteinList
+     * Creates the graph using the data from the ambiguity group given by
+     * selectedProteinGroupId
+     * 
+     * @param proteins
      */
-    private void createGraphFromProteins(List<Protein> proteinList) {
+    private void createGraphFromSelectedProteinGroupId() {
         // create the intermediate structure
         PIAModeller piaModeller = new PIAModeller();
         Integer fileID = piaModeller.addPrideControllerAsInput(controller);
@@ -852,8 +857,9 @@ public class ProteinGroupPane
 
 
     /**
-     * Collapses the proteins of the given {@link VertexObject}, which should
-     * be an {@link IntermediateGroup} representative
+     * Collapses the proteins of the given {@link VertexObject}, which should be
+     * an {@link IntermediateGroup} representative
+     * 
      * @param groupV
      */
     private void collapseProteins(VertexObject groupV) {
