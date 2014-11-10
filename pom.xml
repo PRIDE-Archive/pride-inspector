@@ -7,8 +7,7 @@
     <version>2.5.0-SNAPSHOT</version>
     <name>pride-inspector</name>
     <url>http://code.google.com/p/pride-toolsuite/wiki/PRIDEInspector</url>
-
-
+    
     <!--
         Build Note:
 
@@ -299,7 +298,11 @@
             <version>${commons-net.version}</version>
         </dependency>
 
-
+        <dependency>
+        	<groupId>pia-core-library</groupId>
+        	<artifactId>pia-core-library</artifactId>
+        	<version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
