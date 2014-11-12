@@ -352,6 +352,10 @@ public class PrideInspector extends Desktop {
         String exportIdentDesc = context.getProperty("export.identification.title");
         PrideAction exportIdentAction = new ExportIdentificationPeptideAction(exportIdentDesc, null);
 
+        //export to mztab file
+        String exportTomzTabDesc = context.getProperty("export.to.mztab.title");
+        PrideAction exportTomzTab  = new ExportToMzTabAction(exportTomzTabDesc, null);
+
         // export spectrum description
         String exportSpectrumDesc = context.getProperty("export.spectrum.desc.title");
         PrideAction exportSpectrumDescAction = new ExportSpectrumDescAction(exportSpectrumDesc, null);
@@ -399,7 +403,7 @@ public class PrideInspector extends Desktop {
         JMenu exportMenu = MenuFactory.createMenu("Export",
                 exportAction,
                 exportSpectrumDescAction, exportIdentAction,
-                exportIdentDescAction, exportPeptideAction);
+                exportIdentDescAction, exportPeptideAction, exportTomzTab);
         exportMenu.setMnemonic(java.awt.event.KeyEvent.VK_E);
         menuBar.add(exportMenu);
 

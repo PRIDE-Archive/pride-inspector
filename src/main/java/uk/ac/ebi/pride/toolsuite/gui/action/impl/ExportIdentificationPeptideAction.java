@@ -22,7 +22,7 @@ import static uk.ac.ebi.pride.toolsuite.gui.utils.Constants.DOT;
 import static uk.ac.ebi.pride.toolsuite.gui.utils.Constants.TAB_SEP_FILE;
 
 /**
- * User: rwang
+ * @author rwang
  * Date: 01-Sep-2010
  * Time: 15:35:05
  */

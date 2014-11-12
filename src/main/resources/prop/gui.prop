@@ -123,6 +123,10 @@ export.pride.xml.title = PRIDE XML
 export.identification.title=Protein-Peptide Mappings
 export.identification.tooltip=Export proteins and Peptides into tab delimited format.
 
+export.to.mztab.title=To mzTab file
+export.to.mztab.tooltip=Export proteins and Peptides mztab file.
+
+
 export.spectrum.desc.title=Spectrum Table
 export.spectrum.desc.tooltip=Export spectrum descriptions into tab delimited format.
 
