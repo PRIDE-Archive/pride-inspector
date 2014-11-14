@@ -14,11 +14,13 @@ import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.algorithms.layout.util.Relaxer;
 import edu.uci.ics.jung.algorithms.layout.util.VisRunner;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
+import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
@@ -89,8 +91,8 @@ import java.util.Set;
  * @author ypriverol, julianu
  */
 public class ProteinGroupPane
-extends DataAccessControllerPane<Void, Protein>
-implements ItemListener, ActionListener {
+        extends DataAccessControllerPane<Void, Protein>
+        implements ItemListener, ActionListener {
 
     /** access controller to access the data (proteins, peptides, PSMs...) */
     private DataAccessController controller;
@@ -112,7 +114,7 @@ implements ItemListener, ActionListener {
     private VisualizationViewer<VertexObject, String> visualizationViewer;
 
     /** the shown graph */
-    private DirectedSparseGraph<VertexObject, String> graph;
+    private DirectedGraph<VertexObject, String> graph;
 
     /** the picked status of the graph, i.e. which vertex is selected */
     private PickedState<VertexObject> pickedState;
@@ -161,7 +163,7 @@ implements ItemListener, ActionListener {
     private static final String TITLE_SCORE_THRESHOLD = "Score Threshold: ";
 
     /** the default used layout */
-    private static final Class<? extends Layout> defaultLayout = FRLayout2.class;
+    private static final Class<? extends Layout> defaultLayout = ProteinLayout.class;
 
 
     /** the painting information for the vertices (PSMs, peptides, proteins, "groups") */
@@ -254,7 +256,7 @@ implements ItemListener, ActionListener {
         // add the graph visualization to the top
         setUpVisualizationViewer();
         splitPane.setTopComponent(new GraphZoomScrollPane(visualizationViewer));
-
+        
         // the panel for the bottom
         JPanel bottomPanel = new JPanel();
         GridBagLayout gbl_bottomPanel = new GridBagLayout();
@@ -341,14 +343,10 @@ implements ItemListener, ActionListener {
      */
     private void setUpVisualizationViewer() {
         // set up the layout
-        layout = new FRLayout2<VertexObject, String>(graph);
-        layout.setSize(new Dimension(600, 600));
-        Relaxer relaxer = new VisRunner((IterativeContext)layout);
-        relaxer.stop();
-        relaxer.prerelax();
-        Layout<VertexObject, String> staticLayout = new StaticLayout<VertexObject, String>(graph, layout);
+        layout = new ProteinLayout<String>(graph);
+        Layout<VertexObject, String> staticLayout = new StaticLayout<VertexObject, String>(graph, layout, layout.getSize());
 
-        visualizationViewer = new VisualizationViewer<VertexObject,String>(staticLayout, new Dimension(600, 600));
+        visualizationViewer = new VisualizationViewer<VertexObject,String>(staticLayout, layout.getSize());
         visualizationViewer.setBackground(Color.white);
 
         // listen to viewer resizing
@@ -356,7 +354,9 @@ implements ItemListener, ActionListener {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                layout.setSize(e.getComponent().getSize());
+                if (!(layout instanceof ProteinLayout)) {
+                    layout.setSize(e.getComponent().getSize());
+                }
             }
         });
 
@@ -420,6 +420,9 @@ implements ItemListener, ActionListener {
 
         // define a manipulation mouse
         graphMouse = new DefaultModalGraphMouse<VertexObject, String>();
+        // set PICKING as default mouse behaviour
+        graphMouse.setMode(Mode.PICKING);
+        
         visualizationViewer.setGraphMouse(graphMouse);
     }
 
@@ -484,8 +487,7 @@ implements ItemListener, ActionListener {
         JButton plus = new JButton("+");
         plus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                scaler.scale(visualizationViewer, 1.1f,
-                        visualizationViewer.getCenter());
+                scaler.scale(visualizationViewer, 1.1f, visualizationViewer.getCenter());
             }
         });
 
@@ -550,11 +552,12 @@ implements ItemListener, ActionListener {
      * 
      * @return
      */
-    private static Class<Layout>[] getAvailableLayoutClasses() {
+    private Class<Layout>[] getAvailableLayoutClasses() {
         List<Class<? extends Layout>> layouts = new ArrayList<Class<? extends Layout>>();
+        layouts.add(ProteinLayout.class);
         layouts.add(CircleLayout.class);
         layouts.add(FRLayout2.class);
-
+        
         return layouts.toArray(new Class[0]);
     }
 
@@ -649,11 +652,11 @@ implements ItemListener, ActionListener {
      * updates information shown on the information panel
      */
     private void updateInformationPanel() {
-        selectedVertex = null;
-
         if ((pickedState.getSelectedObjects().length > 0) &&
                 (pickedState.getSelectedObjects()[0] instanceof VertexObject)) {
             selectedVertex = (VertexObject)pickedState.getSelectedObjects()[0];
+        } else {
+            return;
         }
 
         // reset all the information
@@ -761,7 +764,9 @@ implements ItemListener, ActionListener {
             } else {
                 collapseProteins(selectedVertex);
             }
-
+            
+            pickedState.clear();
+            pickedState.pick(selectedVertex, true);
             updateInformationPanel();
         } else if (e.getSource().equals(btnCollapseUncollapsePeptides)) {
             // the peptides (un-)collapse button was pressed
@@ -791,6 +796,8 @@ implements ItemListener, ActionListener {
                 collapsePeptides(selectedVertex);
             }
 
+            pickedState.clear();
+            pickedState.pick(selectedVertex, true);
             updateInformationPanel();
         } else if (e.getSource().equals(btnShowHidePSMs)) {
             // the show/hide PSMs button was pressed
@@ -805,6 +812,8 @@ implements ItemListener, ActionListener {
                 hidePSMs(selectedVertex);
             }
 
+            pickedState.clear();
+            pickedState.pick(selectedVertex, true);
             updateInformationPanel();
         } else if (e.getSource().equals(layoutComboBox)) {
             Dimension dim = layout.getSize();
@@ -813,11 +822,16 @@ implements ItemListener, ActionListener {
                 layout = new FRLayout2<VertexObject, String>(graph);
             } else if (layoutComboBox.getSelectedItem() == CircleLayout.class) {
                 layout = new CircleLayout<VertexObject, String>(graph);
+            } else if (layoutComboBox.getSelectedItem() == ProteinLayout.class) {
+                layout = new ProteinLayout<String>(graph);
             } else {
-                layout = new FRLayout2<VertexObject, String>(graph);
+                layout = new ProteinLayout<String>(graph);
             }
-
-            layout.setSize(dim);
+            
+            if (!(layout instanceof ProteinLayout)) {
+                layout.setSize(dim);
+            }
+            
             recalculateAndAnimateGraphChanges();
         }
     }
@@ -1124,6 +1138,7 @@ implements ItemListener, ActionListener {
      * graph topology
      */
     private void recalculateAndAnimateGraphChanges() {
+        layout.setGraph(graph);
         layout.initialize();
 
         if (layout instanceof IterativeContext) {
@@ -1131,10 +1146,10 @@ implements ItemListener, ActionListener {
             relaxer.stop();
             relaxer.prerelax();
         }
-
+        
         StaticLayout<VertexObject, String> staticLayout =
-                new StaticLayout<VertexObject, String>(graph, layout);
-
+                new StaticLayout<VertexObject, String>(graph, layout, layout.getSize());
+        
         LayoutTransition<VertexObject, String> lt =
                 new LayoutTransition<VertexObject, String>(visualizationViewer,
                         visualizationViewer.getGraphLayout(),
@@ -1142,6 +1157,7 @@ implements ItemListener, ActionListener {
 
         Animator animator = new Animator(lt);
         animator.start();
+        
         visualizationViewer.repaint();
     }
 }
