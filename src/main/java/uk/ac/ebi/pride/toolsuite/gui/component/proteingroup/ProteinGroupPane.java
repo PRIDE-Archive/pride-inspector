@@ -93,28 +93,18 @@ import java.util.Set;
 public class ProteinGroupPane
         extends DataAccessControllerPane<Void, Protein>
         implements ItemListener, ActionListener {
+    /** handler for the shown graph */
+    private ProteinVisualizationGraphHandler visGraph;
 
-    /** access controller to access the data (proteins, peptides, PSMs...) */
-    private DataAccessController controller;
+    /** the currently selected vertex */
+    private VertexObject selectedVertex;
 
-    /** id of the selected protein */
-    private Comparable selectedProteinId;
-
-    /** the accession of the selected protein (created while building the intermediate structure) */
-    private String selectedProteinAccession;
-
-    /** id of the selected protein group */
-    private Comparable selectedProteinGroupId;
-
-    /** the PIA intermediate structure for the visualization */
-    private IntermediateStructure intermediateStructure;
-
-
+    /** the default used layout */
+    private static final Class<? extends Layout> defaultLayout = ProteinLayout.class;
+    
+    
     /** the viewer for the graphical visualization */
     private VisualizationViewer<VertexObject, String> visualizationViewer;
-
-    /** the shown graph */
-    private DirectedGraph<VertexObject, String> graph;
 
     /** the picked status of the graph, i.e. which vertex is selected */
     private PickedState<VertexObject> pickedState;
@@ -124,23 +114,6 @@ public class ProteinGroupPane
 
     /** the mouse handler for the graph */
     private DefaultModalGraphMouse<VertexObject, String> graphMouse;
-
-
-    /** the currently selected vertex */
-    private VertexObject selectedVertex;
-
-    /** mapping from the group's label to whether its accessions are shown */
-    private Map<String, Boolean> expandedAccessions;
-
-    /** mapping from the group's label to whether its peptides are shown */
-    private Map<String, Boolean> expandedPeptides;
-
-    /** mapping from the peptide's label to whether its spectra a shown */
-    private Map<String, Boolean> showPSMs;
-
-
-    /** mapping from the group ID to the vertex in the graph */
-    private Map<Integer, VertexObject> groupVertices;
 
 
     /** button to collapse/uncollapse proteins */
@@ -162,15 +135,7 @@ public class ProteinGroupPane
     /** title for the score threshold slider */
     private static final String TITLE_SCORE_THRESHOLD = "Score Threshold: ";
 
-    /** the default used layout */
-    private static final Class<? extends Layout> defaultLayout = ProteinLayout.class;
 
-
-    /** the painting information for the vertices (PSMs, peptides, proteins, "groups") */
-    private Map<VertexObject, Paint> vertexPaints;
-
-    /** the painting information for the edges */
-    private Map<String, Paint> edgePaints;
 
 
 
@@ -182,27 +147,15 @@ public class ProteinGroupPane
     private static final Color PSM_COLOR = new Color(0x87ceeb);
     private static final Color EDGE_COLOR = Color.BLACK;
 
-    private static final String PROTEINS_OF_PREFIX = "proteins_of_";
-    private static final String PEPTIDES_OF_PREFIX = "peptides_of_";
 
 
 
 
     public ProteinGroupPane(DataAccessController controller, Comparable proteinId, Comparable proteinGroupId) {
         super(controller);
-
-        this.intermediateStructure = null;
-        this.selectedProteinAccession = null;
-
-        this.controller = controller;
-        this.selectedProteinId = proteinId;
-        this.selectedProteinGroupId = proteinGroupId;
-
-        this.expandedAccessions = new HashMap<String, Boolean>();
-        this.expandedPeptides = new HashMap<String, Boolean>();
-        this.showPSMs = new HashMap<String, Boolean>();
-
-        createGraphFromSelectedProteinGroupId();
+        
+        this.visGraph = new ProteinVisualizationGraphHandler(controller, proteinId, proteinGroupId);
+        this.selectedVertex = null;
         setUpPaneComponents();
     }
 
@@ -216,17 +169,6 @@ public class ProteinGroupPane
 
     @Override
     protected void addComponents() {
-        // initiate vertex painting and set all not specially set vertices to
-        // white
-        vertexPaints = LazyMap.<VertexObject, Paint> decorate(
-                new HashMap<VertexObject, Paint>(), new ConstantTransformer(FADED_COLOR));
-
-        // initiate edge painting and set all not specially set edges to blue
-        edgePaints = LazyMap.<String, Paint> decorate(
-                new HashMap<String, Paint>(), new ConstantTransformer(FADED_COLOR));
-
-        // initialize the graph to be a forest
-        graph = new DirectedSparseGraph<VertexObject, String>();
     }
 
 
@@ -343,10 +285,11 @@ public class ProteinGroupPane
      */
     private void setUpVisualizationViewer() {
         // set up the layout
-        layout = new ProteinLayout<String>(graph);
-        Layout<VertexObject, String> staticLayout = new StaticLayout<VertexObject, String>(graph, layout, layout.getSize());
+        layout = new ProteinLayout<String>(visGraph.getGraph());
+        Layout<VertexObject, String> staticLayout = new StaticLayout<VertexObject, String>(visGraph.getGraph(), layout, layout.getSize());
 
         visualizationViewer = new VisualizationViewer<VertexObject,String>(staticLayout, layout.getSize());
+        
         visualizationViewer.setBackground(Color.white);
 
         // listen to viewer resizing
@@ -365,9 +308,10 @@ public class ProteinGroupPane
         pickedState.addItemListener(this);
 
         // tell the renderer to use our own customized colors for the vertices
-        visualizationViewer.getRenderContext().setVertexFillPaintTransformer(MapTransformer.<VertexObject, Paint>getInstance(vertexPaints));
+        //visualizationViewer.getRenderContext().setVertexFillPaintTransformer(MapTransformer.<VertexObject, Paint>getInstance(vertexPaints));
 
         // give a selected vertex red edges, others the same color as the shape edge
+        /*
         visualizationViewer.getRenderContext().setVertexDrawPaintTransformer(
                 new Transformer<VertexObject, Paint>() {
                     @Override
@@ -379,6 +323,7 @@ public class ProteinGroupPane
                         }
                     }
                 });
+        */
 
         // set the special vertex and labeller for the nodes
         ProteinVertexLabeller labeller = new ProteinVertexLabeller(visualizationViewer.getRenderContext(), 5);
@@ -387,22 +332,22 @@ public class ProteinGroupPane
 
 
         // customize the edges
-        visualizationViewer.getRenderContext().setEdgeDrawPaintTransformer(MapTransformer.<String, Paint>getInstance(edgePaints));
+        //visualizationViewer.getRenderContext().setEdgeDrawPaintTransformer(MapTransformer.<String, Paint>getInstance(edgePaints));
         visualizationViewer.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<VertexObject, String>());
 
         // colors for arrowheads are same as the edge
-        visualizationViewer.getRenderContext().setArrowDrawPaintTransformer(MapTransformer.<String, Paint>getInstance(edgePaints));
-        visualizationViewer.getRenderContext().setArrowFillPaintTransformer(MapTransformer.<String, Paint>getInstance(edgePaints));
+        //visualizationViewer.getRenderContext().setArrowDrawPaintTransformer(MapTransformer.<String, Paint>getInstance(edgePaints));
+        //visualizationViewer.getRenderContext().setArrowFillPaintTransformer(MapTransformer.<String, Paint>getInstance(edgePaints));
 
 
         // always show the vertex name as tooltip
         visualizationViewer.setVertexToolTipTransformer(new ToStringLabeller<VertexObject>());
 
         // show all vertex labels for now
-        // TODO: cluster labels...
         visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<VertexObject>());
 
         // gray (= faded out) edges are thin, all others thick
+        /*
         visualizationViewer.getRenderContext().setEdgeStrokeTransformer(
                 new Transformer<String, Stroke>() {
                     protected final Stroke THIN = new BasicStroke(1);
@@ -417,6 +362,7 @@ public class ProteinGroupPane
                             return THICK;
                     }
                 });
+        */
 
         // define a manipulation mouse
         graphMouse = new DefaultModalGraphMouse<VertexObject, String>();
@@ -563,92 +509,6 @@ public class ProteinGroupPane
 
 
     /**
-     * Creates the graph using the data from the ambiguity group given by
-     * selectedProteinGroupId
-     * 
-     * @param proteins
-     */
-    private void createGraphFromSelectedProteinGroupId() {
-        // create the intermediate structure
-        PIAModeller piaModeller = new PIAModeller();
-        Integer fileID = piaModeller.addPrideControllerAsInput(controller);
-        PrideImportController importController = (PrideImportController) piaModeller.getImportController(fileID);
-
-        for (Comparable protID : controller.getProteinAmbiguityGroupById(selectedProteinGroupId).getProteinIds()) {
-            String acc = importController.addProteinsSpectrumIdentificationsToStructCreator(protID, piaModeller.getIntermediateStructureCreator(), null);
-            if (selectedProteinId.equals(protID)) {
-                selectedProteinAccession = acc;
-            }
-        }
-
-        intermediateStructure = piaModeller.buildIntermediateStructure();
-        createGraphFromIntermediateStructure();
-    }
-
-
-    /**
-     * creates the graph from the intermediate structure, also clusters using
-     * the given settings
-     */
-    private void createGraphFromIntermediateStructure() {
-        groupVertices = new HashMap<Integer, VertexObject>();
-
-        // go through the clusters and create the graph
-        for (Set<IntermediateGroup> cluster : intermediateStructure.getClusters().values()) {
-            for (IntermediateGroup group : cluster) {
-                VertexObject groupV = addGroupVertex(group);
-                String groupLabel = groupV.getLabel();
-
-                // connect to the child-groups
-                if (group.getChildren() != null) {
-                    for (IntermediateGroup child : group.getChildren()) {
-                        VertexObject childV = addGroupVertex(child);
-                        String childLabel = childV.getLabel();
-
-                        String edgeName = "groupGroup_" + groupV.getLabel() + "_" + childV.getLabel();
-
-                        graph.addEdge(edgeName, groupV, childV);
-                        edgePaints.put(edgeName, EDGE_COLOR);
-                    }
-                }
-
-                // add the proteins collapsed
-                if ((group.getProteins() != null) && (group.getProteins().size() > 0)) {
-                    addProteinVertices(groupV, true, null);
-                }
-
-                // add the peptides
-                if ((group.getPeptides() != null) && (group.getPeptides().size() > 0)) {
-                    addPeptideVertices(groupV, true, null);
-                }
-            }
-        }
-    }
-
-
-    /**
-     * adds a group vertex to the graph, if not a vertex for this group is
-     * already added
-     *
-     * @param group
-     * @return group's VertexObject (either newly created or already from the graph)
-     */
-    private VertexObject addGroupVertex(IntermediateGroup group) {
-        String groupLabel = group.getID().toString();
-        VertexObject groupV = groupVertices.get(group.getID());
-        if (groupV == null) {
-            groupV = new VertexObject(groupLabel, group);
-            graph.addVertex(groupV);
-
-            vertexPaints.put(groupV, GROUP_COLOR);
-            groupVertices.put(group.getID(), groupV);
-        }
-
-        return groupV;
-    }
-
-
-    /**
      * updates information shown on the information panel
      */
     private void updateInformationPanel() {
@@ -691,7 +551,6 @@ public class ProteinGroupPane
                     }
                 }
             } else {
-
                 if (selectedObject instanceof IntermediateProtein) {
                     informationTable.setModel(
                             new ProteinInformationTableModel(Arrays.asList(new Object[]{selectedObject})));
@@ -700,8 +559,7 @@ public class ProteinGroupPane
                             new PeptideInformationTableModel(Arrays.asList(new Object[]{selectedObject})));
 
                     btnShowHidePSMs.setEnabled(true);
-                    if ((showPSMs.get(selectedVertex.getLabel()) != null ) &&
-                            showPSMs.get(selectedVertex.getLabel())) {
+                    if (visGraph.isExpandedPSMs(selectedVertex)) {
                         btnShowHidePSMs.setText("Hide PSMs");
                     } else {
                         btnShowHidePSMs.setText("Show PSMs");
@@ -711,8 +569,7 @@ public class ProteinGroupPane
                     if ((((IntermediateGroup) selectedObject).getProteins() != null) &&
                             (((IntermediateGroup) selectedObject).getProteins().size() > 1)) {
                         btnCollapseUncollapseProteins.setEnabled(true);
-                        if ((expandedAccessions.get(selectedVertex.getLabel()) != null ) &&
-                                expandedAccessions.get(selectedVertex.getLabel())) {
+                        if (visGraph.isExpandedAccessions(selectedVertex)) {
                             btnCollapseUncollapseProteins.setText("Collapse Proteins");
                         } else {
                             btnCollapseUncollapseProteins.setText("Uncollapse Proteins");
@@ -722,8 +579,7 @@ public class ProteinGroupPane
                     if ((((IntermediateGroup) selectedObject).getPeptides() != null) &&
                             (((IntermediateGroup) selectedObject).getPeptides().size() > 1)) {
                         btnCollapseUncollapsePeptides.setEnabled(true);
-                        if ((expandedPeptides.get(selectedVertex.getLabel()) != null ) &&
-                                expandedPeptides.get(selectedVertex.getLabel())) {
+                        if (visGraph.isExpandedPeptides(selectedVertex)) {
                             btnCollapseUncollapsePeptides.setText("Collapse Peptides");
                         } else {
                             btnCollapseUncollapsePeptides.setText("Uncollapse Peptides");
@@ -745,28 +601,31 @@ public class ProteinGroupPane
 
             if (selectedVertex.getObject() instanceof Collection<?>) {
                 // this is a collection of proteins, select the group
-                VertexObject groupV = null;
-                for (String edge : graph.getOutEdges(selectedVertex)) {
-                    VertexObject v = graph.getOpposite(selectedVertex, edge);
-                    if (v.getObject() instanceof IntermediateGroup) {
-                        groupV = v;
-                    }
-                    if (groupV != null) {
-                        selectedVertex = groupV;
+                for (VertexObject vertex : visGraph.getGraph().getSuccessors(selectedVertex)) {
+                    if (vertex.getObject() instanceof IntermediateGroup) {
+                        selectedVertex = vertex;
                         break;
                     }
                 }
             }
-
-            if ((expandedAccessions.get(selectedVertex.getLabel()) == null) ||
-                    !expandedAccessions.get(selectedVertex.getLabel())) {
-                uncollapseProteins(selectedVertex);
+            
+/*
+TODO:
+hier auch die position speichern und setzen für den collapsed/uncollapsed vertex (bei allen collapse/uncollapse)
+if ((location != null) && (visualizationViewer != null)) {
+    visualizationViewer.getGraphLayout().setLocation(proteinsV, location);
+}
+*/
+            
+            if (!visGraph.isExpandedAccessions(selectedVertex)) {
+                visGraph.uncollapseProteins(selectedVertex);
             } else {
-                collapseProteins(selectedVertex);
+                visGraph.collapseProteins(selectedVertex);
             }
             
             pickedState.clear();
             pickedState.pick(selectedVertex, true);
+            recalculateAndAnimateGraphChanges();
             updateInformationPanel();
         } else if (e.getSource().equals(btnCollapseUncollapsePeptides)) {
             // the peptides (un-)collapse button was pressed
@@ -776,28 +635,23 @@ public class ProteinGroupPane
 
             if (selectedVertex.getObject() instanceof Collection<?>) {
                 // this is a collection of peptides, select the group
-                VertexObject groupV = null;
-                for (String edge : graph.getInEdges(selectedVertex)) {
-                    VertexObject v = graph.getOpposite(selectedVertex, edge);
-                    if (v.getObject() instanceof IntermediateGroup) {
-                        groupV = v;
-                    }
-                    if (groupV != null) {
-                        selectedVertex = groupV;
+                for (VertexObject vertex : visGraph.getGraph().getPredecessors(selectedVertex)) {
+                    if (vertex.getObject() instanceof IntermediateGroup) {
+                        selectedVertex = vertex;
                         break;
                     }
                 }
             }
 
-            if ((expandedPeptides.get(selectedVertex.getLabel()) == null) ||
-                    !expandedPeptides.get(selectedVertex.getLabel())) {
-                uncollapsePeptides(selectedVertex);
+            if (!visGraph.isExpandedPeptides(selectedVertex)) {
+                visGraph.uncollapsePeptides(selectedVertex);
             } else {
-                collapsePeptides(selectedVertex);
+                visGraph.collapsePeptides(selectedVertex);
             }
 
             pickedState.clear();
             pickedState.pick(selectedVertex, true);
+            recalculateAndAnimateGraphChanges();
             updateInformationPanel();
         } else if (e.getSource().equals(btnShowHidePSMs)) {
             // the show/hide PSMs button was pressed
@@ -805,27 +659,27 @@ public class ProteinGroupPane
                 return;
             }
 
-            if ((showPSMs.get(selectedVertex.getLabel()) == null) ||
-                    !showPSMs.get(selectedVertex.getLabel())) {
-                showPSMs(selectedVertex);
+            if (!visGraph.isExpandedPSMs(selectedVertex)) {
+                visGraph.showPSMs(selectedVertex);
             } else {
-                hidePSMs(selectedVertex);
+                visGraph.hidePSMs(selectedVertex);
             }
 
             pickedState.clear();
             pickedState.pick(selectedVertex, true);
+            recalculateAndAnimateGraphChanges();
             updateInformationPanel();
         } else if (e.getSource().equals(layoutComboBox)) {
             Dimension dim = layout.getSize();
 
             if (layoutComboBox.getSelectedItem() == FRLayout2.class) {
-                layout = new FRLayout2<VertexObject, String>(graph);
+                layout = new FRLayout2<VertexObject, String>(visGraph.getGraph());
             } else if (layoutComboBox.getSelectedItem() == CircleLayout.class) {
-                layout = new CircleLayout<VertexObject, String>(graph);
+                layout = new CircleLayout<VertexObject, String>(visGraph.getGraph());
             } else if (layoutComboBox.getSelectedItem() == ProteinLayout.class) {
-                layout = new ProteinLayout<String>(graph);
+                layout = new ProteinLayout<String>(visGraph.getGraph());
             } else {
-                layout = new ProteinLayout<String>(graph);
+                layout = new ProteinLayout<String>(visGraph.getGraph());
             }
             
             if (!(layout instanceof ProteinLayout)) {
@@ -837,308 +691,13 @@ public class ProteinGroupPane
     }
 
 
-    /**
-     * Uncollapses the proteins of the given {@link VertexObject}, which should
-     * be an {@link IntermediateGroup} representative
-     * @param groupV
-     */
-    private void uncollapseProteins(VertexObject groupV) {
-        if ((groupV == null) ||
-                !(groupV.getObject() instanceof IntermediateGroup) ||
-                ((expandedAccessions.get(groupV.getLabel()) != null) && expandedAccessions.get(groupV.getLabel()))) {
-            return;
-        }
-
-        // remove the collapsed proteins
-        Point2D proteinLocation = null;
-        Iterator<String> edgeIt = graph.getIncidentEdges(groupV).iterator();
-        while (edgeIt.hasNext()) {
-            String edge = edgeIt.next();
-            VertexObject proteinsV = graph.getOpposite(groupV, edge);
-            if (proteinsV.getLabel().equals(PROTEINS_OF_PREFIX + groupV.getLabel())) {
-                proteinLocation = visualizationViewer.getGraphLayout().transform(proteinsV);
-                graph.removeVertex(proteinsV);
-                vertexPaints.remove(proteinsV);
-                break;
-            }
-        }
-
-        // add the proteins uncollapsed
-        addProteinVertices(groupV, false, proteinLocation);
-
-        recalculateAndAnimateGraphChanges();
-    }
-
-
-    /**
-     * Collapses the proteins of the given {@link VertexObject}, which should be
-     * an {@link IntermediateGroup} representative
-     * 
-     * @param groupV
-     */
-    private void collapseProteins(VertexObject groupV) {
-        if ((groupV == null) ||
-                !(groupV.getObject() instanceof IntermediateGroup) ||
-                (expandedAccessions.get(groupV.getLabel()) == null) ||
-                !expandedAccessions.get(groupV.getLabel()) ||
-                (((IntermediateGroup)groupV.getObject()).getProteins() == null) ||
-                (((IntermediateGroup)groupV.getObject()).getProteins().size() < 2)) {
-            return;
-        }
-
-        // remove all the protein vertices
-        Iterator<String> edgeIt = graph.getIncidentEdges(groupV).iterator();
-        while (edgeIt.hasNext()) {
-            String edge = edgeIt.next();
-            VertexObject proteinV = graph.getOpposite(groupV, edge);
-            if (proteinV.getObject() instanceof IntermediateProtein) {
-                graph.removeVertex(proteinV);
-                vertexPaints.remove(proteinV);
-            }
-        }
-
-        // add the proteins collapsed
-        addProteinVertices(groupV, true, null);
-
-        recalculateAndAnimateGraphChanges();
-    }
-
-
-    /**
-     * Uncollapses the peptides of the given {@link VertexObject}, which should
-     * be an {@link IntermediateGroup} representative
-     * @param groupV
-     */
-    private void uncollapsePeptides(VertexObject groupV) {
-        if ((groupV == null) ||
-                !(groupV.getObject() instanceof IntermediateGroup) ||
-                ((expandedPeptides.get(groupV.getLabel()) != null) && expandedPeptides.get(groupV.getLabel()))) {
-            return;
-        }
-
-        // remove the collapsed peptides
-        Point2D peptideLocation = null;
-        Iterator<String> edgeIt = graph.getIncidentEdges(groupV).iterator();
-        while (edgeIt.hasNext()) {
-            String edge = edgeIt.next();
-            VertexObject peptidesV = graph.getOpposite(groupV, edge);
-            if (peptidesV.getLabel().equals(PEPTIDES_OF_PREFIX + groupV.getLabel())) {
-                peptideLocation = visualizationViewer.getGraphLayout().transform(peptidesV);
-                graph.removeVertex(peptidesV);
-                vertexPaints.remove(peptidesV);
-                break;
-            }
-        }
-
-        // add the peptides uncollapsed
-        addPeptideVertices(groupV, false, peptideLocation);
-
-        recalculateAndAnimateGraphChanges();
-    }
-
-
-    /**
-     * Collapses the peptides of the given {@link VertexObject}, which should
-     * be an {@link IntermediateGroup} representative
-     * @param groupV
-     */
-    private void collapsePeptides(VertexObject groupV) {
-        if ((groupV == null) ||
-                !(groupV.getObject() instanceof IntermediateGroup) ||
-                (expandedPeptides.get(groupV.getLabel()) == null) ||
-                !expandedPeptides.get(groupV.getLabel()) ||
-                (((IntermediateGroup)groupV.getObject()).getPeptides() == null) ||
-                (((IntermediateGroup)groupV.getObject()).getPeptides().size() < 2)) {
-            return;
-        }
-
-        // remove all the peptide vertices
-        Iterator<String> edgeIt = graph.getIncidentEdges(groupV).iterator();
-        while (edgeIt.hasNext()) {
-            String edge = edgeIt.next();
-            VertexObject peptideV = graph.getOpposite(groupV, edge);
-            if (peptideV.getObject() instanceof IntermediatePeptide) {
-                graph.removeVertex(peptideV);
-                vertexPaints.remove(peptideV);
-            }
-        }
-
-        // add the peptides collapsed
-        addPeptideVertices(groupV, true, null);
-
-        recalculateAndAnimateGraphChanges();
-    }
-
-
-    /**
-     * Shows the PSMs of the given {@link VertexObject}, which should
-     * be an {@link IntermediatePeptide} representative
-     * @param groupV
-     */
-    private void showPSMs(VertexObject peptideV) {
-        if ((peptideV == null) ||
-                !(peptideV.getObject() instanceof IntermediatePeptide) ||
-                ((showPSMs.get(peptideV.getLabel()) != null) && showPSMs.get(peptideV.getLabel()))) {
-            return;
-        }
-
-        Point2D peptideLocation = visualizationViewer.getGraphLayout().transform(peptideV);
-        addPSMVertices(peptideV, peptideLocation);
-
-        recalculateAndAnimateGraphChanges();
-    }
-
-
-    /**
-     * Hides the PSMs of the given {@link VertexObject}, which should
-     * be an {@link IntermediatePeptide} representative
-     * @param groupV
-     */
-    private void hidePSMs(VertexObject peptideV) {
-        if ((peptideV == null) ||
-                !(peptideV.getObject() instanceof IntermediatePeptide) ||
-                (showPSMs.get(peptideV.getLabel()) == null) ||
-                !showPSMs.get(peptideV.getLabel())) {
-            return;
-        }
-
-        // remove the PSMs from the graph
-        Iterator<String> edgeIt = graph.getIncidentEdges(peptideV).iterator();
-        while (edgeIt.hasNext()) {
-            String edge = edgeIt.next();
-            VertexObject psmV = graph.getOpposite(peptideV, edge);
-            if (psmV.getObject() instanceof IntermediatePeptideSpectrumMatch) {
-                graph.removeVertex(psmV);
-                vertexPaints.remove(psmV);
-            }
-        }
-
-        recalculateAndAnimateGraphChanges();
-    }
-
-
-    /**
-     * Adds the proteins of the given group to the graph, either collapsed or
-     * uncollapsed. If the location is not null, set the proteins' position to
-     * the given location.
-     */
-    private void addProteinVertices(VertexObject groupV, Boolean collapsed, Point2D location) {
-        IntermediateGroup group = (IntermediateGroup)groupV.getObject();
-        if (collapsed && (group.getProteins().size() > 1)) {
-            // show the proteins collapsed
-            String proteinLabel = PROTEINS_OF_PREFIX + groupV.getLabel();
-            VertexObject proteinsV =
-                    new VertexObject(proteinLabel, group.getProteins());
-
-            graph.addVertex(proteinsV);
-            vertexPaints.put(proteinsV, PROTEIN_COLOR);
-
-            String edgeName = "proteinGroup_" + proteinLabel + "_" + groupV.getLabel();
-            graph.addEdge(edgeName, proteinsV, groupV);
-            edgePaints.put(edgeName, EDGE_COLOR);
-
-            if (location != null) {
-                visualizationViewer.getGraphLayout().setLocation(proteinsV, location);
-            }
-            expandedAccessions.put(groupV.getLabel(), false);
-        } else {
-            for (IntermediateProtein protein : group.getProteins()) {
-                String proteinLabel = protein.getAccession();
-                VertexObject proteinV = new VertexObject(proteinLabel, protein);
-
-                graph.addVertex(proteinV);
-                vertexPaints.put(proteinV, PROTEIN_COLOR);
-
-                String edgeName = "proteinGroup_" + proteinLabel + "_" + groupV.getLabel();
-                graph.addEdge(edgeName, proteinV, groupV);
-                edgePaints.put(edgeName, EDGE_COLOR);
-
-                if (location != null) {
-                    visualizationViewer.getGraphLayout().setLocation(proteinV, location);
-                }
-            }
-            expandedAccessions.put(groupV.getLabel(), true);
-        }
-    }
-
-
-    /**
-     * Adds the peptides of the given group to the graph, either collapsed or
-     * uncollapsed. If the location is not null, set the peptides' position to
-     * the given location.
-     */
-    private void addPeptideVertices(VertexObject groupV, Boolean collapsed, Point2D location) {
-        IntermediateGroup group = (IntermediateGroup)groupV.getObject();
-        if (collapsed && (group.getPeptides().size() > 1)) {
-            // show the peptides collapsed
-            String peptidesLabel = PEPTIDES_OF_PREFIX + groupV.getLabel();
-            VertexObject peptidesV = new VertexObject(peptidesLabel, group.getPeptides());
-
-            graph.addVertex(peptidesV);
-            vertexPaints.put(peptidesV, PEPTIDE_COLOR);
-
-            String edgeName = "groupPeptide_" + groupV.getLabel() + "_" + peptidesLabel;
-            graph.addEdge(edgeName, groupV, peptidesV);
-            edgePaints.put(edgeName, EDGE_COLOR);
-
-            if (location != null) {
-                visualizationViewer.getGraphLayout().setLocation(peptidesV, location);
-            }
-            expandedPeptides.put(groupV.getLabel(), false);
-        } else {
-            // uncollapsed peptides
-            for (IntermediatePeptide peptide : group.getPeptides()) {
-                String peptideLabel = peptide.getID().toString();
-                VertexObject peptideV = new VertexObject(peptideLabel, peptide);
-
-                graph.addVertex(peptideV);
-                vertexPaints.put(peptideV, PEPTIDE_COLOR);
-
-                String edgeName = "groupPeptide_" + groupV.getLabel() + "_" + peptideLabel;
-                graph.addEdge(edgeName, groupV, peptideV);
-                edgePaints.put(edgeName, EDGE_COLOR);
-
-                if (location != null) {
-                    visualizationViewer.getGraphLayout().setLocation(peptideV, location);
-                }
-
-                showPSMs.put(peptideLabel, false);
-            }
-            expandedPeptides.put(groupV.getLabel(), true);
-        }
-    }
-
-
-    /**
-     * Adds the PSMs of the given peptide to the graph. If the location is not
-     * null, set the peptides' position to the given location.
-     */
-    private void addPSMVertices(VertexObject peptideV, Point2D location) {
-        IntermediatePeptide peptide = (IntermediatePeptide)peptideV.getObject();
-
-        // add the PSMs
-        for (IntermediatePeptideSpectrumMatch psm : peptide.getPeptideSpectrumMatches()) {
-            String psmLabel = psm.getID().toString();
-            VertexObject psmV = new VertexObject(psmLabel, psm);
-
-            graph.addVertex(psmV);
-            vertexPaints.put(psmV, PSM_COLOR);
-
-            String psmEdgeName = "peptidePSM_" + peptideV.getLabel() + "_" + psmLabel;
-            graph.addEdge(psmEdgeName, peptideV, psmV);
-            edgePaints.put(psmEdgeName, EDGE_COLOR);
-        }
-
-        showPSMs.put(peptideV.getLabel(), true);
-    }
-
 
     /**
      * Recalculates the layout and visualization of the graph for the changed
      * graph topology
      */
     private void recalculateAndAnimateGraphChanges() {
-        layout.setGraph(graph);
+        layout.setGraph(visGraph.getGraph());
         layout.initialize();
 
         if (layout instanceof IterativeContext) {
@@ -1148,7 +707,7 @@ public class ProteinGroupPane
         }
         
         StaticLayout<VertexObject, String> staticLayout =
-                new StaticLayout<VertexObject, String>(graph, layout, layout.getSize());
+                new StaticLayout<VertexObject, String>(visGraph.getGraph(), layout, layout.getSize());
         
         LayoutTransition<VertexObject, String> lt =
                 new LayoutTransition<VertexObject, String>(visualizationViewer,
