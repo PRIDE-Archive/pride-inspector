@@ -151,6 +151,9 @@ chart_auto_adjust.tooltip=Auto adjust the chart axis
 chart_auto_adjust.icon.small=icon/16x16/chart_auto_adjust.png
 chart_auto_adjust.icon.large=icon/32x32/chart_auto_adjust.png
 
+plus.icon.small=icon/16x16/plus.png
+minus.icon.small=icon/16x16/minus.png
+
 chart_all_charts.desc=All thumbnails
 chart_all_charts.tooltip=Show all the chart thumbnails
 chart_all_charts.icon.small=icon/16x16/chart_all_charts.png

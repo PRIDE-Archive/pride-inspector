@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * @author Rui Wang
+ * @author rwang
+ * @author ypriverol
  * @version $Id$
  */
 public class ProteinAccessionHyperLinkCellRenderer extends JLabel implements TableCellRenderer {

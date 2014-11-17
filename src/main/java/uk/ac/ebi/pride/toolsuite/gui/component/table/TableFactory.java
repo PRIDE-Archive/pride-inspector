@@ -1,10 +1,14 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table;
 
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.JXTree;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.table.DefaultTableColumnModelExt;
 import org.jdesktop.swingx.table.TableColumnExt;
+import org.jdesktop.swingx.tree.DefaultXTreeCellRenderer;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
+import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
+import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.filter.AssayDownloadButtonCellEditor;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.listener.*;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.*;
@@ -22,7 +26,10 @@ import uk.ac.ebi.pride.utilities.data.core.*;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.*;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeCellRenderer;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Collection;
@@ -873,8 +880,37 @@ public class TableFactory {
         ch.addMouseListener(ma);
         ch.addMouseMotionListener(ma);
 
-        // set table column model needs to happen before set tree table model
-        //table.setTreeTableModel(tableModel);
+        PrideInspectorContext context = (PrideInspectorContext) PrideInspector.getInstance().getDesktopContext();
+
+        Icon plusIcon = GUIUtilities.loadImageIcon(context.getProperty("plus.icon.small"));
+        Icon minusIcon = GUIUtilities.loadImageIcon(context.getProperty("minus.icon.small"));
+
+
+
+        table.setTreeCellRenderer((new DefaultTreeCellRenderer() {
+
+            @Override
+            public Component getTreeCellRendererComponent(JTree tree,
+                                                          Object value, boolean selected, boolean expanded,
+                                                          boolean isLeaf, int row, boolean focused) {
+
+                Component c = super.getTreeCellRendererComponent(tree,value,selected,expanded,isLeaf,row,focused);
+
+                Border paddingBorder = BorderFactory.createEmptyBorder(0, 5, 0, 0);
+
+                this.setBorder(paddingBorder);
+
+
+
+                return c;
+
+            }
+        }));
+
+        table.setOverwriteRendererIcons(true);
+        table.setCollapsedIcon(plusIcon);
+
+        table.setExpandedIcon(minusIcon);
 
         table.setClosedIcon(null);
         table.setLeafIcon(null);
