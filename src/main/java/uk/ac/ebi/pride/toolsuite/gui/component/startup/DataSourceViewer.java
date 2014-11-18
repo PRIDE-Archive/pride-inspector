@@ -1,9 +1,13 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.startup;
 
+import net.java.balloontip.BalloonTip;
+import net.java.balloontip.styles.EdgedBalloonStyle;
+import net.java.balloontip.utils.TimingUtils;
 import org.bushe.swing.event.annotation.AnnotationProcessor;
 import org.bushe.swing.event.annotation.EventSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.pride.toolsuite.gui.component.balloontip.BalloonTipUtil;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.toolsuite.gui.EDTUtils;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
@@ -57,10 +61,14 @@ public class DataSourceViewer extends JPanel {
      */
     private PrideInspectorContext context = null;
 
+    private boolean noadded = false;
+
+    private JLabel summaryTitle = null;
+
     /**
      * Constructor
      */
-    public DataSourceViewer() {
+    public DataSourceViewer( JLabel summaryTitle) {
         // enable annotation
         AnnotationProcessor.process(this);
 
@@ -69,6 +77,8 @@ public class DataSourceViewer extends JPanel {
 
         // set up the rest of components
         addComponents();
+
+        this.summaryTitle = summaryTitle;
     }
 
     private void setupMainPane() {
@@ -88,6 +98,7 @@ public class DataSourceViewer extends JPanel {
         // create data source table with data access model
         sourceTableModel = new DataAccessTableModel();
         sourceTable = new DataAccessTable(sourceTableModel);
+
         sourceTable.setBorder(BorderFactory.createEmptyBorder());
         sourceTable.addMouseMotionListener(new TableCellMouseMotionListener(sourceTable, TableHeader.DATA_SOURCE_COLUMN.getHeader()));
 
@@ -164,6 +175,7 @@ public class DataSourceViewer extends JPanel {
                 @Override
                 public void run() {
                     sourceTable.changeSelection(rowNum, sourceTableModel.getColumnIndex(TableHeader.DATA_SOURCE_COLUMN), false, false);
+
                 }
             };
         }
@@ -179,9 +191,19 @@ public class DataSourceViewer extends JPanel {
     @EventSubscriber(eventClass = ProcessingDataSourceEvent.class)
     public void onProcessingDataSourceEvent(ProcessingDataSourceEvent evt){
         DataAccessController controller = (DataAccessController) evt.getDataSource();
-        if(context.getDataAccessMonitor().containStatusController(controller, evt.getStatus()))
+        if(context.getDataAccessMonitor().containStatusController(controller, evt.getStatus())){
             context.getDataAccessMonitor().removeStatusController(controller, evt.getStatus());
-        else
+            if(evt.getStatus() == ProcessingDataSourceEvent.Status.IDENTIFICATION_READING && controller.getType().equals(DataAccessController.Type.MZIDENTML) && !noadded){
+                java.util.List<DataAccessController> controllers = context.getControllers();
+                int row = controllers.indexOf(controller);
+                Icon icon = GUIUtilities.loadImageIcon(context.getProperty("open.mzidentml.ms.icon.small"));
+                BalloonTip tip = BalloonTipUtil.createBalloonNote(summaryTitle, icon, "<html><p>" +"Click the icon to add the related spectra files"+ "</p></html>",BalloonTip.AttachLocation.ALIGNED,50, 10,true);
+                TimingUtils.showTimedBalloon(tip, 5000);
+                this.revalidate();
+                this.repaint();
+                noadded = true;
+            }
+        }else
             context.getDataAccessMonitor().addStatusController(controller,evt.getStatus());
 
         sourceTable.revalidate();

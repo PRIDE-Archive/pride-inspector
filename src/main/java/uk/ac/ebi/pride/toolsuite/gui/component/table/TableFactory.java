@@ -900,8 +900,6 @@ public class TableFactory {
 
                 this.setBorder(paddingBorder);
 
-
-
                 return c;
 
             }

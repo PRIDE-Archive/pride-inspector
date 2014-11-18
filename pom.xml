@@ -73,7 +73,7 @@
         <eventbus.version>1.4</eventbus.version>
         <swingx-all.version>1.6.5-1</swingx-all.version>
         <ehcache.version>2.7.0</ehcache.version>
-        <balloontip.version>1.2.4.1</balloontip.version>
+        <balloontip.version>1.2</balloontip.version>
         <protein-details-fetcher.version>1.0.5-SNAPSHOT</protein-details-fetcher.version>
         <accession-resolver.version>1.0.3</accession-resolver.version>
         <prider-ws-model.version>0.2.7</prider-ws-model.version>
