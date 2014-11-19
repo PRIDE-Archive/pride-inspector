@@ -138,9 +138,11 @@ public class ProteinGroupPane
 
 
 
+    private static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
+    private static final Color SELECTED_BORDER_COLOR = Color.RED;
 
     private static final Color FADED_COLOR = Color.LIGHT_GRAY;
-    private static final Color SELECTED_COLOR = Color.RED;
+    
     private static final Color GROUP_COLOR = new Color(0x000080);
     private static final Color PROTEIN_COLOR = new Color(0x008000);
     private static final Color PEPTIDE_COLOR = new Color(0xffa500);
@@ -289,7 +291,6 @@ public class ProteinGroupPane
         Layout<VertexObject, String> staticLayout = new StaticLayout<VertexObject, String>(visGraph.getGraph(), layout, layout.getSize());
 
         visualizationViewer = new VisualizationViewer<VertexObject,String>(staticLayout, layout.getSize());
-        
         visualizationViewer.setBackground(Color.white);
 
         // listen to viewer resizing
@@ -307,63 +308,32 @@ public class ProteinGroupPane
         pickedState = visualizationViewer.getPickedVertexState();
         pickedState.addItemListener(this);
 
-        // tell the renderer to use our own customized colors for the vertices
-        //visualizationViewer.getRenderContext().setVertexFillPaintTransformer(MapTransformer.<VertexObject, Paint>getInstance(vertexPaints));
-
-        // give a selected vertex red edges, others the same color as the shape edge
-        /*
+        // set the special vertex and labeller for the nodes
+        ProteinVertexLabeller labeller = new ProteinVertexLabeller(visualizationViewer.getRenderContext(), 5);
+        ProteinVertexShapeTransformer shaper = new ProteinVertexShapeTransformer(visualizationViewer.getRenderContext(), 5);
+        ProteinVertexColorTransformer filler = new ProteinVertexColorTransformer();
+        visualizationViewer.getRenderContext().setVertexShapeTransformer(shaper);
+        visualizationViewer.getRenderContext().setVertexFillPaintTransformer(filler);
+        visualizationViewer.getRenderContext().setVertexLabelTransformer(labeller);
+        visualizationViewer.getRenderer().setVertexLabelRenderer(labeller);
+        // give a selected vertex red edges, otherwise paint it black
         visualizationViewer.getRenderContext().setVertexDrawPaintTransformer(
                 new Transformer<VertexObject, Paint>() {
                     @Override
                     public Paint transform(VertexObject v) {
                         if (pickedState.isPicked(v)) {
-                            return SELECTED_COLOR;
+                            return SELECTED_BORDER_COLOR;
                         } else {
-                            return vertexPaints.get(v);
+                            return DEFAULT_BORDER_COLOR;
                         }
                     }
                 });
-        */
-
-        // set the special vertex and labeller for the nodes
-        ProteinVertexLabeller labeller = new ProteinVertexLabeller(visualizationViewer.getRenderContext(), 5);
-        visualizationViewer.getRenderContext().setVertexShapeTransformer(labeller);
-        visualizationViewer.getRenderer().setVertexLabelRenderer(labeller);
-
-
-        // customize the edges
-        //visualizationViewer.getRenderContext().setEdgeDrawPaintTransformer(MapTransformer.<String, Paint>getInstance(edgePaints));
-        visualizationViewer.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<VertexObject, String>());
-
-        // colors for arrowheads are same as the edge
-        //visualizationViewer.getRenderContext().setArrowDrawPaintTransformer(MapTransformer.<String, Paint>getInstance(edgePaints));
-        //visualizationViewer.getRenderContext().setArrowFillPaintTransformer(MapTransformer.<String, Paint>getInstance(edgePaints));
-
-
-        // always show the vertex name as tooltip
         visualizationViewer.setVertexToolTipTransformer(new ToStringLabeller<VertexObject>());
-
-        // show all vertex labels for now
-        visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<VertexObject>());
-
-        // gray (= faded out) edges are thin, all others thick
-        /*
-        visualizationViewer.getRenderContext().setEdgeStrokeTransformer(
-                new Transformer<String, Stroke>() {
-                    protected final Stroke THIN = new BasicStroke(1);
-                    protected final Stroke THICK = new BasicStroke(2);
-
-                    @Override
-                    public Stroke transform(String e) {
-                        Paint c = edgePaints.get(e);
-                        if (c == FADED_COLOR)
-                            return THIN;
-                        else
-                            return THICK;
-                    }
-                });
-        */
-
+        
+        // customize the edges to be straight lines
+        visualizationViewer.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<VertexObject, String>());
+        
+        
         // define a manipulation mouse
         graphMouse = new DefaultModalGraphMouse<VertexObject, String>();
         // set PICKING as default mouse behaviour
