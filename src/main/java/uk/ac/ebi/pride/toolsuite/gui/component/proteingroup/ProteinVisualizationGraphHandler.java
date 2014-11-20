@@ -29,8 +29,11 @@ public class ProteinVisualizationGraphHandler {
     /** access controller to access the data (proteins, peptides, PSMs...) */
     private DataAccessController controller;
 
-    /** the accession of the selected protein (created while building the intermediate structure) */
-    private String selectedProteinAccession;
+    /** the accession of the reference protein (created while building the intermediate structure) */
+    private String referenceProteinAccession;
+    
+    /** the vertex containing the reference protein, this may change during collapsing/uncollapsing */
+    private VertexObject referenceVertex;
     
     /** the PIA intermediate structure for the visualization */
     private IntermediateStructure intermediateStructure;
@@ -60,7 +63,8 @@ public class ProteinVisualizationGraphHandler {
     
     public ProteinVisualizationGraphHandler(DataAccessController controller, Comparable proteinId, Comparable proteinGroupId) {
         this.controller = controller;
-        this.selectedProteinAccession = null;
+        this.referenceProteinAccession = null;
+        this.referenceVertex = null;
         this.intermediateStructure = null;
         
         this.expandedAccessionsMap = new HashMap<String, Boolean>();
@@ -81,12 +85,22 @@ public class ProteinVisualizationGraphHandler {
     
     
     /**
-     * getter for the selected protein accession (around which teh graph is
+     * getter for the reference protein accession (around which the graph is
      * created)
      * @return
      */
-    public String getProteinAccession() {
-        return selectedProteinAccession;
+    public String getReferenceAccession() {
+        return referenceProteinAccession;
+    }
+    
+    
+    /**
+     * getter for the vertex containing the reference protein, this may change
+     * during collapsing/uncollapsing
+     * @return
+     */
+    public VertexObject getReferenceVertex() {
+        return referenceVertex;
     }
     
     
@@ -133,7 +147,7 @@ public class ProteinVisualizationGraphHandler {
         for (Comparable protID : controller.getProteinAmbiguityGroupById(proteinGroupId).getProteinIds()) {
             String acc = importController.addProteinsSpectrumIdentificationsToStructCreator(protID, piaModeller.getIntermediateStructureCreator(), null);
             if (proteinId.equals(protID)) {
-                selectedProteinAccession = acc;
+                referenceProteinAccession = acc;
             }
         }
 
@@ -197,7 +211,7 @@ public class ProteinVisualizationGraphHandler {
             String proteinLabel = PROTEINS_OF_PREFIX + groupV.getLabel();
             VertexObject proteinsV =
                     new VertexObject(proteinLabel, group.getProteins());
-
+            
             graph.addVertex(proteinsV);
             proteins.add(proteinsV);
 
@@ -205,6 +219,16 @@ public class ProteinVisualizationGraphHandler {
             graph.addEdge(edgeName, proteinsV, groupV);
 
             expandedAccessionsMap.put(groupV.getLabel(), false);
+            
+            // check if it contains the reference protein
+            if (referenceProteinAccession != null) {
+                for (IntermediateProtein protein : group.getProteins()) {
+                    if (referenceProteinAccession.equals(protein.getAccession())) {
+                        referenceVertex = proteinsV;
+                        break;
+                    }
+                }
+            }
         } else {
             for (IntermediateProtein protein : group.getProteins()) {
                 String proteinLabel = protein.getAccession();
@@ -215,6 +239,11 @@ public class ProteinVisualizationGraphHandler {
 
                 String edgeName = "proteinGroup_" + proteinLabel + "_" + groupV.getLabel();
                 graph.addEdge(edgeName, proteinV, groupV);
+                
+                // check if this is the reference protein
+                if (referenceProteinAccession.equals(protein.getAccession())) {
+                    referenceVertex = proteinV;
+                }
             }
             expandedAccessionsMap.put(groupV.getLabel(), true);
         }

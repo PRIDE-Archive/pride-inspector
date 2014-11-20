@@ -79,6 +79,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -125,8 +126,11 @@ public class ProteinGroupPane
     /** button to show/hide PSMs */
     private JButton btnShowHidePSMs;
 
-    /** table showing information of selected vertex */
-    private JTable informationTable;
+    /** table showing information of connected accessions */
+    private ProteinInformationTableModel accessionsTableModel;
+
+    /** table showing information of connected PSMs */
+    private PSMsInformationTableModel psmsTableModel;
 
     /** comboBox for layout changing */
     private JComboBox layoutComboBox;
@@ -141,14 +145,6 @@ public class ProteinGroupPane
     private static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
     private static final Color SELECTED_BORDER_COLOR = Color.RED;
 
-    private static final Color FADED_COLOR = Color.LIGHT_GRAY;
-    
-    private static final Color GROUP_COLOR = new Color(0x000080);
-    private static final Color PROTEIN_COLOR = new Color(0x008000);
-    private static final Color PEPTIDE_COLOR = new Color(0xffa500);
-    private static final Color PSM_COLOR = new Color(0x87ceeb);
-    private static final Color EDGE_COLOR = Color.BLACK;
-
 
 
 
@@ -159,6 +155,12 @@ public class ProteinGroupPane
         this.visGraph = new ProteinVisualizationGraphHandler(controller, proteinId, proteinGroupId);
         this.selectedVertex = null;
         setUpPaneComponents();
+        
+        // set the initial picked vertex to the reference vertex
+        pickedState.clear();
+        if (visGraph.getReferenceVertex() != null) {
+            pickedState.pick(visGraph.getReferenceVertex(), true);
+        }
     }
 
 
@@ -204,10 +206,10 @@ public class ProteinGroupPane
         // the panel for the bottom
         JPanel bottomPanel = new JPanel();
         GridBagLayout gbl_bottomPanel = new GridBagLayout();
-        gbl_bottomPanel.columnWidths = new int[]{0, 0, 0, 0};
-        gbl_bottomPanel.rowHeights = new int[]{0, 0};
-        gbl_bottomPanel.columnWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
-        gbl_bottomPanel.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+        gbl_bottomPanel.columnWidths = new int[]{0, 0, 0};
+        gbl_bottomPanel.rowHeights = new int[]{0, 0, 0};
+        gbl_bottomPanel.columnWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
+        gbl_bottomPanel.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
         bottomPanel.setLayout(gbl_bottomPanel);
         splitPane.setBottomComponent(bottomPanel);
 
@@ -217,6 +219,7 @@ public class ProteinGroupPane
         // information panel
         JPanel informationPanel = new JPanel();
         gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridheight = 2;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -231,6 +234,7 @@ public class ProteinGroupPane
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(0, 3, 0, 0));
         gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridheight = 1;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -241,7 +245,7 @@ public class ProteinGroupPane
         btnCollapseUncollapseProteins.addActionListener(this);
         buttonPanel.add(btnCollapseUncollapseProteins);
 
-        btnCollapseUncollapsePeptides = new JButton("Proteins");
+        btnCollapseUncollapsePeptides = new JButton("Peptides");
         btnCollapseUncollapsePeptides.setEnabled(false);
         btnCollapseUncollapsePeptides.addActionListener(this);
         buttonPanel.add(btnCollapseUncollapsePeptides);
@@ -250,18 +254,31 @@ public class ProteinGroupPane
         btnShowHidePSMs.setEnabled(false);
         btnShowHidePSMs.addActionListener(this);
         buttonPanel.add(btnShowHidePSMs);
-
-        JScrollPane scrollPane = new JScrollPane();
+        
+        
+        JSplitPane infoSplitPane = new JSplitPane();
+        infoSplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        infoSplitPane.setResizeWeight(0.5);
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
         gbc.gridy = 1;
-        informationPanel.add(scrollPane, gbc);
-
-        informationTable = new JTable();
-        informationTable.setFillsViewportHeight(true);
-        scrollPane.setViewportView(informationTable);
-
+        informationPanel.add(infoSplitPane, gbc);
+        
+        JScrollPane scrollPane = new JScrollPane();
+        infoSplitPane.setTopComponent(scrollPane);
+        accessionsTableModel = new ProteinInformationTableModel(null);
+        JTable accessionsTable = new JTable(accessionsTableModel);
+        accessionsTable.setFillsViewportHeight(true);
+        scrollPane.setViewportView(accessionsTable);
+        
+        scrollPane = new JScrollPane();
+        infoSplitPane.setBottomComponent(scrollPane);
+        psmsTableModel = new PSMsInformationTableModel(null);
+        JTable psmsTable = new JTable(psmsTableModel);
+        psmsTable.setFillsViewportHeight(true);
+        scrollPane.setViewportView(psmsTable);
+        
         updateInformationPanel();
 
         // the score threshold panel
@@ -276,8 +293,8 @@ public class ProteinGroupPane
         JPanel visualizationControlsPanel = setUpVisualizationControls();
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.gridx = 2;
-        gbc.gridy = 0;
+        gbc.gridx = 1;
+        gbc.gridy = 1;
         bottomPanel.add(visualizationControlsPanel, gbc);
     }
 
@@ -307,7 +324,7 @@ public class ProteinGroupPane
         // let the pane listen to the vertex-picking
         pickedState = visualizationViewer.getPickedVertexState();
         pickedState.addItemListener(this);
-
+        
         // set the special vertex and labeller for the nodes
         ProteinVertexLabeller labeller = new ProteinVertexLabeller(visualizationViewer.getRenderContext(), 5);
         ProteinVertexShapeTransformer shaper = new ProteinVertexShapeTransformer(visualizationViewer.getRenderContext(), 5);
@@ -328,7 +345,7 @@ public class ProteinGroupPane
                         }
                     }
                 });
-        visualizationViewer.setVertexToolTipTransformer(new ToStringLabeller<VertexObject>());
+        visualizationViewer.setVertexToolTipTransformer(labeller);
         
         // customize the edges to be straight lines
         visualizationViewer.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<VertexObject, String>());
@@ -488,7 +505,7 @@ public class ProteinGroupPane
         } else {
             return;
         }
-
+        
         // reset all the information
         btnCollapseUncollapseProteins.setText("Proteins");
         btnCollapseUncollapseProteins.setEnabled(false);
@@ -496,48 +513,67 @@ public class ProteinGroupPane
         btnCollapseUncollapsePeptides.setEnabled(false);
         btnShowHidePSMs.setText("PSMs");
         btnShowHidePSMs.setEnabled(false);
-        informationTable.setModel(new DefaultTableModel());
 
+        Set<IntermediateProtein> infoProteins = null;
+        Set<IntermediatePeptide> infoPeptides = null;
+        
         if (selectedVertex != null) {
             Object selectedObject = selectedVertex.getObject();
-
+            
             if (selectedObject instanceof Collection) {
                 // the object contains collapsed information
                 Iterator<?> objectIterator = ((Collection<?>)selectedObject).iterator();
 
                 if (objectIterator.hasNext()) {
                     Object firstObject = objectIterator.next();
-
+                    IntermediateGroup connectedGroup = null;
+                    
                     if (firstObject instanceof IntermediateProtein) {
-                        informationTable.setModel(
-                                new ProteinInformationTableModel((Collection<?>)selectedObject));
                         btnCollapseUncollapseProteins.setText("Uncollapse Proteins");
                         btnCollapseUncollapseProteins.setEnabled(true);
+                        
+                        // get the connected proteins
+                        for (VertexObject vObject : visGraph.getGraph().getSuccessors(selectedVertex)) {
+                            if (vObject.getObject() instanceof IntermediateGroup) {
+                                connectedGroup = (IntermediateGroup)vObject.getObject();
+                                break;
+                            }
+                        }
                     } else if (firstObject instanceof IntermediatePeptide) {
-                        informationTable.setModel(
-                                new PeptideInformationTableModel((Collection<?>)selectedObject));
                         btnCollapseUncollapsePeptides.setText("Uncollapse Peptides");
                         btnCollapseUncollapsePeptides.setEnabled(true);
+                        
+                        // get the connected proteins
+                        for (VertexObject vObject : visGraph.getGraph().getPredecessors(selectedVertex)) {
+                            if (vObject.getObject() instanceof IntermediateGroup) {
+                                connectedGroup = (IntermediateGroup)vObject.getObject();
+                                break;
+                            }
+                        }
                     }
+                    
+                    infoProteins = connectedGroup.getAllProteins();
+                    infoPeptides = connectedGroup.getAllPeptides();
                 }
             } else {
                 if (selectedObject instanceof IntermediateProtein) {
-                    informationTable.setModel(
-                            new ProteinInformationTableModel(Arrays.asList(new Object[]{selectedObject})));
+                    infoProteins = ((IntermediateProtein) selectedObject).getGroup().getProteins();
+                    infoPeptides = ((IntermediateProtein) selectedObject).getGroup().getAllPeptides();
                 } else if (selectedObject instanceof IntermediatePeptide) {
-                    informationTable.setModel(
-                            new PeptideInformationTableModel(Arrays.asList(new Object[]{selectedObject})));
-
                     btnShowHidePSMs.setEnabled(true);
                     if (visGraph.isExpandedPSMs(selectedVertex)) {
                         btnShowHidePSMs.setText("Hide PSMs");
                     } else {
                         btnShowHidePSMs.setText("Show PSMs");
                     }
+                    
+                    infoProteins = ((IntermediatePeptide) selectedObject).getAllProteins();
+                    infoPeptides = new HashSet<IntermediatePeptide>();
+                    infoPeptides.add((IntermediatePeptide)selectedObject);
                 } else if (selectedObject instanceof IntermediateGroup) {
-
-                    if ((((IntermediateGroup) selectedObject).getProteins() != null) &&
-                            (((IntermediateGroup) selectedObject).getProteins().size() > 1)) {
+                    IntermediateGroup connectedGroup = (IntermediateGroup)selectedObject;
+                    if ((connectedGroup.getProteins() != null) &&
+                            (connectedGroup.getProteins().size() > 1)) {
                         btnCollapseUncollapseProteins.setEnabled(true);
                         if (visGraph.isExpandedAccessions(selectedVertex)) {
                             btnCollapseUncollapseProteins.setText("Collapse Proteins");
@@ -545,9 +581,9 @@ public class ProteinGroupPane
                             btnCollapseUncollapseProteins.setText("Uncollapse Proteins");
                         }
                     }
-
-                    if ((((IntermediateGroup) selectedObject).getPeptides() != null) &&
-                            (((IntermediateGroup) selectedObject).getPeptides().size() > 1)) {
+                    
+                    if ((connectedGroup.getPeptides() != null) &&
+                            (connectedGroup.getPeptides().size() > 1)) {
                         btnCollapseUncollapsePeptides.setEnabled(true);
                         if (visGraph.isExpandedPeptides(selectedVertex)) {
                             btnCollapseUncollapsePeptides.setText("Collapse Peptides");
@@ -555,9 +591,19 @@ public class ProteinGroupPane
                             btnCollapseUncollapsePeptides.setText("Uncollapse Peptides");
                         }
                     }
+                    
+                    infoProteins = ((IntermediateGroup) selectedObject).getAllProteins();
+                    infoPeptides = ((IntermediateGroup) selectedObject).getAllPeptides();
+                } else if (selectedObject instanceof IntermediatePeptideSpectrumMatch) {
+                    infoProteins = ((IntermediatePeptideSpectrumMatch) selectedObject).getPeptide().getAllProteins();
+                    infoPeptides = new HashSet<IntermediatePeptide>();
+                    infoPeptides.add(((IntermediatePeptideSpectrumMatch) selectedObject).getPeptide());
                 }
             }
         }
+        
+        accessionsTableModel.setProteins(infoProteins);
+        psmsTableModel.setPeptides(infoPeptides);
     }
 
 
@@ -578,14 +624,6 @@ public class ProteinGroupPane
                     }
                 }
             }
-            
-/*
-TODO:
-hier auch die position speichern und setzen für den collapsed/uncollapsed vertex (bei allen collapse/uncollapse)
-if ((location != null) && (visualizationViewer != null)) {
-    visualizationViewer.getGraphLayout().setLocation(proteinsV, location);
-}
-*/
             
             if (!visGraph.isExpandedAccessions(selectedVertex)) {
                 visGraph.uncollapseProteins(selectedVertex);
