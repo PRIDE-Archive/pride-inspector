@@ -9,12 +9,16 @@ import uk.ac.ebi.pride.utilities.data.core.Spectrum;
 import uk.ac.ebi.pride.toolsuite.gui.component.exception.ThrowableEntry;
 import uk.ac.ebi.pride.toolsuite.gui.component.message.MessageType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * User: rwang
  * Date: 10/06/11
  * Time: 15:34
  */
 public class RetrieveSpectrumTask extends AbstractDataAccessTask<Spectrum, Void> {
+
     private static final Logger logger = LoggerFactory.getLogger(RetrievePeptideTask.class);
 
     private Comparable identId;
@@ -90,7 +94,11 @@ public class RetrieveSpectrumTask extends AbstractDataAccessTask<Spectrum, Void>
             spectrum = peptide.getSpectrum();
             if (spectrum != null) {
                 // reassign peptide, this is for fragmented ions and modifications
-                spectrum.setPeptide(peptide);
+                List<Peptide> peptides = new ArrayList<Peptide>();
+                if(spectrum.getPeptide() != null)
+                    peptides = spectrum.getPeptide();
+                peptides.add(peptide);
+                spectrum.setPeptide(peptides);
             }
         }
         return spectrum;

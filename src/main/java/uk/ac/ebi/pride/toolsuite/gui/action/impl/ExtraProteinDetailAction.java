@@ -5,6 +5,7 @@ import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.table.TableColumnExt;
 import org.jdesktop.swingx.table.TableColumnModelExt;
 import org.jdesktop.swingx.treetable.TreeTableModel;
+import uk.ac.ebi.pride.tools.protein_details_fetcher.ProteinDetailFetcher;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
@@ -60,7 +61,7 @@ public class ExtraProteinDetailAction extends PrideAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (InternetChecker.check()) {
+        if (InternetChecker.check() && ProteinDetailFetcher.checkUniprotService()) {
             // set hidden protein details columns visible
             setColumnVisible();
             // start retrieval task

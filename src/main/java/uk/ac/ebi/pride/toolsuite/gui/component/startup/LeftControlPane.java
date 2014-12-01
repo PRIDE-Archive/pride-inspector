@@ -14,7 +14,8 @@ import java.awt.*;
  * 2. SummaryReportViewer, which displays the summary report for selected experiment
  * 3. LaunchMenuViewer, which includes a list of buttons to launch start different features, e.g. database search.
  * <p/>
- * User: rwang
+ * @user rwang
+ * @user ypriverol
  * Date: 19-Aug-2010
  * Time: 11:28:07
  */
@@ -164,7 +165,7 @@ public class LeftControlPane extends JPanel {
 
     private void addSubComponents() {
         // data source viewer
-        DataSourceViewer dataSourceViewer = new DataSourceViewer();
+        DataSourceViewer dataSourceViewer = new DataSourceViewer(dataSourceLabel);
         JScrollPane dataSourceScrollPane = new JScrollPane(dataSourceViewer, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         dataSourcePanel.add(dataSourceScrollPane, BorderLayout.CENTER);
 

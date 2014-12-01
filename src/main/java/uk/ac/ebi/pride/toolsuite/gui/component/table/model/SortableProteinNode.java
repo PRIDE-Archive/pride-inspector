@@ -255,4 +255,10 @@ public class SortableProteinNode  extends SortableTreeTableNode{
         return null;
     }
 
+    @Override
+    public String toString() {
+        if(proteinGroupId != null)
+            return proteinGroupId.toString();
+        return null;
+    }
 }

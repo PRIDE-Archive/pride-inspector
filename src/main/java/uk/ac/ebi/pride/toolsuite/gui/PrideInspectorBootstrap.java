@@ -11,7 +11,8 @@ import java.util.Properties;
 /**
  * PrideInspectorBootstrap calls PrideInspector with specific settings.
  *
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 06-Oct-2010
  * Time: 15:04:32
  */

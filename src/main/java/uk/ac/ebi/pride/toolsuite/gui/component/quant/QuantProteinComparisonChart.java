@@ -18,10 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
-import uk.ac.ebi.pride.utilities.data.core.CvParam;
-import uk.ac.ebi.pride.utilities.data.core.QuantScore;
-import uk.ac.ebi.pride.utilities.data.core.Quantification;
-import uk.ac.ebi.pride.utilities.data.core.QuantitativeSample;
+import uk.ac.ebi.pride.utilities.data.core.*;
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.EventBusSubscribable;
 import uk.ac.ebi.pride.toolsuite.gui.event.QuantSelectionEvent;
@@ -110,7 +107,7 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
     @Override
     protected void addComponents() {
         dataset = new QuantCategoryDataset();
-        JFreeChart chart = ChartFactory.createBarChart(appContext.getProperty("quant.protein.histogram.title"),
+        JFreeChart chart = ChartFactory.createBarChart(null,
                 appContext.getProperty("quant.histogram.x.axis"),
                 appContext.getProperty("quant.histogram.y.axis"),
                 dataset,
@@ -119,8 +116,8 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
                 true,
                 false);
         // set chart title size
-        TextTitle title = chart.getTitle();
-        title.setFont(title.getFont().deriveFont(15f));
+        //TextTitle title = chart.getTitle();
+        //title.setFont(title.getFont().deriveFont(15f));
         // plot
         CategoryPlot plot = chart.getCategoryPlot();
         plot.setBackgroundPaint(Color.white);
@@ -406,25 +403,27 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
                 // get quantitation data
                 QuantScore quantitation = controller.getProteinById(id).getQuantScore();
 
+                Map<Comparable, StudyVariable> studyVariablesTitles = controller.getStudyVariables();
+
                 if (referenceSampleIndex == 0) {
                     for(Comparable column: quantitation.getStudyVariableScores().keySet()){
-                        dataset.addValue(quantitation.getStudyVariableScores().get(column), proteinAcc, id, column.toString());
+                        dataset.addValue(quantitation.getStudyVariableScores().get(column), proteinAcc, id, studyVariablesTitles.get(column).getDescription());
                         java.util.List<Comparable> columns = idMapping.get(id);
                         if (columns == null) {
                             columns = new ArrayList<Comparable>();
                             idMapping.put(id, columns);
                         }
-                        columns.add(column);
+                        columns.add(studyVariablesTitles.get(column).getDescription());
                     }
                 }else{
                     for(Comparable column: quantitation.getAssayAbundance().keySet()){
-                        dataset.addValue(quantitation.getAssayAbundance().get(column), proteinAcc, id, column.toString());
+                        dataset.addValue(quantitation.getAssayAbundance().get(column), proteinAcc, id, studyVariablesTitles.get(column).getDescription());
                         java.util.List<Comparable> columns = idMapping.get(id);
                         if (columns == null) {
                             columns = new ArrayList<Comparable>();
                             idMapping.put(id, columns);
                         }
-                        columns.add(column);
+                        columns.add(studyVariablesTitles.get(column).getDescription());
                     }
                 }
             }
@@ -470,7 +469,8 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
         }
 
         public Comparable getLabel(Comparable rowKey) {
-            return labelMap.get(rowKey);
+            //return labelMap.get(rowKey);
+            return null;
         }
 
         public Comparable getLegend(Comparable rowKey) {

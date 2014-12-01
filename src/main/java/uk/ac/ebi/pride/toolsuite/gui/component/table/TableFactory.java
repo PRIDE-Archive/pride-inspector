@@ -1,10 +1,14 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table;
 
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.JXTree;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.table.DefaultTableColumnModelExt;
 import org.jdesktop.swingx.table.TableColumnExt;
+import org.jdesktop.swingx.tree.DefaultXTreeCellRenderer;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
+import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
+import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.filter.AssayDownloadButtonCellEditor;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.listener.*;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.*;
@@ -22,12 +26,16 @@ import uk.ac.ebi.pride.utilities.data.core.*;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.*;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeCellRenderer;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -599,7 +607,7 @@ public class TableFactory {
      * @param controller data access controller
      * @return JTable   protein quantitative table
      */
-    public static JTable createQuantProteinTable(DataAccessController controller, Collection<CvTermReference> listProteinScores, List<StudyVariable> studyVariables) {
+    public static JTable createQuantProteinTable(DataAccessController controller, Collection<CvTermReference> listProteinScores, Map<Comparable, StudyVariable> studyVariables) {
         QuantProteinTableModel tableModel = new QuantProteinTableModel(listProteinScores, studyVariables);
         return createQuantProteinTable(controller, tableModel);
     }
@@ -610,7 +618,7 @@ public class TableFactory {
      * @param listPeptideScores List of CvTerm
      * @return JTable  peptide table
      */
-    public static JTable createQuantPeptideTable(DataAccessController controller, Collection<CvTermReference> listPeptideScores, List<StudyVariable> studyVariables) {
+    public static JTable createQuantPeptideTable(DataAccessController controller, Collection<CvTermReference> listPeptideScores, Map<Comparable, StudyVariable> studyVariables) {
 
         DefaultTableColumnModelExt columnModel = new DefaultTableColumnModelExt();
         QuantPeptideTableModel tableModel = new QuantPeptideTableModel(listPeptideScores, studyVariables);
@@ -872,8 +880,35 @@ public class TableFactory {
         ch.addMouseListener(ma);
         ch.addMouseMotionListener(ma);
 
-        // set table column model needs to happen before set tree table model
-        //table.setTreeTableModel(tableModel);
+        PrideInspectorContext context = (PrideInspectorContext) PrideInspector.getInstance().getDesktopContext();
+
+        Icon plusIcon = GUIUtilities.loadImageIcon(context.getProperty("plus.icon.small"));
+        Icon minusIcon = GUIUtilities.loadImageIcon(context.getProperty("minus.icon.small"));
+
+
+
+        table.setTreeCellRenderer((new DefaultTreeCellRenderer() {
+
+            @Override
+            public Component getTreeCellRendererComponent(JTree tree,
+                                                          Object value, boolean selected, boolean expanded,
+                                                          boolean isLeaf, int row, boolean focused) {
+
+                Component c = super.getTreeCellRendererComponent(tree,value,selected,expanded,isLeaf,row,focused);
+
+                Border paddingBorder = BorderFactory.createEmptyBorder(0, 5, 0, 0);
+
+                this.setBorder(paddingBorder);
+
+                return c;
+
+            }
+        }));
+
+        table.setOverwriteRendererIcons(true);
+        table.setCollapsedIcon(plusIcon);
+
+        table.setExpandedIcon(minusIcon);
 
         table.setClosedIcon(null);
         table.setLeafIcon(null);

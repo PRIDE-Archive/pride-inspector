@@ -35,8 +35,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Panel to display spectrum
@@ -236,8 +235,9 @@ public class SpectrumViewPane extends DataAccessControllerPane<Spectrum, Void> i
             spectrumBrowser.setId(spectrum.getId());
             spectrumBrowser.clearMassDifferences();
             spectrumBrowser.setAnnotationControlVisible(true);
-            Peptide peptide = spectrum.getPeptide();
-            if (peptide != null) {
+            java.util.List<Peptide> peptides = spectrum.getPeptide();
+            if (peptides != null) {
+                Peptide peptide = peptides.get(0);
                 int peptideLength = peptide.getSequenceLength();
                 Map<Integer, java.util.List<PTModification>> modifications = AnnotationUtils.createModificationMap(peptide.getModifications(), peptideLength);
                 spectrumBrowser.setAminoAcidAnnotationParameters(peptide.getSequenceLength(), modifications);

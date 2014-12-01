@@ -13,6 +13,7 @@ import uk.ac.ebi.pride.toolsuite.gui.component.table.model.PeptideTreeTableModel
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableHeader;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.renderer.IconRenderer;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.renderer.ProteinAccessionHyperLinkCellRenderer;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.renderer.ProteinGroupCellRenderer;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.renderer.SequenceCoverageRenderer;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop;
 
@@ -381,6 +382,7 @@ public class SortableTreeTable extends JXTreeTable {
             if (ProteinTableHeader.PROTEIN_ACCESSION.getHeader().equals(columnTitle)) {
                 columnExt.setCellRenderer(new ProteinAccessionHyperLinkCellRenderer());
             }
+
 
             // set additional column
             if (PeptideTreeTableModel.TableHeader.ADDITIONAL.getHeader().equals(columnTitle)) {

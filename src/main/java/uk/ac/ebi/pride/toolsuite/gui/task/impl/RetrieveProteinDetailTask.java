@@ -20,7 +20,8 @@ import java.util.*;
 /**
  * Retrieve protein name for a given set of proteins
  * <p/>
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 16-Sep-2010
  * Time: 15:53:16
  */

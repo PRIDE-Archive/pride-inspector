@@ -67,6 +67,7 @@ public interface Constants {
     public static final String COMMA = ",";
     public static final String TAB = "\t";
     public static final String TAB_SEP_FILE = ".tsv";
+    public static final String MZTAB_SEP_FILE=".mztab";
     public static final String MZML_FILE = ".mzml";
     public static final String XML_FILE = ".xml";
     public static final String GZIPPED_FILE = ".gz";

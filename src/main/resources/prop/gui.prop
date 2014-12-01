@@ -123,6 +123,10 @@ export.pride.xml.title = PRIDE XML
 export.identification.title=Protein-Peptide Mappings
 export.identification.tooltip=Export proteins and Peptides into tab delimited format.
 
+export.to.mztab.title=To mzTab file
+export.to.mztab.tooltip=Export proteins and Peptides mztab file.
+
+
 export.spectrum.desc.title=Spectrum Table
 export.spectrum.desc.tooltip=Export spectrum descriptions into tab delimited format.
 
@@ -146,6 +150,9 @@ chart_auto_adjust.desc=AutoAdjust
 chart_auto_adjust.tooltip=Auto adjust the chart axis
 chart_auto_adjust.icon.small=icon/16x16/chart_auto_adjust.png
 chart_auto_adjust.icon.large=icon/32x32/chart_auto_adjust.png
+
+plus.icon.small=icon/16x16/plus.png
+minus.icon.small=icon/16x16/minus.png
 
 chart_all_charts.desc=All thumbnails
 chart_all_charts.tooltip=Show all the chart thumbnails
@@ -218,6 +225,7 @@ load.next.mzdata.small.icon=icon/16x16/load_next.png
 #download protein name
 load.protein.detail.small.icon=icon/16x16/load_next.png
 load.protein.detail.title=Obtain Protein Details
+load.protein.detail.test.uniprot.protein=P31946
 
 #Protein Groups details
 load.protein.groups.detail.small.icon=icon/16x16/find_experiment.png

@@ -4,7 +4,8 @@ package uk.ac.ebi.pride.toolsuite.gui.utils;
  * @author Rui Wang
  * @version $Id$
  */
-public class ProteinAccession {
+public class ProteinAccession implements Comparable{
+
     private String accession;
     private String mappedAccession;
 
@@ -46,5 +47,14 @@ public class ProteinAccession {
                 "accession='" + accession + '\'' +
                 ", mappedAccession='" + mappedAccession + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if(o == null) return 1;
+        if (!(o instanceof ProteinAccession)) return 1;
+
+        ProteinAccession that = (ProteinAccession) o;
+        return (this.accession.compareTo(that.accession));
     }
 }

@@ -12,7 +12,7 @@ import java.awt.*;
 /**
  * Summary report viewer displays all the warnings, message related to a single database access controller
  *
- * User: rwang
+ * @author rwang
  * Date: 25/05/11
  * Time: 12:24
  */

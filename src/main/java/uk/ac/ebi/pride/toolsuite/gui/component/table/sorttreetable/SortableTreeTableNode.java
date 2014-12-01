@@ -716,5 +716,10 @@ public class SortableTreeTableNode extends DefaultMutableTreeTableNode implement
 				return traverse((Enumeration) childrenEnums.peek());
 			}
 		}
-	}
+
+        @Override
+        public String toString() {
+            return "lolo";
+        }
+    }
 }

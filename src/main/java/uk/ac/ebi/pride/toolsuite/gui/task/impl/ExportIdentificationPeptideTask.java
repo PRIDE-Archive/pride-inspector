@@ -16,11 +16,13 @@ import java.io.PrintWriter;
 import java.util.Collection;
 
 /**
- * User: rwang
+ * @author rwang
+ * @author ypriverol
  * Date: 01-Sep-2010
  * Time: 16:19:56
  */
 public class ExportIdentificationPeptideTask extends AbstractDataAccessTask<Void, Void> {
+
     private static final Logger logger = LoggerFactory.getLogger(ExportIdentificationPeptideTask.class);
 
     /**

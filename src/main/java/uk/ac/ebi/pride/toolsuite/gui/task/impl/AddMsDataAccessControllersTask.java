@@ -3,7 +3,6 @@ package uk.ac.ebi.pride.toolsuite.gui.task.impl;
 import org.bushe.swing.event.EventBus;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
-import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.MzIdentMLControllerImpl;
 import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.ReferencedIdentificationController;
 import uk.ac.ebi.pride.utilities.data.core.SpectraData;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;

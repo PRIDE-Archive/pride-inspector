@@ -12,7 +12,9 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * User: rwang
+ * @user rwang
+ * @user ypriverol
+ *
  * Date: 25/05/11
  * Time: 11:21
  */
