@@ -19,7 +19,8 @@ public class ProjectTableModel extends ProgressiveListTableModel<Void, ProjectSu
         PROJECT_TAG ("Project Tag", "Project tag"),
         NUM_OF_ASSAY ("#Assays", "Number of assays"),
         PUBLICATION_DATE ("Publication date", "Publication date"),
-        SUBMISSION_TYPE ("Submission Type", "Submission type");
+        SUBMISSION_TYPE ("Submission Type", "Submission type"),
+        DOWNLOAD("Download", "Download and open project files");
 
         private final String header;
         private final String toolTip;
@@ -83,10 +84,15 @@ public class ProjectTableModel extends ProgressiveListTableModel<Void, ProjectSu
             return projectDetail.getPublicationDate();
         } else if (TableHeader.SUBMISSION_TYPE.getHeader().equals(columnName)) {
             return projectDetail.getSubmissionType();
+        }  else if (TableHeader.DOWNLOAD.getHeader().equals(columnName)) {
+            return projectDetail.getAccession();
         }
 
         return null;
     }
 
-
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return TableHeader.DOWNLOAD.getHeader().equals(getColumnName(columnIndex)) || super.isCellEditable(rowIndex, columnIndex);
+    }
 }

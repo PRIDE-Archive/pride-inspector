@@ -1,15 +1,14 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table;
 
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.JXTree;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.table.DefaultTableColumnModelExt;
 import org.jdesktop.swingx.table.TableColumnExt;
-import org.jdesktop.swingx.tree.DefaultXTreeCellRenderer;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.filter.AssayDownloadButtonCellEditor;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.filter.ProjectDownloadButtonCellEditor;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.listener.*;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.*;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.renderer.*;
@@ -29,7 +28,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreeCellRenderer;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Collection;
@@ -307,60 +305,6 @@ public class TableFactory {
         ptmColumn.setCellRenderer(new HyperLinkCellRenderer());
 
         return table;
-    }
-
-    /**
-     * Build a table to display database search summaries.
-     *
-     * @return JTable  database search table
-     */
-    public static JTable createDatabaseSearchTable() {
-        DatabaseSearchTableModel tableModel = new DatabaseSearchTableModel();
-        JXTable searchTable = createDefaultJXTable(tableModel);
-
-        // add cell renderer to view column
-        String viewColumnHeader = DatabaseSearchTableModel.TableHeader.VIEW.getHeader();
-        TableColumnExt viewColumn = (TableColumnExt) searchTable.getColumn(viewColumnHeader);
-        Icon icon = GUIUtilities.loadIcon(Desktop.getInstance().getDesktopContext().getProperty("add.experiment.small.icon"));
-        viewColumn.setCellRenderer(new IconRenderer(icon));
-        viewColumn.setMaxWidth(50);
-
-        // pubmed column
-        String pubmedHeader = DatabaseSearchTableModel.TableHeader.PUBMED_ID.getHeader();
-        TableColumnExt pubmedColumn = (TableColumnExt) searchTable.getColumn(pubmedHeader);
-        Pattern pubmedPattern = Pattern.compile("[\\d,]+");
-        pubmedColumn.setCellRenderer(new HyperLinkCellRenderer(pubmedPattern));
-
-        // hide taxonomy_id and brenda_id column
-        String taxonomyIdHeader = DatabaseSearchTableModel.TableHeader.TAXONOMY_ID.getHeader();
-        TableColumnExt taxonomyIdColumn = (TableColumnExt) searchTable.getColumn(taxonomyIdHeader);
-        Pattern taxonomyIdPattern = Pattern.compile("[\\d]+;{0}");
-        taxonomyIdColumn.setVisible(false);
-
-        String brendaIdHeader = DatabaseSearchTableModel.TableHeader.BRENDA_ID.getHeader();
-        TableColumnExt brendaIdColumn = (TableColumnExt) searchTable.getColumn(brendaIdHeader);
-        Pattern brendaIdPattern = Pattern.compile("BTO:\\d+");
-        brendaIdColumn.setVisible(false);
-
-        // add hyper link for species and tissue column
-        String speciesHeader = DatabaseSearchTableModel.TableHeader.SPECIES.getHeader();
-        TableColumnExt speciesColumn = (TableColumnExt) searchTable.getColumn(speciesHeader);
-        Pattern speciesPattern = Pattern.compile(".+");
-        speciesColumn.setCellRenderer(new HyperLinkCellRenderer(speciesPattern));
-
-        String tissueHeader = DatabaseSearchTableModel.TableHeader.TISSUE.getHeader();
-        TableColumnExt tissueColumn = (TableColumnExt) searchTable.getColumn(tissueHeader);
-        Pattern tissuePattern = Pattern.compile(".+");
-        tissueColumn.setCellRenderer(new HyperLinkCellRenderer(tissuePattern));
-
-        // add mouse motion listener
-        searchTable.addMouseMotionListener(new TableCellMouseMotionListener(searchTable, viewColumnHeader, pubmedHeader));
-        searchTable.addMouseListener(new OpenExperimentMouseListener(searchTable, viewColumnHeader));
-        searchTable.addMouseListener(new HyperLinkCellMouseClickListener(searchTable, pubmedHeader, new PrefixedHyperLinkGenerator(Constants.PUBMED_URL_PERFIX), pubmedPattern));
-        searchTable.addMouseListener(new HyperLinkCellMouseClickListener(searchTable, speciesHeader, taxonomyIdHeader, new PrefixedHyperLinkGenerator(Constants.OLS_URL_PREFIX), taxonomyIdPattern));
-        searchTable.addMouseListener(new HyperLinkCellMouseClickListener(searchTable, tissueHeader, brendaIdHeader, new PrefixedHyperLinkGenerator(Constants.OLS_URL_PREFIX), brendaIdPattern));
-
-        return searchTable;
     }
 
     /**
@@ -1234,10 +1178,19 @@ public class TableFactory {
         TableColumnExt projectTitleColumn = (TableColumnExt) table.getColumn(ProjectTableModel.TableHeader.TITLE.getHeader());
         projectTitleColumn.setPreferredWidth(200);
 
-
         // publication date
         TableColumnExt publicationDateColumn = (TableColumnExt) table.getColumn(ProjectTableModel.TableHeader.PUBLICATION_DATE.getHeader());
         publicationDateColumn.setCellRenderer(new DateRenderer());
+
+        //download column
+        String downloadHeader = ProjectTableModel.TableHeader.DOWNLOAD.getHeader();
+        TableColumnExt downloadColumn = (TableColumnExt) table.getColumn(downloadHeader);
+        String downloadText = "Download";
+        downloadColumn.setCellRenderer(new ButtonCellRenderer(downloadText, null));
+        downloadColumn.setCellEditor(new ProjectDownloadButtonCellEditor(downloadText, null));
+
+        downloadColumn.setMaxWidth(100);
+        downloadColumn.setMinWidth(100);
 
         return table;
     }
@@ -1266,6 +1219,9 @@ public class TableFactory {
         String downloadText = "Download";
         downloadColumn.setCellRenderer(new ButtonCellRenderer(downloadText, null));
         downloadColumn.setCellEditor(new AssayDownloadButtonCellEditor(downloadText, null));
+
+        downloadColumn.setMaxWidth(100);
+        downloadColumn.setMinWidth(100);
 
         return table;
     }
