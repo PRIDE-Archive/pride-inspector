@@ -12,9 +12,18 @@ import de.mpc.pia.core.intermediate.IntermediateGroup;
 import de.mpc.pia.core.intermediate.IntermediatePeptide;
 import de.mpc.pia.core.intermediate.IntermediatePeptideSpectrumMatch;
 import de.mpc.pia.core.intermediate.IntermediateProtein;
-import de.mpc.pia.core.intermediate.IntermediateStructure;
 import de.mpc.pia.core.intermediate.prideimpl.PrideImportController;
 import de.mpc.pia.core.modeller.PIAModeller;
+import de.mpc.pia.core.modeller.filter.AbstractFilter;
+import de.mpc.pia.core.modeller.filter.FilterComparator;
+import de.mpc.pia.core.modeller.filter.psm.PSMScoreFilter;
+import de.mpc.pia.core.modeller.protein.inference.AbstractProteinInference;
+import de.mpc.pia.core.modeller.protein.inference.InferenceProteinGroup;
+import de.mpc.pia.core.modeller.scores.CvScore;
+import de.mpc.pia.core.modeller.scores.peptide.PeptideScoring;
+import de.mpc.pia.core.modeller.scores.peptide.PeptideScoringUseBestPSM;
+import de.mpc.pia.core.modeller.scores.protein.ProteinScoring;
+import de.mpc.pia.core.modeller.scores.protein.ProteinScoringAdditive;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
@@ -36,7 +45,7 @@ public class ProteinVisualizationGraphHandler {
     private VertexObject referenceVertex;
     
     /** the PIA intermediate structure for the visualization */
-    private IntermediateStructure intermediateStructure;
+    private PIAModeller piaModeller;
     
     
     /** the protein-group-peptides-PSMs graph */
@@ -57,6 +66,20 @@ public class ProteinVisualizationGraphHandler {
     private Map<Integer, VertexObject> groupVertices;
     
     
+    /** the main score accession */
+    private String mainScoreAccession; 
+    
+    /** the highest main score in the cluster */
+    private Double highestMainScore;
+    
+    /** the lowest main score in the cluster */
+    private Double lowestMainScore;
+    
+    
+    /** mapping from the vertices to relations of other vertices  */
+    private Map<VertexObject, Map<VertexObject, VertexRelation>> proteinRelationMaps;
+    
+    
     private static final String PROTEINS_OF_PREFIX = "proteins_of_";
     private static final String PEPTIDES_OF_PREFIX = "peptides_of_";
     
@@ -65,11 +88,16 @@ public class ProteinVisualizationGraphHandler {
         this.controller = controller;
         this.referenceProteinAccession = null;
         this.referenceVertex = null;
-        this.intermediateStructure = null;
+        
+        this.piaModeller = null;
         
         this.expandedAccessionsMap = new HashMap<String, Boolean>();
         this.expandedPeptidesMap = new HashMap<String, Boolean>();
         this.showPSMsMap = new HashMap<String, Boolean>();
+        
+        this.mainScoreAccession = null;
+        this.highestMainScore = null;
+        this.lowestMainScore = null;
         
         createGraphFromSelectedProteinGroupId(proteinId, proteinGroupId);
     }
@@ -140,18 +168,18 @@ public class ProteinVisualizationGraphHandler {
      */
     private void createGraphFromSelectedProteinGroupId(Comparable proteinId, Comparable proteinGroupId) {
         // create the intermediate structure
-        PIAModeller piaModeller = new PIAModeller();
+        piaModeller = new PIAModeller();
         Integer fileID = piaModeller.addPrideControllerAsInput(controller);
         PrideImportController importController = (PrideImportController)piaModeller.getImportController(fileID);
-
+        
         for (Comparable protID : controller.getProteinAmbiguityGroupById(proteinGroupId).getProteinIds()) {
-            String acc = importController.addProteinsSpectrumIdentificationsToStructCreator(protID, piaModeller.getIntermediateStructureCreator(), null);
+            String acc = importController.addProteinsSpectrumIdentificationsToStructCreator(protID, null, null);
             if (proteinId.equals(protID)) {
                 referenceProteinAccession = acc;
             }
         }
-
-        intermediateStructure = piaModeller.buildIntermediateStructure();
+        
+        piaModeller.buildIntermediateStructure();
         createGraphFromIntermediateStructure();
     }
     
@@ -165,21 +193,19 @@ public class ProteinVisualizationGraphHandler {
         graph = new DirectedSparseGraph<VertexObject, String>();
         
         groupVertices = new HashMap<Integer, VertexObject>();
-
+        
+        mainScoreAccession = piaModeller.getPSMModeller().getFilesMainScoreAccession(1);
+        
         // go through the clusters and create the graph
-        for (Set<IntermediateGroup> cluster : intermediateStructure.getClusters().values()) {
+        for (Set<IntermediateGroup> cluster : piaModeller.getIntermediateStructure().getClusters().values()) {
             for (IntermediateGroup group : cluster) {
                 VertexObject groupV = addGroupVertex(group);
-                String groupLabel = groupV.getLabel();
 
                 // connect to the child-groups
                 if (group.getChildren() != null) {
                     for (IntermediateGroup child : group.getChildren()) {
                         VertexObject childV = addGroupVertex(child);
-                        String childLabel = childV.getLabel();
-
                         String edgeName = "groupGroup_" + groupV.getLabel() + "_" + childV.getLabel();
-
                         graph.addEdge(edgeName, groupV, childV);
                     }
                 }
@@ -192,9 +218,31 @@ public class ProteinVisualizationGraphHandler {
                 // add the peptides
                 if ((group.getPeptides() != null) && (group.getPeptides().size() > 0)) {
                     addPeptideVertices(groupV, true);
+                    
+                    for (IntermediatePeptide peptide : group.getPeptides()) {
+                        for (IntermediatePeptideSpectrumMatch psm : peptide.getAllPeptideSpectrumMatches()) {
+                            Double score = psm.getScore(mainScoreAccession);
+                            
+                            if ((score != null) && !score.equals(Double.NaN)) {
+                                if ((highestMainScore == null) || highestMainScore.equals(Double.NaN)) {
+                                    highestMainScore = score;
+                                } else if (score > highestMainScore){
+                                    highestMainScore = score;
+                                }
+                                
+                                if ((lowestMainScore == null) || lowestMainScore.equals(Double.NaN)) {
+                                    lowestMainScore = score;
+                                } else if (score < lowestMainScore){
+                                    lowestMainScore = score;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
+        
+        System.err.println("score for " + mainScoreAccession + " " + lowestMainScore + " - " + highestMainScore);
     }
 
 
@@ -302,7 +350,7 @@ public class ProteinVisualizationGraphHandler {
         IntermediatePeptide peptide = (IntermediatePeptide)peptideV.getObject();
 
         // add the PSMs
-        for (IntermediatePeptideSpectrumMatch psm : peptide.getPeptideSpectrumMatches()) {
+        for (IntermediatePeptideSpectrumMatch psm : peptide.getAllPeptideSpectrumMatches()) {
             String psmLabel = psm.getID().toString();
             VertexObject psmV = new VertexObject(psmLabel, psm);
 
@@ -364,6 +412,7 @@ public class ProteinVisualizationGraphHandler {
         }
 
         // add the proteins uncollapsed
+        proteinRelationMaps = new HashMap<VertexObject, Map<VertexObject,VertexRelation>>();
         return addProteinVertices(groupV, false);
     }
 
@@ -395,6 +444,7 @@ public class ProteinVisualizationGraphHandler {
         }
 
         // add the proteins collapsed
+        proteinRelationMaps = new HashMap<VertexObject, Map<VertexObject,VertexRelation>>();
         return addProteinVertices(groupV, true);
     }
 
@@ -423,6 +473,7 @@ public class ProteinVisualizationGraphHandler {
         }
 
         // add the peptides uncollapsed
+        proteinRelationMaps = new HashMap<VertexObject, Map<VertexObject,VertexRelation>>();
         return addPeptideVertices(groupV, false);
     }
 
@@ -456,6 +507,7 @@ public class ProteinVisualizationGraphHandler {
         }
 
         // add the peptides collapsed
+        proteinRelationMaps = new HashMap<VertexObject, Map<VertexObject,VertexRelation>>();
         return addPeptideVertices(groupV, true);
     }
 
@@ -471,7 +523,8 @@ public class ProteinVisualizationGraphHandler {
                 ((showPSMsMap.get(peptideV.getLabel()) != null) && showPSMsMap.get(peptideV.getLabel()))) {
             return new ArrayList<VertexObject>();
         }
-
+        
+        proteinRelationMaps = new HashMap<VertexObject, Map<VertexObject,VertexRelation>>();
         return addPSMVertices(peptideV);
     }
 
@@ -500,6 +553,297 @@ public class ProteinVisualizationGraphHandler {
         }
         
         showPSMsMap.put(peptideV.getLabel(), false);
+        proteinRelationMaps = new HashMap<VertexObject, Map<VertexObject,VertexRelation>>();
     }
     
+    
+    /**
+     * Returns the accession of teh main score
+     * @return
+     */
+    public String getMainScoreAccession() {
+        return mainScoreAccession;
+    }
+    
+    
+    /**
+     * Returns the lowest value of the main score in the intermediate structure
+     * @return
+     */
+    public Double getLowestMainScore() {
+        return lowestMainScore;
+    }
+    
+    
+    /**
+     * Returns the highest value of the main score in the intermediate structure
+     * @return
+     */
+    public Double getHighestMainScore() {
+        return highestMainScore;
+    }
+    
+    
+    /**
+     * Inferes the proteins in this graph, using the given inference and score
+     * threshold.
+     * 
+     * @param scoreThreshold
+     */
+    public void infereProteins(Double scoreThreshold, Class<? extends AbstractProteinInference> inferenceClass, 
+            Boolean considerModifications) {
+        PeptideScoring pepScoring = new PeptideScoringUseBestPSM(mainScoreAccession, false);
+        ProteinScoring protScoring = new ProteinScoringAdditive(false, pepScoring);
+        
+        List<AbstractFilter> filters = new ArrayList<AbstractFilter>();
+        
+        CvScore cvScore = CvScore.getCvRefByAccession(mainScoreAccession);
+        
+        filters.add(
+                new PSMScoreFilter(
+                    cvScore.getHigherScoreBetter() ? FilterComparator.greater_equal : FilterComparator.less_equal,
+                    scoreThreshold,
+                    false,
+                    mainScoreAccession,
+                    false)
+                );
+        
+        piaModeller.getProteinModeller().infereProteins(
+                pepScoring,
+                protScoring,
+                inferenceClass,
+                filters,
+                considerModifications);
+        
+        proteinRelationMaps = new HashMap<VertexObject, Map<VertexObject,VertexRelation>>();
+    }
+    
+    
+    /**
+     * This enum describes the relativity of a vertex to another considering
+     * their PAGs
+     * @author julian
+     *
+     */
+    protected enum VertexRelation {
+        IN_NO_PAG,
+        IN_UNRELATED_PAG,
+        IN_SAME_PAG,
+        IN_SUPER_PAG,
+        IN_SUB_PAG,
+        IN_PARALLEL_PAG,
+        ;
+    }
+    
+    
+    /**
+     * creates a mapping from each vertex in the graph to its relation to the
+     * given proteinVertex
+     *  
+     * @param proteinVertex
+     * @return
+     */
+    private Map<VertexObject, VertexRelation> createProteinsRelationsMap(VertexObject proteinVertex) {
+        // first get the PAG of the proteinVertex
+        IntermediateProtein protein;
+        Object vObject = proteinVertex.getObject();
+        if (vObject instanceof Collection) {
+            vObject = ((Collection<?>)vObject).iterator().next();
+        }
+        if (vObject instanceof IntermediateProtein) {
+            protein = (IntermediateProtein)vObject;
+        } else {
+            return null;
+        }
+        
+        InferenceProteinGroup pag = getProteinsPAG(protein);
+        Map<VertexObject, VertexRelation> relations = new HashMap<VertexObject, ProteinVisualizationGraphHandler.VertexRelation>(); 
+        if (pag != null) {
+            for (VertexObject relatedVertex : graph.getVertices()) {
+                Object objElement = relatedVertex.getObject();
+                boolean done = false;
+                
+                if (objElement instanceof IntermediateGroup) {
+                    // groups have no relation
+                    continue;
+                }
+                
+                // check for same PAG
+                if (isObjectInPAG(objElement, pag)) {
+                    relations.put(relatedVertex, VertexRelation.IN_SAME_PAG);
+                    continue;
+                }
+                
+                // check for sub-PAG
+                for (InferenceProteinGroup subPAG : pag.getSubGroups()) {
+                    if (isObjectInPAG(objElement, subPAG)) {
+                        relations.put(relatedVertex, VertexRelation.IN_SUB_PAG);
+                        done = true;
+                    }
+                    
+                    if (done) {
+                        break;
+                    }
+                }
+                if (!done) {
+                    VertexRelation highestRelation = VertexRelation.IN_NO_PAG;
+                    
+                    // check for super- and parallel-PAG
+                    for (InferenceProteinGroup mainPAG : piaModeller.getProteinModeller().getInferredProteins()) {
+                        if (mainPAG.getSubGroups().contains(pag)) {
+                            // check for super-PAG
+                            if (isObjectInPAG(objElement, mainPAG)) {
+                                relations.put(relatedVertex, VertexRelation.IN_SUPER_PAG);
+                                done = true;
+                            }
+                            
+                            // check for parallel-PAG
+                            for (InferenceProteinGroup parallelPAG : mainPAG.getSubGroups()) {
+                                if (isObjectInPAG(objElement, parallelPAG)) {
+                                    highestRelation = VertexRelation.IN_PARALLEL_PAG;
+                                }
+                            }
+                        }
+                        
+                        if (done) {
+                            break;
+                        }
+                        
+                        // record, if it is in any PAG at all
+                        if (highestRelation.equals(VertexRelation.IN_NO_PAG)) {
+                            if (isObjectInPAG(objElement, mainPAG)) {
+                                highestRelation = VertexRelation.IN_UNRELATED_PAG;
+                            }
+                            for (InferenceProteinGroup subPAG : mainPAG.getSubGroups()) {
+                                if (isObjectInPAG(objElement, subPAG)) {
+                                    highestRelation = VertexRelation.IN_UNRELATED_PAG;
+                                }
+                            }
+                        }
+                    }
+                    
+                    if (!done) {
+                        relations.put(relatedVertex, highestRelation);
+                    }
+                }
+            }
+        } else {
+            // no PAG for this vertex -> all vertices are either unrelated or in no PAG
+            
+            for (VertexObject relatedVertex : graph.getVertices()) {
+                Object objElement = relatedVertex.getObject();
+                VertexRelation highestRelation = VertexRelation.IN_NO_PAG;
+                
+                for (InferenceProteinGroup mainPAG : piaModeller.getProteinModeller().getInferredProteins()) {
+                    // check, if it is in any PAG at all
+                    if (highestRelation.equals(VertexRelation.IN_NO_PAG)) {
+                        if (isObjectInPAG(objElement, mainPAG)) {
+                            highestRelation = VertexRelation.IN_UNRELATED_PAG;
+                        }
+                        for (InferenceProteinGroup subPAG : mainPAG.getSubGroups()) {
+                            if (isObjectInPAG(objElement, subPAG)) {
+                                highestRelation = VertexRelation.IN_UNRELATED_PAG;
+                            }
+                        }
+                    } else {
+                        break;
+                    }
+                }
+                
+                relations.put(relatedVertex, highestRelation);
+            }
+        }
+        
+        return relations;
+    }
+    
+    
+    /**
+     * gets the relation of the given proteinVertex to the other given vertex
+     * 
+     * @param proteinVertex
+     * @param relatedVertex
+     * @return
+     */
+    protected VertexRelation getProteinsRelation(VertexObject proteinVertex, VertexObject relatedVertex) {
+        Map<VertexObject, VertexRelation> relationsMap = proteinRelationMaps.get(proteinVertex);
+        if (relationsMap == null) {
+            relationsMap = createProteinsRelationsMap(proteinVertex);
+            proteinRelationMaps.put(proteinVertex, relationsMap);
+        }
+        
+        if (relationsMap != null) {
+            return relationsMap.get(relatedVertex);
+        } else {
+            return null;
+        }
+    }
+    
+    
+    /**
+     * Returns the protein ambiguity group of the given protein. This is only
+     * possible, if the inference was run.
+     * 
+     * @return the PAG or null, if the protein is not in a reported PAG
+     */
+    private InferenceProteinGroup getProteinsPAG(IntermediateProtein protein) {
+        List<InferenceProteinGroup> pags = piaModeller.getProteinModeller().getInferredProteins();
+        if (pags == null) {
+            return null;
+        }
+        
+        for (InferenceProteinGroup pag : piaModeller.getProteinModeller().getInferredProteins()) {
+            if (pag.getProteins().contains(protein))  {
+                return pag;
+            }
+            
+            for (InferenceProteinGroup subPAG : pag.getSubGroups()) {
+                if (subPAG.getProteins().contains(protein)) {
+                    return subPAG;
+                }
+            }
+        }
+        
+        return null;
+    }
+    
+    
+    /**
+     * Checks for a given object whether it is active in the given inferred
+     * protein group.
+     * 
+     * @param objElement
+     * @param pag
+     * @return
+     */
+    private boolean isObjectInPAG(Object objElement, InferenceProteinGroup pag) {
+        if (objElement instanceof IntermediateProtein) {
+            // check whether protein is in the PAG
+            if (pag.getProteins().contains(objElement)) {
+                return true;
+            }
+        } else if (objElement instanceof IntermediatePeptide) {
+            // check whether peptide is in the PAG
+            if (pag.getPeptides().contains(objElement)) {
+                return true;
+            }
+        } else if (objElement instanceof IntermediatePeptideSpectrumMatch) {
+            // check whether PSM is in the PAG
+            for (IntermediatePeptide pep : pag.getPeptides()) {
+                if (pep.getPeptideSpectrumMatches().contains(objElement)) {
+                    return true;
+                }
+            }
+        } else if (objElement instanceof Collection<?>) {
+            // return true, if at least one if the objects in the collection is in the PAG
+            Iterator<?> iter = ((Collection<?>)objElement).iterator();
+            while (iter.hasNext()) {
+                if (isObjectInPAG(iter.next(), pag)) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
 }

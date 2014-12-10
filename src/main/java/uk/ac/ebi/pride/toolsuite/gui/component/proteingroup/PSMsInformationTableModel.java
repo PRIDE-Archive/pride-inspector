@@ -65,7 +65,7 @@ public class PSMsInformationTableModel extends AbstractTableModel {
                 Object item = objectIterator.next();
                 
                 if (item instanceof IntermediatePeptide) {
-                    psmsList.addAll(((IntermediatePeptide) item).getPeptideSpectrumMatches());
+                    psmsList.addAll(((IntermediatePeptide) item).getAllPeptideSpectrumMatches());
                 }
             }
         }

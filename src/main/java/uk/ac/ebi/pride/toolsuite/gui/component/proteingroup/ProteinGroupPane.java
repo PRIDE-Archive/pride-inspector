@@ -4,9 +4,7 @@ import de.mpc.pia.core.intermediate.IntermediateGroup;
 import de.mpc.pia.core.intermediate.IntermediatePeptide;
 import de.mpc.pia.core.intermediate.IntermediatePeptideSpectrumMatch;
 import de.mpc.pia.core.intermediate.IntermediateProtein;
-import de.mpc.pia.core.intermediate.IntermediateStructure;
-import de.mpc.pia.core.intermediate.prideimpl.PrideImportController;
-import de.mpc.pia.core.modeller.PIAModeller;
+import de.mpc.pia.core.modeller.protein.inference.OccamsRazorInference;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.FRLayout2;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -14,8 +12,6 @@ import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.algorithms.layout.util.Relaxer;
 import edu.uci.ics.jung.algorithms.layout.util.VisRunner;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
-import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -23,23 +19,18 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
-import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.LayoutTransition;
+import edu.uci.ics.jung.visualization.picking.MultiPickedState;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.util.Animator;
-
-import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.ConstantTransformer;
-import org.apache.commons.collections15.functors.MapTransformer;
-import org.apache.commons.collections15.map.LazyMap;
 
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskEvent;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.core.Protein;
+import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
@@ -51,12 +42,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
-import javax.swing.border.TitledBorder;
+import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.table.DefaultTableModel;
 
-import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -65,24 +54,19 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Paint;
-import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -93,7 +77,7 @@ import java.util.Set;
  */
 public class ProteinGroupPane
         extends DataAccessControllerPane<Void, Protein>
-        implements ItemListener, ActionListener {
+        implements ItemListener, ActionListener, ChangeListener {
     /** handler for the shown graph */
     private ProteinVisualizationGraphHandler visGraph;
 
@@ -109,7 +93,11 @@ public class ProteinGroupPane
 
     /** the picked status of the graph, i.e. which vertex is selected */
     private PickedState<VertexObject> pickedState;
+    
+    /** the currently picked protein (group) */
+    private PickedState<VertexObject> pickedProtein;
 
+    
     /** the picked status of the graph, i.e. which vertex is selected */
     private Layout<VertexObject, String> layout;
 
@@ -131,35 +119,39 @@ public class ProteinGroupPane
 
     /** table showing information of connected PSMs */
     private PSMsInformationTableModel psmsTableModel;
-
+    
+    
+    /** the slider to adjust the score threshold */
+    private JSlider scoreThresholdSlider;
+    
+    /** the actual score threshold */
+    private Double scoreThreshold;
+    
+    /** the label showing the current score threshold */
+    private JLabel scoreThresholdLabel;
+    
+    
     /** comboBox for layout changing */
     private JComboBox layoutComboBox;
-
-
-    /** title for the score threshold slider */
-    private static final String TITLE_SCORE_THRESHOLD = "Score Threshold: ";
-
-
-
-
-    private static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
-    private static final Color SELECTED_BORDER_COLOR = Color.RED;
-
-
-
-
-
+    
+    
+    
+    
     public ProteinGroupPane(DataAccessController controller, Comparable proteinId, Comparable proteinGroupId) {
         super(controller);
         
         this.visGraph = new ProteinVisualizationGraphHandler(controller, proteinId, proteinGroupId);
         this.selectedVertex = null;
+        pickedProtein = new MultiPickedState<VertexObject>();
+        pickedProtein.clear();
+        
         setUpPaneComponents();
         
         // set the initial picked vertex to the reference vertex
         pickedState.clear();
         if (visGraph.getReferenceVertex() != null) {
             pickedState.pick(visGraph.getReferenceVertex(), true);
+            pickedProtein.pick(visGraph.getReferenceVertex(), true);
         }
     }
 
@@ -328,23 +320,19 @@ public class ProteinGroupPane
         // set the special vertex and labeller for the nodes
         ProteinVertexLabeller labeller = new ProteinVertexLabeller(visualizationViewer.getRenderContext(), 5);
         ProteinVertexShapeTransformer shaper = new ProteinVertexShapeTransformer(visualizationViewer.getRenderContext(), 5);
-        ProteinVertexColorTransformer filler = new ProteinVertexColorTransformer();
+        ProteinVertexFillColorTransformer filler = new ProteinVertexFillColorTransformer(visGraph, pickedProtein);
+        ProteinVertexBorderColorTransformer borderColorizer = new ProteinVertexBorderColorTransformer(visGraph, pickedState, pickedProtein); 
+        
+        
         visualizationViewer.getRenderContext().setVertexShapeTransformer(shaper);
         visualizationViewer.getRenderContext().setVertexFillPaintTransformer(filler);
         visualizationViewer.getRenderContext().setVertexLabelTransformer(labeller);
         visualizationViewer.getRenderer().setVertexLabelRenderer(labeller);
+        visualizationViewer.getRenderContext().setVertexStrokeTransformer(new ProteinVertexStrokeTransformer(visGraph, pickedState, pickedProtein));
+        
         // give a selected vertex red edges, otherwise paint it black
-        visualizationViewer.getRenderContext().setVertexDrawPaintTransformer(
-                new Transformer<VertexObject, Paint>() {
-                    @Override
-                    public Paint transform(VertexObject v) {
-                        if (pickedState.isPicked(v)) {
-                            return SELECTED_BORDER_COLOR;
-                        } else {
-                            return DEFAULT_BORDER_COLOR;
-                        }
-                    }
-                });
+        visualizationViewer.getRenderContext().setVertexDrawPaintTransformer(borderColorizer);
+        
         visualizationViewer.setVertexToolTipTransformer(labeller);
         
         // customize the edges to be straight lines
@@ -364,49 +352,42 @@ public class ProteinGroupPane
      * set up the score threshold panel
      */
     private JPanel setUpScoreThresholdPanel() {
-        //---------------------------------------------------------------------
         // create the slider for the score threshold
-
-        final JSlider scoreThresholdSlider = new JSlider(JSlider.HORIZONTAL);
-        scoreThresholdSlider.setBackground(Color.WHITE);
-        scoreThresholdSlider.setPaintTicks(true);
-        scoreThresholdSlider.setMaximum(10); // this must be set, when the graph is completely built
-        scoreThresholdSlider.setMinimum(0);
-        scoreThresholdSlider.setValue(0);
-        scoreThresholdSlider.setMajorTickSpacing(10);
+        scoreThresholdSlider = new JSlider(JSlider.HORIZONTAL);
+        
+        // the values are with two decimals (so the actual value is the slider's value divided by 100)
+        scoreThresholdSlider.setMinimum(
+                (int)Math.floor(visGraph.getLowestMainScore() * 100.0));
+        scoreThresholdSlider.setMaximum(
+                (int)Math.ceil(visGraph.getHighestMainScore() * 100.0));
+        
+        scoreThresholdSlider.setValue(scoreThresholdSlider.getMinimum());
+        scoreThresholdSlider.setMajorTickSpacing(
+                (scoreThresholdSlider.getMaximum() - scoreThresholdSlider.getMinimum()) / 2);
         scoreThresholdSlider.setPaintLabels(true);
         scoreThresholdSlider.setPaintTicks(true);
-
+        
+        Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>(5);
+        for (int i=0; i < 3; i++) {
+            int value = scoreThresholdSlider.getMinimum() +
+                    i * (scoreThresholdSlider.getMaximum() - scoreThresholdSlider.getMinimum()) / 2;
+            labelTable.put(value, new JLabel("" + (value / 100.0)));
+        }
+        scoreThresholdSlider.setLabelTable(labelTable);
+        
         JPanel scoreThresholdControls = new JPanel();
         scoreThresholdControls.setOpaque(true);
         scoreThresholdControls.setLayout(new BoxLayout(scoreThresholdControls, BoxLayout.Y_AXIS));
-        scoreThresholdControls.add(Box.createVerticalGlue());
-        scoreThresholdControls.add(scoreThresholdSlider);
-
-        TitledBorder sliderBorder = BorderFactory.createTitledBorder(
-                TITLE_SCORE_THRESHOLD + scoreThresholdSlider.getValue());
+        Border sliderBorder = BorderFactory.createTitledBorder("Score threshold");
         scoreThresholdControls.setBorder(sliderBorder);
-        scoreThresholdControls.add(Box.createVerticalGlue());
-
-        scoreThresholdSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                JSlider source = (JSlider) e.getSource();
-                if (!source.getValueIsAdjusting()) {
-                    // the slider was moved
-		        	/*
-		            int numEdgesToRemove = source.getValue();
-		            clusterAndRecolor(layout, numEdgesToRemove, similarColors,
-		                    true);
-		            sliderBorder.setTitle(
-		            		TITLE_SCORE_THRESHOLD + scoreThresholdSlider.getValue());
-		            scoreThresholdControls.repaint();
-		            visualizationViewer.validate();
-		            visualizationViewer.repaint();
-		            */
-                }
-            }
-        });
-
+        
+        scoreThresholdLabel = new JLabel();
+        scoreThresholdControls.add(scoreThresholdLabel);
+        
+        scoreThresholdControls.add(scoreThresholdSlider);
+        scoreThresholdSlider.addChangeListener(this);
+        
+        updateGraphWithScoreThreshold();
         return scoreThresholdControls;
     }
 
@@ -475,6 +456,15 @@ public class ProteinGroupPane
         Object subject = e.getItem();
 
         if (subject instanceof VertexObject) {
+            Object vObject = ((VertexObject)subject).getObject();
+            if (vObject instanceof Collection) {
+                vObject = ((Collection) vObject).iterator().next();
+            }
+            if (vObject instanceof IntermediateProtein){
+                pickedProtein.clear();
+                pickedProtein.pick((VertexObject)subject, true);
+            }
+            
             updateInformationPanel();
         }
     }
@@ -699,7 +689,6 @@ public class ProteinGroupPane
     }
 
 
-
     /**
      * Recalculates the layout and visualization of the graph for the changed
      * graph topology
@@ -725,6 +714,38 @@ public class ProteinGroupPane
         Animator animator = new Animator(lt);
         animator.start();
         
+        visualizationViewer.repaint();
+    }
+    
+    
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        if (e.getSource().equals(scoreThresholdSlider)) {
+            if (!scoreThresholdSlider.getValueIsAdjusting()) {
+                updateGraphWithScoreThreshold();
+            }
+        }
+    }
+    
+    
+    /**
+     * performs a protein inference on the graph and updates the visualization
+     */
+    private void updateGraphWithScoreThreshold() {
+        scoreThreshold = scoreThresholdSlider.getValue() / 100.0;
+        
+        CvTermReference scoreRef = CvTermReference.getCvRefByAccession(visGraph.getMainScoreAccession());
+        if (scoreRef != null) {
+            scoreThresholdLabel.setText(scoreRef.getName() + ": " + scoreThreshold);
+        } else {
+            scoreThresholdLabel.setText("" + scoreThreshold);
+        }
+        
+        
+        visGraph.infereProteins(scoreThreshold, OccamsRazorInference.class, false);
+        
+        
+        visualizationViewer.validate();
         visualizationViewer.repaint();
     }
 }
