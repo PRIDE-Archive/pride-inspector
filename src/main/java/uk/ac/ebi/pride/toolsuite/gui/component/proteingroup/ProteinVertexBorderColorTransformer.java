@@ -7,11 +7,11 @@ import java.util.Collection;
 import org.apache.commons.collections15.Transformer;
 
 import uk.ac.ebi.pride.toolsuite.gui.component.proteingroup.ProteinVisualizationGraphHandler.VertexRelation;
-import de.mpc.pia.core.intermediate.IntermediateGroup;
-import de.mpc.pia.core.intermediate.IntermediatePeptide;
-import de.mpc.pia.core.intermediate.IntermediatePeptideSpectrumMatch;
-import de.mpc.pia.core.intermediate.IntermediateProtein;
 import edu.uci.ics.jung.visualization.picking.PickedState;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateGroup;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptide;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptideSpectrumMatch;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateProtein;
 
 
 /**
@@ -88,7 +88,7 @@ public class ProteinVertexBorderColorTransformer
             
         case IN_SUPER_PAG:
         case IN_UNRELATED_PAG:
-            if (vObject instanceof IntermediatePeptide)  {
+            if (vObject instanceof IntermediatePeptideSpectrumMatch)  {
                 return ProteinVertexFillColorTransformer.PEPTIDE_COLOR;
             } else if (vObject instanceof IntermediateProtein) {
                 return ProteinVertexFillColorTransformer.PROTEIN_COLOR;

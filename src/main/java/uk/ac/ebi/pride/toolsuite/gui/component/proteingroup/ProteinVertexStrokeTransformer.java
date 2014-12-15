@@ -7,8 +7,8 @@ import java.util.Collection;
 import org.apache.commons.collections15.Transformer;
 
 import uk.ac.ebi.pride.toolsuite.gui.component.proteingroup.ProteinVisualizationGraphHandler.VertexRelation;
-import de.mpc.pia.core.intermediate.IntermediateGroup;
 import edu.uci.ics.jung.visualization.picking.PickedState;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateGroup;
 
 
 /**
