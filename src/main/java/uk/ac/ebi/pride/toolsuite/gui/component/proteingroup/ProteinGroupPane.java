@@ -1,10 +1,10 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.proteingroup;
 
-import de.mpc.pia.core.intermediate.IntermediateGroup;
-import de.mpc.pia.core.intermediate.IntermediatePeptide;
-import de.mpc.pia.core.intermediate.IntermediatePeptideSpectrumMatch;
-import de.mpc.pia.core.intermediate.IntermediateProtein;
-import de.mpc.pia.core.modeller.protein.inference.OccamsRazorInference;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateGroup;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptide;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptideSpectrumMatch;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateProtein;
+import uk.ac.ebi.pride.utilities.pia.modeller.protein.inference.OccamsRazorInference;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.FRLayout2;
 import edu.uci.ics.jung.algorithms.layout.Layout;
