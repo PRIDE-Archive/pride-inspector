@@ -1,12 +1,9 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.proteingroup;
 
-import de.mpc.pia.core.intermediate.IntermediateGroup;
-import de.mpc.pia.core.intermediate.IntermediatePeptide;
-import de.mpc.pia.core.intermediate.IntermediatePeptideSpectrumMatch;
-import de.mpc.pia.core.intermediate.IntermediateProtein;
-import de.mpc.pia.core.intermediate.IntermediateStructure;
-import de.mpc.pia.core.intermediate.prideimpl.PrideImportController;
-import de.mpc.pia.core.modeller.PIAModeller;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateGroup;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptide;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptideSpectrumMatch;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateProtein;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.FRLayout2;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -14,8 +11,6 @@ import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.algorithms.layout.util.Relaxer;
 import edu.uci.ics.jung.algorithms.layout.util.VisRunner;
 import edu.uci.ics.jung.algorithms.util.IterativeContext;
-import edu.uci.ics.jung.graph.DirectedGraph;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
@@ -23,15 +18,11 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 import edu.uci.ics.jung.visualization.control.ScalingControl;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
-import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.layout.LayoutTransition;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.util.Animator;
 
 import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.functors.ConstantTransformer;
-import org.apache.commons.collections15.functors.MapTransformer;
-import org.apache.commons.collections15.map.LazyMap;
 
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskEvent;
@@ -54,9 +45,9 @@ import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.table.DefaultTableModel;
 
-import java.awt.BasicStroke;
+
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -66,17 +57,17 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Paint;
-import java.awt.Stroke;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.geom.Point2D;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;

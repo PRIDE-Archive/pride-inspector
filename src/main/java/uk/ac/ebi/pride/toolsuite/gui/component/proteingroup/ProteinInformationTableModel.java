@@ -9,8 +9,8 @@ import java.util.Map;
 
 import javax.swing.table.AbstractTableModel;
 
-import de.mpc.pia.core.intermediate.IntermediatePeptide;
-import de.mpc.pia.core.intermediate.IntermediateProtein;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptide;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateProtein;
 
 /**
  * Model showing information of the proteins

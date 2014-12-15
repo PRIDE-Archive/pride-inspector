@@ -10,10 +10,10 @@ import java.util.Locale;
 
 import org.apache.commons.collections15.Transformer;
 
-import de.mpc.pia.core.intermediate.IntermediateGroup;
-import de.mpc.pia.core.intermediate.IntermediatePeptide;
-import de.mpc.pia.core.intermediate.IntermediatePeptideSpectrumMatch;
-import de.mpc.pia.core.intermediate.IntermediateProtein;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateGroup;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptide;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptideSpectrumMatch;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateProtein;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Context;

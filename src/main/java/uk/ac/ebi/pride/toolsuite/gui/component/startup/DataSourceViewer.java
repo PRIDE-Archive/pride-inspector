@@ -194,14 +194,14 @@ public class DataSourceViewer extends JPanel {
         if(context.getDataAccessMonitor().containStatusController(controller, evt.getStatus())){
             context.getDataAccessMonitor().removeStatusController(controller, evt.getStatus());
             if(evt.getStatus() == ProcessingDataSourceEvent.Status.IDENTIFICATION_READING && controller.getType().equals(DataAccessController.Type.MZIDENTML) && !noadded){
-                java.util.List<DataAccessController> controllers = context.getControllers();
-                int row = controllers.indexOf(controller);
-                Icon icon = GUIUtilities.loadImageIcon(context.getProperty("open.mzidentml.ms.icon.small"));
-                BalloonTip tip = BalloonTipUtil.createBalloonNote(summaryTitle, icon, "<html><p>" +"Click the icon to add the related spectra files"+ "</p></html>",BalloonTip.AttachLocation.ALIGNED,50, 10,true);
-                TimingUtils.showTimedBalloon(tip, 5000);
-                this.revalidate();
-                this.repaint();
-                noadded = true;
+//                java.util.List<DataAccessController> controllers = context.getControllers();
+//                int row = controllers.indexOf(controller);
+//                Icon icon = GUIUtilities.loadImageIcon(context.getProperty("open.mzidentml.ms.icon.small"));
+//                BalloonTip tip = BalloonTipUtil.createBalloonNote(summaryTitle, icon, "<html><p>" +"Click the icon to add the related spectra files"+ "</p></html>",BalloonTip.AttachLocation.ALIGNED,50, 10,true);
+//                TimingUtils.showTimedBalloon(tip, 5000);
+//                this.revalidate();
+//                this.repaint();
+//                noadded = true;
             }
         }else
             context.getDataAccessMonitor().addStatusController(controller,evt.getStatus());
@@ -244,7 +244,7 @@ public class DataSourceViewer extends JPanel {
     /**
      * Data access table to show experiment name as tooltip
      */
-    private static class DataAccessTable extends JTable {
+    private class DataAccessTable extends JTable {
 
         private DataAccessTable(TableModel dm) {
             super(dm);
@@ -266,6 +266,12 @@ public class DataSourceViewer extends JPanel {
                 }
             } else {
                 tooltip = super.getToolTipText(event);
+            }
+            if(realColIndex == 1 && model != null && rowIndex < context.getControllers().size() && rowIndex >= 0){
+                if(context.getControllers().get(rowIndex).getType().equals(DataAccessController.Type.MZIDENTML) ||
+                        context.getControllers().get(rowIndex).getType().equals(DataAccessController.Type.MZTAB)){
+                    tooltip = "Click here to add related spectra files.";
+                }
             }
 
             return tooltip;

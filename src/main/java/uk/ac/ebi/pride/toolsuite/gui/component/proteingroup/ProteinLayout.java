@@ -15,7 +15,7 @@ import java.util.TreeMap;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.map.LazyMap;
 
-import de.mpc.pia.core.intermediate.IntermediateProtein;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateProtein;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.DirectedGraph;
 import edu.uci.ics.jung.graph.Graph;
