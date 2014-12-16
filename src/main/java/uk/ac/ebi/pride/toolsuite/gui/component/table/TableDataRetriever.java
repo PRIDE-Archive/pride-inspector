@@ -1,8 +1,7 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table;
 
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
-import uk.ac.ebi.pride.utilities.data.core.*;
+import uk.ac.ebi.pride.tools.protein_details_fetcher.model.Protein;
+import uk.ac.ebi.pride.tools.utils.AccessionResolver;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorCacheManager;
 import uk.ac.ebi.pride.toolsuite.gui.component.sequence.AnnotatedProtein;
 import uk.ac.ebi.pride.toolsuite.gui.component.sequence.PeptideFitState;
@@ -10,13 +9,14 @@ import uk.ac.ebi.pride.toolsuite.gui.component.table.model.PeptideTableRow;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableRow;
 import uk.ac.ebi.pride.toolsuite.gui.utils.Constants;
 import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
+import uk.ac.ebi.pride.utilities.data.core.*;
 import uk.ac.ebi.pride.utilities.mol.IsoelectricPointUtils;
 import uk.ac.ebi.pride.utilities.mol.MoleculeUtilities;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
-import uk.ac.ebi.pride.tools.protein_details_fetcher.model.Protein;
-import uk.ac.ebi.pride.tools.utils.AccessionResolver;
-import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 import uk.ac.ebi.pride.utilities.term.QuantCvTermReference;
+import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 
 import java.util.ArrayList;
 import java.util.Collection;

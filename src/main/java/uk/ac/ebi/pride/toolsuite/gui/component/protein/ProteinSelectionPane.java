@@ -7,8 +7,9 @@ import org.bushe.swing.event.annotation.EventSubscriber;
 import org.jdesktop.swingx.JXTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.utilities.engine.SearchEngineType;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
+import uk.ac.ebi.pride.toolsuite.gui.action.PrideAction;
+import uk.ac.ebi.pride.toolsuite.gui.action.impl.DecoyFilterAction;
 import uk.ac.ebi.pride.toolsuite.gui.action.impl.ExtraProteinDetailAction;
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.exception.ThrowableEntry;
@@ -32,7 +33,6 @@ import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collection;
 
 /**
  * IdentificationSelectionPane displays identification related details in a table.
@@ -163,20 +163,20 @@ public class ProteinSelectionPane extends DataAccessControllerPane {
         return metaDataPanel;
     }
 
-    private String getSearchEngineName(Collection<SearchEngineType> searchEngineTypes) {
-        StringBuilder builder = new StringBuilder();
-
-        for (SearchEngineType searchEngineType : searchEngineTypes) {
-            builder.append(searchEngineType.toString()).append(",");
-        }
-
-        String searchEngineName = builder.toString();
-        if (searchEngineName.length() > 1) {
-            searchEngineName.substring(0, searchEngineName.length() - 1);
-        }
-
-        return searchEngineName;
-    }
+//    private String getSearchEngineName(Collection<SearchEngineType> searchEngineTypes) {
+//        StringBuilder builder = new StringBuilder();
+//
+//        for (SearchEngineType searchEngineType : searchEngineTypes) {
+//            builder.append(searchEngineType.toString()).append(",");
+//        }
+//
+//        String searchEngineName = builder.toString();
+//        if (searchEngineName.length() > 1) {
+//            searchEngineName.substring(0, searchEngineName.length() - 1);
+//        }
+//
+//        return searchEngineName;
+//    }
 
     /**
      * Build toolbar which contains all the buttons.
@@ -200,15 +200,15 @@ public class ProteinSelectionPane extends DataAccessControllerPane {
         toolBar.add(Box.createRigidArea(new Dimension(10, 10)));
 
         // decoy filter
-//        JButton decoyFilterButton = GUIUtilities.createLabelLikeButton(null, null);
-//        decoyFilterButton.setForeground(Color.blue);
-//        PrideAction action = appContext.getPrideAction(controller, DecoyFilterAction.class);
-//        if (action == null) {
-//            action = new DecoyFilterAction(controller);
-//            appContext.addPrideAction(controller, action);
-//        }
-//        decoyFilterButton.setAction(action);
-//        toolBar.add(decoyFilterButton);
+        JButton decoyFilterButton = GUIUtilities.createLabelLikeButton(null, null);
+        decoyFilterButton.setForeground(Color.blue);
+        PrideAction action = appContext.getPrideAction(controller, DecoyFilterAction.class);
+        if (action == null) {
+            action = new DecoyFilterAction(controller);
+            appContext.addPrideAction(controller, action);
+        }
+        decoyFilterButton.setAction(action);
+        toolBar.add(decoyFilterButton);
 
         // add gap
         toolBar.add(Box.createRigidArea(new Dimension(10, 10)));

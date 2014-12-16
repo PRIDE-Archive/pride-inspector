@@ -1,10 +1,9 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.decoy;
 
-import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
-import uk.ac.ebi.pride.toolsuite.gui.component.table.filter.DecoyAccessionFilter;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop;
+import uk.ac.ebi.pride.utilities.data.filter.DecoyAccessionFilter;
 
 import javax.help.CSH;
 import javax.swing.*;
@@ -257,7 +256,7 @@ public class DecoyFilterDialog extends JDialog {
                 }
 
                 DecoyFilterDialog.this.setVisible(false);
-                DecoyFilterDialog.this.firePropertyChange(NEW_FILTER, null, new Tuple<DecoyAccessionFilter.Type, String>(type, criteria));
+                DecoyFilterDialog.this.firePropertyChange(NEW_FILTER, null, new DecoyAccessionFilter(type, criteria.toLowerCase()));
 
                 // reset label
                 criteriaLabel.setText(FILTER_STRING_LABEL);

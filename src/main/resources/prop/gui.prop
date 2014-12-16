@@ -223,7 +223,7 @@ load.next.mzdata.tooltip=Load Next Batch
 load.next.mzdata.small.icon=icon/16x16/load_next.png
 
 #download protein name
-load.protein.detail.small.icon=icon/16x16/load_next.png
+load.protein.detail.small.icon=icon/16x16/download.png
 load.protein.detail.title=Obtain Protein Details
 load.protein.detail.test.uniprot.protein=P31946
 
@@ -356,8 +356,10 @@ quant.histogram.y.axis = Ratio
 
 # decoy filter
 decoy.filter.title = Decoy Filter
+none.decoy.filter.title = Remove Filter
 decoy.filter.tooltip = Decoy Filter
 decoy.filter.small.icon = icon/16x16/filter.png
+none.decoy.filter.small.icon = icon/16x16/remove_filter.png
 
 # shared peptide
 shared.peptide.title = Shared Peptides Disclaimer

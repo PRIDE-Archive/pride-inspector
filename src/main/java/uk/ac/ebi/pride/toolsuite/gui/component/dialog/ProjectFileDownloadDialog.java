@@ -8,10 +8,7 @@ import uk.ac.ebi.pride.toolsuite.gui.component.table.model.AssayFileDownloadTabl
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskEvent;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskListener;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
-import uk.ac.ebi.pride.toolsuite.gui.task.impl.AsperaDownloadTask;
-import uk.ac.ebi.pride.toolsuite.gui.task.impl.DataTransferProtocolTask;
-import uk.ac.ebi.pride.toolsuite.gui.task.impl.FTPDownloadTask;
-import uk.ac.ebi.pride.toolsuite.gui.task.impl.GetAssayFileMetadataTask;
+import uk.ac.ebi.pride.toolsuite.gui.task.impl.*;
 import uk.ac.ebi.pride.toolsuite.gui.utils.DataTransferConfiguration;
 import uk.ac.ebi.pride.toolsuite.gui.utils.DataTransferPort;
 import uk.ac.ebi.pride.toolsuite.gui.utils.DataTransferProtocol;
@@ -32,7 +29,7 @@ import java.util.List;
  * @author Rui Wang
  * @version $Id$
  */
-public class AssayFileDownloadDialog extends JDialog implements ActionListener, TaskListener<List<DataTransferProtocol>, Void> {
+public class ProjectFileDownloadDialog extends JDialog implements ActionListener, TaskListener<List<DataTransferProtocol>, Void> {
     private static final String CANCEL_ACTION_COMMAND = "cancelAction";
     private static final String DOWNLOAD_ACTION_COMMAND = "downloadAction";
 
@@ -47,6 +44,11 @@ public class AssayFileDownloadDialog extends JDialog implements ActionListener, 
     private JCheckBox openFileOptionCheckbox;
 
     /**
+     * Accession of the project to download
+     */
+    private final String projectAccession;
+
+    /**
      * Accession for the assay to download
      */
     private final String assayAccession;
@@ -59,17 +61,18 @@ public class AssayFileDownloadDialog extends JDialog implements ActionListener, 
     /**
      * File mapping table model
      */
-//    private FileMappingTableModel fileMappingTableModel;
-    public AssayFileDownloadDialog(Frame owner, String assayAccession) {
+    public ProjectFileDownloadDialog(Frame owner, String projectAccession, String assayAccession) {
         super(owner);
+        this.projectAccession = projectAccession;
         this.assayAccession = assayAccession;
         this.prideInspectorContext = (PrideInspectorContext) PrideInspector.getInstance().getDesktopContext();
         initComponents();
         postComponents();
     }
 
-    public AssayFileDownloadDialog(Dialog owner, String assayAccession) {
+    public ProjectFileDownloadDialog(Dialog owner, String projectAccession, String assayAccession) {
         super(owner);
+        this.projectAccession = projectAccession;
         this.assayAccession = assayAccession;
         this.prideInspectorContext = (PrideInspectorContext) PrideInspector.getInstance().getDesktopContext();
         initComponents();
@@ -100,9 +103,15 @@ public class AssayFileDownloadDialog extends JDialog implements ActionListener, 
     private void postComponents() {
         AssayFileDownloadTableModel model = (AssayFileDownloadTableModel) fileDownloadSelectionTable.getModel();
 
-        GetAssayFileMetadataTask task = new GetAssayFileMetadataTask(assayAccession);
-        task.addTaskListener(model);
-        TaskUtil.startBackgroundTask(task);
+        if (projectAccession != null) {
+            GetProjectFileMetadataTask task = new GetProjectFileMetadataTask(projectAccession);
+            task.addTaskListener(model);
+            TaskUtil.startBackgroundTask(task);
+        } else if (assayAccession != null) {
+            GetAssayFileMetadataTask task = new GetAssayFileMetadataTask(assayAccession);
+            task.addTaskListener(model);
+            TaskUtil.startBackgroundTask(task);
+        }
     }
 
     /**
@@ -113,7 +122,14 @@ public class AssayFileDownloadDialog extends JDialog implements ActionListener, 
         tablePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // create table title label
-        JLabel label = new JLabel("File Download (assay: " + assayAccession + ")");
+        String title = "Files ";
+        if (projectAccession != null) {
+            title += "[Project: " + projectAccession + "]";
+        } else if (assayAccession != null) {
+            title += "[Assay: " + assayAccession + "]";
+        }
+
+        JLabel label = new JLabel(title);
         label.setFont(label.getFont().deriveFont(Font.BOLD));
         tablePanel.add(label, BorderLayout.NORTH);
 
@@ -139,7 +155,7 @@ public class AssayFileDownloadDialog extends JDialog implements ActionListener, 
 
         // open file after download checkbox
         JPanel openFileOptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        openFileOptionCheckbox = new JCheckBox("Open after download");
+        openFileOptionCheckbox = new JCheckBox("Try to open files after download");
         openFileOptionCheckbox.setSelected(true);
         openFileOptionPanel.add(openFileOptionCheckbox);
         controlPanel.add(openFileOptionPanel, BorderLayout.WEST);
@@ -180,7 +196,7 @@ public class AssayFileDownloadDialog extends JDialog implements ActionListener, 
                 ofd.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 ofd.setMultiSelectionEnabled(false);
 
-                int result = ofd.showOpenDialog(AssayFileDownloadDialog.this);
+                int result = ofd.showOpenDialog(ProjectFileDownloadDialog.this);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = ofd.getSelectedFile();
                     String folderPath = selectedFile.getPath();

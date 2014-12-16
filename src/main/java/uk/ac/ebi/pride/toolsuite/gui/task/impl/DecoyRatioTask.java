@@ -1,25 +1,27 @@
 package uk.ac.ebi.pride.toolsuite.gui.task.impl;
 
 import org.bushe.swing.event.EventBus;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.component.report.RemovalReportMessage;
 import uk.ac.ebi.pride.toolsuite.gui.component.report.SummaryReportMessage;
 import uk.ac.ebi.pride.toolsuite.gui.component.startup.ControllerContentPane;
-import uk.ac.ebi.pride.toolsuite.gui.component.table.filter.DecoyAccessionFilter;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.PeptideTableHeader;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableHeader;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop;
 import uk.ac.ebi.pride.toolsuite.gui.event.SummaryReportEvent;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskAdapter;
+import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.data.filter.DecoyAccessionFilter;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
  * Task to calculate decoy ratio
- *
+ * <p/>
  * User: rwang
  * Date: 16/09/2011
  * Time: 10:08
@@ -29,13 +31,11 @@ public class DecoyRatioTask extends TaskAdapter<Void, Void> {
     private static final String TASK_DESCRIPTION = "Calculating decoy ratio for both protein and peptide";
 
     private DataAccessController controller;
-    private DecoyAccessionFilter.Type type;
-    private String criteria;
+    private DecoyAccessionFilter filter;
 
-    public DecoyRatioTask(DataAccessController controller, DecoyAccessionFilter.Type type, String criteria) {
+    public DecoyRatioTask(DataAccessController controller, DecoyAccessionFilter filter) {
         this.controller = controller;
-        this.type = type;
-        this.criteria = criteria.toLowerCase();
+        this.filter = filter;
 
         this.setName(TASK_NAME);
         this.setDescription(TASK_DESCRIPTION);
@@ -53,7 +53,7 @@ public class DecoyRatioTask extends TaskAdapter<Void, Void> {
         String protAccColName = ProteinTableHeader.PROTEIN_ACCESSION.getHeader();
         int index = getAccessionColumnIndex(table.getModel(), protAccColName);
         // protein decoy ratio
-        String proteinDecoyRatio = calculateDecoyRatio(table.getModel(), index, type, criteria);
+        String proteinDecoyRatio = calculateDecoyRatio(table.getModel(), index, filter);
         String proteinDecoyMsg = "Decoy Protein Hits: " + proteinDecoyRatio;
         EventBus.publish(new SummaryReportEvent(this, controller, new SummaryReportMessage(SummaryReportMessage.Type.INFO, proteinDecoyMsg, proteinDecoyMsg)));
 
@@ -62,7 +62,7 @@ public class DecoyRatioTask extends TaskAdapter<Void, Void> {
         protAccColName = PeptideTableHeader.PROTEIN_ACCESSION_COLUMN.getHeader();
         index = getAccessionColumnIndex(table.getModel(), protAccColName);
         // peptide decoy ratio
-        String peptideDecoyRatio = calculateDecoyRatio(table.getModel(), index, type, criteria);
+        String peptideDecoyRatio = calculateDecoyRatio(table.getModel(), index, filter);
         String peptideDecoyMsg = "Decoy Peptide Hits: " + peptideDecoyRatio;
         EventBus.publish(new SummaryReportEvent(this, controller, new SummaryReportMessage(SummaryReportMessage.Type.INFO, peptideDecoyMsg, peptideDecoyMsg)));
 
@@ -91,38 +91,34 @@ public class DecoyRatioTask extends TaskAdapter<Void, Void> {
      *
      * @param tableModel table model
      * @param colIndex   protein accession column
-     * @param type
-     * @param criteria
      * @return String  decoy ratio
      */
     private String calculateDecoyRatio(TableModel tableModel, int colIndex,
-                                       DecoyAccessionFilter.Type type, String criteria) {
+                                       DecoyAccessionFilter filter) {
         int rowCnt = tableModel.getRowCount();
         int decoyCnt = 0;
 
         for (int i = 0; i < rowCnt; i++) {
-            String acc = ((String) tableModel.getValueAt(i, colIndex)).toLowerCase();
-            if (acc != null) {
-                switch (type) {
-                    case PREFIX:
-                        if (acc.startsWith(criteria)) {
-                            decoyCnt ++;
-                        }
-                        break;
-                    case POSTFIX:
-                        if (acc.endsWith(criteria)) {
-                            decoyCnt ++;
-                        }
-                        break;
-                    case CONTAIN:
-                        if (acc.contains(criteria)) {
-                            decoyCnt ++;
-                        }
-                        break;
-                }
+            String acc = getProteinAccession(tableModel, colIndex, i);
+            if (acc != null && filter.apply(acc)) {
+                decoyCnt++;
             }
         }
 
-        return decoyCnt + "/"+ rowCnt;
+        return decoyCnt + "/" + rowCnt;
+    }
+
+    private String getProteinAccession(TableModel tableModel, int colIndex, int i) {
+        Object proteinAccession = tableModel.getValueAt(i, colIndex);
+        if (proteinAccession instanceof ProteinAccession) {
+            return ((ProteinAccession) proteinAccession).getAccession();
+        } else {
+            Set<ProteinAccession> proteinAccessions = (Set<ProteinAccession>) proteinAccession;
+            if (!proteinAccessions.isEmpty()) {
+                return proteinAccessions.iterator().next().getAccession();
+            }
+        }
+
+        return null;
     }
 }

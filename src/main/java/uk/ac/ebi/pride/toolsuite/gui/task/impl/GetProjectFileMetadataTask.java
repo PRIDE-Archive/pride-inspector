@@ -18,22 +18,22 @@ import java.util.List;
  * @author Rui Wang
  * @version $Id$
  */
-public class GetAssayFileMetadataTask extends Task<Void, Tuple<FileDetail, Boolean>> {
+public class GetProjectFileMetadataTask extends Task<Void, Tuple<FileDetail, Boolean>> {
 
-    private static final String DEFAULT_TASK_TITLE = "Retrieving assay file summary";
-    private static final String DEFAULT_TASK_DESCRIPTION = "Retrieving assay file summary";
+    private static final String DEFAULT_TASK_TITLE = "Retrieving project file summary";
+    private static final String DEFAULT_TASK_DESCRIPTION = "Retrieving project file summary";
 
     private final RestTemplate restTemplate;
     private final DesktopContext context;
-    private final String assayAccession;
+    private final String projectAccession;
 
     /**
      * Constructor
      */
-    public GetAssayFileMetadataTask(String assayAccession) {
+    public GetProjectFileMetadataTask(String projectAccession) {
         this.restTemplate = new RestTemplate();
         this.context = PrideInspector.getInstance().getDesktopContext();
-        this.assayAccession = assayAccession;
+        this.projectAccession = projectAccession;
 
         this.setName(DEFAULT_TASK_TITLE);
         this.setDescription(DEFAULT_TASK_DESCRIPTION);
@@ -42,9 +42,9 @@ public class GetAssayFileMetadataTask extends Task<Void, Tuple<FileDetail, Boole
     @Override
     protected Void doInBackground() throws Exception {
         try {
-            String assayFileUrl = context.getProperty("prider.assay.file.url");
+            String assayFileUrl = context.getProperty("prider.project.file.url");
 
-            FileDetailList assayFileList = restTemplate.getForObject(assayFileUrl, FileDetailList.class, assayAccession);
+            FileDetailList assayFileList = restTemplate.getForObject(assayFileUrl, FileDetailList.class, projectAccession);
 
             List<FileDetail> assayFiles = assayFileList.getList();
             for (FileDetail assayFile : assayFiles) {
@@ -56,7 +56,7 @@ public class GetAssayFileMetadataTask extends Task<Void, Tuple<FileDetail, Boole
                 public void run() {
                     JOptionPane.showMessageDialog(PrideInspector.getInstance().getMainComponent(),
                             "Failed to retrieve assay file details from PRIDE for assay " +
-                                    assayAccession,
+                                    projectAccession,
                             "Access error",
                             JOptionPane.ERROR_MESSAGE);
                 }

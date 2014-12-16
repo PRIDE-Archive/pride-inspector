@@ -1,19 +1,5 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.proteingroup;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.geom.Point2D;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Collection;
-import java.util.Locale;
-
-import org.apache.commons.collections15.Transformer;
-
-import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateGroup;
-import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptide;
-import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptideSpectrumMatch;
-import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateProtein;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Context;
@@ -21,6 +7,18 @@ import edu.uci.ics.jung.visualization.Layer;
 import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
+import org.apache.commons.collections15.Transformer;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateGroup;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptide;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptideSpectrumMatch;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateProtein;
+
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Collection;
+import java.util.Locale;
 
 
 /**

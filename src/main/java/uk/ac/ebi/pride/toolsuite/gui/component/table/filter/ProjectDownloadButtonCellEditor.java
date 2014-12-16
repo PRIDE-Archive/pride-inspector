@@ -11,10 +11,10 @@ import java.awt.*;
  * @version $Id$
  *
  */
-public class AssayDownloadButtonCellEditor extends ButtonCellEditor {
+public class ProjectDownloadButtonCellEditor extends ButtonCellEditor {
     private Object value;
 
-    public AssayDownloadButtonCellEditor(String text, Icon icon) {
+    public ProjectDownloadButtonCellEditor(String text, Icon icon) {
         super(text, icon);
     }
 
@@ -28,7 +28,7 @@ public class AssayDownloadButtonCellEditor extends ButtonCellEditor {
     public Object getCellEditorValue() {
         if (isPushed) {
             JFrame mainComponent = PrideInspector.getInstance().getMainComponent();
-            ProjectFileDownloadDialog dialog = new ProjectFileDownloadDialog(mainComponent, null, (String) value);
+            ProjectFileDownloadDialog dialog = new ProjectFileDownloadDialog(mainComponent, (String) value, null);
             dialog.setLocationRelativeTo(mainComponent);
             dialog.setVisible(true);
         }
