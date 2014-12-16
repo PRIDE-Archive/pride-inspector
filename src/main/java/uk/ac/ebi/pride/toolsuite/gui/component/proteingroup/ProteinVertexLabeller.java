@@ -1,9 +1,5 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.proteingroup;
 
-import de.mpc.pia.core.intermediate.IntermediateGroup;
-import de.mpc.pia.core.intermediate.IntermediatePeptide;
-import de.mpc.pia.core.intermediate.IntermediatePeptideSpectrumMatch;
-import de.mpc.pia.core.intermediate.IntermediateProtein;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Context;
@@ -12,6 +8,10 @@ import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 import org.apache.commons.collections15.Transformer;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateGroup;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptide;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptideSpectrumMatch;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateProtein;
 
 import java.awt.*;
 import java.awt.geom.Point2D;

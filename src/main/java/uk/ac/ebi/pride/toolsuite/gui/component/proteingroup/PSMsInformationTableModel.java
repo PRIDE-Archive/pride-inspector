@@ -13,8 +13,8 @@ import java.util.Map;
 import javax.swing.table.AbstractTableModel;
 
 import uk.ac.ebi.jmzidml.model.mzidml.Modification;
-import de.mpc.pia.core.intermediate.IntermediatePeptide;
-import de.mpc.pia.core.intermediate.IntermediatePeptideSpectrumMatch;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptide;
+import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediatePeptideSpectrumMatch;
 
 /**
  * Model showing information of the PSMs in the peptides
@@ -65,7 +65,7 @@ public class PSMsInformationTableModel extends AbstractTableModel {
                 Object item = objectIterator.next();
                 
                 if (item instanceof IntermediatePeptide) {
-                    psmsList.addAll(((IntermediatePeptide) item).getPeptideSpectrumMatches());
+                    psmsList.addAll(((IntermediatePeptide) item).getAllPeptideSpectrumMatches());
                 }
             }
         }

@@ -159,8 +159,8 @@
         </dependency>
 
         <dependency>
-            <groupId>pia-core-library</groupId>
-            <artifactId>pia-core-library</artifactId>
+            <groupId>uk.ac.ebi.pride.utilities</groupId>
+            <artifactId>pride-protein-inference</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
