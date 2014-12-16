@@ -88,7 +88,7 @@ public class ProteinVertexBorderColorTransformer
             
         case IN_SUPER_PAG:
         case IN_UNRELATED_PAG:
-            if (vObject instanceof IntermediatePeptideSpectrumMatch)  {
+            if (vObject instanceof IntermediatePeptide)  {
                 return ProteinVertexFillColorTransformer.PEPTIDE_COLOR;
             } else if (vObject instanceof IntermediateProtein) {
                 return ProteinVertexFillColorTransformer.PROTEIN_COLOR;
