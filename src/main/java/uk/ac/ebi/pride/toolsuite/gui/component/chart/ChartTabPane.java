@@ -2,8 +2,6 @@ package uk.ac.ebi.pride.toolsuite.gui.component.chart;
 
 import uk.ac.ebi.pride.toolsuite.chart.PrideChartType;
 import uk.ac.ebi.pride.toolsuite.chart.io.PrideDataReader;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
-import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.PrideDBAccessControllerImpl;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
@@ -16,6 +14,8 @@ import uk.ac.ebi.pride.toolsuite.gui.task.TaskEvent;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.LoadChartDataTask;
 import uk.ac.ebi.pride.toolsuite.gui.utils.DefaultGUIBlocker;
 import uk.ac.ebi.pride.toolsuite.gui.utils.GUIBlocker;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.data.filter.AccessionFilter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,7 +71,6 @@ public class ChartTabPane extends DataAccessControllerPane<PrideDataReader, Void
 
         // set the final icon
         PrideInspectorContext context = (PrideInspectorContext) PrideInspector.getInstance().getDesktopContext();
-        //this.setIcon(GUIUtilities.loadIcon(context.getProperty("chart.icon.small")));
 
         // set the loading icon
         this.setLoadingIcon(GUIUtilities.loadIcon(context.getProperty("chart_loading.icon.small")));
@@ -89,18 +88,10 @@ public class ChartTabPane extends DataAccessControllerPane<PrideDataReader, Void
         setLayout(new GridLayout(rows, COLS, border, border));
     }
 
-    private void createPrideCharts() {
-        TaskAdapter<PrideDataReader, Void> lcd;
-
-        if (controller.getType().equals(DataAccessController.Type.DATABASE)) {
-            lcd = new LoadChartDataTask(controller, (String) ((PrideDBAccessControllerImpl) controller).getExperimentAcc());
-            String msg = viewerContext.getProperty("chart.time.warning.message");
-            showWarningMessage(msg, false);
-        } else {
-            lcd = new LoadChartDataTask(controller);
-            String msg = viewerContext.getProperty("chart.time.warning.message");
-            showWarningMessage(msg, false);
-        }
+    private void createPrideCharts(AccessionFilter<String> filter) {
+        TaskAdapter<PrideDataReader, Void> lcd = new LoadChartDataTask(controller, filter);
+        String msg = viewerContext.getProperty("chart.time.warning.message");
+        showWarningMessage(msg, false, null);
 
         // add a task listener
         lcd.addTaskListener(this);
@@ -132,7 +123,7 @@ public class ChartTabPane extends DataAccessControllerPane<PrideDataReader, Void
         repaint();
     }
 
-    private void showWarningMessage(String msg, boolean launchButton) {
+    private void showWarningMessage(String msg, boolean launchButton, final AccessionFilter<String> filter) {
         this.setLayout(new BorderLayout());
 
         JPanel msgPanel = new JPanel();
@@ -159,7 +150,7 @@ public class ChartTabPane extends DataAccessControllerPane<PrideDataReader, Void
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     ChartTabPane.this.removeAll();
-                    createPrideCharts();
+                    createPrideCharts(filter);
                 }
             });
             msgPanel.add(computeButton);
@@ -181,14 +172,15 @@ public class ChartTabPane extends DataAccessControllerPane<PrideDataReader, Void
      */
     @Override
     public void populate() {
+        populateWithDecoyFilter(null);
+    }
+
+
+    public void populateWithDecoyFilter(AccessionFilter<String> filter) {
         removeAll();
         //get spectra threshold
-        if (DataAccessController.Type.DATABASE.equals(controller.getType())) {
-            createPrideCharts();
-        } else {
-            String msg = viewerContext.getProperty("chart.warning.message");
-            showWarningMessage(msg, true);
-        }
+        String msg = viewerContext.getProperty("chart.warning.message");
+        showWarningMessage(msg, true, filter);
     }
 
     @Override
@@ -211,7 +203,7 @@ public class ChartTabPane extends DataAccessControllerPane<PrideDataReader, Void
 
     @Override
     public void started(TaskEvent event) {
-     //   showIcon(getLoadingIcon());
+        //   showIcon(getLoadingIcon());
     }
 
     @Override
@@ -225,7 +217,7 @@ public class ChartTabPane extends DataAccessControllerPane<PrideDataReader, Void
      * @param icon icon to show
      */
     private void showIcon(Icon icon) {
-        if (parentComponent != null && parentComponent instanceof ControllerContentPane ) {
+        if (parentComponent != null && parentComponent instanceof ControllerContentPane) {
             ControllerContentPane contentPane = (ControllerContentPane) parentComponent;
             contentPane.setTabIcon(contentPane.getChartTabIndex(), icon);
         }
