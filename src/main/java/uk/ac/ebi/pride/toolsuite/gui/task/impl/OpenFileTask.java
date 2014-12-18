@@ -15,23 +15,29 @@ import uk.ac.ebi.pride.utilities.data.core.ProteinGroup;
 import uk.ac.ebi.pride.utilities.data.core.SpectraData;
 import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateProtein;
 import uk.ac.ebi.pride.utilities.pia.intermediate.prideimpl.PrideIntermediateProtein;
+import uk.ac.ebi.pride.utilities.pia.intermediate.prideimpl.PrideUtilities;
 import uk.ac.ebi.pride.utilities.pia.modeller.PIAModeller;
 import uk.ac.ebi.pride.utilities.pia.modeller.filter.AbstractFilter;
 import uk.ac.ebi.pride.utilities.pia.modeller.protein.inference.InferenceProteinGroup;
+import uk.ac.ebi.pride.utilities.pia.modeller.protein.inference.OccamsRazorInference;
 import uk.ac.ebi.pride.utilities.pia.modeller.protein.inference.ReportAllInference;
+import uk.ac.ebi.pride.utilities.pia.modeller.scores.CvScore;
 import uk.ac.ebi.pride.utilities.pia.modeller.scores.peptide.PeptideScoring;
 import uk.ac.ebi.pride.utilities.pia.modeller.scores.peptide.PeptideScoringUseBestPSM;
 import uk.ac.ebi.pride.utilities.pia.modeller.scores.protein.ProteinScoring;
 import uk.ac.ebi.pride.utilities.pia.modeller.scores.protein.ProteinScoringAdditive;
 import uk.ac.ebi.pride.utilities.pia.modeller.scores.protein.ProteinScoringMultiplicative;
+import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Task to open mzML/MzIdentML or PRIDE xml files.
@@ -277,77 +283,85 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
     
     
     
-    
+    /**
+     * Run the protein inference using the PIA algorithms and add the resulting
+     * protein ambiguity groups to the {@link DataAccessController}
+     * 
+     * @param controller
+     */
     private void infereProteins(DataAccessController controller) {
         PIAModeller piaModeller = new PIAModeller();
         
-        // MS:1002355   PSM-level FDRScore
-        // MS:1002053   MS-GF E-value
-        // MS:1001171   Mascot:score
-        //String scoreAcc = piaModeller.getPSMModeller().getFilesMainScoreAccession(1);
-        // TODO:use the getfilesmanscore again 
-        String scoreAcc = "MS:1001171";
-        
+        CvScore cvScore = null;
+        String scoreAccession = null;
+        // try to get the main-score
+        for (CvTermReference termRef : controller.getAvailablePeptideLevelScores()) {
+            CvScore newCvScore;
+            scoreAccession = termRef.getAccession();
+            newCvScore = CvScore.getCvRefByAccession(termRef.getAccession());
+            if ((newCvScore != null) && newCvScore.getIsMainScore()) {
+                cvScore = newCvScore;
+                scoreAccession = cvScore.getAccession();
+                break;
+            }
+        }
         
         // add the input file to modeller and import data
         Integer controllerID = piaModeller.addPrideControllerAsInput(controller);
         piaModeller.importAllDataFromFile(controllerID);
         
-        
         // first create the intermediate structure from the data given by the controller
         piaModeller.buildIntermediateStructure();
         
-        
-        // perform the protein inferences
-        PeptideScoring pepScoring = new PeptideScoringUseBestPSM(scoreAcc, false);
-        
-        // TODO: this must be chosen scorewise
-        //ProteinScoring protScoring = new ProteinScoringMultiplicative(false, pepScoring);
-        ProteinScoring protScoring = new ProteinScoringAdditive(false, pepScoring);
-        
-        
-        List<AbstractFilter> filters = null;
-        
-        
-        piaModeller.getProteinModeller().infereProteins(
-                pepScoring, protScoring, ReportAllInference.class, filters, false);
-        
-        
-        
-        
-        
-        Map<Comparable, ProteinGroup> prideProteinGroups = new HashMap<Comparable, ProteinGroup>();
-        int nrPAG = 0;
-        // create the protein groups
-        for (InferenceProteinGroup piaGroup : piaModeller.getProteinModeller().getInferredProteins()) {
-            List<Protein> proteinList;
-            
-            proteinList = new ArrayList<Protein>();
-            
-            for (IntermediateProtein intermediateProtein : piaGroup.getProteins()) {
-                
-                Comparable proteinID = ((PrideIntermediateProtein)intermediateProtein).getPrideProteinID();
-                
-                Protein protein = controller.getProteinById(proteinID);
-                
-                /*
-                Protein protein = new Protein(intermediateProtein.getAccession(),
-                        intermediateProtein.getAccession(),
-                        dbSequence, passThreshold, peptides, score, threshold, sequenceCoverage, gel);
-                */
-                
-                proteinList.add(protein);
-            }
-            
-            ProteinGroup group = new ProteinGroup(piaGroup.getID(), "name---" + piaGroup.getID(), proteinList);
-            
-            prideProteinGroups.put(group.getId(), group);
+        PeptideScoring pepScoring = new PeptideScoringUseBestPSM(scoreAccession, false);
+        ProteinScoring protScoring;
+        if ((cvScore != null) && !cvScore.getHigherScoreBetter()) {
+            protScoring = new ProteinScoringMultiplicative(false, pepScoring);
+        } else {
+            protScoring = new ProteinScoringAdditive(false, pepScoring);
         }
         
+        // TODO: allow for filters
+        List<AbstractFilter> filters = null;
         
+        // perform the protein inferences
+        piaModeller.getProteinModeller().infereProteins(pepScoring, protScoring, OccamsRazorInference.class, filters, false);
         
+        // create the protein groups
+        int nrGroups = piaModeller.getProteinModeller().getInferredProteins().size();
+        Map<Comparable, Map<Comparable, List<Comparable>>> prideProteinGroupMapping = new HashMap<Comparable, Map<Comparable,List<Comparable>>>(nrGroups);
         
+        int count = 0;
+        for (InferenceProteinGroup piaGroup : piaModeller.getProteinModeller().getInferredProteins()) {
+            
+            Map<Comparable, List<Comparable>> proteinPeptideMap = null;
+            
+            if ((filters == null) || (filters.size() < 1)) {
+                
+                Set<IntermediateProtein> proteinSet = new HashSet<IntermediateProtein>(piaGroup.getProteins());
+                // include the subGroups
+                for (InferenceProteinGroup subGroup : piaGroup.getSubGroups()) {
+                    proteinSet.addAll(subGroup.getProteins());
+                }
+                
+                proteinPeptideMap = new HashMap<Comparable, List<Comparable>>(proteinSet.size());
+                
+                for (IntermediateProtein protein : proteinSet) {
+                    Comparable proteinID = ((PrideIntermediateProtein)protein).getPrideProteinID();
+                    // null as the peptide list is interpreted as taking all peptides (PSMs)
+                    proteinPeptideMap.put(proteinID, null);
+                }
+            } else {
+                // TODO: implement filtered out PSMs
+                /*
+                ProteinGroup group =
+                        PrideUtilities.convertInferenceProteinGroup(piaGroup, true, (filters == null) || (filters.size() < 1));
+                */
+            }
+            
+            prideProteinGroupMapping.put(piaGroup.getID(), proteinPeptideMap);
+        }
         
-        controller.setInferredProteinGroups(prideProteinGroups);
+        controller.setInferredProteinGroups(prideProteinGroupMapping);
     }
 }
