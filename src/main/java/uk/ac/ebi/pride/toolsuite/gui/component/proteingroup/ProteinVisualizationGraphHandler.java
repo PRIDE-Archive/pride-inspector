@@ -241,8 +241,6 @@ public class ProteinVisualizationGraphHandler {
                 }
             }
         }
-        
-        System.err.println("score for " + mainScoreAccession + " " + lowestMainScore + " - " + highestMainScore);
     }
 
 
