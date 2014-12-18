@@ -251,6 +251,8 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
         }
 
         // detect protein grouping
+        boolean runProteinInference = false;
+        
         if (mzIdentMLFiles.size() > 0) {
             List<File> mzIdentMLWithoutProteinGroups = new ArrayList<File>();
             for (File mzIdentMLFile : mzIdentMLFiles.keySet()) {
@@ -269,6 +271,8 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
                     for (File mzIdentMLWithoutProteinGroup : mzIdentMLWithoutProteinGroups) {
                         mzIdentMLFiles.remove(mzIdentMLWithoutProteinGroup);
                     }
+                } else {
+                    runProteinInference = true;
                 }
             }
         }
@@ -294,12 +298,12 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
                 OpenFileTask newTask;
                 if (mzIdentMLFiles.get(mzIdentML) != null && mzIdentMLFiles.get(mzIdentML).size() > 0) {
                     newTask = (isFileToBig(mzIdentML,fileSizeThreshold))?
-                            new OpenFileTask(mzIdentML, mzIdentMLFiles.get(mzIdentML), MzIdentMLControllerImpl.class, msg, msg,false):
-                            new OpenFileTask(mzIdentML, mzIdentMLFiles.get(mzIdentML), MzIdentMLControllerImpl.class, msg, msg,true);
+                            new OpenFileTask(mzIdentML, mzIdentMLFiles.get(mzIdentML), MzIdentMLControllerImpl.class, msg, msg,false, !hasProteinGroups(mzIdentML) && runProteinInference):
+                            new OpenFileTask(mzIdentML, mzIdentMLFiles.get(mzIdentML), MzIdentMLControllerImpl.class, msg, msg,true, !hasProteinGroups(mzIdentML) && runProteinInference);
                 } else {
                     newTask = (isFileToBig(mzIdentML,fileSizeThreshold))?
-                            new OpenFileTask(mzIdentML, null, MzIdentMLControllerImpl.class, msg, msg,false):
-                            new OpenFileTask(mzIdentML, null, MzIdentMLControllerImpl.class, msg, msg,true);
+                            new OpenFileTask(mzIdentML, null, MzIdentMLControllerImpl.class, msg, msg,false, !hasProteinGroups(mzIdentML) && runProteinInference):
+                            new OpenFileTask(mzIdentML, null, MzIdentMLControllerImpl.class, msg, msg,true, !hasProteinGroups(mzIdentML) && runProteinInference);
                 }
                 TaskUtil.startBackgroundTask(newTask);
             }
