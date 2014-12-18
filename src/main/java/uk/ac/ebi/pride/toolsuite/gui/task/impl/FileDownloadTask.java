@@ -2,6 +2,7 @@ package uk.ac.ebi.pride.toolsuite.gui.task.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.pride.archive.dataprovider.file.ProjectFileType;
 import uk.ac.ebi.pride.archive.web.service.model.file.FileDetail;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
@@ -70,17 +71,17 @@ abstract class FileDownloadTask extends TaskAdapter<Void, String> {
 
 
     protected void openFiles() throws IOException {
-        List<File> downloadedFiles = new ArrayList<File>();
+        List<File> filesToOpen = new ArrayList<File>();
 
         for (FileDetail fileDetail : filesToDownload) {
             File downloadedFile = new File(outputFolder.getAbsolutePath(), fileDetail.getFileName());
-            if (downloadedFile.exists()) {
-                downloadedFiles.add(downloadedFile);
+            if (downloadedFile.exists() && (fileDetail.getFileType().equals(ProjectFileType.RESULT) || fileDetail.getFileType().equals(ProjectFileType.PEAK))) {
+                filesToOpen.add(downloadedFile);
             }
         }
 
         SilentSingleAssayFileOpener fileOpener = new SilentSingleAssayFileOpener();
-        fileOpener.open(downloadedFiles, outputFolder);
+        fileOpener.open(filesToOpen, outputFolder);
     }
 
     protected void setDownloadProgress(long bytesTransferred) {

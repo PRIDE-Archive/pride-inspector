@@ -55,7 +55,8 @@ public class HyperLinkCellMouseClickListener extends MouseAdapter {
         if (header.equals(clickHeader)) {
             int row = table.rowAtPoint(new Point(e.getX(), e.getY()));
 
-            Object val = table.getValueAt(table.convertRowIndexToModel(row), col);
+            int convertRowIndexToModel = table.convertRowIndexToModel(row);
+            Object val = table.getModel().getValueAt(convertRowIndexToModel, col);
 
             if (val != null && clickHeader.equals(linkedHeader)) {
 

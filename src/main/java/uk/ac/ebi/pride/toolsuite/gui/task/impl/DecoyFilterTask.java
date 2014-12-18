@@ -1,17 +1,18 @@
 package uk.ac.ebi.pride.toolsuite.gui.task.impl;
 
 import org.bushe.swing.event.EventBus;
-import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.component.report.RemovalReportMessage;
 import uk.ac.ebi.pride.toolsuite.gui.component.startup.ControllerContentPane;
-import uk.ac.ebi.pride.toolsuite.gui.component.table.filter.DecoyAccessionFilter;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.filter.DecoyAccessionTableFilter;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.PeptideTableHeader;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableHeader;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.sorter.NumberTableRowSorter;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop;
 import uk.ac.ebi.pride.toolsuite.gui.event.SummaryReportEvent;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskAdapter;
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
+import uk.ac.ebi.pride.utilities.data.filter.DecoyAccessionFilter;
 
 import javax.swing.*;
 import javax.swing.table.TableModel;
@@ -30,13 +31,11 @@ public class DecoyFilterTask extends TaskAdapter<Void, Void>{
     private static final String TASK_DESCRIPTION = "Calculating decoy ratio for both protein and peptide";
 
     private DataAccessController controller;
-    private DecoyAccessionFilter.Type type;
-    private String criteria;
+    private DecoyAccessionFilter filter;
 
-    public DecoyFilterTask(DataAccessController controller, DecoyAccessionFilter.Type type, String criteria) {
+    public DecoyFilterTask(DataAccessController controller, DecoyAccessionFilter filter) {
         this.controller = controller;
-        this.type = type;
-        this.criteria = criteria.toLowerCase();
+        this.filter = filter;
 
         this.setName(TASK_NAME);
         this.setDescription(TASK_DESCRIPTION);
@@ -53,20 +52,21 @@ public class DecoyFilterTask extends TaskAdapter<Void, Void>{
         JTable table = contentPane.getProteinTabPane().getIdentificationPane().getIdentificationTable();
         String protAccColName = ProteinTableHeader.PROTEIN_ACCESSION.getHeader();
         int index = getAccessionColumnIndex(table.getModel(), protAccColName);
-        setRowFilter(table, new DecoyAccessionFilter(type, criteria, index, false));
+        setRowFilter(table, new DecoyAccessionTableFilter(filter, index));
         // protein decoy ratio
 
         // peptide tab
         table = contentPane.getPeptideTabPane().getPeptidePane().getPeptideTable();
         protAccColName = PeptideTableHeader.PROTEIN_ACCESSION_COLUMN.getHeader();
         index = getAccessionColumnIndex(table.getModel(), protAccColName);
-        setRowFilter(table, new DecoyAccessionFilter(type, criteria, index, false));
+        setRowFilter(table, new DecoyAccessionTableFilter(filter, index));
+
         // quant tab
         if (contentPane.isQuantTabEnabled()) {
             table = contentPane.getQuantTabPane().getQuantProteinSelectionPane().getQuantProteinTable();
             protAccColName = ProteinTableHeader.PROTEIN_ACCESSION.getHeader();
             index = getAccessionColumnIndex(table.getModel(), protAccColName);
-            setRowFilter(table, new DecoyAccessionFilter(type, criteria, index, false));
+            setRowFilter(table, new DecoyAccessionTableFilter(filter, index));
         }
 
         return null;
