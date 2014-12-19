@@ -262,7 +262,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
             }
 
             if (mzIdentMLWithoutProteinGroups.size() > 0) {
-                String[] options = new String[]{"Yes", "No", "Run Protein Inference"};
+                String[] options = new String[]{"Yes", "No", "Compute Protein Inference"};
                 int option = JOptionPane.showOptionDialog(null,
                         "<html> <b>Protein grouping information missing from mzIdentML file. " +
                                 "</b><br/> <br/> File scan is needed and can be time consuming, " +
