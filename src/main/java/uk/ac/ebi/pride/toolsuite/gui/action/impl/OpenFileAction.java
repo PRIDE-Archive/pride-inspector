@@ -262,16 +262,24 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
             }
 
             if (mzIdentMLWithoutProteinGroups.size() > 0) {
-                int option = JOptionPane.showConfirmDialog(null,
+                String[] options = new String[]{"Yes", "No", "Run Protein Inference"};
+                int option = JOptionPane.showOptionDialog(null,
                         "<html> <b>Protein grouping information missing from mzIdentML file. " +
                                 "</b><br/> <br/> File scan is needed and can be time consuming, " +
-                                "would you like to continue? </html>", "mzIdentML", JOptionPane.YES_NO_OPTION);
+                                "would you like to continue? </html>", "mzIdentML",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                        null, options, options[0]);
 
-                if (option == JOptionPane.NO_OPTION) {
+                if (option == 1) {
+
                     for (File mzIdentMLWithoutProteinGroup : mzIdentMLWithoutProteinGroups) {
                         mzIdentMLFiles.remove(mzIdentMLWithoutProteinGroup);
                     }
-                } else {
+
+                } else if(option == 0){
+
+                    runProteinInference = false;
+                } else{
                     runProteinInference = true;
                 }
             }
