@@ -33,7 +33,7 @@ public class ProteinVertexFillColorTransformer
     // some color values
     protected static final Color FADED_COLOR = Color.WHITE;
     
-    protected static final Color GROUP_COLOR = new Color(0x000080);
+    protected static final Color GROUP_COLOR = new Color(37579);
     
     protected static final Color PROTEIN_COLOR = new Color(0x00c000);
     protected static final Color PROTEIN_COLOR_FAINT = new Color(0xacffac);
