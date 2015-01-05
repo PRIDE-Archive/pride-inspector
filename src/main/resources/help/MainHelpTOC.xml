@@ -51,10 +51,12 @@
 
         <tocitem text="FAQ" target="help.faq">
             <tocitem text="What is PRIDE?" target="help.faq.pride"/>
-            <tocitem text="What is PRIDE Public Instance?" target="help.faq.pridedb"/>
+            <tocitem text="What is PRIDE webservice?" target="help.faq.pridedb"/>
             <tocitem text="What is PRIDE XML Format?" target="help.faq.pridexml"/>
-            <tocitem text="What is mzML Format?" target="help.faq.mzml"/>
             <tocitem text="What is mzIdentMl Format?" target="help.faq.mzidentml"/>
+            <tocitem text="What is mzTab Format?" target="help.faq.mztab"/>
+            <tocitem text="What is mzML Format?" target="help.faq.mzml"/>
+            <tocitem text="What are peak list Formats?" target="help.faq.peaklist"/>
             <tocitem text="What to do when PRIDE Inspector run out of memory?" target="help.faq.memory"/>
             <tocitem text="How does PRIDE Inspector calculate delta m/z?" target="help.faq.deltamz"/>
             <tocitem text="The problem with shared peptides?" target="help.faq.shared.peptide"/>

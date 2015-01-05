@@ -73,6 +73,8 @@
     <mapID target="help.faq.pride" url="html/faq/pride.html"/>
     <mapID target="help.faq.pridedb" url="html/faq/pride_db.html"/>
     <mapID target="help.faq.pridexml" url="html/faq/pride_xml.html"/>
+    <mapID target="help.faq.mztab" url="html/faq/mzTab.html" />
+    <mapID target="help.faq.peaklist" url="html/faq/peak_file.html"/>
     <mapID target="help.faq.mzml" url="html/faq/mzml.html"/>
     <mapID target="help.faq.mzidentml" url="html/faq/mzidentml.html"/>
     <mapID target="help.faq.memory" url="html/faq/memory.html"/>

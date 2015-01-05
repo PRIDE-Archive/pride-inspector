@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../css/s.css">
+    <title>What is mzTab Format?</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+    <!-- header -->
+    <div id="header">
+        <h1>What is mzTab Format?</h1>
+    </div>
+
+    <!-- navigation -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+        <tr>
+            <td align="left" class="topicpath">
+                <a href="mzidentml.html">Previous</a> | <a href="mzml.html">Next</a> | <a
+                    href="#topicSeeAlsoTopicsList">See Also</a>
+            </td>
+            <td width="70%" class="topicpath"></td>
+        </tr>
+    </table>
+
+    <!-- table of contents -->
+    <div class="introduction">
+        <p>
+            mzTab is meant to be a light-weight, tab-delimited file format for proteomics data. The target audience for this format are primarily researchers outside of proteomics.
+            It should be easy to parse and only contain the minimal information required to evaluate the results of a proteomics experiment. One of the goals of this file format is
+            that it, for example, should be possible for a biologist to open such a file in Excel and still be able to "see" the data. The aim of the format is to present the results
+            of a proteomics experiment in a computationally accessible overview. The aim is not to provide the detailed evidence for these results, or allow recreating the process
+            which led to the results. Both of these functions are established through links to more detailed representations in other formats, in particular <a href="http://www.psidev.info/mzidentml">mzIdentML</a>
+            and <a href="http://www.psidev.info/mzquantml">mzQuantML</a>.
+        </p>
+
+        <div class="note">
+            The spectra data related with the identifications in the mzTab files should be referenced from the mzTab files. Currently, PRIDE Inspector supports
+            mzML, mzXML, pkl, mgf, ms2 and dta file formats. The reference to the original spectra must be added during the loading process of each mzTab
+            file (<a href="../usage/open_id_file.html">More information</a>). If you have problems with spectra referencing please contact the pride support team:
+            <a href="mailto:pride-support@ebi.ac.uk">PRIDE HelpDesk</a>.
+        </div>
+
+        <div class="note">
+            Please refer to PSI's online documentation if you want a detailed description on mzTab:
+            <br>
+            <a href="https://code.google.com/p/mztab/">mzTab</a>
+        </div>
+    </div>
+
+    <div id="seealso">
+        <a name="topicSeeAlsoTopicsList"></a>
+
+        <h2>See Also</h2>
+
+        <p>
+            <strong>Other topics:</strong>
+        </p>
+
+        <ul>
+            <li><a href="pride_xml.html">What is PRIDE XML Format?</a></li>
+            <li><a href="mzidentml.html">What is mzTab Format?</a></li>
+            <li><a href="mzml.html">What is mzML Format?</a></li>
+            <li><a href="peak_file.html"> What are peak file Formats?</a></li>
+        </ul>
+    </div>
+
+    <div id="footer">
+        <p>Comments, questions, suggestions? See the
+            <a href="../feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+        </p>
+    </div>
+</div>
+</body>
+</html>
