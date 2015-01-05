@@ -1,10 +1,97 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../css/s.css">
+    <title>Open PRIDE XML or mzML/mzIdentML files</title>
 </head>
-<body>
 
+<body class="template">
+<div id="container">
+
+    <!-- header -->
+    <div id="header">
+        <h1>Opening Files in PRIDE Inspector</h1>
+    </div>
+
+    <!-- navigation -->
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+        <tr>
+            <td align="left" class="topicpath">
+                <a href="open_file.html.html">Previous</a> |
+                <a href="try_examples.html">Next</a> |
+                <a href="#topicSeeAlsoTopicsList">See Also</a>
+            </td>
+            <td width="70%" class="topicpath"></td>
+        </tr>
+    </table>
+
+    <!-- table of contents -->
+    <div class="introduction">
+        <p>This chapter explains how add spectra information to the mzIdentML fand mzTab files.
+            <br>
+            You can add this information in 2 different ways:
+        </p>
+        <ul>
+            <li>When you open an identification file a dialog ask if you want to  add the spectra information related with the results file :
+                <br>
+                  <img src="../images/add_spectra.png">
+                <br>
+                If the user select click Yes, a new dialog allow to chose all the spectra files related with the identification results file (mzTab or mzIdentML):
+                <br>
+                  <img src="../images/add_before_ms.png">
+                <br>
+                One identification result file can be associated with one or more spectra files, for that reason the users is able to associate one or more spectra files to the identification results.
+                The dialog shows the the files added, the size of each file and the user is able to remove one of then by clicking <img src="../../../icon/16x16/delete_enable.gif">
+                <br>
+            </li>
+            <li>When the result file (mzIdentML or mzTab) is already opened then the user can also add the spectra information by clicking the icon <img src="../../../icon/16x16/peak.png">. Then a new
+                dialog appear where the user can select the files realted with the identification result file:
+                <br>
+                <img src="../images/add_after_ms.png">
+                <br>
+            </li>
+
+        </ul>
+
+        <div class="note">
+
+            <div class="tipmark"></div>
+            <img src="../images/tip.gif">You can open multiple files at the same time (same or different format) by
+            clicking
+            <span class="shortcut">Ctrl</span> and selecting with the mouse the different files you want to inspect.
+        </div>
+
+    </div>
+
+    <!-- content -->
+    <div id="content">
+        <div class="section"></div>
+    </div>
+
+
+    <div id="seealso">
+        <a name="topicSeeAlsoTopicsList"></a>
+
+        <h2>See Also</h2>
+
+        <p>
+            <strong>Other topics</strong> which will help you navigate through the data
+        </p>
+
+        <ul>
+            <li><a href="browse_data.html">Familiarize YourSelf with Browsing Data</a></li>
+            <li><a href="ui/navigation.html">Navigation bar</a></li>
+            <li><a href="ui/menu_and_toolbar.html">Menu and toolbar options</a></li>
+            <li><a href="try_examples.html">Trying mzML or PRIDE XML Example Files</a></li>
+        </ul>
+    </div>
+    <div id="footer">
+        <p>Comments, questions, suggestions? See the
+            <a href="feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+        </p>
+    </div>
+</div>
 </body>
 </html>

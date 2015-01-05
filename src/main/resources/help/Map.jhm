@@ -52,6 +52,7 @@
     <mapID target="help.chart.9" url="html/usage/chart/chart_9.html"/>
 
     <mapID target="help.openfile" url="html/usage/open_file.html"/>
+    <mapID target="help.openidfile" url="html/usage/open_id_file.html"/>
 
     <mapID target="help.examples" url="html/usage/try_examples.html"/>
 
