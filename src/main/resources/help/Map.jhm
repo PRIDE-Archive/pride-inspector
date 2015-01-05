@@ -41,6 +41,7 @@
     <mapID target="help.protein.viewer" url="html/usage/protein/protein_sequence_viewer.html"/>
 
     <mapID target="help.chart" url="html/usage/view_chart.html"/>
+    <mapID target="help.quant.chart" url="html/usage/chart/quant_ratio.html"/>
     <mapID target="help.chart.1" url="html/usage/chart/chart_1.html"/>
     <mapID target="help.chart.2" url="html/usage/chart/chart_2.html"/>
     <mapID target="help.chart.3" url="html/usage/chart/chart_3.html"/>

@@ -31,6 +31,7 @@
             <tocitem text="Protein Sequence Viewer" target="help.protein.viewer"/>
         </tocitem>
         <tocitem text="Understanding Summary Charts" target="help.chart">
+            <tocitem text="Peptides per Ratio" target="help.quant.chart"/>
             <tocitem text="Peak Intensity Distribution Chart" target="help.chart.1"/>
             <tocitem text="Precursor Ion Charge Distribution Chart" target="help.chart.2"/>
             <tocitem text="MS2 m/z Distribution Chart" target="help.chart.3"/>
