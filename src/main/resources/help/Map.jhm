@@ -28,6 +28,7 @@
     <mapID target="help.browse.protein" url="html/usage/browse/protein.html"/>
     <mapID target="help.browse.peptide" url="html/usage/browse/peptide.html"/>
     <mapID target="help.browse.mzgraph" url="html/usage/browse/mzgraph.html"/>
+    <mapID target="help.browse.proteingroup" url="html/usage/browse/protein_group.html"/>
     <mapID target="help.browse.quant" url="html/usage/browse/quant.html"/>
     <mapID target="help.browse.chart" url="html/usage/browse/quality_chart.html"/>
 

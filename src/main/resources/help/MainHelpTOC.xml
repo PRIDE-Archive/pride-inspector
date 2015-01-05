@@ -16,6 +16,7 @@
         <tocitem text="Familiarize Yourself with Browsing Data" target="help.browse">
             <tocitem text="View General Descriptions" target="help.browse.general"/>
             <tocitem text="View Protein Descriptions" target="help.browse.protein"/>
+            <tocitem text="Protein Group Visualization" target="help.browse.proteingroup"/>
             <tocitem text="View Peptide Descriptions" target="help.browse.peptide"/>
             <tocitem text="View Spectrum/Chromatogram Descriptions" target="help.browse.mzgraph"/>
             <tocitem text="View Quantification Descriptions" target="help.browse.quant"/>

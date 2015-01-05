@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/s.css">
+    <title>Protein Tab</title>
+</head>
+
+<body class="template">
+<div id="container">
+
+<!-- header -->
+<div id="header">
+    <h1>Protein Tab</h1>
+</div>
+
+<!-- navigation -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+    <tr>
+        <td align="left" class="topicpath">
+            <a href="protein.html">Previous</a> | <a href="peptide.html">Next</a> | <a
+                href="#topicSeeAlsoTopicsList">See Also</a>
+        </td>
+        <td width="70%" class="topicpath"></td>
+    </tr>
+</table>
+
+<!-- table of contents -->
+<div class="introduction">
+    <p>
+        The Protein Tab provides a protein identification centric view. When protein group information is present, the information is shown in a tree table view.
+        Each protein groups is represent by an anchor protein <img src="../../../../icon/16x16/plus.png">. If the user click in the icon the three table is expanded
+        and all the proteins in group are shown.
+    </p>
+
+    <div class="note">
+        <p>
+            When MS/MS spectra are searched against a sequence database, we are matching peptides, not proteins. In most cases, the matched peptides will not be unique to a single protein.
+            Yet, we usually want to know which proteins were present in the sample. So, we are faced with the <strong>challenge of protein inference</strong>: given a set of peptide matches,
+            which proteins do we believe were present in the sample?
+
+            The usual approach is based on the "Principle of Parsimony". We report the minimum set of proteins that account for the observed peptide matches. If we had four peptide matches,
+            two of which occurred in protein A and two in protein B but all four were found in protein C, we would report that protein C had been identified. Proteins A and B might be listed
+            as "sub-set" proteins. It is perfectly possible that our sample actually contained a mixture of proteins A and B, but there is no evidence for this.
+        </p>
+    </div>
+
+    <p>
+        If the protein group is present the "Show Protein Group" button will be enable below the protein table in the 'Protein Panel'. The Protein Group Visualization shows a graph view of the protein inference information
+        for a particular protein group; it shows the protein evidences, the <a href="../../faq/shared_peptide.html">shared peptides</a>, and the psms.
+        <br><br>
+          <img src="../../images/protein_group.png">
+        <br>
+    </p>
+
+    <div class="note">
+        The protein group visualization panel also contains Score Threshold, the idea with this option is that the end-users can filter low-score PSM removing "dubious" identification and obtaining better
+        results. When the user filter the data using the threshold score the graph is updated showing only the biological evidences that pass the threshold.
+    </div>
+
+</div>
+
+
+<div id="seealso">
+    <a name="topicSeeAlsoTopicsList"></a>
+
+    <h2>See Also</h2>
+
+    <p>
+        <strong>Other titles:</strong>
+    </p>
+
+    <ul>
+        <li><a href="../export.html">Exporting Data from PRIDE Inspector</a></li>
+    </ul>
+</div>
+<div id="footer">
+    <p>Comments, questions, suggestions? See the
+        <a href="../../feedback.html">Feedback</a> page to contact <strong>PRIDE HelpDesk</strong>
+    </p>
+</div>
+</div>
+</body>
+</html>
