@@ -379,27 +379,97 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <descriptors>
-                        <descriptor>${project.basedir}/assembly.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+
+        <profile>
+            <!-- To run this profile, you will have to use Maven command line -->
+            <id>pi-webstart-build</id>
+            <activation>
+                <property>
+                    <name>pi-webstart</name>
+                    <value>build</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo.webstart</groupId>
+                        <artifactId>webstart-maven-plugin</artifactId>
+
+                        <executions>
+                            <execution>
+                                <id>jnlp-building</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jnlp</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!-- Include all the dependencies -->
+                            <excludeTransitive>false</excludeTransitive>
+                            <!-- The path where the libraries are stored -->
+                            <libPath>lib</libPath>
+                            <jnlp>
+                                <inputTemplate>webstart/jnlp-template.vm</inputTemplate>
+                                <outputFile>pride-inspector.jnlp</outputFile>
+
+                                <mainClass>uk.ac.ebi.pride.toolsuite.gui.PrideInspector</mainClass>
+                            </jnlp>
+                            <sign>
+                                <keystore>${keystore.path}</keystore>
+                                <alias>${keystore.alias}</alias>
+                                <storepass>${keystore.store.password}</storepass>
+                                <keypass>${keystore.key.password}</keypass>
+
+                                <keystoreConfig>
+                                    <delete>false</delete>
+                                    <gen>false</gen>
+                                </keystoreConfig>
+                            </sign>
+                            <!-- building process -->
+                            <pack200>false</pack200>
+                            <verbose>true</verbose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>pi-desktop-build</id>
+            <activation>
+                <property>
+                    <name>desktop</name>
+                    <value>build</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>${project.basedir}/assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <repositories>
         <repository>
