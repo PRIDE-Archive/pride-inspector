@@ -40,11 +40,11 @@ public class GeneralMetadataPanel extends JPanel {
     private void populateComponents(GeneralMetaDataGroup metaData) {
 
         // get accession
-        String accession = (metaData.getId() != null) ? metaData.getId().toString() : null;
-        accessionField = new JTextField();
-        if (accession != null) {
-            accessionField.setText(accession);
-        }
+//        String accession = (metaData.getId() != null) ? metaData.getId().toString() : null;
+//        accessionField = new JTextField();
+//        if (accession != null) {
+//            accessionField.setText(accession);
+//        }
 
         expTitleField = new JTextField();
         shortLabelField = new JTextField();
@@ -185,7 +185,7 @@ public class GeneralMetadataPanel extends JPanel {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner non-commercial license
-        accessionLabel = new JLabel();
+//        accessionLabel = new JLabel();
         expTitleLabel = new JLabel();
         shortLabel = new JLabel();
         projectLabel = new JLabel();
@@ -205,8 +205,8 @@ public class GeneralMetadataPanel extends JPanel {
         setFocusable(false);
 
         //---- accessionLabel ----
-        accessionLabel.setText("Experiment Accession/ID");
-        accessionLabel.setFont(accessionLabel.getFont().deriveFont(accessionLabel.getFont().getStyle() | Font.BOLD));
+//        accessionLabel.setText("Experiment Accession/ID");
+//        accessionLabel.setFont(accessionLabel.getFont().deriveFont(accessionLabel.getFont().getStyle() | Font.BOLD));
 
         //---- expTitleLabel ----
         expTitleLabel.setText("Experiment Title");
@@ -225,7 +225,7 @@ public class GeneralMetadataPanel extends JPanel {
         expDescLabel.setFont(expDescLabel.getFont().deriveFont(expDescLabel.getFont().getStyle() | Font.BOLD));
 
         //---- accessionField ----
-        accessionField.setEditable(false);
+//        accessionField.setEditable(false);
 
         //---- expTitleField ----
         expTitleField.setEditable(false);
@@ -330,7 +330,7 @@ public class GeneralMetadataPanel extends JPanel {
                                                         .addComponent(scrollPane2, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addGroup(layout.createParallelGroup()
-                                                                        .addComponent(accessionLabel)
+//                                                                        .addComponent(accessionLabel)
                                                                         .addComponent(expTitleLabel)
                                                                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
                                                                                 .addComponent(speciesLabel, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -346,7 +346,7 @@ public class GeneralMetadataPanel extends JPanel {
                                                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                                                 .addComponent(tissueField, GroupLayout.PREFERRED_SIZE, 224, GroupLayout.PREFERRED_SIZE))
                                                                         .addComponent(expTitleField, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
-                                                                        .addComponent(accessionField, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 224, GroupLayout.PREFERRED_SIZE)
+//                                                                        .addComponent(accessionField, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 224, GroupLayout.PREFERRED_SIZE)
                                                                         .addComponent(projectField, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
                                                                         .addComponent(shortLabelField, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 224, GroupLayout.PREFERRED_SIZE)
                                                                         .addComponent(instrumentField, GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE))))
@@ -356,10 +356,10 @@ public class GeneralMetadataPanel extends JPanel {
                 layout.createParallelGroup()
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(accessionLabel)
-                                        .addComponent(accessionField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
+//                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+//                                        .addComponent(accessionLabel)
+//                                        .addComponent(accessionField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+//                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(expTitleLabel)
                                         .addComponent(expTitleField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -407,12 +407,12 @@ public class GeneralMetadataPanel extends JPanel {
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner non-commercial license
-    private JLabel accessionLabel;
+//    private JLabel accessionLabel;
     private JLabel expTitleLabel;
     private JLabel shortLabel;
     private JLabel projectLabel;
     private JLabel expDescLabel;
-    private JTextField accessionField;
+//    private JTextField accessionField;
     private JTextField expTitleField;
     private JTextField shortLabelField;
     private JTextField projectField;
