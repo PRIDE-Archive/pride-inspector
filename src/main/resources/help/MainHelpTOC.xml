@@ -45,7 +45,7 @@
         <tocitem text="Opening Identification and Peak Files" target="help.openfile"/>
         <tocitem text="Adding spectra information to mzIdentML and mzTab files" target="help.openidfile"/>
         <tocitem text="Trying with Example Files" target="help.examples"/>
-        <tocitem text="Connecting to PRIDE web services" target="help.pridedb"/>
+        <tocitem text="Search PRIDE Archive" target="help.pridedb"/>
         <tocitem text="Review Project" target="help.review.project"/>
         <tocitem text="Exporting Data from PRIDE Inspector" target="help.export"/>
         <tocitem text="Exporting Quantification Data from PRIDE Inspector" target="help.export.quant"/>

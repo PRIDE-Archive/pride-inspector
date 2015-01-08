@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" media="all" href="../css/s.css">
-    <title>Coonect PRIDE public database</title>
+    <title>Search PRIDE Archive</title>
 </head>
 
 <body class="template">
@@ -12,7 +12,7 @@
 
     <!-- header -->
     <div id="header">
-        <h1>Connecting to PRIDE Public database</h1>
+        <h1>Search PRIDE Archive</h1>
     </div>
 
     <!-- navigation -->
@@ -28,28 +28,30 @@
 
     <!-- table of contents -->
     <div class="introduction">
-        <p>This chapter explains how to connect pride inspector to the public pride database and access the different
-            experiments stored in it.
+        <p>This section explains how to search PRIDE Archive, which offer a list of publicly available shortgun proteomics datasets.
         </p>
 
         <p>
-            The database is located at the EBI, Cambridge, and can be publicly accessed through the following address as
-            well:
-            <span class="control">193.62.194.210</span> using as username <span class="control">inspector</span>,
-            password <span class="control">inspector</span> and the port <span class="control">5000</span>.
+            PRIDE Archive is a proteomics data repository, which is part of the ProteomeXchange consortium that has been set up to provide
+            coordinated submisison of MS proteomics data to the main existing proteomics repositories, and to encourage optimal data dissemination.
         </p>
+
+        <p>
+            The public databsets from PRIDE Archive are retrieved through its web service.
+        </p>
+
         <br>
 
         <p>
             You can connect the pride inspector to the public database in 3 different ways:
         <ul>
-            <li>From the <a href="ui/welcome.html">Welcome</a> screen, clicking on the <span class="control">Connect to PRIDE Database</span>
+            <li>From the <a href="ui/welcome.html">Welcome</a> screen, clicking on the <span class="control">Search PRIDE Archive</span>
                 icon
             </li>
-            <li>From the <span class="menupath">File | Connect PRIDE database</span> option in the menu bar
+            <li>From the <span class="menupath">File | Search PRIDE</span> option in the menu bar
             </li>
             <li>From the <a href="ui/menu_and_toolbar.html">toolbar</a>, clicking on the <img
-                    src="../../../icon/16x16/connect_database.png"> button
+                    src="../../../icon/16x16/search_database.png"> button
             </li>
         </ul>
         </p>
@@ -58,17 +60,20 @@
     <!-- content -->
     <div id="content">
         <div class="section">
-            Once you are connected to the database, a search panel consists of two parts will be displayed:
+            Once you are entered "Search PRIDE Archive", a search panel consists of three parts will be displayed:
             <li><b>Search Box</b>: In this box, you can specify which metadata field you want to search
                 for. And the criteria for searching, as well as the search string. Once the search button is clicked,
                 the table below will show all the matching experiments.
             </li>
-            <li><b>Experiment Table</b>: This table contains all the matching experiments from the search, if no search
-                has been made, all the experiments are listed by default. At the top right corner above the table, the
-                number of visible experiments are shown. You can open the experiment by clicking on the plus sign at the
-                "View" column.
+            <li><b>Project Table</b>: This table contains all the matching projects from the search, if no search
+                has been made, all the public projects are listed by default. The table also provides some key information
+                about the projects, such as: project title, species, tissue and etc. Users can choose to download all the files
+                belongs to the project by clicking on the download button.
             </li>
-            <li><b>Close</b>: You can close the database search panel by clicking on the "Close" button.</Li>
+            <li><b>Assay Table</b>: You can choose a project of interest from the Project table. If the project is a complete submission,
+                which means it included the experimental results in standard file format. A list of assays will be shown in this table.
+                Users can download specific assay files by clicking on the download button in the relevant row.
+            </Li>
         </div>
     </div>
 
