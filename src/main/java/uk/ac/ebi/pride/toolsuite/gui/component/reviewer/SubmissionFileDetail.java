@@ -3,6 +3,7 @@ package uk.ac.ebi.pride.toolsuite.gui.component.reviewer;
 import uk.ac.ebi.pride.archive.dataprovider.file.ProjectFileType;
 import uk.ac.ebi.pride.archive.web.service.model.file.FileDetail;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +50,14 @@ public class SubmissionFileDetail {
 
     public String getFileName() {
         return fileDetail.getFileName();
+    }
+
+    public URL getDownloadLink() {
+        return fileDetail.getDownloadLink();
+    }
+
+    public void setDownloadLink(URL downloadLink) {
+        fileDetail.setDownloadLink(downloadLink);
     }
 
     public void setFileSize(long fileSize) {

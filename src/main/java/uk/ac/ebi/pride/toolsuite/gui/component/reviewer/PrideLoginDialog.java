@@ -143,8 +143,11 @@ public class PrideLoginDialog extends JDialog implements TaskListener<ProjectDet
     public String getUserName() {
         String username = userNameField.getText();
 
-        if (username != null && username.toLowerCase().startsWith(REVIEWER) && !username.contains(EMAIL_SIGN)) {
-            username += EMAIL_SIGN + EBI_EMAIL_DOMAIN;
+        if (username != null) {
+            username = username.trim();
+            if (username.toLowerCase().startsWith(REVIEWER) && !username.contains(EMAIL_SIGN)) {
+                username += EMAIL_SIGN + EBI_EMAIL_DOMAIN;
+            }
         }
 
         return username;

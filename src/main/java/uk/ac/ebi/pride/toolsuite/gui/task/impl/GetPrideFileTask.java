@@ -17,13 +17,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.toolsuite.gui.action.impl.OpenFileAction;
 import uk.ac.ebi.pride.toolsuite.gui.component.reviewer.SubmissionFileDetail;
-import uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop;
-import uk.ac.ebi.pride.toolsuite.gui.desktop.DesktopContext;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskAdapter;
 
 import java.io.*;
-import java.net.URLEncoder;
-import java.util.Arrays;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -43,6 +41,8 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
     private String user;
     private String password;
     private boolean toOpenFile;
+    private long readCount = 0;
+    private long totalFileSize = 0;
 
     public GetPrideFileTask(List<SubmissionFileDetail> submissionEntries,
                             File path,
@@ -55,6 +55,10 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
         this.password = pwd;
         this.toOpenFile = toOpenFile;
 
+        for (SubmissionFileDetail submissionEntry : submissionEntries) {
+            totalFileSize += submissionEntry.getFileSize();
+        }
+
         String msg = "Downloading PRIDE submission";
         this.setName(msg);
         this.setDescription(msg);
@@ -63,29 +67,33 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
     @Override
     protected Void doInBackground() throws Exception {
         if (folder != null) {
+
+            List<File> downloadedFiles = new ArrayList<File>();
+
             for (SubmissionFileDetail submissionEntry : submissionEntries) {
-                // create a http connection
-                DesktopContext context = Desktop.getInstance().getDesktopContext();
-
-                // initialize the download
-                String url = buildFileDownloadUrl(context.getProperty("prider.file.download.url"), submissionEntry.getProjectAccession(), submissionEntry.getFileName());
-
                 // get output file path
                 File output = new File(folder.getAbsolutePath() + File.separator + submissionEntry.getFileName());
 
-                // download submission file
-                String host = context.getProperty("prider.host.url");
-                int port = Integer.parseInt(context.getProperty("prider.host.port"));
-                output = downloadFile(host, port, url, output, user, password, submissionEntry.getFileSize());
+                // download URL
+                URL downloadUrl = submissionEntry.getDownloadLink();
+                output = downloadFile(downloadUrl.getHost(), downloadUrl.getPort(), downloadUrl.getPath(), output, user, password);
 
-                // open file
-                if (toOpenFile && output != null) {
-                    OpenFileAction openFileAction = new OpenFileAction(null, null, Arrays.asList(output));
-                    openFileAction.actionPerformed(null);
+                if (output != null) {
+                    downloadedFiles.add(output);
                 }
 
                 // this is important for cancelling
                 checkInterruption();
+            }
+
+            // set download progress to 100 percent
+            setProgress(100);
+            publish("Download has finished");
+
+            // open downloaded files
+            if (toOpenFile && !downloadedFiles.isEmpty()) {
+                OpenFileAction openFileAction = new OpenFileAction(null, null, downloadedFiles);
+                openFileAction.actionPerformed(null);
             }
         }
         return null;
@@ -97,13 +105,7 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
         }
     }
 
-    private String buildFileDownloadUrl(String url, String accession, String fileName) throws UnsupportedEncodingException {
-        url = url.replace("{accession}", accession);
-        url = url.replace("{file}", URLEncoder.encode(fileName, "UTF-8").replace("+", "%20"));
-        return url;
-    }
-
-    private File downloadFile(String host, int port, String url, File output, String userName, String password, long fileSize) throws IOException {
+    private File downloadFile(String host, int port, String url, File output, String userName, String password) throws IOException {
         HttpHost target = new HttpHost(host, port, "http");
 
         // Create an instance of HttpClient.
@@ -138,7 +140,7 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
 
                 try {
                     Header contentTypeHeader = response.getFirstHeader("Content-Type");
-                    if (contentTypeHeader != null && "application/x-gzip".equalsIgnoreCase(contentTypeHeader.getValue())) {
+                    if (contentTypeHeader != null && contentTypeHeader.getValue().contains("application/x-gzip")) {
                         inputStream = new GZIPInputStream(inputStream);
                     }
 
@@ -146,10 +148,7 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
 
                     boutStream = new BufferedOutputStream(new FileOutputStream(output), BUFFER_SIZE);
 
-                    copyStream(inputStream, boutStream, fileSize);
-
-                    publish("Download has finished");
-
+                    copyStream(inputStream, boutStream);
                 } finally {
                     inputStream.close();
                 }
@@ -181,8 +180,7 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
         return output;
     }
 
-    private void copyStream(InputStream inputStream, BufferedOutputStream outputStream, long fileSize) throws IOException {
-        int readCount = 0;
+    private void copyStream(InputStream inputStream, BufferedOutputStream outputStream) throws IOException {
         byte data[] = new byte[BUFFER_SIZE];
         int count;
 
@@ -190,7 +188,7 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
             readCount += count;
             outputStream.write(data, 0, count);
 
-            float ratio = ((float) readCount) / fileSize;
+            float ratio = ((float) readCount) / totalFileSize;
             int progress = Math.abs(Math.round(ratio * 100));
             if (progress >= 100) {
                 progress = 99;
@@ -201,6 +199,5 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
             }
         }
         outputStream.flush();
-        setProgress(100);
     }
 }
