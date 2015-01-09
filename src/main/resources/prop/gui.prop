@@ -224,7 +224,7 @@ load.next.mzdata.small.icon=icon/16x16/load_next.png
 
 #download protein name
 load.protein.detail.small.icon=icon/16x16/download.png
-load.protein.detail.title=Obtain Protein Details
+load.protein.detail.title=Update Protein Details
 load.protein.detail.test.uniprot.protein=P31946
 
 #Protein Groups details
@@ -322,7 +322,7 @@ protein.sequence.tab.tooltip=Protein sequence converage for selected protein
 protein.sequence.missing.icon.small=icon/16x16/warning.png
 protein.sequence.missing.title = Protein sequences are not available, would you like to download them now?
 protein.sequence.unavailable.title = Protein sequence is not available
-protein.sequence.unchecked.title = Protein sequence is not updated
+protein.sequence.unchecked.title = Protein sequence is retrieved from the original file
 
 # internet connection
 internet.connection.warning.short.message=Internet Connection Required

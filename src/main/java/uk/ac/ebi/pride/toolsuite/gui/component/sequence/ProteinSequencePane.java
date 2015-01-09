@@ -154,8 +154,7 @@ public class ProteinSequencePane extends DataAccessControllerPane<AnnotatedProte
                 }
             } else if (downloadProteinAction != null && proteinModel.getSequenceString() != null) {
                 // protein sequence can not be download
-                String msg = appContext.getProperty("protein.sequence.unchecked.title") +
-                        ", " + proteinModel.getAccession() + " is not checked in repositories";
+                String msg = appContext.getProperty("protein.sequence.unchecked.title");
                 JPanel panel = createWarningPanel(msg, true);
                 this.add(panel, BorderLayout.NORTH);
             } else if (proteinModel.getSequenceString() == null) {
