@@ -71,6 +71,19 @@ public class BarChartRenderer extends JLabel implements TableCellRenderer {
                                                    boolean isSelected, boolean hasFocus,
                                                    int row, int column) {
         this.value = value;
+
+        // set background
+        if (isSelected) {
+            this.setBackground(table.getSelectionBackground());
+        } else {
+            Color alternate = UIManager.getColor("Table.alternateRowColor");
+            if (row % 2 == 1) {
+                this.setBackground(alternate);
+            } else {
+                this.setBackground(Color.WHITE);
+            }
+        }
+
         return this;
     }
 
