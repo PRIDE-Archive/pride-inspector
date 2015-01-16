@@ -68,7 +68,7 @@ public class GetProjectMetadataTask extends Task<Void, ProjectSummary> {
     }
 
     private List<ProjectSummary> getProjectDetails(int page) {
-        String restriction = (searchTerm == null || searchTerm.length() == 0) ? "" : "q=" + searchTerm;
+        String restriction = (searchTerm == null || searchTerm.length() == 0) ? "" : "query=" + searchTerm;
         String projectMetadataUrl = context.getProperty("prider.project.metadata.url") + "?" + restriction + "&show=" + BATCH_SIZE + "&page=" + page;
 
         ProjectSummaryList projectDetailList = restTemplate.getForObject(projectMetadataUrl, ProjectSummaryList.class);
@@ -77,7 +77,7 @@ public class GetProjectMetadataTask extends Task<Void, ProjectSummary> {
     }
 
     private int getNumberOfProjects() {
-        String restriction = (searchTerm == null || searchTerm.length() == 0) ? "" : "q=" + searchTerm;
+        String restriction = (searchTerm == null || searchTerm.length() == 0) ? "" : "query=" + searchTerm;
         String projectCountUrl = context.getProperty("prider.project.count.url") + "?" + restriction;
         Integer count = restTemplate.getForObject(projectCountUrl, Integer.class);
         return count == null ? 0 : count;
