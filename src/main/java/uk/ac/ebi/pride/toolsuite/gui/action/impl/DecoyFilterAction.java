@@ -6,6 +6,9 @@ import uk.ac.ebi.pride.toolsuite.gui.action.PrideAction;
 import uk.ac.ebi.pride.toolsuite.gui.component.chart.ChartTabPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.decoy.DecoyFilterDialog;
 import uk.ac.ebi.pride.toolsuite.gui.component.startup.ControllerContentPane;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.filter.DecoyAccessionTableFilter;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableHeader;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.ProteinSortableTreeTable;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop;
 import uk.ac.ebi.pride.toolsuite.gui.task.Task;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
@@ -15,6 +18,7 @@ import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.filter.DecoyAccessionFilter;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -136,8 +140,36 @@ public class DecoyFilterAction extends PrideAction implements PropertyChangeList
     }
 
     private void clearFilter(JTable table) {
-        TableRowSorter rowSorter = (TableRowSorter) table.getRowSorter();
-        rowSorter.setRowFilter(null);
+        if (table instanceof ProteinSortableTreeTable) {
+            String protAccColName = ProteinTableHeader.PROTEIN_ACCESSION.getHeader();
+            int index = getAccessionColumnIndex(table.getModel(), protAccColName);
+            ((ProteinSortableTreeTable) table).setRowFilter(new DecoyAccessionTableFilter(new NoneAccessionTableFilter(), index));
+        } else {
+            TableRowSorter rowSorter = (TableRowSorter) table.getRowSorter();
+            rowSorter.setRowFilter(null);
+        }
+    }
+
+    private int getAccessionColumnIndex(TableModel tableModel, String protAccColName) {
+        int colCnt = tableModel.getColumnCount();
+        for (int i = 0; i < colCnt; i++) {
+            if (tableModel.getColumnName(i).equals(protAccColName)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private static class NoneAccessionTableFilter extends DecoyAccessionFilter {
+
+        public NoneAccessionTableFilter() {
+            super(null, null);
+        }
+
+        @Override
+        public boolean apply(String proteinAccession) {
+            return true;
+        }
     }
 }
 

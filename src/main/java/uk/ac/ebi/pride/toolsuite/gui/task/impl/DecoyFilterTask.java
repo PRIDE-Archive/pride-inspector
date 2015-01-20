@@ -8,6 +8,7 @@ import uk.ac.ebi.pride.toolsuite.gui.component.table.filter.DecoyAccessionTableF
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.PeptideTableHeader;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableHeader;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.sorter.NumberTableRowSorter;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.ProteinSortableTreeTable;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop;
 import uk.ac.ebi.pride.toolsuite.gui.event.SummaryReportEvent;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskAdapter;
@@ -88,13 +89,17 @@ public class DecoyFilterTask extends TaskAdapter<Void, Void>{
      * @param rowFilter a given row filter
      */
     private void setRowFilter(JTable table, RowFilter rowFilter) {
-        // get table model
-        TableModel tableModel = table.getModel();
-        RowSorter rowSorter = table.getRowSorter();
-        if (rowSorter == null || !(rowSorter instanceof TableRowSorter)) {
-            rowSorter = new NumberTableRowSorter(tableModel);
-            table.setRowSorter(rowSorter);
+        if (table instanceof ProteinSortableTreeTable) {
+            ((ProteinSortableTreeTable) table).setRowFilter(rowFilter);
+        } else {
+            // get table model
+            TableModel tableModel = table.getModel();
+            RowSorter rowSorter = table.getRowSorter();
+            if (rowSorter == null || !(rowSorter instanceof TableRowSorter)) {
+                rowSorter = new NumberTableRowSorter(tableModel);
+                table.setRowSorter(rowSorter);
+            }
+            ((TableRowSorter) rowSorter).setRowFilter(rowFilter);
         }
-        ((TableRowSorter) rowSorter).setRowFilter(rowFilter);
     }
 }

@@ -13,17 +13,23 @@ import uk.ac.ebi.pride.toolsuite.gui.component.table.model.PeptideTreeTableModel
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableHeader;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.renderer.IconRenderer;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.renderer.ProteinAccessionHyperLinkCellRenderer;
-import uk.ac.ebi.pride.toolsuite.gui.component.table.renderer.ProteinGroupCellRenderer;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.renderer.SequenceCoverageRenderer;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop;
 
-
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import javax.swing.tree.TreePath;
 import java.beans.PropertyChangeEvent;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * A specialized {@link org.jdesktop.swingx.JXTreeTable tree table} containing checkboxes and
@@ -99,7 +105,6 @@ public class SortableTreeTable extends JXTreeTable {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <R extends TableModel> void setRowFilter(RowFilter<? super R, ? super Integer> filter) {
         // all fine, because R extends TableModel
         ((TreeTableRowSorter<R>) getRowSorter()).setRowFilter(filter);

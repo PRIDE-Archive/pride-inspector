@@ -1,16 +1,12 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JTree;
-import javax.swing.RowFilter;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
-import javax.swing.table.TableModel;
-
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.table.TableColumnExt;
+
+import javax.swing.*;
+import javax.swing.table.TableModel;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Custom {@link javax.swing.RowSorter} for use with {}.
