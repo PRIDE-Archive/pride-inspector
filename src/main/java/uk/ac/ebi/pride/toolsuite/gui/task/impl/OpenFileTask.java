@@ -29,7 +29,10 @@ import uk.ac.ebi.pride.utilities.pia.modeller.scores.protein.ProteinScoringAddit
 import uk.ac.ebi.pride.utilities.pia.modeller.scores.protein.ProteinScoringMultiplicative;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +41,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Task to open mzML/MzIdentML or PRIDE xml files.
@@ -55,6 +59,8 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
      */
     private File inputFile;
 
+    private static final int BUFFER_SIZE = 2048;
+
     /**
      * reference pride inspector context
      */
@@ -70,6 +76,8 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
     private Boolean inMemory   = false;
     
     private Boolean runProteinInferenceLater = false;
+
+    File path = null;
 
     public OpenFileTask(File inputFile, Class<D> dataAccessControllerClass, String name, String description) {
         this.inputFile = inputFile;
@@ -94,15 +102,17 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
     
     
     public OpenFileTask(File inputFile, List<File> msFiles, Class<D> dataAccessControllerClass,
-            String name, String description, Boolean inMemory, Boolean runProteinInferenceLater) {
+            String name, String description, Boolean inMemory, Boolean runProteinInferenceLater, File path) {
         this(inputFile, msFiles, dataAccessControllerClass, name, description, inMemory);
-        
+        this.path = path;
         this.runProteinInferenceLater = runProteinInferenceLater;
     }
     
     
     @Override
     protected Void doInBackground() throws Exception {
+
+
         boolean opened = alreadyOpened(inputFile);
         if (opened) {
             openExistingDataAccessController(inputFile);
@@ -170,8 +180,6 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
             // create dummy
             EmptyDataAccessController dummy = createEmptyDataAccessController(message);
 
-            String welcomeMessage = (runProteinInferenceLater)?"loading.proteininferece":"loading.title";
-
             Constructor<D> cstruct = dataAccessControllerClass.getDeclaredConstructor(File.class);
             DataAccessController controller;
             
@@ -181,6 +189,10 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
             } else {
                 cstruct = dataAccessControllerClass.getDeclaredConstructor(File.class);
                 controller = cstruct.newInstance(inputFile);
+            }
+
+            if(path != null){
+                msFiles = unzipMSFiles(msFiles);
             }
 
             if (MzIdentMLControllerImpl.class.equals(dataAccessControllerClass) && msFiles != null) {
@@ -237,6 +249,9 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
                 cstruct = dataAccessControllerClass.getDeclaredConstructor(File.class, Boolean.TYPE);
                 controller = cstruct.newInstance(inputFile, Boolean.TRUE);
             }
+            if(path != null){
+                msFiles = unzipMSFiles(msFiles);
+            }
             
             if (MzIdentMLControllerImpl.class.equals(dataAccessControllerClass) && msFiles != null) {
                 try {
@@ -268,6 +283,64 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
             logger.error(msg, err);
 //            GUIUtilities.error(Desktop.getInstance().getMainComponent(), msg, "Open File Error");
         }
+    }
+    /**
+     * Check whether a file is gzip file based its extension.
+     *
+     * @param file input file
+     * @return boolean true means it is a gzip file
+     */
+    private boolean isGzipFile(File file) {
+        return file.getName().endsWith(".gz");
+    }
+
+    private List<File> unzipMSFiles(List<File> msFiles) throws Exception {
+        String namePath = path.getAbsolutePath().endsWith(System.getProperty("file.separator")) ? path.getAbsolutePath() : path.getAbsolutePath() + System.getProperty("file.separator");
+        List<File> newFiles = new ArrayList<File>(msFiles.size());
+        for (File inputFile : msFiles) {
+            if(isGzipFile(inputFile)){
+                FileInputStream fis = null;
+                GZIPInputStream gs = null;
+                FileOutputStream fos = null;
+                BufferedOutputStream bos = null;
+                try {
+                    fis = new FileInputStream(inputFile);
+                    gs = new GZIPInputStream(fis);
+
+                    String outputFile = namePath + inputFile.getName().replace(".gz", "");
+                    fos = new FileOutputStream(outputFile);
+                    bos = new BufferedOutputStream(fos, BUFFER_SIZE);
+                    byte data[] = new byte[BUFFER_SIZE];
+                    int count;
+                    while ((count = gs.read(data, 0, BUFFER_SIZE)) != -1) {
+                        bos.write(data, 0, count);
+                    }
+                    bos.flush();
+                    bos.close();
+                    newFiles.add(new File(outputFile));
+                } finally {
+                    if (fis != null) {
+                        fis.close();
+                    }
+
+                    if (gs != null) {
+                        gs.close();
+                    }
+
+                    if (fos != null) {
+                        fos.close();
+                    }
+
+                    if (bos != null) {
+                        bos.close();
+                    }
+                }
+            }else{
+                newFiles.add(inputFile);
+            }
+
+        }
+        return newFiles;
     }
 
     private EmptyDataAccessController createEmptyDataAccessController(String welcomeMessage) {
@@ -357,11 +430,7 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
                     proteinPeptideMap.put(proteinID, null);
                 }
             } else {
-                // TODO: implement filtered out PSMs
-                /*
-                ProteinGroup group =
-                        PrideUtilities.convertInferenceProteinGroup(piaGroup, true, (filters == null) || (filters.size() < 1));
-                */
+
             }
             
             prideProteinGroupMapping.put(piaGroup.getID(), proteinPeptideMap);

@@ -43,6 +43,8 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
 
     private PrideInspectorContext context;
 
+    private File path;
+
     public OpenFileAction(String name, Icon icon) {
         this(name, icon, null);
         setAccelerator(java.awt.event.KeyEvent.VK_O, ActionEvent.CTRL_MASK);
@@ -146,6 +148,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
                 int result = ofd.showOpenDialog(Desktop.getInstance().getMainComponent());
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File path = ofd.getSelectedFile();
+                    this.path = path;
                     // start new tasks to unzip files
                     openGzippedFiles(zippedFiles, path.getAbsolutePath());
                 }
@@ -170,6 +173,16 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
         }
 
         return hasGzip;
+    }
+
+    private boolean hasGzipFiles(Map<File, List<File>> files){
+        for(File file: files.keySet()){
+            List<File> filesToOpen = files.get(file);
+            for(File fileToOpen: filesToOpen)
+            if(isGzipFile(fileToOpen))
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -268,7 +281,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
                         JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                         null, options, options[1]);
 
-                if (option == 1) {
+                if (option == 0) {
                     runProteinInference = false;
                 } else{
                     runProteinInference = true;
@@ -289,20 +302,52 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
             }
         }
 
+
         // Open all mzIdentML Files
         if (!mzIdentMLFiles.isEmpty()) {
+            // unzip zipped files
+            boolean hasGzipFiles = hasGzipFiles(mzIdentMLFiles);
+
+            // check whether the user want to unzip
+            if(hasGzipFiles &&  this.path == null){
+                Object[] options = {"Yes", "No"};
+                int n = JOptionPane.showOptionDialog(Desktop.getInstance().getMainComponent(),
+                        "Would you like to unzip compressed files before loading?",
+                        "Gzip Files Found",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null, options, options[1]);
+
+                if (n == JOptionPane.YES_OPTION) {
+                    // ask for the path to save unzipped files
+                    JFileChooser ofd = new JFileChooser(context.getOpenFilePath());
+                    ofd.setDialogTitle("Select folder to save unzipped files");
+                    ofd.setDialogType(JFileChooser.OPEN_DIALOG);
+                    ofd.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                    ofd.setMultiSelectionEnabled(false);
+
+                    int result = ofd.showOpenDialog(Desktop.getInstance().getMainComponent());
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        path = ofd.getSelectedFile();
+                    }
+                }
+            }else if(!hasGzipFiles){
+                path = null;
+            }
+
             for (File mzIdentML : mzIdentMLFiles.keySet()) {
                 String msg = "Opening " + mzIdentML.getName();
+                List<File> openNewFiles = mzIdentMLFiles.get(mzIdentML);
 
                 OpenFileTask newTask;
                 if (mzIdentMLFiles.get(mzIdentML) != null && mzIdentMLFiles.get(mzIdentML).size() > 0) {
                     newTask = (isFileToBig(mzIdentML,fileSizeThreshold))?
-                            new OpenFileTask(mzIdentML, mzIdentMLFiles.get(mzIdentML), MzIdentMLControllerImpl.class, msg, msg,false, !hasProteinGroups(mzIdentML) && runProteinInference):
-                            new OpenFileTask(mzIdentML, mzIdentMLFiles.get(mzIdentML), MzIdentMLControllerImpl.class, msg, msg,true, !hasProteinGroups(mzIdentML) && runProteinInference);
+                            new OpenFileTask(mzIdentML, openNewFiles, MzIdentMLControllerImpl.class, msg, msg,false, !hasProteinGroups(mzIdentML) && runProteinInference, this.path):
+                            new OpenFileTask(mzIdentML, openNewFiles, MzIdentMLControllerImpl.class, msg, msg,true, !hasProteinGroups(mzIdentML) && runProteinInference, this.path);
                 } else {
                     newTask = (isFileToBig(mzIdentML,fileSizeThreshold))?
-                            new OpenFileTask(mzIdentML, null, MzIdentMLControllerImpl.class, msg, msg,false, !hasProteinGroups(mzIdentML) && runProteinInference):
-                            new OpenFileTask(mzIdentML, null, MzIdentMLControllerImpl.class, msg, msg,true, !hasProteinGroups(mzIdentML) && runProteinInference);
+                            new OpenFileTask(mzIdentML, null, MzIdentMLControllerImpl.class, msg, msg,false, !hasProteinGroups(mzIdentML) && runProteinInference, this.path):
+                            new OpenFileTask(mzIdentML, null, MzIdentMLControllerImpl.class, msg, msg,true, !hasProteinGroups(mzIdentML) && runProteinInference, this.path);
                 }
                 TaskUtil.startBackgroundTask(newTask);
             }
