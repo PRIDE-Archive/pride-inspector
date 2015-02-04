@@ -10,7 +10,7 @@ import java.util.Comparator;
  *   - Remove the type checking and casting in compare().
  *
  * To use this class:
- *   Use the static "sort" method from the java.util.Collections class:
+ *   Use the static "sort" method from the java.utils.Collections class:
  *   Collections.sort(your list, new AlphanumComparator());
  */
 public class AlphanumComparator implements Comparator {

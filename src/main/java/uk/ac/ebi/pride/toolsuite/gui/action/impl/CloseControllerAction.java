@@ -42,7 +42,7 @@ public class CloseControllerAction extends PrideAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         DataAccessController controllerToClose = controller == null ? context.getForegroundDataAccessController() : controller;
-        context.removeDataAccessController(controllerToClose, true);
+        context.removeDataAccessController(controllerToClose, true, "loading.title");
     }
 
     @EventSubscriber(eventClass = ForegroundDataSourceEvent.class)

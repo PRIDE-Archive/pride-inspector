@@ -95,14 +95,13 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
 
         if (tooBig) {
             // check whether the user still want to open
-            Object[] options = {"Yes", "No"};
+            Object[] options = {"Continue"};
             int n = JOptionPane.showOptionDialog(Desktop.getInstance().getMainComponent(),
-                    "Selected File is over " + fileSizeThreshold + "M in size, it will take longer to open, would you like to continue?",
+                    "Selected File is over " + fileSizeThreshold + "M in size, it will take longer to open fhe file.",
                     "Big File Found",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
+                    JOptionPane.INFORMATION_MESSAGE, JOptionPane.PLAIN_MESSAGE,
                     null, options, options[0]);
-            toOpen = (n == JOptionPane.YES_OPTION);
+            toOpen = (n == 0);
         }
 
         return toOpen;
@@ -262,22 +261,14 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
             }
 
             if (mzIdentMLWithoutProteinGroups.size() > 0) {
-                String[] options = new String[]{"Yes", "No", "Compute Protein Inference"};
+                String[] options = new String[]{"No", "Compute Protein Inference"};
                 int option = JOptionPane.showOptionDialog(null,
                         "<html> <b>Protein grouping information missing from mzIdentML file. " +
-                                "</b><br/> <br/> File scan is needed and can be time consuming, " +
-                                "would you like to continue? </html>", "mzIdentML",
+                                "</b><br/> <br/> Would you like to run the Protein inference Algorithm </html>" , "mzIdentML",
                         JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
-                        null, options, options[0]);
+                        null, options, options[1]);
 
                 if (option == 1) {
-
-                    for (File mzIdentMLWithoutProteinGroup : mzIdentMLWithoutProteinGroups) {
-                        mzIdentMLFiles.remove(mzIdentMLWithoutProteinGroup);
-                    }
-
-                } else if(option == 0){
-
                     runProteinInference = false;
                 } else{
                     runProteinInference = true;

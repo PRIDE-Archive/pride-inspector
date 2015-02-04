@@ -91,6 +91,7 @@ public class CentralContentPane extends JPanel {
         logger.debug("A new foreground data access controller has been selected");
         // add new tabs
         DataAccessController controller = (DataAccessController) evt.getNewForegroundDataSource();
+        String welcomeMessage           = (String) evt.getMessage();
 
         if (ForegroundDataSourceEvent.Status.EMPTY.equals(evt.getStatus())) {
             if (!isLocked()) {
@@ -101,7 +102,7 @@ public class CentralContentPane extends JPanel {
             if (controller == null) {
                 showWelcomePane();
             } else {
-                ControllerContentPane dataContentPane = getControllerContentPane(controller);
+                ControllerContentPane dataContentPane = getControllerContentPane(controller, welcomeMessage);
                 setContentPane(dataContentPane);
             }
             setLocked(false);
@@ -114,10 +115,10 @@ public class CentralContentPane extends JPanel {
      * @param controller data access controller
      * @return ControllerContentPane   content pane
      */
-    private ControllerContentPane getControllerContentPane(DataAccessController controller) {
+    private ControllerContentPane getControllerContentPane(DataAccessController controller, String welcomeMessage) {
         ControllerContentPane dataContentPane = (ControllerContentPane) inspectorContext.getDataContentPane(controller);
         if (dataContentPane == null) {
-            dataContentPane = new ControllerContentPane(controller);
+            dataContentPane = new ControllerContentPane(controller, welcomeMessage);
             inspectorContext.addDataContentPane(controller, dataContentPane);
         }
 
@@ -133,7 +134,7 @@ public class CentralContentPane extends JPanel {
             // lock the central content panel
             setLocked(true);
             // deselect the foreground data access controller
-            inspectorContext.setForegroundDataAccessController(null);
+            inspectorContext.setForegroundDataAccessController(null, "loading.title");
         } else if (DatabaseSearchEvent.Status.HIDE.equals(evt.getStatus())) {
             logger.debug("Database search pane is to be replaced by the welcome pane, event status: " + evt.getStatus().name());
             // hide database search pane

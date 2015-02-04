@@ -194,7 +194,7 @@ public class DataSourceViewer extends JPanel {
         if(context.getDataAccessMonitor().containStatusController(controller, evt.getStatus())){
             context.getDataAccessMonitor().removeStatusController(controller, evt.getStatus());
             if(evt.getStatus() == ProcessingDataSourceEvent.Status.IDENTIFICATION_READING && controller.getType().equals(DataAccessController.Type.MZIDENTML) && !noadded){
-//                java.util.List<DataAccessController> controllers = context.getControllers();
+//                java.utils.List<DataAccessController> controllers = context.getControllers();
 //                int row = controllers.indexOf(controller);
 //                Icon icon = GUIUtilities.loadImageIcon(context.getProperty("open.mzidentml.ms.icon.small"));
 //                BalloonTip tip = BalloonTipUtil.createBalloonNote(summaryTitle, icon, "<html><p>" +"Click the icon to add the related spectra files"+ "</p></html>",BalloonTip.AttachLocation.ALIGNED,50, 10,true);
@@ -480,7 +480,7 @@ public class DataSourceViewer extends JPanel {
                 if (colName.equals(TableHeader.DATA_SOURCE_COLUMN.getHeader()) && !context.isForegroundDataAccessController(controller)) {
                     // close foreground data access controller
                     logger.debug("Set foreground data access controller: {}", controller.getName());
-                    context.setForegroundDataAccessController(controller);
+                    context.setForegroundDataAccessController(controller, "loading.title");
                 }
             }
         }
@@ -505,7 +505,7 @@ public class DataSourceViewer extends JPanel {
                 java.util.List<DataAccessController> controllers = context.getControllers();
                 if (row >= 0 && row < controllers.size()) {
                     DataAccessController controller = controllers.get(row);
-                    context.removeDataAccessController(controller, true);
+                    context.removeDataAccessController(controller, true, "loading.title");
                 }
 
             }

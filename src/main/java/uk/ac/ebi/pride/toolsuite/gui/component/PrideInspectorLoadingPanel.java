@@ -15,7 +15,10 @@ import java.awt.*;
  */
 public class PrideInspectorLoadingPanel extends PrideInspectorPanel {
 
-    public PrideInspectorLoadingPanel() {
+    String message =  "loading.title";
+
+    public PrideInspectorLoadingPanel(String message) {
+        this.message = message;
         initComponents();
     }
 
@@ -36,7 +39,7 @@ public class PrideInspectorLoadingPanel extends PrideInspectorPanel {
         JLabel label = new JLabel();
         label.setOpaque(false);
         label.setIcon(loadingIcon);
-        label.setText(context.getProperty("loading.title"));
+        label.setText(context.getProperty(this.message));
         label.setFont(label.getFont().deriveFont(18f));
         panel.add(label, c);
         this.add(panel, c);

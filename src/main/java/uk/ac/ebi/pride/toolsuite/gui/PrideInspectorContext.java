@@ -105,7 +105,7 @@ public class PrideInspectorContext extends DesktopContext {
     private PrideArchiveWSSearchPane prideArchiveWSSearchPane = null;
 
     /**
-     * selected data transfter protocol
+     * selected data transfer protocol
      */
     private DataTransferProtocol dataTransferProtocol;
 
@@ -224,8 +224,8 @@ public class PrideInspectorContext extends DesktopContext {
      *
      * @param controller data access controller
      */
-    public final void setForegroundDataAccessController(DataAccessController controller) {
-        dataAccessMonitor.setForegroundDataAccessController(controller);
+    public final void setForegroundDataAccessController(DataAccessController controller, String message) {
+        dataAccessMonitor.setForegroundDataAccessController(controller, message);
     }
 
     /**
@@ -237,7 +237,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller  data access controller
      * @param cancelTasks whether to cancel the tasks associated with this controller
      */
-    public final void removeDataAccessController(DataAccessController controller, boolean cancelTasks) {
+    public final void removeDataAccessController(DataAccessController controller, boolean cancelTasks, String message) {
         if (cancelTasks) {
             // cancel all the tasks related to this data access controller
             TaskManager taskMgr = this.getTaskManager();
@@ -254,7 +254,7 @@ public class PrideInspectorContext extends DesktopContext {
         summaryReportTracker.remove(controller);
 
         // remove data access controller
-        dataAccessMonitor.removeDataAccessController(controller);
+        dataAccessMonitor.removeDataAccessController(controller, message);
 
     }
 
@@ -281,7 +281,7 @@ public class PrideInspectorContext extends DesktopContext {
      * @param replacement replacement data access controller
      * @param cancelTasks whether to cancel the tasks associated with this controller
      */
-    public final void replaceDataAccessController(DataAccessController original, DataAccessController replacement, boolean cancelTasks) {
+    public final void replaceDataAccessController(DataAccessController original, DataAccessController replacement, boolean cancelTasks, String message) {
         if (cancelTasks) {
             // cancel all the tasks related to this data access controller
             TaskManager taskMgr = this.getTaskManager();
@@ -301,7 +301,7 @@ public class PrideInspectorContext extends DesktopContext {
         getSummaryReportModel(replacement);
 
         // replace
-        dataAccessMonitor.replaceDataAccessController(original, replacement);
+        dataAccessMonitor.replaceDataAccessController(original, replacement, message);
     }
 
     /**
@@ -311,8 +311,8 @@ public class PrideInspectorContext extends DesktopContext {
      *
      * @param controller data access controller
      */
-    public final void addDataAccessController(DataAccessController controller) {
-        addDataAccessController(controller, true);
+    public final void addDataAccessController(DataAccessController controller, String message) {
+        addDataAccessController(controller, true, message);
     }
 
     /**
@@ -321,14 +321,14 @@ public class PrideInspectorContext extends DesktopContext {
      * @param controller data access controller
      * @param foreground foreground status
      */
-    public final void addDataAccessController(DataAccessController controller, boolean foreground) {
+    public final void addDataAccessController(DataAccessController controller, boolean foreground, String message) {
         // initialize summary report model
         getSummaryReportModel(controller);
 
         // set left control panel to visible
         setLeftControlPaneVisible(true);
 
-        dataAccessMonitor.addDataAccessController(controller, foreground);
+        dataAccessMonitor.addDataAccessController(controller, foreground, message);
     }
 
     /**

@@ -16,6 +16,8 @@ public class ForegroundDataSourceEvent<T> extends AbstractEventServiceEvent {
 
     private Status status;
 
+    private String message;
+
     /**
      * Default constructor
      *
@@ -24,12 +26,13 @@ public class ForegroundDataSourceEvent<T> extends AbstractEventServiceEvent {
      * @param oldForeground previous foreground data source
      * @param newForeground new foreground data source
      */
-    public ForegroundDataSourceEvent(Object source, Status status,
+    public ForegroundDataSourceEvent(Object source, Status status, String message,
                                      T oldForeground, T newForeground) {
         super(source);
         setStatus(status);
         setOldForegroundDataSource(oldForeground);
         setNewForegroundDataSource(newForeground);
+        this.message = message;
     }
 
     public Status getStatus() {
@@ -54,5 +57,13 @@ public class ForegroundDataSourceEvent<T> extends AbstractEventServiceEvent {
 
     public void setNewForegroundDataSource(T newForegroundDataSource) {
         this.newForegroundDataSource = newForegroundDataSource;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

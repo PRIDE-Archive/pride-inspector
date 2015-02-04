@@ -66,8 +66,9 @@ public class ControllerContentPane extends DataAccessControllerPane<GeneralMetaD
      */
     private int indexCount = 0;
 
-    public ControllerContentPane(DataAccessController controller) {
+    public ControllerContentPane(DataAccessController controller, String welcomeMessage) {
         super(controller);
+        addCustomComponents(welcomeMessage);
     }
 
     @Override
@@ -82,7 +83,10 @@ public class ControllerContentPane extends DataAccessControllerPane<GeneralMetaD
         if (!categories.isEmpty()) {
             retrieveMetaData();
         }
-        createLoadingPanel();
+    }
+
+    protected void addCustomComponents(String welcomeMessage){
+        createLoadingPanel(welcomeMessage);
     }
 
     @Override
@@ -107,8 +111,8 @@ public class ControllerContentPane extends DataAccessControllerPane<GeneralMetaD
         TaskUtil.startBackgroundTask(retrieveTask, controller);
     }
 
-    private void createLoadingPanel() {
-        JPanel panel = new PrideInspectorLoadingPanel();
+    private void createLoadingPanel(String welcomeMessage) {
+        JPanel panel = new PrideInspectorLoadingPanel(welcomeMessage);
         this.setBorder(BorderFactory.createLineBorder(Color.lightGray));
         this.add(panel, BorderLayout.CENTER);
     }

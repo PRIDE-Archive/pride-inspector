@@ -64,8 +64,8 @@ public class DataAccessMonitor extends PropertyChangeHelper {
      *
      * @param controller new data access controller
      */
-    public synchronized void addDataAccessController(DataAccessController controller) {
-        addDataAccessController(controller, true);
+    public synchronized void addDataAccessController(DataAccessController controller, String message) {
+        addDataAccessController(controller, true, message);
     }
 
     /**
@@ -74,7 +74,7 @@ public class DataAccessMonitor extends PropertyChangeHelper {
      * @param controller new data access controller
      * @param foreground true will set this data access controller to foreground
      */
-    public void addDataAccessController(DataAccessController controller, boolean foreground) {
+    public void addDataAccessController(DataAccessController controller, boolean foreground, String welcomeMessage) {
         // new controller should always be added to the end of the list
         List<DataAccessController> oldControllers, newControllers;
 
@@ -85,7 +85,7 @@ public class DataAccessMonitor extends PropertyChangeHelper {
                 newControllers = new ArrayList<DataAccessController>(controllers);
                 EventBus.publish(new AddDataSourceEvent<DataAccessController>(this, oldControllers, newControllers));
                 if (foreground) {
-                    setForegroundDataAccessController(controller);
+                    setForegroundDataAccessController(controller, welcomeMessage);
                 }
             }
         }
@@ -100,7 +100,7 @@ public class DataAccessMonitor extends PropertyChangeHelper {
         }
     }
 
-    public synchronized void removeDataAccessController(DataAccessController controller) {
+    public synchronized void removeDataAccessController(DataAccessController controller, String message) {
         List<DataAccessController> oldControllers, newControllers;
 
         synchronized (controllersLock) {
@@ -111,7 +111,7 @@ public class DataAccessMonitor extends PropertyChangeHelper {
                 int nextIndex = controllers.size() - 1 > index ? index : index - 1;
                 controllers.remove(controller);
                 if (foregroundController != null && foregroundController.equals(controller)) {
-                    setForegroundDataAccessController(nextIndex >= 0 ? controllers.get(nextIndex) : null);
+                    setForegroundDataAccessController(nextIndex >= 0 ? controllers.get(nextIndex) : null, message);
                 }
                 controller.close();
                 newControllers = new ArrayList<DataAccessController>(controllers);
@@ -127,7 +127,7 @@ public class DataAccessMonitor extends PropertyChangeHelper {
      * @param original    original data access controller
      * @param replacement replacement data access controller
      */
-    public synchronized void replaceDataAccessController(DataAccessController original, DataAccessController replacement) {
+    public synchronized void replaceDataAccessController(DataAccessController original, DataAccessController replacement, String welcomeMessage) {
         List<DataAccessController> oldControllers, newControllers;
 
         synchronized (controllersLock) {
@@ -137,7 +137,7 @@ public class DataAccessMonitor extends PropertyChangeHelper {
                 controllers.add(index, replacement);
                 controllers.remove(original);
                 if (foregroundController != null && foregroundController.equals(original)) {
-                    setForegroundDataAccessController(replacement);
+                    setForegroundDataAccessController(replacement, welcomeMessage);
                 }
                 original.close();
                 newControllers = new ArrayList<DataAccessController>(controllers);
@@ -145,12 +145,12 @@ public class DataAccessMonitor extends PropertyChangeHelper {
                 EventBus.publish(new AddDataSourceEvent<DataAccessController>(this, oldControllers, newControllers));
             } else {
                 // add as a new data access controller
-                addDataAccessController(replacement);
+                addDataAccessController(replacement, welcomeMessage);
             }
         }
     }
 
-    public void setForegroundDataAccessController(DataAccessController controller) {
+    public void setForegroundDataAccessController(DataAccessController controller, String welcomeMessage) {
         DataAccessController oldController, newController;
 
         synchronized (this) {
@@ -169,7 +169,7 @@ public class DataAccessMonitor extends PropertyChangeHelper {
             status = ForegroundDataSourceEvent.Status.EMPTY;
         }
 
-        EventBus.publish(new ForegroundDataSourceEvent<DataAccessController>(this, status, oldController, newController));
+        EventBus.publish(new ForegroundDataSourceEvent<DataAccessController>(this, status, welcomeMessage, oldController, newController));
     }
 
     public synchronized DataAccessController getForegroundDataAccessController() {

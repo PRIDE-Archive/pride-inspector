@@ -535,7 +535,8 @@ public class MzIdMsDialog extends JDialog {
                 Constants.MGF_FILE,
                 Constants.MS2_FILE,
                 Constants.PKL_FILE,
-                Constants.DTA_FILE);
+                Constants.DTA_FILE,
+                Constants.GZIPPED_FILE);
         simpleFileDialog.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         // check the selection results from open file dialog
 

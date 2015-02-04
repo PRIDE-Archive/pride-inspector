@@ -155,6 +155,7 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
                 String accession = (mod.getId() != null) ? mod.getId().toString() : null;
                 String name = mod.getName();
                 if (!ptmMap.containsKey(accession)) {
+                    accession = (accession == null || accession.length() ==0)?"Unknown":accession;
                     EventBus.publish(new SummaryReportEvent(this, controller, new SummaryReportMessage(SummaryReportMessage.Type.INFO, "Mod: " + accession,
                             "Modification found: [" + accession + "]\t" + name)));
                     ptmMap.put(mod.getId().toString(), mod.getName());

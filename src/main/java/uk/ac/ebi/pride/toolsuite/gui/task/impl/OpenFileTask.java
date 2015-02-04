@@ -154,7 +154,7 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
         for (DataAccessController controller : controllers) {
             if (DataAccessController.Type.XML_FILE.equals(controller.getType()) &&
                     controller.getSource().equals(file)) {
-                context.setForegroundDataAccessController(controller);
+                context.setForegroundDataAccessController(controller, "loading.title");
             }
         }
     }
@@ -166,8 +166,11 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
      */
     private void createNewDataAccessController(File file) {
         try {
+            String message = (runProteinInferenceLater)?"loading.proteininferece":"loading.title";
             // create dummy
-            EmptyDataAccessController dummy = createEmptyDataAccessController();
+            EmptyDataAccessController dummy = createEmptyDataAccessController(message);
+
+            String welcomeMessage = (runProteinInferenceLater)?"loading.proteininferece":"loading.title";
 
             Constructor<D> cstruct = dataAccessControllerClass.getDeclaredConstructor(File.class);
             DataAccessController controller;
@@ -197,11 +200,11 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
             // this is important for cancelling
             if (Thread.interrupted()) {
                 // remove dummy
-                context.removeDataAccessController(dummy, false);
+                context.removeDataAccessController(dummy, false, message);
                 throw new InterruptedException();
             } else {
                 // add the real thing
-                context.replaceDataAccessController(dummy, controller, false);
+                context.replaceDataAccessController(dummy, controller, false, message);
             }
         } catch (InterruptedException ex) {
             logger.warn("File loading has been interrupted: {}", file.getName());
@@ -220,7 +223,9 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
     private void createNewDataAccessController(File file, Boolean inmemory) {
         try {
             // create dummy
-            EmptyDataAccessController dummy = createEmptyDataAccessController();
+            String message = (runProteinInferenceLater)?"loading.proteininferece":"loading.title";
+
+            EmptyDataAccessController dummy = createEmptyDataAccessController(message);
 
             Constructor<D> cstruct = dataAccessControllerClass.getDeclaredConstructor(File.class, Boolean.TYPE);
             DataAccessController controller = cstruct.newInstance(inputFile, Boolean.TRUE);
@@ -250,11 +255,11 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
             // this is important for cancelling
             if (Thread.interrupted()) {
                 // remove dummy
-                context.removeDataAccessController(dummy, false);
+                context.removeDataAccessController(dummy, false, message);
                 throw new InterruptedException();
             } else {
                 // add the real thing
-                context.replaceDataAccessController(dummy, controller, false);
+                context.replaceDataAccessController(dummy, controller, false, message);
             }
         } catch (InterruptedException ex) {
             logger.warn("File loading has been interrupted: {}", file.getName());
@@ -265,7 +270,7 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
         }
     }
 
-    private EmptyDataAccessController createEmptyDataAccessController() {
+    private EmptyDataAccessController createEmptyDataAccessController(String welcomeMessage) {
         EmptyDataAccessController dummy = new EmptyDataAccessController();
         dummy.setName(inputFile.getName());
 
@@ -277,7 +282,7 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
 
         // add a closure hook
         this.addOwner(dummy);
-        context.addDataAccessController(dummy);
+        context.addDataAccessController(dummy, welcomeMessage);
         return dummy;
     }
     

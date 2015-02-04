@@ -316,7 +316,9 @@ public class SimpleMsDialog extends JDialog {
                     Constants.MZXML_FILE,
                     Constants.MZML_FILE,
                     Constants.DTA_FILE,
-                    Constants.XML_FILE);
+                    Constants.XML_FILE,
+                    Constants.MS2_FILE,
+                    Constants.GZIPPED_FILE);
             int result = ofd.showDialog(this, null);
 
             java.util.List<File> filesToOpen = new ArrayList<File>();
@@ -346,7 +348,9 @@ public class SimpleMsDialog extends JDialog {
                 Constants.MZXML_FILE,
                 Constants.MZML_FILE,
                 Constants.DTA_FILE,
-                Constants.XML_FILE);
+                Constants.XML_FILE,
+                Constants.MS2_FILE,
+                Constants.GZIPPED_FILE);
 
         int result = ofd.showDialog(this, null);
 

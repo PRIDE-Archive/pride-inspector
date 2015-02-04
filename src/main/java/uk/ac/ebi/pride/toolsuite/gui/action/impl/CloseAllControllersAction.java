@@ -37,7 +37,7 @@ public class CloseAllControllersAction extends PrideAction {
     public void actionPerformed(ActionEvent e) {
         PrideInspectorContext context = (PrideInspectorContext) Desktop.getInstance().getDesktopContext();
         for (DataAccessController controller : context.getControllers()) {
-            context.removeDataAccessController(controller, true);
+            context.removeDataAccessController(controller, true, "loading.title");
         }
     }
 

@@ -161,7 +161,7 @@ public class ChartTabPane extends DataAccessControllerPane<PrideDataReader, Void
         this.add(msgPanel, BorderLayout.NORTH);
 
         if (!launchButton) {
-            JPanel loadingPanel = new PrideInspectorLoadingPanel();
+            JPanel loadingPanel = new PrideInspectorLoadingPanel("loading.chart");
             this.add(loadingPanel, BorderLayout.CENTER);
         }
 

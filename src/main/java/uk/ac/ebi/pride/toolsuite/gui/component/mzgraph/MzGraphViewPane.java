@@ -170,9 +170,9 @@ public class MzGraphViewPane extends DataAccessControllerPane {
 //                    Peptide peptide = spectrum.getPeptide();
 //                    if (peptide != null) {
 //                        int peptideLength = peptide.getSequenceLength();
-//                        Map<Integer, java.util.List<PTModification>> modifications = AnnotationUtils.createModificationMap(peptide.getModifications(), peptideLength);
+//                        Map<Integer, java.utils.List<PTModification>> modifications = AnnotationUtils.createModificationMap(peptide.getModifications(), peptideLength);
 //                        spectrumBrowser.setAminoAcidAnnotationParameters(peptide.getSequenceLength(), modifications);
-//                        java.util.List<IonAnnotation> ions = AnnotationUtils.convertToIonAnnotations(peptide.getFragmentIons());
+//                        java.utils.List<IonAnnotation> ions = AnnotationUtils.convertToIonAnnotations(peptide.getFragmentIons());
 //                        spectrumBrowser.addFragmentIons(ions);
 //                        if (!ions.isEmpty()) {
 //                            spectrumBrowser.enableAnnotationControl(true);
