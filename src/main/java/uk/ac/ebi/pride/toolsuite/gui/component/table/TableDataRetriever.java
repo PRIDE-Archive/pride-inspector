@@ -119,7 +119,13 @@ public class TableDataRetriever {
                     ptmMasses.add(monoMasses.get(0));
                 }
             }
-            Double deltaMass = MoleculeUtilities.calculateDeltaMz(sequence, mz, charge, ptmMasses);
+            double theoreticalMz = controller.getPeptideTheoreticalMz(identId, peptideId);
+            Double deltaMass = 0.0;
+            if(theoreticalMz == -1)
+              deltaMass = MoleculeUtilities.calculateDeltaMz(sequence, mz, charge, ptmMasses);
+            else
+                deltaMass = MoleculeUtilities.calculateDeltaMz( mz, charge, theoreticalMz);
+
             peptideTableRow.setDeltaMz(deltaMass == null ? null : NumberUtilities.scaleDouble(deltaMass, 4));
 
             peptideTableRow.setPrecursorMz(mz == -1 ? null : NumberUtilities.scaleDouble(mz, 4));
