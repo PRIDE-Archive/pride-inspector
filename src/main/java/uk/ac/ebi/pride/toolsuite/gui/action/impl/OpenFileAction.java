@@ -178,9 +178,12 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
     private boolean hasGzipFiles(Map<File, List<File>> files){
         for(File file: files.keySet()){
             List<File> filesToOpen = files.get(file);
-            for(File fileToOpen: filesToOpen)
-            if(isGzipFile(fileToOpen))
-                return true;
+            if(filesToOpen != null && filesToOpen.size() > 0){
+                for(File fileToOpen: filesToOpen)
+                    if(isGzipFile(fileToOpen))
+                        return true;
+            }
+
         }
         return false;
     }
