@@ -31,6 +31,7 @@ import java.util.List;
  * @version $Id$
  */
 public class ProjectFileDownloadDialog extends JDialog implements ActionListener, TaskListener<List<DataTransferProtocol>, Void> {
+    private static final String SELECTION_ACTION_COMMAND = "selectionAction";
     private static final String CANCEL_ACTION_COMMAND = "cancelAction";
     private static final String DOWNLOAD_ACTION_COMMAND = "downloadAction";
 
@@ -43,6 +44,11 @@ public class ProjectFileDownloadDialog extends JDialog implements ActionListener
      * Open file after download
      */
     private JCheckBox openFileOptionCheckbox;
+
+    /**
+     * Button for select all / deselect all
+     */
+    private JButton selectionButton;
 
     /**
      * Accession of the project to download
@@ -156,13 +162,21 @@ public class ProjectFileDownloadDialog extends JDialog implements ActionListener
 
         // open file after download checkbox
         JPanel openFileOptionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        openFileOptionCheckbox = new JCheckBox("Try to open files after download");
+
+        openFileOptionCheckbox = new JCheckBox("Open files after download");
         openFileOptionCheckbox.setSelected(true);
         openFileOptionPanel.add(openFileOptionCheckbox);
         controlPanel.add(openFileOptionPanel, BorderLayout.WEST);
 
         // control pane
         JPanel ctrlPane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+        // selection button
+        selectionButton = new JButton("Deselect all");
+        selectionButton.setPreferredSize(new Dimension(120, 30));
+        selectionButton.setActionCommand(SELECTION_ACTION_COMMAND);
+        selectionButton.addActionListener(this);
+        ctrlPane.add(selectionButton);
 
         // cancel button
         JButton cancelButton = new JButton("Cancel");
@@ -205,6 +219,21 @@ public class ProjectFileDownloadDialog extends JDialog implements ActionListener
                     downloadFiles(folderPath, filesToDownload);
                     this.dispose();
                 }
+            }
+        } else if (SELECTION_ACTION_COMMAND.equals(evtName)) {
+            AssayFileDownloadTableModel assayFileDownloadTableModel = (AssayFileDownloadTableModel) fileDownloadSelectionTable.getModel();
+            int columnIndex = assayFileDownloadTableModel.getColumnIndex(AssayFileDownloadTableModel.TableHeader.SELECTION.getHeader());
+            boolean toDeselect = selectionButton.getText().equals("Deselect all");
+
+            for (int i = 0; i < assayFileDownloadTableModel.getRowCount(); i++) {
+                assayFileDownloadTableModel.setValueAt(!toDeselect, i, columnIndex);
+            }
+            assayFileDownloadTableModel.fireTableDataChanged();
+
+            if (toDeselect) {
+                selectionButton.setText("Select all");
+            } else {
+                selectionButton.setText("Deselect all");
             }
         }
     }
