@@ -595,16 +595,18 @@ public class ProteinVisualizationGraphHandler {
         
         List<AbstractFilter> filters = new ArrayList<AbstractFilter>();
         
-        CvScore cvScore = CvScore.getCvRefByAccession(mainScoreAccession);
-        
-        filters.add(
-                new PSMScoreFilter(
-                    cvScore.getHigherScoreBetter() ? FilterComparator.greater_equal : FilterComparator.less_equal,
-                    scoreThreshold,
-                    false,
-                    mainScoreAccession,
-                    false)
-                );
+        if (mainScoreAccession != null) {
+            CvScore cvScore = CvScore.getCvRefByAccession(mainScoreAccession);
+            
+            filters.add(
+                    new PSMScoreFilter(
+                        ((cvScore == null) || cvScore.getHigherScoreBetter()) ? FilterComparator.greater_equal : FilterComparator.less_equal,
+                        scoreThreshold,
+                        false,
+                        mainScoreAccession,
+                        false)
+                    );
+        }
         
         piaModeller.getProteinModeller().infereProteins(
                 pepScoring,
