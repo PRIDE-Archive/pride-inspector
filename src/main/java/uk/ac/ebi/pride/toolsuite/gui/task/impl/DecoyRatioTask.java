@@ -54,7 +54,7 @@ public class DecoyRatioTask extends TaskAdapter<Void, Void> {
         int index = getAccessionColumnIndex(table.getModel(), protAccColName);
         // protein decoy ratio
         String proteinDecoyRatio = calculateDecoyRatio(table.getModel(), index, filter);
-        String proteinDecoyMsg = "Decoy Protein Hits: " + proteinDecoyRatio;
+        String proteinDecoyMsg = "Decoy Protein Ratio: " + proteinDecoyRatio;
         EventBus.publish(new SummaryReportEvent(this, controller, new SummaryReportMessage(SummaryReportMessage.Type.INFO, proteinDecoyMsg, proteinDecoyMsg)));
 
         // peptide tab
@@ -63,7 +63,7 @@ public class DecoyRatioTask extends TaskAdapter<Void, Void> {
         index = getAccessionColumnIndex(table.getModel(), protAccColName);
         // peptide decoy ratio
         String peptideDecoyRatio = calculateDecoyRatio(table.getModel(), index, filter);
-        String peptideDecoyMsg = "Decoy Peptide Hits: " + peptideDecoyRatio;
+        String peptideDecoyMsg = "Decoy Peptide Ratio: " + peptideDecoyRatio;
         EventBus.publish(new SummaryReportEvent(this, controller, new SummaryReportMessage(SummaryReportMessage.Type.INFO, peptideDecoyMsg, peptideDecoyMsg)));
 
         return null;
@@ -100,12 +100,14 @@ public class DecoyRatioTask extends TaskAdapter<Void, Void> {
 
         for (int i = 0; i < rowCnt; i++) {
             String acc = getProteinAccession(tableModel, colIndex, i);
-            if (acc != null && filter.apply(acc)) {
+            if (acc != null && !filter.apply(acc)) {
                 decoyCnt++;
             }
         }
 
-        return decoyCnt + "/" + rowCnt;
+        float percentage = (decoyCnt * 1.0f / rowCnt) * 100;
+
+        return String.format("%.0f%%", percentage);
     }
 
     private String getProteinAccession(TableModel tableModel, int colIndex, int i) {

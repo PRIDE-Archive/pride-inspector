@@ -58,6 +58,11 @@ public class DecoyFilterAction extends PrideAction implements PropertyChangeList
     private PrideInspectorContext appContext;
 
     /**
+     * Current decoy accession filter
+     */
+    private DecoyAccessionFilter currentFilter;
+
+    /**
      * Constructor
      *
      * @param controller data access controller
@@ -87,20 +92,9 @@ public class DecoyFilterAction extends PrideAction implements PropertyChangeList
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(DecoyFilterDialog.NEW_FILTER)) {
 
-            DecoyAccessionFilter filter = (DecoyAccessionFilter) evt.getNewValue();
+           currentFilter = (DecoyAccessionFilter) evt.getNewValue();
 
-            ControllerContentPane contentPane = (ControllerContentPane) appContext.getDataContentPane(controller);
-
-            //Update the Summary Charts Tab
-            ChartTabPane chartContentPane = contentPane.getChartTabPane();
-            chartContentPane.populateWithDecoyFilter(filter);
-
-            // decoy task
-            Task decoyRatioTask = new DecoyRatioTask(controller, filter);
-            TaskUtil.startBackgroundTask(decoyRatioTask, controller);
-
-            Task decoyFilterTask = new DecoyFilterTask(controller, filter);
-            TaskUtil.startBackgroundTask(decoyFilterTask, controller);
+            applyFilter(currentFilter);
 
             // change icon and name of the action
             putValue(Action.NAME, NONE_FILTER_ACTION_NAME);
@@ -111,8 +105,41 @@ public class DecoyFilterAction extends PrideAction implements PropertyChangeList
         }
     }
 
+    public void applyFilter() {
+        if (currentFilter != null) {
+            applyFilter(currentFilter);
+        }
+    }
+
+    private void applyFilter(DecoyAccessionFilter filter) {
+        ControllerContentPane contentPane = (ControllerContentPane) appContext.getDataContentPane(controller);
+
+        //Update the Summary Charts Tab
+        ChartTabPane chartContentPane = contentPane.getChartTabPane();
+        chartContentPane.populateWithDecoyFilter(filter);
+
+        // decoy task
+        Task decoyRatioTask = new DecoyRatioTask(controller, filter);
+        TaskUtil.startBackgroundTask(decoyRatioTask, controller);
+
+        Task decoyFilterTask = new DecoyFilterTask(controller, filter);
+        TaskUtil.startBackgroundTask(decoyFilterTask, controller);
+    }
+
 
     private void undoFilter() {
+        removeFilter();
+
+
+        // change icon and name of the action
+        putValue(Action.NAME, FILTER_ACTION_NAME);
+        putValue(Action.SMALL_ICON, GUIUtilities.loadIcon(FILTER_ACTION_ICON_PATH));
+
+        // record filter
+        filterApplied = false;
+    }
+
+    public void removeFilter() {
         // remove the decoy filter
         ControllerContentPane contentPane = (ControllerContentPane) appContext.getDataContentPane(controller);
 
@@ -130,13 +157,6 @@ public class DecoyFilterAction extends PrideAction implements PropertyChangeList
         if (contentPane.isQuantTabEnabled()) {
             clearFilter(contentPane.getQuantTabPane().getQuantProteinSelectionPane().getQuantProteinTable());
         }
-
-        // change icon and name of the action
-        putValue(Action.NAME, FILTER_ACTION_NAME);
-        putValue(Action.SMALL_ICON, GUIUtilities.loadIcon(FILTER_ACTION_ICON_PATH));
-
-        // record filter
-        filterApplied = false;
     }
 
     private void clearFilter(JTable table) {
