@@ -19,6 +19,8 @@ import uk.ac.ebi.pride.toolsuite.gui.component.table.model.PeptideSpeciesTableMo
 import uk.ac.ebi.pride.toolsuite.gui.event.container.ChangeRankingThresholdEvent;
 import uk.ac.ebi.pride.toolsuite.gui.event.container.ExpandPanelEvent;
 import uk.ac.ebi.pride.toolsuite.gui.event.container.PeptideSpeciesEvent;
+import uk.ac.ebi.pride.toolsuite.gui.task.TaskEvent;
+import uk.ac.ebi.pride.toolsuite.gui.task.TaskListenerAdapter;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.FilterPeptideRankingTask;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
@@ -210,6 +212,25 @@ public class PeptideDescriptionPane extends DataAccessControllerPane {
                 int rankingThreshold = PeptideRankingFilter.getRankingThreshold(filter);
                 PeptideSpeciesTableModel peptideSpeciesTableModel = (PeptideSpeciesTableModel) pepTable.getModel();
                 FilterPeptideRankingTask filterPeptideRankingTask = new FilterPeptideRankingTask(peptideSpeciesTableModel, rankingThreshold);
+                filterPeptideRankingTask.addTaskListener(new TaskListenerAdapter<Void, Void>() {
+                    @Override
+                    public void started(TaskEvent<Void> event) {
+                        PrideAction prideAction = appContext.getPrideAction(controller, DecoyFilterAction.class);
+                        if (prideAction != null && prideAction instanceof DecoyFilterAction) {
+                            DecoyFilterAction decoyFilterAction = (DecoyFilterAction)prideAction;
+                            decoyFilterAction.removeFilter();
+                        }
+                    }
+
+                    @Override
+                    public void succeed(TaskEvent<Void> event) {
+                        PrideAction prideAction = appContext.getPrideAction(controller, DecoyFilterAction.class);
+                        if (prideAction != null && prideAction instanceof DecoyFilterAction) {
+                            DecoyFilterAction decoyFilterAction = (DecoyFilterAction)prideAction;
+                            decoyFilterAction.applyFilter();
+                        }
+                    }
+                });
                 TaskUtil.startBackgroundTask(filterPeptideRankingTask, controller);
 
                 // publish the event to local event bus

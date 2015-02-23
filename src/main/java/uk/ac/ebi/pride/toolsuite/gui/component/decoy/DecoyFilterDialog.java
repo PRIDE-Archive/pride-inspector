@@ -18,7 +18,7 @@ import java.awt.event.ActionListener;
 
 
 /**
- * @author User #2
+ * @author ypriverol, rwwang
  */
 public class DecoyFilterDialog extends JDialog {
     /**
@@ -265,8 +265,6 @@ public class DecoyFilterDialog extends JDialog {
                 criteriaLabel.setText("<html><div> " + FILTER_STRING_LABEL + " <b style=\"color:#FF0000\"> (Empty String)</b></div></html>");
             }
         }
-
-
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables

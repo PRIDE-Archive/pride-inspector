@@ -124,7 +124,7 @@ public class TableDataRetriever {
             if(theoreticalMz == -1)
               deltaMass = MoleculeUtilities.calculateDeltaMz(sequence, mz, charge, ptmMasses);
             else
-                deltaMass = MoleculeUtilities.calculateDeltaMz( mz, charge, theoreticalMz);
+                deltaMass = MoleculeUtilities.calculateDeltaMz(mz, theoreticalMz);
 
             peptideTableRow.setDeltaMz(deltaMass == null ? null : NumberUtilities.scaleDouble(deltaMass, 4));
 
