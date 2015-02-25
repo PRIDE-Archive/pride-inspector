@@ -63,17 +63,7 @@
         <junit.version>4.11</junit.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <logback-core.version>1.0.11</logback-core.version>
-<<<<<<< HEAD
-=======
-        <ms-data-core-api.version>2.0.2-SNAPSHOT</ms-data-core-api.version>
-        <inspector-mzgraph-browser.version>2.0.0-SNAPSHOT</inspector-mzgraph-browser.version>
-        <inspector-quality-chart.version>2.0.0-SNAPSHOT</inspector-quality-chart.version>
-        <inspector-swing-utils.version>2.0.0-SNAPSHOT</inspector-swing-utils.version>
-        <javahelp.version>2.0.02</javahelp.version>
-        <pride-utilities.version>2.0.0-SNAPSHOT</pride-utilities.version>
-        <pride-protein-inference.version>0.0.3-SNAPSHOT</pride-protein-inference.version>
         <jnlp-api.version>1.5.0</jnlp-api.version>
->>>>>>> 82856ec8d3dbab9387d8e3dd7fb75c52588d7856
         <commons-cli.version>1.2</commons-cli.version>
         <eventbus.version>1.4</eventbus.version>
         <swingx-all.version>1.6.5-1</swingx-all.version>
@@ -89,7 +79,6 @@
         <jsparklines.version>1.0.1</jsparklines.version>
         <aspera-faspmanager.version>2.7.0.42750</aspera-faspmanager.version>
         <commons-net.version>3.3</commons-net.version>
-        <prider-ws-model.version>0.2.7</prider-ws-model.version>
         <jackson-mapper-asl.version>1.9.9</jackson-mapper-asl.version>
         <httpcore.version>4.3.2</httpcore.version>
         <jnlp-api.version>1.5.0</jnlp-api.version>
@@ -100,6 +89,7 @@
         <protein-details-fetcher.version>1.0.5</protein-details-fetcher.version>
         <pride-protein-inference.version>0.0.4</pride-protein-inference.version>
         <accession-resolver.version>1.0.3</accession-resolver.version>
+        <prider-ws-model.version>0.2.7</prider-ws-model.version>
 
         <!-- toolsuite dependencies -->
         <inspector-mzgraph-browser.version>2.0.1</inspector-mzgraph-browser.version>
@@ -467,98 +457,7 @@
             </build>
         </profile>
 
-        <profile>
-            <id>pi-desktop-build-apple</id>
-            <activation>
-                <property>
-                    <name>desktop</name>
-                    <value>build</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>${project.basedir}/assembly.xml</descriptor>
-                            </descriptors>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>assembly</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>osxappbundle-maven-plugin</artifactId>
-                        <version>1.0-alpha-2</version>
-                        <configuration>
-                            <mainClass>uk.ac.ebi.pride.toolsuite.gui.PrideInspector</mainClass>
-                            <bundleName>PRIDE Inspector</bundleName>
-                            <zipFile>
-                                ${project.basedir}/${artifact.artifactId}-${artifact.baseVersion}-mac-bundle.zip
-                            </zipFile>
-                            <fileSets>
-                                <fileSet>
-                                    <directory>${project.basedir}/target</directory>
-                                    <includes>
-                                        <include>*.jar</include>
-                                    </includes>
-                                    <outputDirectory>${assembly.dir}</outputDirectory>
-                                </fileSet>
-
-                                <fileSet>
-                                    <directory>${project.basedir}</directory>
-                                    <outputDirectory>${assembly.dir}/log</outputDirectory>
-                                    <excludes>
-                                        <exclude>**/*</exclude>
-                                    </excludes>
-                                </fileSet>
-
-                                <fileSet>
-                                    <directory>${project.basedir}/examples</directory>
-                                    <outputDirectory>${assembly.dir}/examples</outputDirectory>
-                                    <includes>
-                                        <include>**/**</include>
-                                    </includes>
-                                </fileSet>
-
-                                <fileSet>
-                                    <directory>${project.basedir}/config</directory>
-                                    <outputDirectory>${assembly.dir}/config</outputDirectory>
-                                    <includes>
-                                        <include>**/**</include>
-                                    </includes>
-                                </fileSet>
-
-                                <fileSet>
-                                    <directory>${project.basedir}/aspera</directory>
-                                    <outputDirectory>${assembly.dir}/aspera</outputDirectory>
-                                    <includes>
-                                        <include>**/**</include>
-                                    </includes>
-                                </fileSet>
-                            </fileSets>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>bundle</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
+       <profile>
             <id>pi-desktop-build</id>
             <activation>
                 <property>
