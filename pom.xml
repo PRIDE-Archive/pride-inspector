@@ -394,6 +394,7 @@
                     <goals>deploy</goals>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
@@ -456,6 +457,97 @@
         </profile>
 
         <profile>
+            <id>pi-desktop-build-apple</id>
+            <activation>
+                <property>
+                    <name>desktop</name>
+                    <value>build</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>${project.basedir}/assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>osxappbundle-maven-plugin</artifactId>
+                        <version>1.0-alpha-2</version>
+                        <configuration>
+                            <mainClass>uk.ac.ebi.pride.toolsuite.gui.PrideInspector</mainClass>
+                            <bundleName>PRIDE Inspector</bundleName>
+                            <zipFile>
+                                ${project.basedir}/${artifact.artifactId}-${artifact.baseVersion}-mac-bundle.zip
+                            </zipFile>
+                            <fileSets>
+                                <fileSet>
+                                    <directory>${project.basedir}/target</directory>
+                                    <includes>
+                                        <include>*.jar</include>
+                                    </includes>
+                                    <outputDirectory>${assembly.dir}</outputDirectory>
+                                </fileSet>
+
+                                <fileSet>
+                                    <directory>${project.basedir}</directory>
+                                    <outputDirectory>${assembly.dir}/log</outputDirectory>
+                                    <excludes>
+                                        <exclude>**/*</exclude>
+                                    </excludes>
+                                </fileSet>
+
+                                <fileSet>
+                                    <directory>${project.basedir}/examples</directory>
+                                    <outputDirectory>${assembly.dir}/examples</outputDirectory>
+                                    <includes>
+                                        <include>**/**</include>
+                                    </includes>
+                                </fileSet>
+
+                                <fileSet>
+                                    <directory>${project.basedir}/config</directory>
+                                    <outputDirectory>${assembly.dir}/config</outputDirectory>
+                                    <includes>
+                                        <include>**/**</include>
+                                    </includes>
+                                </fileSet>
+
+                                <fileSet>
+                                    <directory>${project.basedir}/aspera</directory>
+                                    <outputDirectory>${assembly.dir}/aspera</outputDirectory>
+                                    <includes>
+                                        <include>**/**</include>
+                                    </includes>
+                                </fileSet>
+                            </fileSets>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>bundle</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
             <id>pi-desktop-build</id>
             <activation>
                 <property>
@@ -482,6 +574,7 @@
                             </execution>
                         </executions>
                     </plugin>
+
                 </plugins>
             </build>
         </profile>
