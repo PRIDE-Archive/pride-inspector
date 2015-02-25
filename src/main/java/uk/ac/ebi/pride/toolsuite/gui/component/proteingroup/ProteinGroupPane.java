@@ -355,25 +355,36 @@ public class ProteinGroupPane
         // create the slider for the score threshold
         scoreThresholdSlider = new JSlider(JSlider.HORIZONTAL);
         
-        // the values are with two decimals (so the actual value is the slider's value divided by 100)
-        scoreThresholdSlider.setMinimum(
-                (int)Math.floor(visGraph.getLowestMainScore() * 100.0));
-        scoreThresholdSlider.setMaximum(
-                (int)Math.ceil(visGraph.getHighestMainScore() * 100.0));
-        
-        scoreThresholdSlider.setValue(scoreThresholdSlider.getMinimum());
-        scoreThresholdSlider.setMajorTickSpacing(
-                (scoreThresholdSlider.getMaximum() - scoreThresholdSlider.getMinimum()) / 2);
-        scoreThresholdSlider.setPaintLabels(true);
-        scoreThresholdSlider.setPaintTicks(true);
-        
-        Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>(5);
-        for (int i=0; i < 3; i++) {
-            int value = scoreThresholdSlider.getMinimum() +
-                    i * (scoreThresholdSlider.getMaximum() - scoreThresholdSlider.getMinimum()) / 2;
-            labelTable.put(value, new JLabel("" + (value / 100.0)));
+        if (visGraph.getMainScoreAccession() != null) {
+            // the values are with two decimals (so the actual value is the slider's value divided by 100)
+            scoreThresholdSlider.setMinimum((int)Math.floor(visGraph.getLowestMainScore() * 100.0));
+            scoreThresholdSlider.setMaximum((int)Math.ceil(visGraph.getHighestMainScore() * 100.0));
+            
+            scoreThresholdSlider.setEnabled(true);
+            
+            scoreThresholdSlider.setValue(scoreThresholdSlider.getMinimum());
+            scoreThresholdSlider.setMajorTickSpacing(
+                    (scoreThresholdSlider.getMaximum() - scoreThresholdSlider.getMinimum()) / 2);
+            scoreThresholdSlider.setPaintLabels(true);
+            scoreThresholdSlider.setPaintTicks(true);
+            
+            Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>(5);
+            for (int i=0; i < 3; i++) {
+                int value = scoreThresholdSlider.getMinimum() +
+                        i * (scoreThresholdSlider.getMaximum() - scoreThresholdSlider.getMinimum()) / 2;
+                labelTable.put(value, new JLabel("" + (value / 100.0)));
+            }
+            scoreThresholdSlider.setLabelTable(labelTable);
+        } else {
+            // there was no score for the PSMs
+            scoreThresholdSlider.setMinimum(0);
+            scoreThresholdSlider.setMaximum(0);
+            
+            scoreThresholdSlider.setEnabled(false);
+            
+            scoreThresholdSlider.setPaintLabels(false);
+            scoreThresholdSlider.setPaintTicks(false);
         }
-        scoreThresholdSlider.setLabelTable(labelTable);
         
         JPanel scoreThresholdControls = new JPanel();
         scoreThresholdControls.setOpaque(true);
@@ -732,18 +743,22 @@ public class ProteinGroupPane
      * performs a protein inference on the graph and updates the visualization
      */
     private void updateGraphWithScoreThreshold() {
-        scoreThreshold = scoreThresholdSlider.getValue() / 100.0;
         
-        CvTermReference scoreRef = CvTermReference.getCvRefByAccession(visGraph.getMainScoreAccession());
-        if (scoreRef != null) {
-            scoreThresholdLabel.setText(scoreRef.getName() + ": " + scoreThreshold);
+        if (visGraph.getMainScoreAccession() != null) {
+            scoreThreshold = scoreThresholdSlider.getValue() / 100.0;
+            
+            CvTermReference scoreRef = CvTermReference.getCvRefByAccession(visGraph.getMainScoreAccession());
+            if (scoreRef != null) {
+                scoreThresholdLabel.setText(scoreRef.getName() + ": " + scoreThreshold);
+            } else {
+                scoreThresholdLabel.setText("" + scoreThreshold);
+            }
         } else {
-            scoreThresholdLabel.setText("" + scoreThreshold);
+            scoreThreshold = 0.0;
+            scoreThresholdLabel.setText("(could not get score)");
         }
         
-        
         visGraph.infereProteins(scoreThreshold, OccamsRazorInference.class, false);
-        
         
         visualizationViewer.validate();
         visualizationViewer.repaint();
