@@ -128,7 +128,7 @@ public class AsperaDownloadTask extends FileDownloadTask implements TransferList
                     logger.error(msg);
                     publish(msg);
             }
-
+            logger.error(jarDir + File.separator + ascpLocation);
             //concatenate jar directory plus relative ascp binaries directory
             return jarDir + File.separator + ascpLocation;
         } catch (UnsupportedEncodingException e) {

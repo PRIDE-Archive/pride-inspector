@@ -168,6 +168,8 @@ public class AsperaFileUploader {
         // Pride's public location for downloading data, not used in uploading
         RemoteLocation pridePublicLocation = new RemoteLocation(ebiHost, ebiUser, jarDir + File.separator + asperaPrivateKey, "");
 
+        logger.error(pridePublicLocation.toString());
+
         for (String path : remoteSourcePaths) {
             pridePublicLocation.addPath(path);
         }
@@ -176,6 +178,8 @@ public class AsperaFileUploader {
         localDestination.addPath(localDestinationDirPath);
 
         TransferOrder order = new TransferOrder(pridePublicLocation, localDestination, transferParameters);
+
+        System.out.println(ebiHost + " " + asperaPrivateKey + " " + ebiUser);
 
         return FaspManager.getSingleton().startTransfer(order);
     }
