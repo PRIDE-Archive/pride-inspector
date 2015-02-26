@@ -168,7 +168,12 @@ public class AsperaFileUploader {
         // Pride's public location for downloading data, not used in uploading
         RemoteLocation pridePublicLocation = new RemoteLocation(ebiHost, ebiUser, jarDir + File.separator + asperaPrivateKey, "");
 
+        logger.debug("EBI aspera host: {}", ebiHost);
+        logger.debug("EBI aspera user: {}", ebiUser);
+        logger.debug("EBI aspera private key: {}", jarDir + File.separator + asperaPrivateKey);
+
         for (String path : remoteSourcePaths) {
+            logger.debug("EBI aspera remote path: {}", path);
             pridePublicLocation.addPath(path);
         }
 

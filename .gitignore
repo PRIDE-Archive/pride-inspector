@@ -22,8 +22,3 @@ log/
 target/
 .idea/
 
-# Eclipse generated files #
-###########################
-/.settings
-.classpath
-.project
