@@ -170,7 +170,13 @@ public class AsperaFileUploader {
 
         logger.error(pridePublicLocation.toString());
 
+        logger.debug("EBI aspera host: {}", ebiHost);
+        logger.debug("EBI aspera user: {}", ebiUser);
+        logger.debug("EBI aspera private key: {}", jarDir + File.separator + asperaPrivateKey);
+
+
         for (String path : remoteSourcePaths) {
+            logger.debug("EBI aspera remote path: {}", path);
             pridePublicLocation.addPath(path);
         }
 
