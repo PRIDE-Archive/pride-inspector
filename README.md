@@ -154,7 +154,7 @@ Metadata View
 
 Quatification View
 
-![Quatification View](https://raw.githubusercontent.com/PRIDE-Toolsuite/pride-inspector/master/wiki/quatification_tab.png)
+![Quatification View](https://raw.githubusercontent.com/PRIDE-Toolsuite/pride-inspector/master/wiki/quantification_tab.png)
 
 
 
