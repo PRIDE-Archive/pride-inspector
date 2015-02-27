@@ -93,6 +93,37 @@ Note: you need to change the version number to the latest version.
 
 For developers, the latest source code is available from our SVN repository.
 
+# Faqs
+
+## Mac OS X App Gatekeeper Message
+
+If a user downloads the PRIDE Inspector software onto Mac OS X 10.8, they will see a scary warning:
+
+<quote>"PRIDE Inspecor can’t be opened because it is from an unidentified developer"</quote>
+
+![Mac Error](https://raw.githubusercontent.com/PRIDE-Toolsuite/pride-inspector/master/wiki/mac_error.png)
+
+<string>Solution</strong>
+
+1- Solution 1: To override your security settings and open the app anyway:
+
+
+    - In the Finder, locate the app you want to open. Don’t use Launchpad to do this. Launchpad doesn’t allow you to access the shortcut menu.
+
+    - Press the Control key, then click the app icon.
+ 
+    - Choose Open from the shortcut menu.
+
+    - Click Open.
+
+The app is saved as an exception to your security settings, and you will be able to open it in the future by double-clicking it, just like any registered app.
+
+2- Solution 2: Permanet solution
+
+  To run unsigned software you need to go into Mac OS X Preferences>Security & Privacy>General and change Allow applications downloaded from Mac App store and identified developers to Anywhere:
+  
+![Mac Preferences](https://raw.githubusercontent.com/PRIDE-Toolsuite/pride-inspector/master/wiki/mac_preferences.png)  
+
 # Getting Help
 
 If you have questions or need additional help, please contact the PRIDE Helpdesk at the EBI: pride-support at ebi.ac.uk (replace at with @).
