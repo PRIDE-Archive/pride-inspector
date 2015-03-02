@@ -5,6 +5,10 @@ pride-inspector
 
 PRIDE Inspector is a desktop application to visualise and perform first quality assessment on Mass Spectrometry data.
 
+# Quick Download 
+
+Download the latest release:  [<img src="https://raw.githubusercontent.com/PRIDE-Toolsuite/pride-inspector/master/wiki/download.png">](http://www.ebi.ac.uk/pride/resources/tools/inspector/latest/desktop/pride-inspector.zip)
+
 # License
 
 pride-inspector is a PRIDE API licensed under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt).
