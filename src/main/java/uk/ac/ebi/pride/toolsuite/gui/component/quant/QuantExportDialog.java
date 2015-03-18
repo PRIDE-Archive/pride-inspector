@@ -21,6 +21,7 @@ import uk.ac.ebi.pride.toolsuite.gui.url.HttpUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.utils.EnsemblSpeciesMapper;
 import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
+import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 
 import javax.help.CSH;
@@ -55,9 +56,9 @@ public class QuantExportDialog extends JDialog {
     private PrideInspectorContext appContext;
     private JTable table;
     private DataAccessController controller;
-    private Collection<CvTermReference> listProteinScores;
+    private Collection<SearchEngineScoreCvTermReference> listProteinScores;
 
-    public QuantExportDialog(Frame owner, JTable table, DataAccessController controller, Collection<CvTermReference> listProteinScores) {
+    public QuantExportDialog(Frame owner, JTable table, DataAccessController controller, Collection<SearchEngineScoreCvTermReference> listProteinScores) {
         super(owner);
         this.table = table;
         this.controller = controller;
@@ -300,7 +301,7 @@ public class QuantExportDialog extends JDialog {
      *
      * @return JTable  a new jtable
      */
-    private JTable createProteinTable(Collection<CvTermReference> listProteinScores) {
+    private JTable createProteinTable(Collection<SearchEngineScoreCvTermReference> listProteinScores) {
         QuantProteinTableModel tableModel = new QuantProteinTableModel(listProteinScores);
         tableModel.removeAllColumns();
 

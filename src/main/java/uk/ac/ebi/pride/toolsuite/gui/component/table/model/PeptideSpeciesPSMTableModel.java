@@ -1,5 +1,6 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
+import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
@@ -16,7 +17,7 @@ public class PeptideSpeciesPSMTableModel extends AbstractPeptideTableModel {
     private final List<PeptideTableRow> allPeptideTableRows;
     private int rankingThreshold;
 
-    public PeptideSpeciesPSMTableModel(Collection<CvTermReference> listPeptideScores, int rankingThreshold) {
+    public PeptideSpeciesPSMTableModel(Collection<SearchEngineScoreCvTermReference> listPeptideScores, int rankingThreshold) {
         super(listPeptideScores);
         this.rankingThreshold = rankingThreshold;
         this.allPeptideTableRows = new ArrayList<PeptideTableRow>();

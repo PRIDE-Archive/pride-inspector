@@ -3,6 +3,7 @@ package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.SortableTreeTableNode;
 import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
+import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 
 import java.util.*;
 
@@ -48,7 +49,7 @@ public class SortableProteinNode  extends SortableTreeTableNode{
         this.childNodes = new ArrayList<SortableProteinNode>();
     }
 
-    public SortableProteinNode(ProteinTableRow proteinTableRow, Map<String, String> columns, Collection<CvTermReference> scoresNames){
+    public SortableProteinNode(ProteinTableRow proteinTableRow, Map<String, String> columns, Collection<SearchEngineScoreCvTermReference> scoresNames){
         super();
         childNodes = new ArrayList<SortableProteinNode>();
         scores = proteinTableRow.getScores();
@@ -113,7 +114,7 @@ public class SortableProteinNode  extends SortableTreeTableNode{
         this.sequenceCoverage = sequenceCoverage;
     }
 
-    public void updatePropertyObject(Map<String, String> columns, Collection<CvTermReference> scoresNames){
+    public void updatePropertyObject(Map<String, String> columns, Collection<SearchEngineScoreCvTermReference> scoresNames){
         setUserObjects(getObjectValues(columns.keySet(), scoresNames));
     }
 
@@ -202,7 +203,7 @@ public class SortableProteinNode  extends SortableTreeTableNode{
         return ProteinTableHeader.values().length + scores.size();
     }
 
-    private Object[] getObjectValues(Set<String> columns, Collection<CvTermReference> proteinScores){
+    private Object[] getObjectValues(Set<String> columns, Collection<SearchEngineScoreCvTermReference> proteinScores){
         List<String> listColumns = new ArrayList<String>(columns);
         Object[] values = new Object[columns.size()];
         for(int i = 0; i < listColumns.size(); i++){
@@ -240,12 +241,12 @@ public class SortableProteinNode  extends SortableTreeTableNode{
         return values;
     }
 
-    private Double getProteinScore(SortableProteinNode proteinTableRow, String columnName, Collection<CvTermReference> proteinScores) {
+    private Double getProteinScore(SortableProteinNode proteinTableRow, String columnName, Collection<SearchEngineScoreCvTermReference> proteinScores) {
         List<Double> scores = proteinTableRow.getScores();
 
         int scoreIndex = 0;
 
-        for (CvTermReference scoreTermReference : proteinScores) {
+        for (SearchEngineScoreCvTermReference scoreTermReference : proteinScores) {
             if (scoreTermReference.getName().equals(columnName)) {
                 return scores.get(scoreIndex);
             }

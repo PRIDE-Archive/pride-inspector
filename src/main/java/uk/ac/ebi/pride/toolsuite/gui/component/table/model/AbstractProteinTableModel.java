@@ -1,5 +1,6 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
+import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.toolsuite.gui.component.sequence.AnnotatedProtein;
 import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
@@ -20,9 +21,9 @@ import java.util.Map;
  */
 public class AbstractProteinTableModel extends ProgressiveListTableModel<Void, Tuple<TableContentType, Object>> {
 
-    protected Collection<CvTermReference> listScores;
+    protected Collection<SearchEngineScoreCvTermReference> listScores;
 
-    public AbstractProteinTableModel(Collection<CvTermReference> listScores) {
+    public AbstractProteinTableModel(Collection<SearchEngineScoreCvTermReference> listScores) {
         this.listScores = listScores;
         initializeTableModel();
     }
@@ -40,7 +41,7 @@ public class AbstractProteinTableModel extends ProgressiveListTableModel<Void, T
         for (ProteinTableHeader header : headers) {
             columnNames.put(header.getHeader(), header.getToolTip());
             if (listScores != null && ProteinTableHeader.PROTEIN_ID.getHeader().equals(header.getHeader())) {
-                for (CvTermReference scoreCvTerm : listScores) {
+                for (SearchEngineScoreCvTermReference scoreCvTerm : listScores) {
                     String name = scoreCvTerm.getName();
                     columnNames.put(name, name);
                 }
@@ -161,7 +162,7 @@ public class AbstractProteinTableModel extends ProgressiveListTableModel<Void, T
         List<Double> scores = proteinTableRow.getScores();
         int scoreIndex = 0;
 
-        for (CvTermReference scoreTermReference : listScores) {
+        for (SearchEngineScoreCvTermReference scoreTermReference : listScores) {
             if (scoreTermReference.getName().equals(columnName)) {
                 return scores.get(scoreIndex);
             }

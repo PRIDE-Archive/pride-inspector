@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
-import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.PrideDBAccessControllerImpl;
 import uk.ac.ebi.pride.utilities.data.core.*;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.SideToolBarPanel;
@@ -228,8 +227,6 @@ public class SpectrumViewPane extends DataAccessControllerPane<Spectrum, Void> i
             // set source name
             if (controller.getType().equals(DataAccessController.Type.XML_FILE)) {
                 spectrumBrowser.setSource(((File) controller.getSource()).getName());
-            } else if (controller.getType().equals(DataAccessController.Type.DATABASE)) {
-                spectrumBrowser.setSource("Pride Experiment " + ((PrideDBAccessControllerImpl) controller).getExperimentAcc());
             }
             // set id
             spectrumBrowser.setId(spectrum.getId());

@@ -1,5 +1,6 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
+import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
@@ -8,14 +9,14 @@ import java.util.Collection;
 /**
  * PeptideTableModel contains all the detailed that displayed in peptide table.
  * <p/>
- * User: rwang
+ * @user: rwang, ypriverol
  * Date: 14-Apr-2010
  * Time: 15:58:15
  */
 public class PeptideTableModel extends AbstractPeptideTableModel {
 
 
-    public PeptideTableModel(Collection<CvTermReference> listPeptideScores) {
+    public PeptideTableModel(Collection<SearchEngineScoreCvTermReference> listPeptideScores) {
         super(listPeptideScores);
     }
 

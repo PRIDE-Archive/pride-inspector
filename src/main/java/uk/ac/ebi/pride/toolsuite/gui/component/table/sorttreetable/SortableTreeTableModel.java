@@ -5,6 +5,7 @@ import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 import org.jdesktop.swingx.treetable.TreeTableNode;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableHeader;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
+import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 
 import javax.swing.*;
 import javax.swing.RowSorter.SortKey;
@@ -41,13 +42,13 @@ public class SortableTreeTableModel extends DefaultTreeTableModel {
 
     public final Map<String, String> columnNames;
 
-    public final Collection<CvTermReference> proteinScores;
+    public final Collection<SearchEngineScoreCvTermReference> proteinScores;
 
 	/**
 	 * Constructs a sortable tree table model using the specified root node.
 	 * @param root The tree table node to be used as root.
 	 */
-	public SortableTreeTableModel(TreeTableNode root, final Collection<CvTermReference> listPeptideScores) {
+	public SortableTreeTableModel(TreeTableNode root, final Collection<SearchEngineScoreCvTermReference> listPeptideScores) {
 		super(root);
         this.proteinScores = listPeptideScores;
         columnNames = new LinkedHashMap<String, String>();
@@ -202,7 +203,7 @@ public class SortableTreeTableModel extends DefaultTreeTableModel {
 		}
 	}
 
-    private void addAdditionalColumns(Collection<CvTermReference> proteinScores) {
+    private void addAdditionalColumns(Collection<SearchEngineScoreCvTermReference> proteinScores) {
         columnNames.clear();
 
         // add columns for search engine scores
@@ -210,7 +211,7 @@ public class SortableTreeTableModel extends DefaultTreeTableModel {
         for (ProteinTableHeader header : headers) {
             columnNames.put(header.getHeader(), header.getToolTip());
             if (proteinScores != null && ProteinTableHeader.PROTEIN_ID.getHeader().equals(header.getHeader())) {
-                for (uk.ac.ebi.pride.utilities.term.CvTermReference scoreCvTerm : proteinScores) {
+                for (uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference scoreCvTerm : proteinScores) {
                     String name = scoreCvTerm.getName();
                     columnNames.put(name, name);
                 }

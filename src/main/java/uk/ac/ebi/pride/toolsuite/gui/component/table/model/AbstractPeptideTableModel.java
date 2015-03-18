@@ -1,5 +1,6 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
+import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.toolsuite.gui.component.sequence.AnnotatedProtein;
 import uk.ac.ebi.pride.toolsuite.gui.utils.Constants;
@@ -21,9 +22,9 @@ import java.util.Map;
  */
 public abstract class AbstractPeptideTableModel extends ProgressiveListTableModel<Void, Tuple<TableContentType, Object>> {
 
-    protected Collection<CvTermReference> listScores;
+    protected Collection<SearchEngineScoreCvTermReference> listScores;
 
-    AbstractPeptideTableModel(Collection<CvTermReference> listPeptideScores) {
+    AbstractPeptideTableModel(Collection<SearchEngineScoreCvTermReference> listPeptideScores) {
         this.listScores = listPeptideScores;
         initializeTableModel();
     }
@@ -41,7 +42,7 @@ public abstract class AbstractPeptideTableModel extends ProgressiveListTableMode
         for (PeptideTableHeader header : headers) {
             columnNames.put(header.getHeader(), header.getToolTip());
             if (listScores != null && PeptideTableHeader.NUMBER_OF_FRAGMENT_IONS_COLUMN.getHeader().equals(header.getHeader())) {
-                for (CvTermReference scoreCvTerm : listScores) {
+                for (SearchEngineScoreCvTermReference scoreCvTerm : listScores) {
                     String name = scoreCvTerm.getName();
                     columnNames.put(name, name);
                 }
@@ -263,7 +264,7 @@ public abstract class AbstractPeptideTableModel extends ProgressiveListTableMode
 
         int scoreIndex = 0;
 
-        for (CvTermReference scoreTermReference : listScores) {
+        for (SearchEngineScoreCvTermReference scoreTermReference : listScores) {
             if (scoreTermReference.getName().equals(columnName)) {
                 return scores.get(scoreIndex);
             }
