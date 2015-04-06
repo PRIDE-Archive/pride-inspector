@@ -2,6 +2,7 @@ package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
 
 import uk.ac.ebi.pride.utilities.data.core.StudyVariable;
+import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
@@ -12,7 +13,7 @@ import java.util.Map;
 /**
  * Quantitative peptide table model
  *
- * User: rwang
+ * @author: rwang, ypriverol
  * Date: 11/08/2011
  * Time: 13:34
  */
@@ -22,11 +23,11 @@ public class QuantPeptideTableModel extends AbstractPeptideTableModel {
 
     public static String ABUNDANCE_HEADER = "abundance_";
 
-    public QuantPeptideTableModel(Collection<CvTermReference> listScores) {
+    public QuantPeptideTableModel(Collection<SearchEngineScoreCvTermReference> listScores) {
         super(listScores);
     }
 
-    public QuantPeptideTableModel(Collection<CvTermReference> listScores, Map<Comparable, StudyVariable> studyVariables){
+    public QuantPeptideTableModel(Collection<SearchEngineScoreCvTermReference> listScores, Map<Comparable, StudyVariable> studyVariables){
         super(listScores);
         this.studyVariables = studyVariables;
         updateStudyVariablesHeader();

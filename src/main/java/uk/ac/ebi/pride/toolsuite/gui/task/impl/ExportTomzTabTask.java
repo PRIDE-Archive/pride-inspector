@@ -59,7 +59,8 @@ public class ExportTomzTabTask extends AbstractDataAccessTask<Void, Void> {
             mzTabConverter = new PRIDEMzTabConverter(controller);
             mzTabFile = mzTabConverter.getMZTabFile();
         }else if(controller instanceof MzIdentMLControllerImpl){
-            mzTabConverter = new MzIdentMLMzTabConverter(controller);
+            //Todo: We should be able to extend and do this independently.
+            mzTabConverter = new MzIdentMLMzTabConverter((MzIdentMLControllerImpl)controller);
             mzTabFile = mzTabConverter.getMZTabFile();
         }
         if(mzTabFile != null){

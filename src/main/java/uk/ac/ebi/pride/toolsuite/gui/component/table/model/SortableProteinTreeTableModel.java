@@ -9,6 +9,7 @@ import uk.ac.ebi.pride.toolsuite.gui.task.TaskEvent;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskListener;
 import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
+import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 
 import javax.swing.tree.TreePath;
@@ -32,7 +33,7 @@ public class SortableProteinTreeTableModel extends SortableTreeTableModel
      * @param root              The tree table node to be used as root.
      * @param listPeptideScores
      */
-    public SortableProteinTreeTableModel(TreeTableNode root, Collection<CvTermReference> listPeptideScores) {
+    public SortableProteinTreeTableModel(TreeTableNode root, Collection<SearchEngineScoreCvTermReference> listPeptideScores) {
         super(root, listPeptideScores);
         this.random = new Random();
         proteinGroupIdToProteinTableRow = new HashMap<Comparable, SortableProteinNode>();
@@ -255,7 +256,7 @@ public class SortableProteinTreeTableModel extends SortableTreeTableModel
 
         int scoreIndex = 0;
 
-        for (CvTermReference scoreTermReference : proteinScores) {
+        for (SearchEngineScoreCvTermReference scoreTermReference : proteinScores) {
             if (scoreTermReference.getName().equals(columnName)) {
                 return scores.get(scoreIndex);
             }

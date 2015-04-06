@@ -23,6 +23,7 @@ import uk.ac.ebi.pride.toolsuite.gui.utils.Constants;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.core.*;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
+import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -71,7 +72,7 @@ public class TableFactory {
      * @param listProteinScores List of Reference Scores
      * @return JTable   peptide table
      */
-    public static JXTable createProteinTable(final Collection<CvTermReference> listProteinScores, final boolean hasProteinGroups, DataAccessController controller) {
+    public static JXTable createProteinTable(final Collection<SearchEngineScoreCvTermReference> listProteinScores, final boolean hasProteinGroups, DataAccessController controller) {
         JXTable table;
         if (hasProteinGroups) {
             SortableProteinTreeTableModel proteinTreeTableModel = new SortableProteinTreeTableModel(new SortableProteinNode(), listProteinScores);
@@ -95,7 +96,7 @@ public class TableFactory {
      * @param controller data access controller
      * @return JTable   identification table
      */
-    public static JXTable createProteinTable(Collection<CvTermReference> listProteinScores, DataAccessController controller) {
+    public static JXTable createProteinTable(Collection<SearchEngineScoreCvTermReference> listProteinScores, DataAccessController controller) {
 
         ProteinTableModel identTableModel = new ProteinTableModel(listProteinScores);
         JXTable table = createDefaultJXTable(identTableModel);
@@ -275,13 +276,13 @@ public class TableFactory {
      * @param controller        data access controller
      * @return JTable   peptide table
      */
-    public static JTable createPeptideTable(Collection<CvTermReference> listPeptideScores, DataAccessController controller) {
+    public static JTable createPeptideTable(Collection<SearchEngineScoreCvTermReference> listPeptideScores, DataAccessController controller) {
 
         PeptideTableModel peptideTableModel = new PeptideTableModel(listPeptideScores);
         return createPeptideTable(peptideTableModel, controller);
     }
 
-    public static JTable createPSMTable(Collection<CvTermReference> listPeptideScores, int defaultRankingThreshold, DataAccessController controller) {
+    public static JTable createPSMTable(Collection<SearchEngineScoreCvTermReference> listPeptideScores, int defaultRankingThreshold, DataAccessController controller) {
         PeptideSpeciesPSMTableModel peptideTableModel = new PeptideSpeciesPSMTableModel(listPeptideScores, defaultRankingThreshold);
         return createPeptideTable(peptideTableModel, controller);
     }
@@ -540,7 +541,7 @@ public class TableFactory {
      * @param controller data access controller
      * @return JTable   protein quantitative table
      */
-    public static JTable createQuantProteinTable(DataAccessController controller, Collection<CvTermReference> listProteinScores) {
+    public static JTable createQuantProteinTable(DataAccessController controller, Collection<SearchEngineScoreCvTermReference> listProteinScores) {
         QuantProteinTableModel tableModel = new QuantProteinTableModel(listProteinScores);
         return createQuantProteinTable(controller, tableModel);
     }
@@ -551,7 +552,7 @@ public class TableFactory {
      * @param controller data access controller
      * @return JTable   protein quantitative table
      */
-    public static JTable createQuantProteinTable(DataAccessController controller, Collection<CvTermReference> listProteinScores, Map<Comparable, StudyVariable> studyVariables) {
+    public static JTable createQuantProteinTable(DataAccessController controller, Collection<SearchEngineScoreCvTermReference> listProteinScores, Map<Comparable, StudyVariable> studyVariables) {
         QuantProteinTableModel tableModel = new QuantProteinTableModel(listProteinScores, studyVariables);
         return createQuantProteinTable(controller, tableModel);
     }
@@ -562,7 +563,7 @@ public class TableFactory {
      * @param listPeptideScores List of CvTerm
      * @return JTable  peptide table
      */
-    public static JTable createQuantPeptideTable(DataAccessController controller, Collection<CvTermReference> listPeptideScores, Map<Comparable, StudyVariable> studyVariables) {
+    public static JTable createQuantPeptideTable(DataAccessController controller, Collection<SearchEngineScoreCvTermReference> listPeptideScores, Map<Comparable, StudyVariable> studyVariables) {
 
         DefaultTableColumnModelExt columnModel = new DefaultTableColumnModelExt();
         QuantPeptideTableModel tableModel = new QuantPeptideTableModel(listPeptideScores, studyVariables);
@@ -687,7 +688,7 @@ public class TableFactory {
      * @param listPeptideScores List of CvTerm
      * @return JTable  peptide table
      */
-    public static JTable createQuantPeptideTable(DataAccessController controller, Collection<CvTermReference> listPeptideScores) {
+    public static JTable createQuantPeptideTable(DataAccessController controller, Collection<SearchEngineScoreCvTermReference> listPeptideScores) {
 
         DefaultTableColumnModelExt columnModel = new DefaultTableColumnModelExt();
         QuantPeptideTableModel tableModel = new QuantPeptideTableModel(listPeptideScores);

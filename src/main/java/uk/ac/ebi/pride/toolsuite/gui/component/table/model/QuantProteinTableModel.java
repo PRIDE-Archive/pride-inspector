@@ -1,6 +1,7 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
 import uk.ac.ebi.pride.utilities.data.core.StudyVariable;
+import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
@@ -20,11 +21,11 @@ public class QuantProteinTableModel extends AbstractProteinTableModel {
 
     Map<Comparable, StudyVariable> studyVariables;
 
-    public QuantProteinTableModel(Collection<CvTermReference> listProteinScores) {
+    public QuantProteinTableModel(Collection<SearchEngineScoreCvTermReference> listProteinScores) {
         super(listProteinScores);
     }
 
-    public QuantProteinTableModel(Collection<CvTermReference> listProteinScores, Map<Comparable, StudyVariable> studyVariables){
+    public QuantProteinTableModel(Collection<SearchEngineScoreCvTermReference> listProteinScores, Map<Comparable, StudyVariable> studyVariables){
         super(listProteinScores);
         this.studyVariables = studyVariables;
         updateStudyVariablesHeader();

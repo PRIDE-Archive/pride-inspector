@@ -1,5 +1,6 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
+import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
@@ -14,7 +15,7 @@ import java.util.Collection;
  */
 public class ProteinTableModel extends AbstractProteinTableModel {
 
-    public ProteinTableModel(Collection<CvTermReference> listProteinScores) {
+    public ProteinTableModel(Collection<SearchEngineScoreCvTermReference> listProteinScores) {
         super(listProteinScores);
     }
 

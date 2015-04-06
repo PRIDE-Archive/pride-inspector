@@ -16,6 +16,7 @@ import uk.ac.ebi.pride.utilities.mol.IsoelectricPointUtils;
 import uk.ac.ebi.pride.utilities.mol.MoleculeUtilities;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.utilities.term.QuantCvTermReference;
+import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 
 import java.util.ArrayList;
@@ -283,9 +284,9 @@ public class TableDataRetriever {
     private static void addPeptideScores(PeptideTableRow peptideTableRow, DataAccessController controller,
                                          Comparable identId, Comparable peptideId) {
         Score score = controller.getPeptideScore(identId, peptideId);
-        Collection<CvTermReference> availablePeptideLevelScores = controller.getAvailablePeptideLevelScores();
+        Collection<SearchEngineScoreCvTermReference> availablePeptideLevelScores = controller.getAvailablePeptideLevelScores();
         if (score != null) {
-            for (CvTermReference availablePeptideLevelScore : availablePeptideLevelScores) {
+            for (SearchEngineScoreCvTermReference availablePeptideLevelScore : availablePeptideLevelScores) {
                 List<Number> values = score.getScores(availablePeptideLevelScore);
                 if (!values.isEmpty()) {
                     // take the first by default
@@ -298,7 +299,7 @@ public class TableDataRetriever {
                 }
             }
         } else {
-            for (CvTermReference availablePeptideLevelScore : availablePeptideLevelScores) {
+            for (SearchEngineScoreCvTermReference availablePeptideLevelScore : availablePeptideLevelScores) {
                 peptideTableRow.addScore(null);
             }
         }
@@ -307,9 +308,9 @@ public class TableDataRetriever {
     private static void addQuantPeptideScores(PeptideTableRow peptideTableRow, DataAccessController controller,
                                               Comparable identId, Comparable peptideId) {
         Score score = controller.getQuantPeptideScore(identId, peptideId);
-        Collection<CvTermReference> availablePeptideLevelScores = controller.getAvailablePeptideLevelScores();
+        Collection<SearchEngineScoreCvTermReference> availablePeptideLevelScores = controller.getAvailablePeptideLevelScores();
         if (score != null) {
-            for (CvTermReference availablePeptideLevelScore : availablePeptideLevelScores) {
+            for (SearchEngineScoreCvTermReference availablePeptideLevelScore : availablePeptideLevelScores) {
                 List<Number> values = score.getScores(availablePeptideLevelScore);
                 if (!values.isEmpty()) {
                     Double value =  (values.get(0) != null)?NumberUtilities.scaleDouble(values.get(0).doubleValue(),4):-1.0;
@@ -320,7 +321,7 @@ public class TableDataRetriever {
                 }
             }
         } else {
-            for (CvTermReference availablePeptideLevelScore : availablePeptideLevelScores) {
+            for (SearchEngineScoreCvTermReference availablePeptideLevelScore : availablePeptideLevelScores) {
                 peptideTableRow.addScore(null);
             }
         }
@@ -401,9 +402,9 @@ public class TableDataRetriever {
 
     private static void addProteinScores(ProteinTableRow proteinTableRow, DataAccessController controller, Comparable identId) {
         Score score = controller.getProteinScores(identId);
-        Collection<CvTermReference> availablePeptideLevelScores = controller.getAvailableProteinLevelScores();
+        Collection<SearchEngineScoreCvTermReference> availablePeptideLevelScores = controller.getAvailableProteinLevelScores();
         if (score != null) {
-            for (CvTermReference availablePeptideLevelScore : availablePeptideLevelScores) {
+            for (SearchEngineScoreCvTermReference availablePeptideLevelScore : availablePeptideLevelScores) {
                 List<Number> values = score.getScores(availablePeptideLevelScore);
                 if (!values.isEmpty()) {
                     // take the first by default
@@ -414,7 +415,7 @@ public class TableDataRetriever {
                 }
             }
         } else {
-            for (CvTermReference availablePeptideLevelScore : availablePeptideLevelScores) {
+            for (SearchEngineScoreCvTermReference availablePeptideLevelScore : availablePeptideLevelScores) {
                 proteinTableRow.addScore(null);
             }
         }
@@ -482,10 +483,10 @@ public class TableDataRetriever {
     public static List<Object> getProteinScoreHeaders(DataAccessController controller) throws DataAccessException {
         List<Object> headers = new ArrayList<Object>();
 
-        Collection<CvTermReference> cvHeaders = controller.getAvailableProteinLevelScores();
+        Collection<SearchEngineScoreCvTermReference> cvHeaders = controller.getAvailableProteinLevelScores();
 
         if (cvHeaders != null && !cvHeaders.isEmpty()) {
-            Iterator<CvTermReference> cvHeader = cvHeaders.iterator();
+            Iterator<SearchEngineScoreCvTermReference> cvHeader = cvHeaders.iterator();
             while (cvHeader.hasNext()) {
                 headers.add((cvHeader.next().getName()));
             }
