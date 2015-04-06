@@ -28,6 +28,7 @@ import uk.ac.ebi.pride.utilities.pia.modeller.scores.protein.ProteinScoring;
 import uk.ac.ebi.pride.utilities.pia.modeller.scores.protein.ProteinScoringAdditive;
 import uk.ac.ebi.pride.utilities.pia.modeller.scores.protein.ProteinScoringMultiplicative;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
+import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -49,8 +50,6 @@ import java.util.zip.GZIPInputStream;
  * <p/>
  * @author rwang
  * @author ypriverol
- * Date: 01-Feb-2010
- * Time: 10:37:49
  */
 public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Void, String> {
     private static final Logger logger = LoggerFactory.getLogger(OpenFileTask.class);
@@ -232,7 +231,7 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
      *
      * @param file file to open
      */
-    private void createNewDataAccessController(File file, Boolean inmemory) {
+    private void createNewDataAccessController(File file, Boolean inMemory) {
         try {
             // create dummy
             String message = (runProteinInferenceLater)?"loading.proteininferece":"loading.title";
@@ -373,7 +372,7 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
         CvScore cvScore = null;
         String scoreAccession = null;
         // try to get the main-score
-        for (CvTermReference termRef : controller.getAvailablePeptideLevelScores()) {
+        for (SearchEngineScoreCvTermReference termRef : controller.getAvailablePeptideLevelScores()) {
             CvScore newCvScore;
             scoreAccession = termRef.getAccession();
             newCvScore = CvScore.getCvRefByAccession(termRef.getAccession());

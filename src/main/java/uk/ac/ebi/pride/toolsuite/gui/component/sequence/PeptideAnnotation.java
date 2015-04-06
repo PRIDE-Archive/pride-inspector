@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Annotation to describe a peptide
  *
- * User: rwang
+ * @author: rwang
  * Date: 08/06/11
  * Time: 13:52
  */

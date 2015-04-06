@@ -5,9 +5,7 @@ import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
 /**
- * User: rwang
- * Date: 11-Feb-2010
- * Time: 11:54:20
+ * @author: Rui Wang
  */
 public class SimpleFileDialog extends JFileChooser {
     private static final String OPEN_FILE = "Open File";

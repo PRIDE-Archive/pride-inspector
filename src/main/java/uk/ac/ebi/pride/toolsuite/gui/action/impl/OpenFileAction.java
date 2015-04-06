@@ -30,8 +30,7 @@ import java.util.*;
  * <p/>
  * @author rwang
  * @author ypriverol
- * Date: 18-Aug-2010
- * Time: 11:40:33
+ *
  */
 public class OpenFileAction extends PrideAction implements TaskListener<Void, File> {
 

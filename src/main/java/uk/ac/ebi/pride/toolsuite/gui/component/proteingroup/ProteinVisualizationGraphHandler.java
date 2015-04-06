@@ -530,7 +530,7 @@ public class ProteinVisualizationGraphHandler {
     /**
      * Hides the PSMs of the given {@link VertexObject}, which should
      * be an {@link IntermediatePeptide} representative
-     * @param groupV
+     * @param peptideV
      */
     public void hidePSMs(VertexObject peptideV) {
         if ((peptideV == null) ||
