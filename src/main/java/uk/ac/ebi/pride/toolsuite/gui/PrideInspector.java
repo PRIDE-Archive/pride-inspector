@@ -19,11 +19,11 @@ import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.OpenMyAssayTask;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.OpenMyProjectTask;
 import uk.ac.ebi.pride.utilities.util.IOUtilities;
-
-import javax.jnlp.ServiceManager;
-import javax.jnlp.SingleInstanceListener;
-import javax.jnlp.SingleInstanceService;
-import javax.jnlp.UnavailableServiceException;
+//
+//import javax.jnlp.ServiceManager;
+//import javax.jnlp.SingleInstanceListener;
+//import javax.jnlp.SingleInstanceService;
+//import javax.jnlp.UnavailableServiceException;
 import javax.swing.*;
 import javax.swing.text.DefaultEditorKit;
 import java.awt.*;
@@ -54,8 +54,8 @@ public class PrideInspector extends Desktop {
     private JMenuBar menuBar;
     private StatusBar statusBar;
     private MainDataVisualizer visualizer;
-    private SingleInstanceService sis;
-    private SingleInstanceListener sisL;
+//    private SingleInstanceService sis;
+//    private SingleInstanceListener sisL;
     private Options cmdOptions;
     private CommandLineParser cmdParser;
     private String[] cmdArgs;
@@ -69,7 +69,7 @@ public class PrideInspector extends Desktop {
     @Override
     public void init(String[] args) {
         // register this instance as a single instance service listener for jnlp
-        registerJnlpListener();
+//        registerJnlpListener();
         // create command line parser
         createCmdLineParser();
         // store all the command line arguments
@@ -93,16 +93,16 @@ public class PrideInspector extends Desktop {
     /**
      * Register as a Java Web Start listener
      */
-    private void registerJnlpListener() {
-        try {
-            sis = (SingleInstanceService) ServiceManager.lookup("javax.jnlp.SingleInstanceService");
-            sisL = new SISListener();
-            sis.addSingleInstanceListener(sisL);
-        } catch (UnavailableServiceException e) {
-            sis = null;
-            logger.warn("Cannot create single instance service for web start");
-        }
-    }
+//    private void registerJnlpListener() {
+//        try {
+//            sis = (SingleInstanceService) ServiceManager.lookup("javax.jnlp.SingleInstanceService");
+//            sisL = new SISListener();
+//            sis.addSingleInstanceListener(sisL);
+//        } catch (UnavailableServiceException e) {
+//            sis = null;
+//            logger.warn("Cannot create single instance service for web start");
+//        }
+//    }
 
     /**
      * Method to create command line parser
@@ -439,9 +439,9 @@ public class PrideInspector extends Desktop {
 
     @Override
     public void finish() {
-        if (sis != null && sisL != null) {
-            sis.removeSingleInstanceListener(sisL);
-        }
+//        if (sis != null && sisL != null) {
+//            sis.removeSingleInstanceListener(sisL);
+//        }
     }
 
     public JFrame getMainComponent() {
@@ -477,10 +477,10 @@ public class PrideInspector extends Desktop {
         return file;
     }
 
-    private class SISListener implements SingleInstanceListener {
-        @Override
-        public void newActivation(String[] args) {
-            processCmdArgs(args);
-        }
-    }
+//    private class SISListener implements SingleInstanceListener {
+//        @Override
+//        public void newActivation(String[] args) {
+//            processCmdArgs(args);
+//        }
+//    }
 }

@@ -14,7 +14,6 @@ import uk.ac.ebi.pride.toolsuite.gui.utils.DataTransferPort;
 import uk.ac.ebi.pride.toolsuite.gui.utils.DataTransferProtocol;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 
-import javax.jnlp.ServiceManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -344,27 +343,27 @@ public class ProjectFileDownloadDialog extends JDialog implements ActionListener
             return;
         }
 
-        if(isRunningJavaWebStart()) {
-            // when running in web start using FTP by default
-            prideInspectorContext.setDataTransferProtocol(DataTransferProtocol.FTP);
-        } else {
+//        if(isRunningJavaWebStart()) {
+//            // when running in web start using FTP by default
+//            prideInspectorContext.setDataTransferProtocol(DataTransferProtocol.FTP);
+//        } else {
             Collections.sort(value, new DataTransferProtocol.PriorityComparator());
             prideInspectorContext.setDataTransferProtocol(value.get(0));
-        }
+//        }
 
         String filePath = prideInspectorContext.getOpenFilePath();
         List<FileDetail> filesToDownload = getFilesToDownload();
         downloadFiles(filePath, filesToDownload);
     }
 
-    private boolean isRunningJavaWebStart() {
-        try {
-            String[] serviceNames = ServiceManager.getServiceNames();
-            return serviceNames != null;
-        } catch (NoClassDefFoundError e) {
-            return false;
-        }
-    }
+//    private boolean isRunningJavaWebStart() {
+//        try {
+//            String[] serviceNames = ServiceManager.getServiceNames();
+//            return serviceNames != null;
+//        } catch (NoClassDefFoundError e) {
+//            return false;
+//        }
+//    }
 
     @Override
     public void cancelled(TaskEvent<Void> event) {
