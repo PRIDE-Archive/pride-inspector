@@ -62,14 +62,13 @@
         <junit.version>4.11</junit.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <logback-core.version>1.0.11</logback-core.version>
-        <ms-data-core-api.version>2.0.5-SNAPSHOT</ms-data-core-api.version>
+        <ms-data-core-api.version>2.0.4</ms-data-core-api.version>
         <jmzidentml.version>1.2.2</jmzidentml.version>
         <inspector-mzgraph-browser.version>2.0.0-SNAPSHOT</inspector-mzgraph-browser.version>
         <inspector-quality-chart.version>2.0.0-SNAPSHOT</inspector-quality-chart.version>
         <inspector-swing-utils.version>2.0.0-SNAPSHOT</inspector-swing-utils.version>
         <javahelp.version>2.0.02</javahelp.version>
-        <pride-utilities.version>2.0.4-SNAPSHOT</pride-utilities.version>
-        <jnlp-api.version>1.5.0</jnlp-api.version>
+        <pride-utilities.version>2.0.4</pride-utilities.version>
         <commons-cli.version>1.2</commons-cli.version>
         <eventbus.version>1.4</eventbus.version>
         <swingx-all.version>1.6.5-1</swingx-all.version>
@@ -149,14 +148,6 @@
             <groupId>uk.ac.ebi.pride.utilities</groupId>
             <artifactId>pride-utilities</artifactId>
             <version>${pride-utilities.version}</version>
-        </dependency>
-
-        <dependency>
-            <!--Use the following command to add jnlp.jar file to your local maven repository-->
-            <!--mvn install:install-file -Dfile="path\to\jdk\sample\jnlp\servlet\jnlp.jar" -DgroupId=javax.jnlp -DartifactId=jnlp-api -Dversion=1.5.0 =Dpackaging=jar-->
-            <groupId>javax.jnlp</groupId>
-            <artifactId>jnlp-api</artifactId>
-            <version>${jnlp-api.version}</version>
         </dependency>
 
         <dependency>
@@ -321,8 +312,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <plugin>
