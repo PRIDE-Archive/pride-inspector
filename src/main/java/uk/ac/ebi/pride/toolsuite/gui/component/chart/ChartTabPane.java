@@ -186,7 +186,6 @@ public class ChartTabPane extends DataAccessControllerPane<PrideDataReader, Void
     @Override
     public void succeed(TaskEvent<PrideDataReader> listTaskEvent) {
         this.reader = listTaskEvent.getValue();
-        int chartSize = reader.getHistogramDataSourceMap().size() + reader.getXYDataSourceMap().size() + reader.getErrorMap().size();
 
         showThumbnailView(reader);
 

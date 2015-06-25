@@ -4,7 +4,6 @@ import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 import org.jdesktop.swingx.treetable.TreeTableNode;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.ProteinTableHeader;
-import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 
 import javax.swing.*;

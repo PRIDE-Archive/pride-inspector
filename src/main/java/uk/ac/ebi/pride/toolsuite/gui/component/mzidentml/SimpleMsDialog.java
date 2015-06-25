@@ -8,11 +8,8 @@ import org.bushe.swing.event.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
-import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.MzIdentMLControllerImpl;
-import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.MzTabControllerImpl;
 import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.ReferencedIdentificationController;
 import uk.ac.ebi.pride.utilities.data.core.SpectraData;
-import uk.ac.ebi.pride.utilities.data.utils.MzIdentMLUtils;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.component.dialog.SimpleFileDialog;
@@ -330,7 +327,7 @@ public class SimpleMsDialog extends JDialog {
                 String filePath = selectedFile.getPath();
                 // remember the path has visited
                 context.setOpenFilePath(filePath.replace(selectedFile.getName(), ""));
-                if (filePath != null && filePath.length() > 0) {
+                if (filePath.length() > 0) {
                     msFileTable.getModel().setValueAt(filePath, row, 3);
                     setButton.setEnabled(true);
                     updateFormStatus();

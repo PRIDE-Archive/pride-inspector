@@ -10,24 +10,19 @@ import uk.ac.ebi.pride.toolsuite.gui.task.TaskAdapter;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.MzIdentMLControllerImpl;
-import uk.ac.ebi.pride.utilities.data.core.Protein;
-import uk.ac.ebi.pride.utilities.data.core.ProteinGroup;
 import uk.ac.ebi.pride.utilities.data.core.SpectraData;
 import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateProtein;
 import uk.ac.ebi.pride.utilities.pia.intermediate.prideimpl.PrideIntermediateProtein;
-import uk.ac.ebi.pride.utilities.pia.intermediate.prideimpl.PrideUtilities;
 import uk.ac.ebi.pride.utilities.pia.modeller.PIAModeller;
 import uk.ac.ebi.pride.utilities.pia.modeller.filter.AbstractFilter;
 import uk.ac.ebi.pride.utilities.pia.modeller.protein.inference.InferenceProteinGroup;
 import uk.ac.ebi.pride.utilities.pia.modeller.protein.inference.OccamsRazorInference;
-import uk.ac.ebi.pride.utilities.pia.modeller.protein.inference.ReportAllInference;
 import uk.ac.ebi.pride.utilities.pia.modeller.scores.CvScore;
 import uk.ac.ebi.pride.utilities.pia.modeller.scores.peptide.PeptideScoring;
 import uk.ac.ebi.pride.utilities.pia.modeller.scores.peptide.PeptideScoringUseBestPSM;
 import uk.ac.ebi.pride.utilities.pia.modeller.scores.protein.ProteinScoring;
 import uk.ac.ebi.pride.utilities.pia.modeller.scores.protein.ProteinScoringAdditive;
 import uk.ac.ebi.pride.utilities.pia.modeller.scores.protein.ProteinScoringMultiplicative;
-import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 
 import java.io.BufferedOutputStream;
@@ -36,7 +31,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -408,7 +402,6 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
         int nrGroups = piaModeller.getProteinModeller().getInferredProteins().size();
         Map<Comparable, Map<Comparable, List<Comparable>>> prideProteinGroupMapping = new HashMap<Comparable, Map<Comparable,List<Comparable>>>(nrGroups);
         
-        int count = 0;
         for (InferenceProteinGroup piaGroup : piaModeller.getProteinModeller().getInferredProteins()) {
             
             Map<Comparable, List<Comparable>> proteinPeptideMap = null;
@@ -428,8 +421,6 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
                     // null as the peptide list is interpreted as taking all peptides (PSMs)
                     proteinPeptideMap.put(proteinID, null);
                 }
-            } else {
-
             }
             
             prideProteinGroupMapping.put(piaGroup.getID(), proteinPeptideMap);

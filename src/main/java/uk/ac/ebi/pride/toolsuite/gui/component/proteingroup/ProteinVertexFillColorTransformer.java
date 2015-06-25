@@ -3,7 +3,6 @@ package uk.ac.ebi.pride.toolsuite.gui.component.proteingroup;
 import java.awt.Color;
 import java.awt.Paint;
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.apache.commons.collections15.Transformer;
 

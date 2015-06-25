@@ -136,7 +136,6 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
         if (!userParams.isEmpty()) {
             for (UserParam userParam : userParams) {
                 String name = userParam.getName().toLowerCase();
-                String value = userParam.getValue();
                 // tranche link
                 if (name.contains("tranche")) {
                     EventBus.publish(new SummaryReportEvent(this, controller, new SummaryReportMessage(SummaryReportMessage.Type.INFO, "Tranche Link Available", "This data source contains Tranche links")));

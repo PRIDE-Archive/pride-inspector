@@ -70,8 +70,7 @@ public class GeneralMetaDataGroup {
     }
 
     public List<InstrumentConfiguration> getInstrumentConfigurations() {
-        List<InstrumentConfiguration> instrumentConfigurations = null;
-        instrumentConfigurations = CollectionUtils.createListFromList(instrumentConfigurations);
+        List<InstrumentConfiguration> instrumentConfigurations = CollectionUtils.createEmptyList();
         if (hasMzGraphMetadata()) {
             instrumentConfigurations = getMzGraphMetaData().getInstrumentConfigurations();
         }

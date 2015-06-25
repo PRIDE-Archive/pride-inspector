@@ -21,8 +21,6 @@ import uk.ac.ebi.pride.toolsuite.gui.task.TaskEvent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * IdentTabPane displays protein identification and peptide related information.

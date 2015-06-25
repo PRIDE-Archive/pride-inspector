@@ -45,6 +45,7 @@ public class ContactTableModel extends ListBasedListTableModel<ParamGroup> {
     }
 
     private static final String CONTACT_INFORMATION = "contact information";
+
     private List<Person> contacts;
 
     public ContactTableModel(Collection<Person> contacts) {

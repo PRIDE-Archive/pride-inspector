@@ -10,7 +10,6 @@ import uk.ac.ebi.pride.toolsuite.gui.component.dialog.SimpleFileDialog;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop;
 import uk.ac.ebi.pride.toolsuite.gui.event.ForegroundDataSourceEvent;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
-import uk.ac.ebi.pride.toolsuite.gui.task.impl.ExportIdentificationPeptideTask;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.ExportTomzTabTask;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
@@ -21,7 +20,6 @@ import java.io.File;
 
 import static uk.ac.ebi.pride.toolsuite.gui.utils.Constants.DOT;
 import static uk.ac.ebi.pride.toolsuite.gui.utils.Constants.MZTAB_SEP_FILE;
-import static uk.ac.ebi.pride.toolsuite.gui.utils.Constants.TAB_SEP_FILE;
 
 /**
  * @author yperez

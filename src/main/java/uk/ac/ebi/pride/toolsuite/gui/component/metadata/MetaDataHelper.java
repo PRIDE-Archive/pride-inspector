@@ -34,12 +34,10 @@ public class MetaDataHelper {
         addUserParam(params, Constants.VERSION, metaData.getVersion());
 
         // add experiment related meta data
-        if (metaData instanceof ExperimentMetaData) {
-            addUserParam(params, Constants.TITLE, (metaData).getName());
-            addUserParam(params, Constants.SHORT_LABEL, (metaData).getShortLabel());
-            addUserParam(params, Constants.CREATION_DATE, (metaData).getCreationDate());
-            addUserParam(params, Constants.PUBLIC_DATE, (metaData).getPublicDate());
-        }
+        addUserParam(params, Constants.TITLE, (metaData).getName());
+        addUserParam(params, Constants.SHORT_LABEL, (metaData).getShortLabel());
+        addUserParam(params, Constants.CREATION_DATE, (metaData).getCreationDate());
+        addUserParam(params, Constants.PUBLIC_DATE, (metaData).getPublicDate());
 
         // additional parameters
         addParamGroup(params, metaData, Constants.EMPTY);
@@ -213,12 +211,10 @@ public class MetaDataHelper {
         // protocol steps
         List<ParamGroup> steps = new ArrayList<ParamGroup>();
         steps.add(protocol.getAnalysisParam());
-        if (steps != null) {
-            for (int i = 0; i < steps.size(); i++) {
-                String prefix = Constants.PROTOCOL_STEP + " " + (i + 1) + " - ";
-                ParamGroup step = steps.get(i);
-                addParamGroup(params, step, prefix);
-            }
+        for (int i = 0; i < steps.size(); i++) {
+            String prefix = Constants.PROTOCOL_STEP + " " + (i + 1) + " - ";
+            ParamGroup step = steps.get(i);
+            addParamGroup(params, step, prefix);
         }
         // additaional param
         addParamGroup(params, protocol, Constants.EMPTY);
@@ -262,8 +258,7 @@ public class MetaDataHelper {
             if (acc == null || !NumberUtilities.isNumber(acc)) {
                 acc = pubmedCvParam.getAccession();
             }
-
-            if (acc != null || !NumberUtilities.isNumber(acc)) {
+            if (!NumberUtilities.isNumber(acc)) {
                 String hyperLink = "<html><head></head><body><a href='http://www.ncbi.nlm.nih.gov/pubmed/" + acc + "'>" + acc + "</a></body></html>";
                 CvParam newCvParam = new CvParam(acc, Constants.PUBMED, pubmedCvParam.getCvLookupID(),
                         hyperLink, pubmedCvParam.getUnitAcc(), pubmedCvParam.getUnitName(), pubmedCvParam.getUnitCVLookupID());

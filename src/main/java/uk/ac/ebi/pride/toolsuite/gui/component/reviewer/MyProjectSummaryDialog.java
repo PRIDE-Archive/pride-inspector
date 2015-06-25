@@ -156,8 +156,6 @@ public class MyProjectSummaryDialog extends JDialog implements TaskListener<File
 
     @Override
     public void process(TaskEvent<List<String>> event) {
-        java.util.List<String> msgs = event.getValue();
-
         //todo:  display error message
 
         viewFilesButton.setEnabled(true);

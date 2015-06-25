@@ -17,7 +17,6 @@ import uk.ac.ebi.pride.toolsuite.gui.component.table.listener.TableCellMouseMoti
 import uk.ac.ebi.pride.toolsuite.gui.utils.Constants;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -25,7 +24,6 @@ import java.util.*;
 import java.util.List;
 import javax.help.CSH;
 import javax.swing.*;
-import javax.swing.GroupLayout;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.*;
@@ -471,9 +469,6 @@ public class MzIdMsDialog extends JDialog {
                                                        boolean hasFocus, int row, int column) {
             // get the original component
             final JLabel cell = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-            // get the current data access file
-            File file = fileList.get(row);
 
             // get the icon depending on the type of the data access controller
 

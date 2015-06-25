@@ -14,7 +14,6 @@ import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 import uk.ac.ebi.pride.utilities.data.core.*;
 import uk.ac.ebi.pride.utilities.mol.IsoelectricPointUtils;
 import uk.ac.ebi.pride.utilities.mol.MoleculeUtilities;
-import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.utilities.term.QuantCvTermReference;
 import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 import uk.ac.ebi.pride.utilities.util.NumberUtilities;

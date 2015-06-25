@@ -8,7 +8,6 @@ import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.SortableTreeT
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskEvent;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskListener;
 import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
-import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 

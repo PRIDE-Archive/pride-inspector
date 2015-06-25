@@ -101,7 +101,7 @@ public class BarChartRenderer extends JLabel implements TableCellRenderer {
             int width = this.getWidth() - 1;
             int height = this.getHeight();
             int xPos = 0;
-            int yPos = -1;
+            int yPos;
 
 
             // font metrics
@@ -124,7 +124,7 @@ public class BarChartRenderer extends JLabel implements TableCellRenderer {
             }
 
             // draw bar chart
-            int barWidth = -1;
+            int barWidth;
             int barHeight = fontAscent;
             // calculate x position
             xPos = width / 2;

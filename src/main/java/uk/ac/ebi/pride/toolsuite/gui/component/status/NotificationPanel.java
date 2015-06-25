@@ -1,9 +1,7 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.status;
 
-import net.java.balloontip.utils.ToolTipUtils;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
-import uk.ac.ebi.pride.toolsuite.gui.component.balloontip.TaskBalloon;
 import uk.ac.ebi.pride.toolsuite.gui.component.exception.ThrowableEntry;
 import uk.ac.ebi.pride.toolsuite.gui.component.exception.ThrowableHandler;
 

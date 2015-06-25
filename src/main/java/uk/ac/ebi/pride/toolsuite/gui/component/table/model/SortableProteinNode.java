@@ -2,7 +2,6 @@ package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
 import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.SortableTreeTableNode;
 import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
-import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 
 import java.util.*;

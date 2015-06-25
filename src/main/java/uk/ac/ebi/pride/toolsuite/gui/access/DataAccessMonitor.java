@@ -216,7 +216,7 @@ public class DataAccessMonitor extends PropertyChangeHelper {
     }
 
     public synchronized void addStatusController(DataAccessController controller, ProcessingDataSourceEvent.Status status) {
-        List<ProcessingDataSourceEvent.Status> statuses = null;
+        List<ProcessingDataSourceEvent.Status> statuses;
 
         synchronized (dataAccessControllerStatusLock) {
             if (dataAccessControllerStatus.containsKey(controller)) {

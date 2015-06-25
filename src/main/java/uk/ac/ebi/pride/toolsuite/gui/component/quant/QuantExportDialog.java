@@ -20,7 +20,6 @@ import uk.ac.ebi.pride.toolsuite.gui.task.impl.ExportTableDataTask;
 import uk.ac.ebi.pride.toolsuite.gui.url.HttpUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.utils.EnsemblSpeciesMapper;
 import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
-import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 
@@ -72,7 +71,7 @@ public class QuantExportDialog extends JDialog {
         this.appContext = (PrideInspectorContext) uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop.getInstance().getDesktopContext();
         this.setTitle(appContext.getProperty("export.quantitative.data.long.title"));
         ImageIcon dialogIcon = (ImageIcon) GUIUtilities.loadIcon(appContext.getProperty("export.quantitative.data.small.icon"));
-        this.setIconImage(dialogIcon.getImage());
+        if(dialogIcon != null) this.setIconImage(dialogIcon.getImage());
     }
 
     private void initComponents() {
@@ -453,7 +452,7 @@ public class QuantExportDialog extends JDialog {
                 for (int i = 0; i < rowCnt; i++) {
                     Object protein = proteinTable.getValueAt(i, protColIndex);
                     String prot = null;
-                    if (protein == null) {
+                    if (protein != null) {
                         prot = ((ProteinAccession) protein).getMappedAccession();
                     }
 
@@ -502,7 +501,7 @@ public class QuantExportDialog extends JDialog {
                         for (int i = 0; i < rowCnt; i++) {
                             Object protein = proteinTable.getValueAt(i, protColIndex);
                             String prot = null;
-                            if (protein == null) {
+                            if (protein != null) {
                                 prot = ((ProteinAccession) protein).getMappedAccession();
                             }
 

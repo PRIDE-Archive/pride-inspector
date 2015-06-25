@@ -5,7 +5,6 @@ import javax.swing.table.TableRowSorter;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
 /**

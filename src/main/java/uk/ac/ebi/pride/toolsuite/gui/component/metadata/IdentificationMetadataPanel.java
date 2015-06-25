@@ -50,7 +50,7 @@ public class IdentificationMetadataPanel extends JPanel {
 
             String nameProtocol = proteinProtocol.getName();
             if (nameProtocol == null) nameProtocol = "Dafault";
-            String softwareProtocol = (proteinProtocol != null && proteinProtocol.getAnalysisSoftware() != null)?proteinProtocol.getAnalysisSoftware().getName():"";
+            String softwareProtocol = (proteinProtocol.getAnalysisSoftware() != null)?proteinProtocol.getAnalysisSoftware().getName():"";
             proteinProtocolLabel.setText("Protein Identification Protocol: " + nameProtocol + ", Software: " + softwareProtocol);
             proteinProtocolLabel.setToolTipText(nameProtocol);
             // protocol table

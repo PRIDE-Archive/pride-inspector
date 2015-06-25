@@ -76,7 +76,7 @@ public class TableFactory {
         JXTable table;
         if (hasProteinGroups) {
             SortableProteinTreeTableModel proteinTreeTableModel = new SortableProteinTreeTableModel(new SortableProteinNode(), listProteinScores);
-            table = createDefaultJXTreeTable(proteinTreeTableModel, hasProteinGroups);
+            table = createDefaultJXTreeTable(proteinTreeTableModel, true);
             table.setEditable(false);
 
             String protAccColumnHeader = PeptideTreeTableModel.TableHeader.PROTEIN_ACCESSION_COLUMN.getHeader();

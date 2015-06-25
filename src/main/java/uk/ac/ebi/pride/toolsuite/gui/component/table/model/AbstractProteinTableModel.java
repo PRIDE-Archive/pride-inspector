@@ -4,7 +4,6 @@ import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.toolsuite.gui.component.sequence.AnnotatedProtein;
 import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
-import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.tools.protein_details_fetcher.model.Protein;
 
 import java.util.Collection;
@@ -163,7 +162,7 @@ public class AbstractProteinTableModel extends ProgressiveListTableModel<Void, T
         int scoreIndex = 0;
 
         for (SearchEngineScoreCvTermReference scoreTermReference : listScores) {
-            if (scoreTermReference.getName().equals(columnName)) {
+            if (scoreTermReference.getName().equals(columnName) && scores.contains(scoreIndex)) {
                 return scores.get(scoreIndex);
             }
             scoreIndex++;

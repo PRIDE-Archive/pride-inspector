@@ -38,8 +38,6 @@ public class SampleProtocolMetadataPanel extends JPanel {
                 scrollPane.setBorder(BorderFactory.createEmptyBorder());
                 sampleTabbedPane.addTab(sampleName, scrollPane);
             }
-        } else {
-            // todo: what if no samples are available, display a message?
         }
 
         // protocol

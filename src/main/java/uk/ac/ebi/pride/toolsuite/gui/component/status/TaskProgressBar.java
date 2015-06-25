@@ -1,7 +1,6 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.status;
 
 import uk.ac.ebi.pride.toolsuite.gui.EDTUtils;
-import uk.ac.ebi.pride.toolsuite.gui.component.balloontip.TaskBalloon;
 import uk.ac.ebi.pride.toolsuite.gui.task.Task;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskEvent;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskListener;

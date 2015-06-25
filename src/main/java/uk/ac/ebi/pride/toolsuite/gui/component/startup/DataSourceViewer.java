@@ -1,13 +1,9 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.startup;
 
-import net.java.balloontip.BalloonTip;
-import net.java.balloontip.styles.EdgedBalloonStyle;
-import net.java.balloontip.utils.TimingUtils;
 import org.bushe.swing.event.annotation.AnnotationProcessor;
 import org.bushe.swing.event.annotation.EventSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.pride.toolsuite.gui.component.balloontip.BalloonTipUtil;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.toolsuite.gui.EDTUtils;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
@@ -193,16 +189,16 @@ public class DataSourceViewer extends JPanel {
         DataAccessController controller = (DataAccessController) evt.getDataSource();
         if(context.getDataAccessMonitor().containStatusController(controller, evt.getStatus())){
             context.getDataAccessMonitor().removeStatusController(controller, evt.getStatus());
-            if(evt.getStatus() == ProcessingDataSourceEvent.Status.IDENTIFICATION_READING && controller.getType().equals(DataAccessController.Type.MZIDENTML) && !noadded){
-//                java.utils.List<DataAccessController> controllers = context.getControllers();
-//                int row = controllers.indexOf(controller);
-//                Icon icon = GUIUtilities.loadImageIcon(context.getProperty("open.mzidentml.ms.icon.small"));
-//                BalloonTip tip = BalloonTipUtil.createBalloonNote(summaryTitle, icon, "<html><p>" +"Click the icon to add the related spectra files"+ "</p></html>",BalloonTip.AttachLocation.ALIGNED,50, 10,true);
-//                TimingUtils.showTimedBalloon(tip, 5000);
-//                this.revalidate();
-//                this.repaint();
-//                noadded = true;
-            }
+//            if(evt.getStatus() == ProcessingDataSourceEvent.Status.IDENTIFICATION_READING && controller.getType().equals(DataAccessController.Type.MZIDENTML) && !noadded){
+////                java.utils.List<DataAccessController> controllers = context.getControllers();
+////                int row = controllers.indexOf(controller);
+////                Icon icon = GUIUtilities.loadImageIcon(context.getProperty("open.mzidentml.ms.icon.small"));
+////                BalloonTip tip = BalloonTipUtil.createBalloonNote(summaryTitle, icon, "<html><p>" +"Click the icon to add the related spectra files"+ "</p></html>",BalloonTip.AttachLocation.ALIGNED,50, 10,true);
+////                TimingUtils.showTimedBalloon(tip, 5000);
+////                this.revalidate();
+////                this.repaint();
+////                noadded = true;
+//            }
         }else
             context.getDataAccessMonitor().addStatusController(controller,evt.getStatus());
 
@@ -500,7 +496,7 @@ public class DataSourceViewer extends JPanel {
             String colName = sourceTable.getColumnName(col);
             if (colName.equals(TableHeader.CLOSE_COLUMN.getHeader())) {
                 // remove the data access controller from data access monitor
-                MzidentMLMSCellRenderer cellRender = (MzidentMLMSCellRenderer) sourceTable.getCellRenderer(row,col-1);
+               // MzidentMLMSCellRenderer cellRender = (MzidentMLMSCellRenderer) sourceTable.getCellRenderer(row,col-1);
 
                 java.util.List<DataAccessController> controllers = context.getControllers();
                 if (row >= 0 && row < controllers.size()) {

@@ -1,13 +1,9 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.renderer;
 
-import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * @ypriverol

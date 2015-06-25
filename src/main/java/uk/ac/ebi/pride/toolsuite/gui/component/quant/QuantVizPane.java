@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.EventBusSubscribable;
-import uk.ac.ebi.pride.toolsuite.gui.component.mzgraph.SpectrumViewPane;
 
 import javax.swing.*;
 import java.awt.*;

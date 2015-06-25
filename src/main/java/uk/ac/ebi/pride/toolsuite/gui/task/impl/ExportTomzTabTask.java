@@ -53,7 +53,7 @@ public class ExportTomzTabTask extends AbstractDataAccessTask<Void, Void> {
 
     @Override
     protected Void retrieve() throws Exception {
-        AbstractMzTabConverter mzTabConverter = null;
+        AbstractMzTabConverter mzTabConverter;
         MZTabFile mzTabFile = null;
         if(controller instanceof PrideXmlControllerImpl){
             mzTabConverter = new PRIDEMzTabConverter(controller);

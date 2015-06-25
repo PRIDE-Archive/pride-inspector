@@ -6,7 +6,6 @@ import org.bushe.swing.event.EventSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.toolsuite.gui.action.impl.*;
-import uk.ac.ebi.pride.toolsuite.gui.desktop.*;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessException;
 import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;

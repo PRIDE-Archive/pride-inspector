@@ -103,7 +103,7 @@ public class RetrievePeptideSpectrumDetailTask extends AbstractDataAccessTask<Vo
                     ptmMasses.add(monoMasses.get(0));
                 }
             }
-            deltaMass = MoleculeUtilities.calculateDeltaMz(sequence, mz, charge, ptmMasses);
+            deltaMass = (charge != null)? MoleculeUtilities.calculateDeltaMz(sequence, mz, charge, ptmMasses):null;
         }
         return deltaMass;
     }

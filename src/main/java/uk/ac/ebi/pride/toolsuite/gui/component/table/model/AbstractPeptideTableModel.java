@@ -5,7 +5,6 @@ import uk.ac.ebi.pride.utilities.util.Tuple;
 import uk.ac.ebi.pride.toolsuite.gui.component.sequence.AnnotatedProtein;
 import uk.ac.ebi.pride.toolsuite.gui.utils.Constants;
 import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
-import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.tools.protein_details_fetcher.model.Protein;
 
 import java.util.Collection;
