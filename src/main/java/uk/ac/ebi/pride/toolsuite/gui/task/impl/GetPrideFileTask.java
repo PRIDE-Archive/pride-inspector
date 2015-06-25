@@ -15,6 +15,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.pride.archive.dataprovider.file.ProjectFileType;
 import uk.ac.ebi.pride.toolsuite.gui.action.impl.OpenFileAction;
 import uk.ac.ebi.pride.toolsuite.gui.component.reviewer.SubmissionFileDetail;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskAdapter;
@@ -78,7 +79,7 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
                 URL downloadUrl = submissionEntry.getDownloadLink();
                 output = downloadFile(downloadUrl.getHost(), downloadUrl.getPort(), downloadUrl.getPath(), output, user, password);
 
-                if (output != null) {
+                if (output != null && !isRAW(submissionEntry)) {
                     downloadedFiles.add(output);
                 }
 
@@ -92,11 +93,23 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
 
             // open downloaded files
             if (toOpenFile && !downloadedFiles.isEmpty()) {
+                
                 OpenFileAction openFileAction = new OpenFileAction(null, null, downloadedFiles);
                 openFileAction.actionPerformed(null);
             }
         }
         return null;
+    }
+
+    /**
+     * Remove the files to be open that are not peaks or results.
+     * @param submissionEntry
+     * @return
+     */
+    private boolean isRAW(SubmissionFileDetail submissionEntry) {
+        if(submissionEntry.getFileType() == ProjectFileType.RESULT || submissionEntry.getFileType() == ProjectFileType.PEAK)
+            return false;
+        return true;
     }
 
     private void checkInterruption() throws InterruptedException {
