@@ -427,7 +427,6 @@ public class PeptideSelectionPane extends DataAccessControllerPane<Peptide, Void
             ProteinGroupChartEvent.Type type = proteinGroupChartEvent.getType();
             if(type == ProteinGroupChartEvent.Type.PROTEIN){
                 Protein protein = (Protein) proteinGroupChartEvent.getSource();
-                String id = protein.getId().toString();
             }
 
         }

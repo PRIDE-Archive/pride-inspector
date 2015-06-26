@@ -39,7 +39,7 @@ public class ShowParamsMouseListener extends MouseAdapter{
             Object val = tableModel.getValueAt(table.convertRowIndexToModel(row), table.convertColumnIndexToModel(col));
             if (val != null) {
                 String valStr = val.toString();
-                String protId = null;
+                String protId;
                 String peptideId = null;
                 if (valStr.contains(Constants.COMMA)) {
                     String[] parts = valStr.split(Constants.COMMA);

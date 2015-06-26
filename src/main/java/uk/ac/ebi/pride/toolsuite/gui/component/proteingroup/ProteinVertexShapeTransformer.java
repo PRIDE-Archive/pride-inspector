@@ -50,7 +50,7 @@ public class ProteinVertexShapeTransformer
      * @return
      */
     public Component prepareRenderer(VertexObject vertex) {
-        return rc.getVertexLabelRenderer().<VertexObject>getVertexLabelRendererComponent(
+        return rc.getVertexLabelRenderer().getVertexLabelRendererComponent(
                 rc.getScreenDevice(),
                 rc.getVertexLabelTransformer().transform(vertex),
                 rc.getVertexFontTransformer().transform(vertex),

@@ -260,32 +260,12 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
             if (QuantSelectionEvent.Type.PROTEIN.equals(event.getType())) {
                 Comparable id = event.getId();
                 QuantPeptideTableModel tableModel = (QuantPeptideTableModel) pepTable.getModel();
-                DataAccessController controller = event.getController();
                 if (event.isSelected()) {
                     updateTable(tableModel, id, true);
                 } else {
                     updateTable(tableModel, id, false);
                 }
             }
-
-//            Comparable identId = event.getId();
-//
-//            logger.debug("Identification has been selected: {}", identId);
-//
-//            updateProteinLabel(identId);
-//
-//            // clear peptide table,
-//            QuantPeptideTableModel tableModel = (QuantPeptideTableModel) pepTable.getModel();
-//
-//            // reset sorting behavior
-//            pepTable.setRowSorter(new NumberTableRowSorter(tableModel));
-//            tableModel.removeAllRows();
-//
-//            // cancel ongoing table update tasks
-//            cancelOngoingTableUpdates(tableModel);
-//
-//            // update peptide table
-//            updateTable(tableModel, identId);
         }
 
         private void updateProteinLabel(Comparable identId) {

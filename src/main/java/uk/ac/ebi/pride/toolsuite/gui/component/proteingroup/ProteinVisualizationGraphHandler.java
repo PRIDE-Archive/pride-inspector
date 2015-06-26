@@ -513,7 +513,7 @@ public class ProteinVisualizationGraphHandler {
     /**
      * Shows the PSMs of the given {@link VertexObject}, which should
      * be an {@link IntermediatePeptide} representative
-     * @param groupV
+     * @param peptideV
      */
     public Collection<VertexObject> showPSMs(VertexObject peptideV) {
         if ((peptideV == null) ||

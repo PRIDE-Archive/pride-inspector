@@ -12,7 +12,8 @@ import java.util.List;
  */
 public class PeptideAnnotation {
 
-    private int start = -1, end = -1;
+    private int start = -1;
+    private int end = -1;
     /**
      * peptide sequence
      */
@@ -77,8 +78,7 @@ public class PeptideAnnotation {
         PeptideAnnotation that = (PeptideAnnotation) o;
 
         if (end != that.end) return false;
-        if (start != that.start) return false;
-        return !(ptmAnnotations != null ? !ptmAnnotations.equals(that.ptmAnnotations) : that.ptmAnnotations != null) && !(sequence != null ? !sequence.equals(that.sequence) : that.sequence != null);
+        return start == that.start && !(ptmAnnotations != null ? !ptmAnnotations.equals(that.ptmAnnotations) : that.ptmAnnotations != null) && !(sequence != null ? !sequence.equals(that.sequence) : that.sequence != null);
 
     }
 

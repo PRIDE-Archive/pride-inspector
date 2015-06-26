@@ -72,7 +72,6 @@ public interface Constants {
     public static final String XML_FILE = ".xml";
     public static final String GZIPPED_FILE = ".gz";
     public static final String MZIDENT_FILE =".mzid";
-    //Todo: We added the large extension for mzidentml files but in the future will be only mzid
     public static final String MZIDENT_FILE_LARGE=".mzidentml";
     public static final String MZXML_FILE   = ".mzxml";
     public static final String MGF_FILE = ".mgf";

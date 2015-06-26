@@ -248,7 +248,6 @@ public class AttributedSequenceBuilder {
      * @return int mapped index
      */
     private static int mapIndex(int index) {
-        // todo: is this the best implementation?
         return ((index - index % PROTEIN_SEGMENT_LENGTH) / PROTEIN_SEGMENT_LENGTH) * PROTEIN_SEGMENT_GAP.length() + index;
     }
 }

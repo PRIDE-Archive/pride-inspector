@@ -61,7 +61,7 @@ public class ProteinVertexLabeller
      * @return
      */
     public Component prepareRenderer(VertexObject vertex) {
-        return rc.getVertexLabelRenderer().<VertexObject>getVertexLabelRendererComponent(
+        return rc.getVertexLabelRenderer().getVertexLabelRendererComponent(
                 rc.getScreenDevice(),
                 rc.getVertexLabelTransformer().transform(vertex),
                 rc.getVertexFontTransformer().transform(vertex),
@@ -74,7 +74,7 @@ public class ProteinVertexLabeller
     public void labelVertex(RenderContext<VertexObject, String> rc, Layout<VertexObject, String> layout, VertexObject v, String label) {
         Graph<VertexObject, String> graph = layout.getGraph();
         
-        if (rc.getVertexIncludePredicate().evaluate(Context.<Graph<VertexObject, String>, VertexObject>getInstance(graph,v)) == false) {
+        if (!rc.getVertexIncludePredicate().evaluate(Context.getInstance(graph, v))) {
             return;
         }
         

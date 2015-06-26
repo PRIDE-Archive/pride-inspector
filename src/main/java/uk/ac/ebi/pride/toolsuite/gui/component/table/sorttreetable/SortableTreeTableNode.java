@@ -355,12 +355,8 @@ public class SortableTreeTableNode extends DefaultMutableTreeTableNode implement
 		if (aNode == null) {
 			retval = false;
 		} else {
-			if (getChildCount() == 0) {
-				retval = false;
-			} else {
-				retval = (aNode.getParent() == this);
-			}
-		}
+            retval = getChildCount() != 0 && (aNode.getParent() == this);
+        }
 
 		return retval;
 	}
@@ -662,7 +658,7 @@ public class SortableTreeTableNode extends DefaultMutableTreeTableNode implement
                 retval = subtree.nextElement();
             } else if (children.hasMoreElements()) {
                 subtree = new PostorderEnumeration(
-                                (TreeNode)children.nextElement());
+                        children.nextElement());
                 retval = subtree.nextElement();
             } else {
                 retval = root;

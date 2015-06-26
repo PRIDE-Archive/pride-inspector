@@ -188,7 +188,7 @@ public class ProteinLayout<E> implements Layout<VertexObject, E> {
      * the vertex
      * 
      * @param vertex
-     * @param x
+     * @param xPos
      */
     private void buildTree(VertexObject vertex, int xPos) {
         if (!alreadyDone.contains(vertex)) {

@@ -82,7 +82,6 @@ public class SummaryItemPanel extends JPanel {
         label.setFont(label.getFont().deriveFont(DEFAULT_TITLE_FONT_SIZE));
 
         // set icon
-        Icon icon;
         if (count > 0) {
             label.setFont(label.getFont().deriveFont(Font.BOLD));
         }

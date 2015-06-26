@@ -29,8 +29,7 @@ public class ProteinAccession implements Comparable{
 
         ProteinAccession that = (ProteinAccession) o;
 
-        if (accession != null ? !accession.equals(that.accession) : that.accession != null) return false;
-        return !(mappedAccession != null ? !mappedAccession.equals(that.mappedAccession) : that.mappedAccession != null);
+        return !(accession != null ? !accession.equals(that.accession) : that.accession != null) && !(mappedAccession != null ? !mappedAccession.equals(that.mappedAccession) : that.mappedAccession != null);
 
     }
 

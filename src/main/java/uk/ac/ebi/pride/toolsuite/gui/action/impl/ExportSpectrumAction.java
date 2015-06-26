@@ -76,7 +76,7 @@ public class ExportSpectrumAction extends PrideAction {
     @EventSubscriber(eventClass = SpectrumAddEvent.class)
     public void onSpectrumAddEvent(SpectrumAddEvent evt) {
         try {
-            DataAccessController controller = (DataAccessController) evt.getController();
+            DataAccessController controller = evt.getController();
             this.setEnabled(controller != null && controller.hasSpectrum());
         } catch (DataAccessException e) {
             logger.error("Failed to check the data access controller", e);

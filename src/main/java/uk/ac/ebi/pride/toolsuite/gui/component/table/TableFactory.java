@@ -1067,10 +1067,10 @@ public class TableFactory {
                 ActionListener aggrListener = new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
-                        TableColumnExt column = (TableColumnExt) treeTbl.getColumnExt(col);
+                        TableColumnExt column = treeTbl.getColumnExt(col);
                     }
                 };
-                TableColumnExt column = (TableColumnExt) treeTbl.getColumnExt(col);
+//           TableColumnExt column = (TableColumnExt) treeTbl.getColumnExt(col);
                 popup.add(sortMenu);
 //				popup.add(aggrMenu);
 //				popup.add(hideItem);

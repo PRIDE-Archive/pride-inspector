@@ -121,9 +121,7 @@ public class PTMAnnotation {
         if (avgMassDeltas != null ? !avgMassDeltas.equals(that.avgMassDeltas) : that.avgMassDeltas != null)
             return false;
         if (modDatabase != null ? !modDatabase.equals(that.modDatabase) : that.modDatabase != null) return false;
-        if (modDatabaseVersion != null ? !modDatabaseVersion.equals(that.modDatabaseVersion) : that.modDatabaseVersion != null)
-            return false;
-        return !(monoMassDeltas != null ? !monoMassDeltas.equals(that.monoMassDeltas) : that.monoMassDeltas != null) && !(name != null ? !name.equals(that.name) : that.name != null);
+        return !(modDatabaseVersion != null ? !modDatabaseVersion.equals(that.modDatabaseVersion) : that.modDatabaseVersion != null) && !(monoMassDeltas != null ? !monoMassDeltas.equals(that.monoMassDeltas) : that.monoMassDeltas != null) && !(name != null ? !name.equals(that.name) : that.name != null);
 
     }
 

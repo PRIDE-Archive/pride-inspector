@@ -577,19 +577,22 @@ public class MzIdMsDialog extends JDialog {
     }
 
     private List<File> recursiveFileFolder(File file, List<File> files) {
-        if (!file.isDirectory()) {
-            files.add(file);
-        } else {
-            if(file != null && file.listFiles() != null && file.listFiles().length >0){
-                for (File fileOnDir : file.listFiles()) {
-                    String name = fileOnDir.getName();
-                    if (getFileType(name) != null || fileOnDir.isDirectory()) {
-                        files = (recursiveFileFolder(fileOnDir, files));
+        if(file != null){
+            if (!file.isDirectory()) {
+                files.add(file);
+            } else {
+                if(file.listFiles() != null && file.listFiles().length >0){
+                    for (File fileOnDir : file.listFiles()) {
+                        String name = fileOnDir.getName();
+                        if (getFileType(name) != null || fileOnDir.isDirectory()) {
+                            files = (recursiveFileFolder(fileOnDir, files));
+                        }
                     }
                 }
-            }
 
+            }
         }
+
         return files;
     }
 

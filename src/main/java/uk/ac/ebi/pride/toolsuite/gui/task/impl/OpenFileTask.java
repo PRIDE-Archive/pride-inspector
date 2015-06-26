@@ -396,7 +396,7 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
         List<AbstractFilter> filters = null;
         
         // perform the protein inferences
-        piaModeller.getProteinModeller().infereProteins(pepScoring, protScoring, OccamsRazorInference.class, filters, false);
+        piaModeller.getProteinModeller().infereProteins(pepScoring, protScoring, OccamsRazorInference.class, null, false);
         
         // create the protein groups
         int nrGroups = piaModeller.getProteinModeller().getInferredProteins().size();
@@ -405,24 +405,21 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
         for (InferenceProteinGroup piaGroup : piaModeller.getProteinModeller().getInferredProteins()) {
             
             Map<Comparable, List<Comparable>> proteinPeptideMap = null;
-            
-            if ((filters == null) || (filters.size() < 1)) {
-                
-                Set<IntermediateProtein> proteinSet = new HashSet<IntermediateProtein>(piaGroup.getProteins());
-                // include the subGroups
-                for (InferenceProteinGroup subGroup : piaGroup.getSubGroups()) {
-                    proteinSet.addAll(subGroup.getProteins());
-                }
-                
-                proteinPeptideMap = new HashMap<Comparable, List<Comparable>>(proteinSet.size());
-                
-                for (IntermediateProtein protein : proteinSet) {
-                    Comparable proteinID = ((PrideIntermediateProtein)protein).getPrideProteinID();
-                    // null as the peptide list is interpreted as taking all peptides (PSMs)
-                    proteinPeptideMap.put(proteinID, null);
-                }
+
+            Set<IntermediateProtein> proteinSet = new HashSet<IntermediateProtein>(piaGroup.getProteins());
+            // include the subGroups
+            for (InferenceProteinGroup subGroup : piaGroup.getSubGroups()) {
+                proteinSet.addAll(subGroup.getProteins());
             }
-            
+
+            proteinPeptideMap = new HashMap<Comparable, List<Comparable>>(proteinSet.size());
+
+            for (IntermediateProtein protein : proteinSet) {
+                Comparable proteinID = ((PrideIntermediateProtein)protein).getPrideProteinID();
+                // null as the peptide list is interpreted as taking all peptides (PSMs)
+                proteinPeptideMap.put(proteinID, null);
+            }
+
             prideProteinGroupMapping.put(piaGroup.getID(), proteinPeptideMap);
         }
         

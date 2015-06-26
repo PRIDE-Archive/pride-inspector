@@ -351,7 +351,7 @@ public class QuantProteinSelectionPane extends DataAccessControllerPane implemen
                     retrieveTask.addTaskListener((TaskListener) parentComponent);
                 }
                 // register protein tab as a task listener
-                retrieveTask.addTaskListener((ProgressiveListTableModel) tableModel);
+                retrieveTask.addTaskListener(tableModel);
 
                 TaskUtil.startBackgroundTask(retrieveTask, controller);
             }

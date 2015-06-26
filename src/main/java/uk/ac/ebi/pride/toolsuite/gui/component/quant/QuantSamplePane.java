@@ -44,7 +44,7 @@ public class QuantSamplePane extends DataAccessControllerPane {
     @Override
     protected void addComponents() {
         // create identification table
-        QuantitativeSample sample = null;
+        QuantitativeSample sample;
         try {
             sample = controller.getQuantSample();
             sampleDetailTable = TableFactory.createQuantSampleTable(sample);

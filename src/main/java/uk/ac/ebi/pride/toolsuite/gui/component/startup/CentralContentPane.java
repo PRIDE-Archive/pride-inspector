@@ -91,7 +91,7 @@ public class CentralContentPane extends JPanel {
         logger.debug("A new foreground data access controller has been selected");
         // add new tabs
         DataAccessController controller = (DataAccessController) evt.getNewForegroundDataSource();
-        String welcomeMessage           = (String) evt.getMessage();
+        String welcomeMessage           = evt.getMessage();
 
         if (ForegroundDataSourceEvent.Status.EMPTY.equals(evt.getStatus())) {
             if (!isLocked()) {

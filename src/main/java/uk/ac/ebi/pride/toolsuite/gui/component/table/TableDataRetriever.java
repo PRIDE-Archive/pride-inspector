@@ -120,7 +120,7 @@ public class TableDataRetriever {
                 }
             }
             double theoreticalMz = controller.getPeptideTheoreticalMz(identId, peptideId);
-            Double deltaMass = 0.0;
+            Double deltaMass;
             if(theoreticalMz == -1)
               deltaMass = MoleculeUtilities.calculateDeltaMz(sequence, mz, charge, ptmMasses);
             else
