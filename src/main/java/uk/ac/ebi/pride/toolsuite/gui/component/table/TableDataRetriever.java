@@ -100,8 +100,9 @@ public class TableDataRetriever {
 
         // precursor charge
         Integer charge = controller.getPeptidePrecursorCharge(identId, peptideId);
-        Comparable specId = controller.getPeptideSpectrumId(identId, peptideId);
-        if (charge == null && specId != null) {
+        Comparable specId = null;
+        if (charge == null && controller.hasSpectrum()){
+            specId = controller.getPeptideSpectrumId(identId, peptideId);
             charge = controller.getSpectrumPrecursorCharge(specId);
             if (charge == null || charge == 0) {
                 charge = null;
@@ -109,9 +110,14 @@ public class TableDataRetriever {
         }
         peptideTableRow.setPrecursorCharge(charge);
 
-        if (specId != null) {
-            double mz = controller.getSpectrumPrecursorMz(specId);
-            mz = (mz == -1)? controller.getPeptidePrecursorMz(identId,peptideId):mz;
+        Double mz = controller.getPeptidePrecursorMz(identId,peptideId);
+
+        if (mz == -1 && controller.hasSpectrum()) {
+            if(specId == null)
+                specId = controller.getPeptideSpectrumId(identId, peptideId);
+            mz = controller.getSpectrumPrecursorMz(specId);
+        }
+        if(mz != -1){
             List<Double> ptmMasses = new ArrayList<Double>();
             for (Modification mod : mods) {
                 List<Double> monoMasses = mod.getMonoisotopicMassDelta();
@@ -122,14 +128,14 @@ public class TableDataRetriever {
             double theoreticalMz = controller.getPeptideTheoreticalMz(identId, peptideId);
             Double deltaMass;
             if(theoreticalMz == -1)
-              deltaMass = MoleculeUtilities.calculateDeltaMz(sequence, mz, charge, ptmMasses);
+                deltaMass = MoleculeUtilities.calculateDeltaMz(sequence, mz, charge, ptmMasses);
             else
                 deltaMass = MoleculeUtilities.calculateDeltaMz(mz, theoreticalMz);
 
             peptideTableRow.setDeltaMz(deltaMass == null ? null : NumberUtilities.scaleDouble(deltaMass, 4));
 
             peptideTableRow.setPrecursorMz(mz == -1 ? null : NumberUtilities.scaleDouble(mz, 4));
-        } else {
+        }else{
             peptideTableRow.setDeltaMz(null);
             peptideTableRow.setPrecursorMz(null);
         }

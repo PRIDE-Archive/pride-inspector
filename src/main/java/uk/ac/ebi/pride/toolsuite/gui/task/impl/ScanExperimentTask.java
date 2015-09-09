@@ -70,7 +70,7 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
             if (hasQuantData) {
                 getQuantHeaders();
             }
-
+            long date = System.currentTimeMillis();
             // retrieve protein group ids
             Collection<Comparable> proteinGroupIds = getProteinGroupIds();
 
@@ -95,7 +95,7 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
                         for (Comparable peptideId : ids) {
                             getPeptideData(proteinId, peptideId);
 
-                            if (controller.getPeptideSpectrumId(proteinId, peptideId) == null) {
+                            if (!controller.hasSpectrum() || controller.getPeptideSpectrumId(proteinId, peptideId) == null) {
                                 missingSpectrumLinks++;
                             }
 
@@ -113,6 +113,7 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
             if (missingSpectrumLinks > 0) {
                 EventBus.publish(new SummaryReportEvent(this, controller, new SummaryReportMessage(SummaryReportMessage.Type.WARNING, "Missing spectra [" + missingSpectrumLinks + "]", "The number of peptides without spectrum links")));
             }
+            logger.info("LOAD INFORMATION | All the proteins has been shown in: |{}| milliseconds", System.currentTimeMillis() - date);
         } catch (DataAccessException dex) {
             String msg = "Failed to retrieve protein and peptide related data";
             logger.error(msg, dex);

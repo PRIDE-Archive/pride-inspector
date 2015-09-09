@@ -87,6 +87,7 @@ public class RetrievePeptideTableTask extends AbstractDataAccessTask<Void, Tuple
     @Override
     protected Void retrieve() throws Exception {
         try {
+
             Collection<Comparable> identIds = controller.getProteinIds();
 
             int identSize = identIds.size();
@@ -108,7 +109,6 @@ public class RetrievePeptideTableTask extends AbstractDataAccessTask<Void, Tuple
                 }
 
             }
-
         } catch (DataAccessException dex) {
             String msg = "Failed to retrieve peptide related data";
             logger.error(msg, dex);

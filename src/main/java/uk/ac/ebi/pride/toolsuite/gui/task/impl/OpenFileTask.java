@@ -168,7 +168,11 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
      * @param file file to open
      */
     private void createNewDataAccessController(File file) {
+
         try {
+
+            long date = System.currentTimeMillis();
+
             String message = (runProteinInferenceLater)?"loading.proteininferece":"loading.title";
             // create dummy
             EmptyDataAccessController dummy = createEmptyDataAccessController(message);
@@ -211,6 +215,9 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
                 // add the real thing
                 context.replaceDataAccessController(dummy, controller, false, message);
             }
+
+            logger.info("FIRST LOAD | File loading first loading has been done in: |{}| milliseconds", System.currentTimeMillis() - date);
+
         } catch (InterruptedException ex) {
             logger.warn("File loading has been interrupted: {}", file.getName());
         } catch (Exception err) {
@@ -228,12 +235,15 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
     private void createNewDataAccessController(File file, Boolean inMemory) {
         try {
             // create dummy
+
+            long date = System.currentTimeMillis();
+
             String message = (runProteinInferenceLater)?"loading.proteininferece":"loading.title";
 
             EmptyDataAccessController dummy = createEmptyDataAccessController(message);
 
             Constructor<D> cstruct = dataAccessControllerClass.getDeclaredConstructor(File.class, Boolean.TYPE);
-            DataAccessController controller = cstruct.newInstance(inputFile, Boolean.TRUE);
+            DataAccessController controller = null;
             
             if (runProteinInferenceLater) {
                 cstruct = dataAccessControllerClass.getDeclaredConstructor(File.class, Boolean.TYPE, Boolean.TYPE);
@@ -269,6 +279,9 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
                 // add the real thing
                 context.replaceDataAccessController(dummy, controller, false, message);
             }
+
+            logger.info("FIRST LOAD | File loading first loading has been done in: |{}| milliseconds", System.currentTimeMillis() - date);
+
         } catch (InterruptedException ex) {
             logger.warn("File loading has been interrupted: {}", file.getName());
         } catch (Exception err) {

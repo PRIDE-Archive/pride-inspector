@@ -87,6 +87,9 @@ public class RetrieveSpectrumTableTask extends AbstractDataAccessTask<Void, Tupl
     @Override
     protected Void retrieve() throws Exception {
         try {
+
+            long date = System.currentTimeMillis();
+
             EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.SPECTRA_READING, controller));
             Collection<Comparable> specIds = controller.getSpectrumIds();
 
@@ -126,6 +129,7 @@ public class RetrieveSpectrumTableTask extends AbstractDataAccessTask<Void, Tupl
                 }
 
             }
+            logger.info("SPECTRUM LOAD | All {} spectrum has been shown in: {} milliseconds", size, System.currentTimeMillis() - date);
             EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.SPECTRA_READING,controller));
         } catch (DataAccessException dex) {
             String msg = "Failed to retrieve spectrum related data";

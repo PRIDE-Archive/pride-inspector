@@ -36,6 +36,7 @@ public class LoadChartDataTask extends AbstractDataAccessTask<PrideDataReader, V
     @Override
     protected PrideDataReader retrieve() throws Exception {
         PrideDataReader reader = null;
+        long date = System.currentTimeMillis();
         EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.CHART_GENERATION, controller));
         try {
 
@@ -45,7 +46,7 @@ public class LoadChartDataTask extends AbstractDataAccessTask<PrideDataReader, V
             logger.error(msg, ex);
             appContext.addThrowableEntry(new ThrowableEntry(MessageType.ERROR, msg, ex));
         }
-
+        logger.info("CHARTS LOAD | All the charts has been shown in: |{}| milliseconds", System.currentTimeMillis() - date );
         EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.CHART_GENERATION, controller));
         return reader;
     }

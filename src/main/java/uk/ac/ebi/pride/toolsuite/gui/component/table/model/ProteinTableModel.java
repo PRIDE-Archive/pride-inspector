@@ -9,7 +9,7 @@ import java.util.Collection;
 /**
  * IdentificationTableModel stores all information to be displayed in the identification table.
  * <p/>
- * User: rwang
+ * User: ypriverol
  * Date: 14-Apr-2010
  * Time: 15:58:04
  */
