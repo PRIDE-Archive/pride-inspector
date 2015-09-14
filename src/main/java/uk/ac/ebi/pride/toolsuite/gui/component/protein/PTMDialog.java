@@ -53,13 +53,8 @@ public class PTMDialog extends JDialog implements ActionListener {
         // modification label
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<html><p>");
-        stringBuilder.append("<font size='3'><b>Peptide</b>:");
-        stringBuilder.append(peptide.getSequence());
-        stringBuilder.append("</font><br></p></html>");
 
-        JLabel label = new JLabel(stringBuilder.toString());
+        JLabel label = new JLabel("<html><p>" + "<font size='3'><b>Peptide</b>:" + peptide.getSequence() + "</font><br></p></html>");
         labelPanel.add(label);
         labelPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         panel.add(labelPanel, BorderLayout.NORTH);

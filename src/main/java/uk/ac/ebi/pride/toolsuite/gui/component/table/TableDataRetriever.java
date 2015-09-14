@@ -117,6 +117,7 @@ public class TableDataRetriever {
                 specId = controller.getPeptideSpectrumId(identId, peptideId);
             mz = controller.getSpectrumPrecursorMz(specId);
         }
+
         if(mz != -1){
             List<Double> ptmMasses = new ArrayList<Double>();
             for (Modification mod : mods) {

@@ -177,7 +177,7 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
             // create dummy
             EmptyDataAccessController dummy = createEmptyDataAccessController(message);
 
-            Constructor<D> cstruct = dataAccessControllerClass.getDeclaredConstructor(File.class);
+            Constructor<D> cstruct;
             DataAccessController controller;
             
             if (runProteinInferenceLater) {
@@ -242,8 +242,8 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
 
             EmptyDataAccessController dummy = createEmptyDataAccessController(message);
 
-            Constructor<D> cstruct = dataAccessControllerClass.getDeclaredConstructor(File.class, Boolean.TYPE);
-            DataAccessController controller = null;
+            Constructor<D> cstruct;
+            DataAccessController controller;
             
             if (runProteinInferenceLater) {
                 cstruct = dataAccessControllerClass.getDeclaredConstructor(File.class, Boolean.TYPE, Boolean.TYPE);
@@ -404,9 +404,7 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
         } else {
             protScoring = new ProteinScoringAdditive(false, pepScoring);
         }
-        
-        // TODO: allow for filters
-        List<AbstractFilter> filters = null;
+
         
         // perform the protein inferences
         piaModeller.getProteinModeller().infereProteins(pepScoring, protScoring, OccamsRazorInference.class, null, false);
@@ -417,7 +415,7 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
         
         for (InferenceProteinGroup piaGroup : piaModeller.getProteinModeller().getInferredProteins()) {
             
-            Map<Comparable, List<Comparable>> proteinPeptideMap = null;
+            Map<Comparable, List<Comparable>> proteinPeptideMap;
 
             Set<IntermediateProtein> proteinSet = new HashSet<IntermediateProtein>(piaGroup.getProteins());
             // include the subGroups

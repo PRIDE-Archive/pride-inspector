@@ -324,7 +324,7 @@ public class DataSourceViewer extends JPanel {
         public int getRowIndex(Object controller) {
             // get all data access controllers
             java.util.List<DataAccessController> controllers = context.getControllers();
-            return controllers.indexOf(controller);
+            return controllers != null && controllers.contains(controller)?controllers.indexOf(controller):-1;
         }
     }
 

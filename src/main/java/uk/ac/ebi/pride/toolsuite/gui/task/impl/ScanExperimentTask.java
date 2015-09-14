@@ -94,10 +94,9 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
                     if (ids != null) {
                         for (Comparable peptideId : ids) {
                             getPeptideData(proteinId, peptideId);
-
-                            if (!controller.hasSpectrum() || controller.getPeptideSpectrumId(proteinId, peptideId) == null) {
-                                missingSpectrumLinks++;
-                            }
+//                            if (!peptideData.isSpectrumInformation()) {
+//                                missingSpectrumLinks++;
+//                            }
 
                             sendPTMNotification(proteinId, peptideId);
                         }
@@ -106,6 +105,8 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
                     checkInterruption();
                 }
             }
+
+            missingSpectrumLinks = controller.getNumberOfMissingSpectra();
             EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.IDENTIFICATION_READING, controller));
             if (controller.hasProteinAmbiguityGroup())
                 EventBus.publish(new SortProteinTableEvent(controller, SortProteinTableEvent.Type.ENABLE_SORT));
@@ -172,10 +173,11 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
         return proteinTableRow;
     }
 
-    private void getPeptideData(Comparable identId, Comparable peptideId) {
+    private PeptideTableRow getPeptideData(Comparable identId, Comparable peptideId) {
         logger.debug("Scan peptide details: {}-{}", identId, peptideId);
         PeptideTableRow peptideTableRow = TableDataRetriever.getPeptideTableRow(controller, identId, peptideId);
         publish(new Tuple<TableContentType, Object>(TableContentType.PEPTIDE, peptideTableRow));
+        return peptideTableRow;
     }
 
     private void getQuantData(Comparable identId, ProteinTableRow proteinTableRow) {

@@ -16,7 +16,7 @@ import java.util.Collection;
  * <p/>
  * This class is a singleton
  * <p/>
- * User: rwang
+ * @author ypriverol, rwang
  * Date: 23/06/11
  * Time: 13:17
  */

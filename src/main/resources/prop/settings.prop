@@ -35,7 +35,7 @@ open.mzidentml.file.threshold = 200
 
 # Memory threshold for mzidentml file size (in M)
 # if greater than the threshold, the mzidentml file use the disk to retrieve the data
-memory.mzidentml.file.threshold = 100
+memory.mzidentml.file.threshold = 600
 
 
 # threshold for download size (in M)

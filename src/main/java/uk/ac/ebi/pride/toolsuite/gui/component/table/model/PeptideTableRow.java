@@ -34,6 +34,7 @@ public class PeptideTableRow{
     private Comparable peptideId;
     private final List<Object> quantifications;
 
+
     public PeptideTableRow() {
         this.scores = new ArrayList<Double>();
         this.quantifications = new ArrayList<Object>();

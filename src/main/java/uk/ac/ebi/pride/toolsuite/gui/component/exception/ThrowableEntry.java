@@ -23,16 +23,7 @@ public class ThrowableEntry extends Message {
 
     @Override
     public String getMessage() {
-        StringBuilder buffer = new StringBuilder();
-        buffer.append("<html>");
-        buffer.append("<h3>");
-        buffer.append(title);
-        buffer.append("</h3>");
-        buffer.append("<p>");
-        buffer.append(err.toString());
-        buffer.append("</p>");
-        buffer.append("</html>");
-        return buffer.toString();
+        return "<html>" + "<h3>" + title + "</h3>" + "<p>" + err.toString() + "</p>" + "</html>";
     }
 
     public String getTitle() {

@@ -491,7 +491,7 @@ public class ProteinGroupPane
         layouts.add(CircleLayout.class);
         layouts.add(FRLayout2.class);
         
-        return layouts.toArray(new Class[0]);
+        return layouts.toArray(new Class[layouts.size()]);
     }
 
 
