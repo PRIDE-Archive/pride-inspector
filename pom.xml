@@ -157,11 +157,7 @@
         <dependency>
             <groupId>uk.ac.ebi.pride.utilities</groupId>
             <artifactId>pride-protein-inference</artifactId>
-<<<<<<< HEAD
             <version>0.0.5</version>
-=======
-            <version>0.0.4</version>
->>>>>>> e771ccb1a3a1b8c0329e97b80cbfbb2b333d6224
         </dependency>
 
         <dependency>

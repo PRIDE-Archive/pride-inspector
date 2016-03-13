@@ -15,6 +15,7 @@ pride-inspector is a PRIDE API licensed under [Apache License 2.0](http://www.ap
 
 # How to cite it:
 
+Perez-Riverol, Yasset, Qing-Wei Xu, Rui Wang, Julian Uszkoreit, Johannes Griss, Aniel Sanchez, Florian Reisinger et al. "PRIDE Inspector Toolsuite: Moving Toward a Universal Visualization Tool for Proteomics Data Standard Formats and Quality Assessment of ProteomeXchange Datasets." Molecular & Cellular Proteomics 15, no. 1 (2016): 305-317 [PDF File](http://www.mcponline.org/content/15/1/305.full.pdf) [Pubmed Record](http://www.ncbi.nlm.nih.gov/pubmed/26545397)
 Wang, R., Fabregat, A., Ríos, D., Ovelleiro, D., Foster, J. M., Côté, R. G., ... & Vizcaíno, J. A. (2012). PRIDE Inspector: a tool to visualize and validate MS proteomics data. Nature biotechnology, 30(2), 135-137. [PDF File](http://www.nature.com/nbt/journal/v30/n2/pdf/nbt.2112.pdf), [Pubmed Record](http://www.ncbi.nlm.nih.gov/pubmed/22318026)
 
 # Main Features
