@@ -68,6 +68,11 @@
         <inspector-swing-utils.version>2.0.2</inspector-swing-utils.version>
         <javahelp.version>2.0.02</javahelp.version>
         <pride-utilities.version>2.0.6-SNAPSHOT</pride-utilities.version>
+        <inspector-mzgraph-browser.version>2.0.1</inspector-mzgraph-browser.version>
+        <inspector-quality-chart.version>2.0.2</inspector-quality-chart.version>
+        <inspector-swing-utils.version>2.0.1</inspector-swing-utils.version>
+        <javahelp.version>2.0.02</javahelp.version>
+        <pride-utilities.version>2.0.4</pride-utilities.version>
         <commons-cli.version>1.2</commons-cli.version>
         <eventbus.version>1.4</eventbus.version>
         <swingx-all.version>1.6.5-1</swingx-all.version>
@@ -152,7 +157,11 @@
         <dependency>
             <groupId>uk.ac.ebi.pride.utilities</groupId>
             <artifactId>pride-protein-inference</artifactId>
+<<<<<<< HEAD
             <version>0.0.5</version>
+=======
+            <version>0.0.4</version>
+>>>>>>> e771ccb1a3a1b8c0329e97b80cbfbb2b333d6224
         </dependency>
 
         <dependency>
@@ -280,6 +289,9 @@
         <dependency>
             <groupId>com.asperasoft</groupId>
             <artifactId>aspera-faspmanager</artifactId>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/aspera/lib/aspera-faspmanager-2.7.0.42750.jar</systemPath>
+            <type>jar</type>
             <version>${aspera-faspmanager.version}</version>
         </dependency>
 

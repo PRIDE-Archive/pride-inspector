@@ -44,7 +44,7 @@ Peak Files (mgf, ms2, pkl, dta, mzData, mzXML, apl)
 
 ## Installation Requirements
 
-* Java: Java JRE 1.6(or above), which you can download for free here. (Note: most computers should have Java installed already).
+* Java: Java JRE 1.7 (or above), which you can download for free [here](http://www.oracle.com/technetwork/java/javase/downloads/index.html). (Note: most computers should have Java installed already).
 * Operating System: The current version has been tested on Windows 7, Windows Vista, Linux and Max OS X, it should also work on other platforms. If you come across any problems on your platform, please contact the PRIDE Help Desk.
 * Memory: MS dataset can be very large sometimes, in order to get good performance from PRIDE Inspector, we recommend you to have 1G of free memory.
 
@@ -65,7 +65,7 @@ You can get the latest PRIDE Inspector from our [Download Section](http://www.eb
      examples
      config
 
-To start the software, simply double-click the file named pride-inspector-X.Y.jar. If this fails, try to download and install Java 1.5 or above, as explained in the previous section. (The program can also be started from the command line using the following command: java -jar pride-inspector-X.Y.jar.)
+To start the software, simply double-click the file named pride-inspector-X.Y.jar. If this fails, try to download and install Java 1.7 or above, as explained in the previous section. (The program can also be started from the command line using the following command: java -jar pride-inspector-X.Y.jar.)
 
 The zip file contains also an examples folder with 2 sample files: one in mzML format (mzml-example.mzML) and the other in PRIDE xml format (pride-example.xml) so you can upload them in pride inspector and try the application. There is and additional folder, config, that contains a file called config.props where you can modify the amount of memory assigned to your application (only change if you are trying to view files and is causing the software crash because of a "Out of memory..." exception). The additional 2 directories, lib and log, contain all the java libraries necessary for the application to run and some debugging information if the application crashes.
 
