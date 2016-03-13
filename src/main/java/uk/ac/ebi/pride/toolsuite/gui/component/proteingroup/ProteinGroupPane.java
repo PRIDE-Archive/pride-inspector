@@ -180,8 +180,6 @@ public class ProteinGroupPane
 
     /**
      * Create and set up everything for the viewer
-     *
-     * @throws IOException
      */
     private void setUpPaneComponents() {
         // use a splitPane as basic layout

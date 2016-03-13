@@ -107,9 +107,7 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
      * @return
      */
     private boolean isRAW(SubmissionFileDetail submissionEntry) {
-        if(submissionEntry.getFileType() == ProjectFileType.RESULT || submissionEntry.getFileType() == ProjectFileType.PEAK)
-            return false;
-        return true;
+        return !(submissionEntry.getFileType() == ProjectFileType.RESULT || submissionEntry.getFileType() == ProjectFileType.PEAK);
     }
 
     private void checkInterruption() throws InterruptedException {

@@ -4,7 +4,7 @@
     <groupId>uk.ac.ebi.pride.toolsuite</groupId>
     <artifactId>pride-inspector</artifactId>
     <packaging>jar</packaging>
-    <version>2.5.0-SNAPSHOT</version>
+    <version>2.5.1</version>
     <name>pride-inspector</name>
     <url>http://code.google.com/p/pride-toolsuite/wiki/PRIDEInspector</url>
 
@@ -62,18 +62,18 @@
         <junit.version>4.11</junit.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <logback-core.version>1.0.11</logback-core.version>
-        <ms-data-core-api.version>2.0.5-SNAPSHOT</ms-data-core-api.version>
-        <inspector-mzgraph-browser.version>2.0.2-SNAPSHOT</inspector-mzgraph-browser.version>
-        <inspector-quality-chart.version>2.0.3-SNAPSHOT</inspector-quality-chart.version>
-        <inspector-swing-utils.version>2.0.2-SNAPSHOT</inspector-swing-utils.version>
+        <ms-data-core-api.version>2.0.6-SNAPSHOT</ms-data-core-api.version>
+        <inspector-mzgraph-browser.version>2.0.2</inspector-mzgraph-browser.version>
+        <inspector-quality-chart.version>2.0.4-SNAPSHOT</inspector-quality-chart.version>
+        <inspector-swing-utils.version>2.0.2</inspector-swing-utils.version>
         <javahelp.version>2.0.02</javahelp.version>
-        <pride-utilities.version>2.0.5-SNAPSHOT</pride-utilities.version>
+        <pride-utilities.version>2.0.6-SNAPSHOT</pride-utilities.version>
         <commons-cli.version>1.2</commons-cli.version>
         <eventbus.version>1.4</eventbus.version>
         <swingx-all.version>1.6.5-1</swingx-all.version>
         <ehcache.version>2.7.0</ehcache.version>
         <balloontip.version>1.2</balloontip.version>
-        <protein-details-fetcher.version>1.0.5-SNAPSHOT</protein-details-fetcher.version>
+        <protein-details-fetcher.version>1.0.7</protein-details-fetcher.version>
         <accession-resolver.version>1.0.3</accession-resolver.version>
         <prider-ws-model.version>0.2.7</prider-ws-model.version>
         <jackson-mapper-asl.version>1.9.9</jackson-mapper-asl.version>
@@ -152,7 +152,7 @@
         <dependency>
             <groupId>uk.ac.ebi.pride.utilities</groupId>
             <artifactId>pride-protein-inference</artifactId>
-            <version>0.0.5-SNAPSHOT</version>
+            <version>0.0.5</version>
         </dependency>
 
         <dependency>

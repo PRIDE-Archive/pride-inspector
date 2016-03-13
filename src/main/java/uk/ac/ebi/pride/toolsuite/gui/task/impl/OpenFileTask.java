@@ -14,7 +14,6 @@ import uk.ac.ebi.pride.utilities.data.core.SpectraData;
 import uk.ac.ebi.pride.utilities.pia.intermediate.IntermediateProtein;
 import uk.ac.ebi.pride.utilities.pia.intermediate.prideimpl.PrideIntermediateProtein;
 import uk.ac.ebi.pride.utilities.pia.modeller.PIAModeller;
-import uk.ac.ebi.pride.utilities.pia.modeller.filter.AbstractFilter;
 import uk.ac.ebi.pride.utilities.pia.modeller.protein.inference.InferenceProteinGroup;
 import uk.ac.ebi.pride.utilities.pia.modeller.protein.inference.OccamsRazorInference;
 import uk.ac.ebi.pride.utilities.pia.modeller.scores.CvScore;
@@ -216,7 +215,7 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
                 context.replaceDataAccessController(dummy, controller, false, message);
             }
 
-            logger.info("FIRST LOAD | File loading first loading has been done in: |{}| milliseconds", System.currentTimeMillis() - date);
+            logger.debug("FIRST LOAD | File loading first loading has been done in: |{}| milliseconds", System.currentTimeMillis() - date);
 
         } catch (InterruptedException ex) {
             logger.warn("File loading has been interrupted: {}", file.getName());
@@ -280,7 +279,7 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
                 context.replaceDataAccessController(dummy, controller, false, message);
             }
 
-            logger.info("FIRST LOAD | File loading first loading has been done in: |{}| milliseconds", System.currentTimeMillis() - date);
+            logger.debug("FIRST LOAD | File loading first loading has been done in: |{}| milliseconds", System.currentTimeMillis() - date);
 
         } catch (InterruptedException ex) {
             logger.warn("File loading has been interrupted: {}", file.getName());

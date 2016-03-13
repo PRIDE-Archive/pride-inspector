@@ -36,6 +36,7 @@ public class ExternalLinkContentViewerUI extends BasicContentViewerUI {
                     return;
                 }
             } catch (Throwable t) {
+                t.printStackTrace();
             }
         }
         super.hyperlinkUpdate(e);

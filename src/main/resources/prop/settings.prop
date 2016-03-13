@@ -20,7 +20,7 @@ pride.inspector.download.website=http://www.ebi.ac.uk/pride/resources/tools/insp
 pride.inspector.update.website=http://www.ebi.ac.uk/pride/resources/tools/inspector
 
 # pride inspector example dataset
-pride.inspector.example.dataset.website=http://www.ebi.ac.uk/pride/resources/tools/inspector/latest/example/ExampleDataSets.zip
+pride.inspector.example.dataset.website=https://github.com/PRIDE-Toolsuite/inspector-example-files
 
 # the size of each mzdata batch load
 mzdata.batch.load.size=100
@@ -70,10 +70,10 @@ prider.host.port=80
 ensembl.genome.browser.url=http://www.ensembl.org/%1$s/Location/Genome?type=ProteinAlignFeature
 
 # PRIDE Inspector publication
-pride.inspector.publication.title = Wang et al., Nat Biotechnol 2012; 30:130-132.
-pride.inspector.publication.url = http://www.nature.com/nbt/journal/v30/n2/full/nbt.2112.html
-pride.inspector.publication.pdf.url = http://www.nature.com/nbt/journal/v30/n2/pdf/nbt.2112.pdf
-pride.inspector.publication.pubmed.url = http://www.ncbi.nlm.nih.gov/pubmed/22318026
+pride.inspector.publication.title = Perez-Riverol et al., Mol Cell Proteomics 2015; Nov 6. pii: mcp.O115.050229..
+pride.inspector.publication.url = http://www.mcponline.org/content/early/2015/11/06/mcp.O115.050229.long
+pride.inspector.publication.pdf.url = http://www.mcponline.org/content/early/2015/11/06/mcp.O115.050229.full.pdf
+pride.inspector.publication.pubmed.url = http://www.ncbi.nlm.nih.gov/pubmed/26545397
 
 # PRIDE Database Out
 pride.inspector.pride.out.message = Be aware that PRIDE public database instance is not updated since December 2013.\n A web service replacement will be in place in the near future.

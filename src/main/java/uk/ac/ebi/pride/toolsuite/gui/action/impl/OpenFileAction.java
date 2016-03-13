@@ -216,6 +216,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
                 Constants.DTA_FILE,
                 Constants.APL_FILE,
                 Constants.MZTAB_FILE,
+                Constants.CDF_FILE,
                 Constants.GZIPPED_FILE);
 
         int result = ofd.showDialog(Desktop.getInstance().getMainComponent(), null);
@@ -412,6 +413,8 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
             classType = MzDataControllerImpl.class;
         } else if (PeakControllerImpl.isValidFormat(file) != null) {
             classType = PeakControllerImpl.class;
+        } else if (NetCDFControllerImpl.isValidFormat(file)){
+           classType = NetCDFControllerImpl.class;
         } else if (MzTabControllerImpl.isValidFormat(file)){
             classType = MzTabControllerImpl.class;
         }else {

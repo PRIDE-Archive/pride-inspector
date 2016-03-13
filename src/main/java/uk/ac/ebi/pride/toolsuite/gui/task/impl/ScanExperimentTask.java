@@ -114,7 +114,7 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
             if (missingSpectrumLinks > 0) {
                 EventBus.publish(new SummaryReportEvent(this, controller, new SummaryReportMessage(SummaryReportMessage.Type.WARNING, "Missing spectra [" + missingSpectrumLinks + "]", "The number of peptides without spectrum links")));
             }
-            logger.info("LOAD INFORMATION | All the proteins has been shown in: |{}| milliseconds", System.currentTimeMillis() - date);
+            logger.debug("LOAD INFORMATION | All the proteins has been shown in: |{}| milliseconds", System.currentTimeMillis() - date);
         } catch (DataAccessException dex) {
             String msg = "Failed to retrieve protein and peptide related data";
             logger.error(msg, dex);
