@@ -17,6 +17,7 @@ import uk.ac.ebi.pride.toolsuite.gui.desktop.DesktopContext;
 import uk.ac.ebi.pride.toolsuite.gui.menu.MenuFactory;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskUtil;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.OpenMyAssayTask;
+import uk.ac.ebi.pride.toolsuite.gui.task.impl.OpenMyFolderProjectTask;
 import uk.ac.ebi.pride.toolsuite.gui.task.impl.OpenMyProjectTask;
 import uk.ac.ebi.pride.utilities.util.IOUtilities;
 //
@@ -50,12 +51,12 @@ public class PrideInspector extends Desktop {
     // command line option for password
     private static final String PASSWORD_CMD = "password";
 
+    private static final String FOLDER_CMD   = "folder";
+
     private JFrame mainFrame;
     private JMenuBar menuBar;
     private StatusBar statusBar;
     private MainDataVisualizer visualizer;
-//    private SingleInstanceService sis;
-//    private SingleInstanceListener sisL;
     private Options cmdOptions;
     private CommandLineParser cmdParser;
     private String[] cmdArgs;
@@ -118,6 +119,10 @@ public class PrideInspector extends Desktop {
         cmdOptions.addOption(USER_NAME_CMD, true, "pride user name");
         // add a password option
         cmdOptions.addOption(PASSWORD_CMD, true, "pride password");
+
+        // add a folder option
+        cmdOptions.addOption(FOLDER_CMD, true, "folder option containing the files");
+
         // create cmd line parser
         cmdParser = new GnuParser();
     }
@@ -163,6 +168,16 @@ public class PrideInspector extends Desktop {
             String password = null;
             if (cmd.hasOption(PASSWORD_CMD)) {
                 password = cmd.getOptionValue(PASSWORD_CMD);
+            }
+
+            String folder = null;
+            if(cmd.hasOption(FOLDER_CMD)){
+                folder = cmd.getOptionValue(FOLDER_CMD);
+            }
+
+            if(folder != null){
+                OpenMyFolderProjectTask task = new OpenMyFolderProjectTask(folder);
+                TaskUtil.startBackgroundTask(task);
             }
 
             if (projectAccession != null) {
@@ -293,7 +308,7 @@ public class PrideInspector extends Desktop {
         if (prideXmlExampleFile != null) {
             prideXmlFiles.add(prideXmlExampleFile);
         }
-        PrideAction openPrideXmlExampleAction = new OpenFileAction(openPrideXmlExampleDesc, null, prideXmlFiles);
+        PrideAction openPrideXmlExampleAction = new OpenFileAction(openPrideXmlExampleDesc, null, prideXmlFiles, false);
         openPrideXmlExampleAction.setEnabled(prideXmlExampleFile != null && prideXmlExampleFile.exists());
 
         // try mzml sample
@@ -303,7 +318,7 @@ public class PrideInspector extends Desktop {
         if (mzMLExampleFile != null) {
             mzMLFiles.add(mzMLExampleFile);
         }
-        PrideAction openMzMLExampleAction = new OpenFileAction(openMzMLExampleDesc, null, mzMLFiles);
+        PrideAction openMzMLExampleAction = new OpenFileAction(openMzMLExampleDesc, null, mzMLFiles, false);
         openMzMLExampleAction.setEnabled(mzMLExampleFile != null && mzMLExampleFile.exists());
 
         // try mzidentml sample
@@ -313,7 +328,7 @@ public class PrideInspector extends Desktop {
         if (mzMLExampleFile != null) {
             mzIdentMLFiles.add(mzIdentMLExampleFile);
         }
-        PrideAction openMzIdentMLExampleAction = new OpenFileAction(openMzIdentMLExampleDesc, null, mzMLFiles);
+        PrideAction openMzIdentMLExampleAction = new OpenFileAction(openMzIdentMLExampleDesc, null, mzMLFiles, false);
         openMzIdentMLExampleAction.setEnabled(mzIdentMLExampleFile != null && mzIdentMLExampleFile.exists());
 
 

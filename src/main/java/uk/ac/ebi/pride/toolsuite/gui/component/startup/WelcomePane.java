@@ -311,7 +311,7 @@ public class WelcomePane extends JPanel implements TaskListener<Object, Object> 
         if (mzMLExampleFile != null) {
             mzMLFiles.add(mzMLExampleFile);
         }
-        Action openMzMLExampleAction = new OpenFileAction(context.getProperty("open.mzml.example.title"), circleIcon, mzMLFiles);
+        Action openMzMLExampleAction = new OpenFileAction(context.getProperty("open.mzml.example.title"), circleIcon, mzMLFiles, false);
         openMzMLExampleAction.setEnabled(mzMLExampleFile != null && mzMLExampleFile.exists());
         JButton openMzMLExampleButton = createLabelLikeButton(openMzMLExampleAction);
         buttonPanel.add(openMzMLExampleButton, c);
@@ -322,7 +322,7 @@ public class WelcomePane extends JPanel implements TaskListener<Object, Object> 
         if (prideXMLExampleFile != null) {
             prideXmlFiles.add(prideXMLExampleFile);
         }
-        Action openPrideExampleAction = new OpenFileAction(context.getProperty("open.pride.xml.example.title"), circleIcon, prideXmlFiles);
+        Action openPrideExampleAction = new OpenFileAction(context.getProperty("open.pride.xml.example.title"), circleIcon, prideXmlFiles, false);
         openPrideExampleAction.setEnabled(prideXMLExampleFile != null && prideXMLExampleFile.exists());
         JButton openPrideExampleButton = createLabelLikeButton(openPrideExampleAction);
         openPrideExampleButton.setAction(openPrideExampleAction);
@@ -334,7 +334,7 @@ public class WelcomePane extends JPanel implements TaskListener<Object, Object> 
         if (mzIdentMlExampleFile != null) {
             mzIdentMlFiles.add(mzIdentMlExampleFile);
         }
-        Action openMzIdentMlExampleAction = new OpenFileAction(context.getProperty("open.mzidentml.example.title"), circleIcon, mzIdentMlFiles);
+        Action openMzIdentMlExampleAction = new OpenFileAction(context.getProperty("open.mzidentml.example.title"), circleIcon, mzIdentMlFiles, false);
         openMzIdentMlExampleAction.setEnabled(mzIdentMlExampleFile != null && mzIdentMlExampleFile.exists());
         JButton mzIdentMlExampleButton = createLabelLikeButton(openMzIdentMlExampleAction);
         mzIdentMlExampleButton.setAction(openMzIdentMlExampleAction);

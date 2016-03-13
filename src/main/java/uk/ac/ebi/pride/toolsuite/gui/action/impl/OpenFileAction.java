@@ -44,13 +44,16 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
 
     private File path;
 
+    private boolean skipFiles = false;
+
     public OpenFileAction(String name, Icon icon) {
-        this(name, icon, null);
+        this(name, icon, null, false);
         setAccelerator(java.awt.event.KeyEvent.VK_O, ActionEvent.CTRL_MASK);
     }
 
-    public OpenFileAction(String name, Icon icon, List<File> files) {
+    public OpenFileAction(String name, Icon icon, List<File> files, boolean skipFiles) {
         super(name, icon);
+        this.skipFiles = skipFiles;
         inputFilesToOpen = files == null ? null : new ArrayList<File>(files);
     }
 
@@ -251,7 +254,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
             // check the file type
             Class classType = null;
             try {
-                classType = getFileType(selectedFile);
+                classType = getFileType(selectedFile, skipFiles);
             } catch (IOException e1) {
                 logger.error("Failed to check the file type", e1);
             }
@@ -261,6 +264,19 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
                     mzIdentMLFiles.put(selectedFile, null);
                 } else {
                     openFiles.put(selectedFile, classType);
+
+                }
+            }
+        }
+
+        for(File msFile: openFiles.keySet()){
+            if(mzIdentMLFiles != null && isSpectraFile(openFiles.get(msFile))){
+                for(File file : mzIdentMLFiles.keySet()){
+                    List<File> msFiles = mzIdentMLFiles.get(file);
+                    if(msFiles == null)
+                        msFiles = new ArrayList<File>();
+                    msFiles.add(msFile);
+                    mzIdentMLFiles.put(file, msFiles);
                 }
             }
         }
@@ -293,7 +309,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
         }
 
         // load peak list files
-        if (mzIdentMLFiles.size() > 0) {
+        if (mzIdentMLFiles.size() > 0 && hasFiles(mzIdentMLFiles)) {
             int option = JOptionPane.showConfirmDialog(null,
                     "Would you like to load spectrum files related to the mzIdentML files?", "mzIdentML", JOptionPane.YES_NO_OPTION);
 
@@ -364,6 +380,17 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
         }
     }
 
+    private boolean hasFiles(Map<File, List<File>> mzIdentMLFiles) {
+        if(mzIdentMLFiles == null)
+            return true;
+        for(File mzIdentML: mzIdentMLFiles.keySet()){
+            if(mzIdentMLFiles.get(mzIdentML) == null && mzIdentMLFiles.get(mzIdentML).size() == 0)
+                return true;
+        }
+        return false;
+
+    }
+
     private boolean hasProteinGroups(File mzIdentMLFile) {
         boolean proteinGroupPresent = false;
 
@@ -397,7 +424,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
      * @return Class    the class type of the data access controller
      * @throws IOException exception while checking the file type
      */
-    private Class getFileType(File file) throws IOException {
+    private Class getFileType(File file, boolean skipFiles) throws IOException {
         Class classType = null;
 
         // check file type
@@ -417,13 +444,20 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
            classType = NetCDFControllerImpl.class;
         } else if (MzTabControllerImpl.isValidFormat(file)){
             classType = MzTabControllerImpl.class;
-        }else {
+        }else if (!skipFiles){
             GUIUtilities.error(Desktop.getInstance().getMainComponent(),
                     "<html><h4>The files you selected are not in supported format.</h4> The formats are supported by PRIDE Inspector are: <br> <b> PRIDE XML </b> <br> <b> mzIdentML </b> <br> <b> mzML </b> </html>",
                     "Wrong File Format");
         }
 
         return classType;
+    }
+
+    boolean isSpectraFile(Class classType){
+        return (classType == MzMLControllerImpl.class || classType == MzXmlControllerImpl.class
+        || classType == MzDataControllerImpl.class ||
+           classType == PeakControllerImpl.class ||
+           classType == NetCDFControllerImpl.class);
     }
 
     private Boolean isFileToBig(File file, long fileSizeThreshold){

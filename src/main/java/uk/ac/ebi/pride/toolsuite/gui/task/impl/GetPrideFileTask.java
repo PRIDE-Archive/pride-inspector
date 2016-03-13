@@ -94,7 +94,7 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
             // open downloaded files
             if (toOpenFile && !downloadedFiles.isEmpty()) {
                 
-                OpenFileAction openFileAction = new OpenFileAction(null, null, downloadedFiles);
+                OpenFileAction openFileAction = new OpenFileAction(null, null, downloadedFiles, false);
                 openFileAction.actionPerformed(null);
             }
         }

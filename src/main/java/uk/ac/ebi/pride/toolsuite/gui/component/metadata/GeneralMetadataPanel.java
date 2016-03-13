@@ -97,7 +97,7 @@ public class GeneralMetadataPanel extends JPanel {
                 for (CvParam cvParam : sample.getCvParams()) {
                     String cvAcc = cvParam.getAccession();
                     String name = cvParam.getName();
-                    String cvLabel = cvParam.getCvLookupID().toLowerCase();
+                    String cvLabel = (cvParam != null && cvParam.getCvLookupID() != null)?cvParam.getCvLookupID().toLowerCase():"";
                     if ("newt".equals(cvLabel)) {
                         if (!speciesAcc.contains(cvAcc)) {
                             species += ("".equals(species) ? "" : ", ") + name;
