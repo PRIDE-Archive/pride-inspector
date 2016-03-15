@@ -41,21 +41,32 @@ public class OpenMyFolderProjectTask extends TaskAdapter<Void, Void> {
 
     }
 
+    public OpenMyFolderProjectTask(List<File> files){
+        this.files = files;
+        this.setName(DEFAULT_TASK_TITLE);
+        this.setDescription(DEFAULT_TASK_DESCRIPTION);
+    }
+
     @Override
     protected Void doInBackground() throws Exception {
         // retrieve submission details
-        getFileMetadata(folder);
+        File folderFile = null;
+        if(folder != null)
+             folderFile = new File(folder);
+        if(folderFile != null && folderFile.isDirectory() && folderFile.listFiles().length > 0)
+            getFileMetadata(Arrays.asList(folderFile));
+        else if(files != null)
+                getFileMetadata(files);
 
         return null;
     }
 
-    protected void getFileMetadata(String folder) {
-        File folderFile = new File(folder);
-        if(folderFile != null && folderFile.isDirectory() && folderFile.listFiles().length > 0){
+    protected void getFileMetadata(List<File> files) {
             // open downloaded files
-            OpenFileAction openFileAction = new OpenFileAction(null, null, Arrays.asList(folderFile.listFiles()), true);
+            this.files = files;
+            OpenFileAction openFileAction = new OpenFileAction(null, null, files, true);
             openFileAction.actionPerformed(null);
-        }
+
     }
 
 }

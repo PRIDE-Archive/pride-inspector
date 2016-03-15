@@ -20,15 +20,21 @@ public class PrideInspectorBootstrap {
     private static final Logger logger = LoggerFactory.getLogger(PrideInspectorBootstrap.class);
 
     public static void main(String[] args) {
-        new PrideInspectorBootstrap().go();
+        new PrideInspectorBootstrap().go(args);
     }
 
     /**
      * Method to run the pride inspector
      */
-    private void go() {
+    private void go(String[] args) {
         // read bootstrap properties
         Properties bootstrapProps = getBootstrapSettings();
+        String generalArgs = "";
+        if(args != null && args.length > 0){
+            for(String arg: args)
+                generalArgs += arg + " ";
+        }
+        generalArgs = generalArgs.trim();
 
         // get max memory
         String maxMem = bootstrapProps.getProperty("pride.inspector.max.memory");
@@ -48,6 +54,7 @@ public class PrideInspectorBootstrap {
         cmdBuffer.append(maxMem);
         cmdBuffer.append("m ");
         cmdBuffer.append(PrideInspector.class.getName());
+        cmdBuffer.append(" " + generalArgs);
 
         // call the command
         Process process;

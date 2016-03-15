@@ -32,9 +32,8 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 /**
  * This is the main class to call to run PRIDE GUI
@@ -52,6 +51,12 @@ public class PrideInspector extends Desktop {
     private static final String PASSWORD_CMD = "password";
 
     private static final String FOLDER_CMD   = "folder";
+
+    private static final String ID_FILE_CMD     = "idFile";
+
+    private static String MZ_FILE = "mzFile";
+
+    private static String CMD_LINE_SPLIT     = "\\s+";
 
     private JFrame mainFrame;
     private JMenuBar menuBar;
@@ -123,6 +128,11 @@ public class PrideInspector extends Desktop {
         // add a folder option
         cmdOptions.addOption(FOLDER_CMD, true, "folder option containing the files");
 
+        // add a file option including all the files to be upload
+        cmdOptions.addOption(ID_FILE_CMD, true, "all files identifications to be open in inspector");
+
+        cmdOptions.addOption(MZ_FILE, true, "all the spectra files to be open ins inspector");
+
         // create cmd line parser
         cmdParser = new GnuParser();
     }
@@ -175,8 +185,36 @@ public class PrideInspector extends Desktop {
                 folder = cmd.getOptionValue(FOLDER_CMD);
             }
 
+            String[] idFile = null;
+            if(cmd.hasOption(ID_FILE_CMD)){
+                idFile = cmd.getOptionValues(ID_FILE_CMD);
+            }
+
+            String[] mzFile = null;
+            if(cmd.hasOption(MZ_FILE))
+                mzFile = cmd.getOptionValues(MZ_FILE);
+
             if(folder != null){
                 OpenMyFolderProjectTask task = new OpenMyFolderProjectTask(folder);
+                TaskUtil.startBackgroundTask(task);
+            }else if(idFile != null && mzFile != null){
+                List<String> fileNames = new ArrayList<>();
+                if(idFile != null){
+                    for(String file: idFile){
+                        String[] intermadiaNames = file.split(CMD_LINE_SPLIT);
+                        fileNames.addAll(Arrays.asList(intermadiaNames));
+                    }
+                }
+                if(mzFile != null){
+                    for(String file: mzFile){
+                        String[] intermadiaNames = file.split(CMD_LINE_SPLIT);
+                        fileNames.addAll(Arrays.asList(intermadiaNames));
+                    }
+                }
+                java.util.List<File> files = new ArrayList<File>();
+                for(String fileName: fileNames)
+                    files.add(new File(fileName));
+                OpenMyFolderProjectTask task = new OpenMyFolderProjectTask(files);
                 TaskUtil.startBackgroundTask(task);
             }
 
