@@ -6,7 +6,7 @@ import uk.ac.ebi.pride.utilities.util.IOUtilities;
 
 import java.io.*;
 import java.net.URL;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * PrideInspectorBootstrap calls PrideInspector with specific settings.
@@ -39,28 +39,33 @@ public class PrideInspectorBootstrap {
         // get max memory
         String maxMem = bootstrapProps.getProperty("pride.inspector.max.memory");
 
+        List<String> arguments = new ArrayList<>();
+
 
         // createAttributedSequence the command
         StringBuilder cmdBuffer = new StringBuilder();
-        cmdBuffer.append("java -cp ");
+        arguments.add("java");
+        arguments.add("-cp");
+        String classPath = System.getProperty("java.class.path");
+        logger.info(classPath);
         if (isWindowsPlatform()) {
-            cmdBuffer.append("\"");
+            arguments.add("\"");
         }
-        cmdBuffer.append(System.getProperty("java.class.path"));
+        arguments.add(System.getProperty("java.class.path"));
         if (isWindowsPlatform()) {
-            cmdBuffer.append("\"");
+            arguments.add("\"");
         }
-        cmdBuffer.append(" -Xmx");
-        cmdBuffer.append(maxMem);
-        cmdBuffer.append("m ");
-        cmdBuffer.append(PrideInspector.class.getName());
-        cmdBuffer.append(" " + generalArgs);
+        arguments.add("-Xmx"+maxMem+"m");
+        arguments.add(PrideInspector.class.getName());
+
+        for(String arg: args)
+                arguments.add(arg);
 
         // call the command
         Process process;
         try {
             logger.info(cmdBuffer.toString());
-            process = Runtime.getRuntime().exec(cmdBuffer.toString());
+            process = Runtime.getRuntime().exec(arguments.toArray(new String[arguments.size()]));
 
             StreamProxy errorStreamProxy = new StreamProxy(process.getErrorStream(), System.err);
             StreamProxy outStreamProxy = new StreamProxy(process.getInputStream(), System.out);

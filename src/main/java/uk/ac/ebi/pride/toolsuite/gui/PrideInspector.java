@@ -289,6 +289,9 @@ public class PrideInspector extends Desktop {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     UIManager.setLookAndFeel(info.getClassName());
+                    LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+                    UIDefaults defaults = lookAndFeel.getDefaults();
+                    defaults.put("ScrollBar.minimumThumbSize", new Dimension(30, 30));
                     break;
                 }
             }
