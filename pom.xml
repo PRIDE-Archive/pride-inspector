@@ -62,7 +62,7 @@
         <junit.version>4.11</junit.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <logback-core.version>1.0.11</logback-core.version>
-        <ms-data-core-api.version>2.0.6-SNAPSHOT</ms-data-core-api.version>
+        <ms-data-core-api.version>2.0.7-SNAPSHOT</ms-data-core-api.version>
         <inspector-mzgraph-browser.version>2.0.2</inspector-mzgraph-browser.version>
         <inspector-quality-chart.version>2.0.4-SNAPSHOT</inspector-quality-chart.version>
         <inspector-swing-utils.version>2.0.2</inspector-swing-utils.version>
@@ -78,7 +78,8 @@
         <swingx-all.version>1.6.5-1</swingx-all.version>
         <ehcache.version>2.7.0</ehcache.version>
         <balloontip.version>1.2</balloontip.version>
-        <protein-details-fetcher.version>1.0.7</protein-details-fetcher.version>
+        <protein-details-fetcher.version>1.0.9-SNAPSHOT</protein-details-fetcher.version>
+        <pride-protein-inference.version>0.0.5-SNAPSHOT</pride-protein-inference.version>
         <accession-resolver.version>1.0.3</accession-resolver.version>
         <prider-ws-model.version>0.2.7</prider-ws-model.version>
         <jackson-mapper-asl.version>1.9.9</jackson-mapper-asl.version>
@@ -157,7 +158,7 @@
         <dependency>
             <groupId>uk.ac.ebi.pride.utilities</groupId>
             <artifactId>pride-protein-inference</artifactId>
-            <version>0.0.5</version>
+            <version>${pride-protein-inference.version}</version>
         </dependency>
 
         <dependency>
@@ -408,36 +409,21 @@
 
     <repositories>
         <repository>
-            <id>PRIDE_SourceForge_Maven2_Repository</id>
-            <url>http://pride-proteome.sourceforge.net/maven2</url>
-        </repository>
-        <repository>
             <id>genesis-maven2-repository</id>
             <name>Genesis maven2 repository</name>
             <url>http://genesis.UGent.be/maven2</url>
         </repository>
-        <!-- EBI repo -->
         <repository>
-            <id>nexus-ebi-repo</id>
-            <name>The EBI internal repository</name>
+            <id>nexus-ebi-repo-old</id>
             <url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo/</url>
-            <releases>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
         </repository>
-
-        <!-- EBI SNAPSHOT repo -->
+        <repository>
+            <id>nexus-ebi-release-repo</id>
+            <url>http://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-repo/</url>
+        </repository>
         <repository>
             <id>nexus-ebi-snapshot-repo</id>
-            <name>The EBI internal snapshot repository</name>
-            <url>http://www.ebi.ac.uk/intact/maven/nexus/content/repositories/ebi-repo-snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-            </snapshots>
+            <url>http://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-snapshots/</url>
         </repository>
     </repositories>
 
