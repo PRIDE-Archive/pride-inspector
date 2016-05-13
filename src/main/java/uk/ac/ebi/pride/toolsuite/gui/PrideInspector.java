@@ -69,6 +69,17 @@ public class PrideInspector extends Desktop {
     private final static String PRIDE_GUI = "PRIDE Inspector";
 
     public static void main(String[] args) {
+        if (!ApplicationInstanceManager.registerInstance()) {
+            // instance already running.
+            System.out.println("Another instance of this application is already running.  Exiting.");
+            System.exit(0);
+        }
+        ApplicationInstanceManager.setApplicationInstanceListener(new ApplicationInstanceManager.ApplicationInstanceListener() {
+            public void newInstanceCreated() {
+                System.out.println("New instance detected...");
+                // this is where your handler code goes...
+            }
+        });
         Desktop.launch(PrideInspector.class, PrideInspectorContext.class, args);
     }
 

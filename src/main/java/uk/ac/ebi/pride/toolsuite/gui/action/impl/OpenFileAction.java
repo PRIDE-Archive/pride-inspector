@@ -384,7 +384,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
         if(mzIdentMLFiles == null)
             return true;
         for(File mzIdentML: mzIdentMLFiles.keySet()){
-            if(mzIdentMLFiles.get(mzIdentML) == null && mzIdentMLFiles.get(mzIdentML).size() == 0)
+            if(mzIdentMLFiles.get(mzIdentML) == null || mzIdentMLFiles.get(mzIdentML).size() == 0)
                 return true;
         }
         return false;

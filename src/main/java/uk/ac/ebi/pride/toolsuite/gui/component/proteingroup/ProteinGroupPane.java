@@ -132,10 +132,7 @@ public class ProteinGroupPane
     
     /** comboBox for layout changing */
     private JComboBox layoutComboBox;
-    
-    
-    
-    
+
     public ProteinGroupPane(DataAccessController controller, Comparable proteinId, Comparable proteinGroupId) {
         super(controller);
         
