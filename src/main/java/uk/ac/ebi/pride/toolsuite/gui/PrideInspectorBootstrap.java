@@ -48,13 +48,14 @@ public class PrideInspectorBootstrap {
         arguments.add("-cp");
         String classPath = System.getProperty("java.class.path");
         logger.info(classPath);
-        if (isWindowsPlatform()) {
-            arguments.add("\"");
-        }
+//        if (isWindowsPlatform()) {
+//            arguments.add("\"");
+//        }
         arguments.add(System.getProperty("java.class.path"));
-        if (isWindowsPlatform()) {
-            arguments.add("\"");
-        }
+
+//        if (isWindowsPlatform()) {
+//            arguments.add("\"");
+//        }
         arguments.add("-Xmx"+maxMem+"m");
         arguments.add(PrideInspector.class.getName());
 
@@ -64,6 +65,7 @@ public class PrideInspectorBootstrap {
         // call the command
         Process process;
         try {
+            logger.info(arguments.toString());
             logger.info(cmdBuffer.toString());
             process = Runtime.getRuntime().exec(arguments.toArray(new String[arguments.size()]));
 

@@ -77,7 +77,6 @@ public class PrideInspector extends Desktop {
         ApplicationInstanceManager.setApplicationInstanceListener(new ApplicationInstanceManager.ApplicationInstanceListener() {
             public void newInstanceCreated() {
                 System.out.println("New instance detected...");
-                // this is where your handler code goes...
             }
         });
         Desktop.launch(PrideInspector.class, PrideInspectorContext.class, args);
