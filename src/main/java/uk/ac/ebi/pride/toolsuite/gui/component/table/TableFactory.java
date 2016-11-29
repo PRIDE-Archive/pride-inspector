@@ -22,7 +22,6 @@ import uk.ac.ebi.pride.toolsuite.gui.url.*;
 import uk.ac.ebi.pride.toolsuite.gui.utils.Constants;
 import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.core.*;
-import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.utilities.term.SearchEngineScoreCvTermReference;
 
 import javax.swing.*;
@@ -338,7 +337,7 @@ public class TableFactory {
         referenceTable.addMouseMotionListener(new TableCellMouseMotionListener(referenceTable, pubMedColumnHeader, doiColumnHeader, referenceColumnHeader));
         referenceTable.addMouseListener(new HyperLinkCellMouseClickListener(referenceTable, pubMedColumnHeader, new PrefixedHyperLinkGenerator(Constants.PUBMED_URL_PERFIX), pubmedPattern));
         referenceTable.addMouseListener(new HyperLinkCellMouseClickListener(referenceTable, doiColumnHeader, new DOIHyperLinkGenerator(Constants.DOI_URL_PREFIX)));
-        Collection<String> columnHeadersWithPopup = new HashSet<String>();
+        Collection<String> columnHeadersWithPopup = new HashSet<>();
         columnHeadersWithPopup.add(referenceColumnHeader);
         referenceTable.addMouseListener(new MouseClickPopupListener(referenceTable, columnHeadersWithPopup));
 
@@ -919,91 +918,6 @@ public class TableFactory {
     }
 
     /**
-     * Build a table to display peptide related details.
-     *
-     * @param listPeptideScores List of Reference Scores
-     * @return JTable   peptide table
-     */
-    public static JXTreeTable createPeptideTreeTable(Collection<CvTermReference> listPeptideScores, int defaultRankingThreshold) {
-
-        //PeptideTreeTableModel peptideTableModel = new PeptideTreeTableModel(listPeptideScores, defaultRankingThreshold);
-        //JXTreeTable table = createDefaultJXTreeTable(peptideTableModel);
-/*
-        table.setColumnFactory(new ColumnFactory() {
-            @Override
-            public void configureTableColumn(TableModel model, TableColumnExt columnExt) {
-                super.configureTableColumn(model, columnExt);
-
-                // peptide sequence column renderer
-                String columnTitle = columnExt.getTitle();
-                // set column visibility
-                if (PeptideTreeTableModel.TableHeader.SPECTRUM_ID.getHeader().equals(columnTitle) ||
-                        PeptideTreeTableModel.TableHeader.IDENTIFICATION_ID.getHeader().equals(columnTitle) ||
-                        PeptideTreeTableModel.TableHeader.PEPTIDE_FIT.getHeader().equals(columnTitle) ||
-                        PeptideTreeTableModel.TableHeader.PEPTIDE_ID.getHeader().equals(columnTitle) ||
-                        PeptideTreeTableModel.TableHeader.PROTEIN_NAME.getHeader().equals(columnTitle) ||
-                        PeptideTreeTableModel.TableHeader.PROTEIN_SEQUENCE_COVERAGE.getHeader().equals(columnTitle) ||
-                        PeptideTreeTableModel.TableHeader.PROTEIN_STATUS.getHeader().equals(columnTitle) ||
-                        PeptideTreeTableModel.TableHeader.THEORITICAL_ISOELECTRIC_POINT_COLUMN.getHeader().equals(columnTitle) ||
-                        PeptideTreeTableModel.TableHeader.NUMBER_OF_FRAGMENT_IONS_COLUMN.getHeader().equals(columnTitle) ||
-                        PeptideTreeTableModel.TableHeader.ADDITIONAL.getHeader().equals(columnTitle)) {
-                    columnExt.setVisible(false);
-                }
-
-                // peptide sequence column renderer
-                if (PeptideTreeTableModel.TableHeader.PEPTIDE_COLUMN.getHeader().equals(columnTitle)) {
-                    columnExt.setMinWidth(200);
-                }
-
-                // delta mass column
-                if (PeptideTreeTableModel.TableHeader.DELTA_MASS_COLUMN.getHeader().equals(columnTitle)) {
-                    double minLimit = Double.parseDouble(Desktop.getInstance().getDesktopContext().getProperty("delta.mz.min.limit"));
-                    double maxLimit = Double.parseDouble(Desktop.getInstance().getDesktopContext().getProperty("delta.mz.max.limit"));
-                    DeltaMZRenderer renderer = new DeltaMZRenderer(minLimit, maxLimit);
-                    columnExt.setCellRenderer(renderer);
-                }
-
-                // peptide sequence present in protein sequence
-                if (PeptideTreeTableModel.TableHeader.PEPTIDE_FIT.getHeader().equals(columnTitle)) {
-                    columnExt.setCellRenderer(new PeptideFitCellRenderer());
-                }
-
-                // set protein name column width
-                if (PeptideTreeTableModel.TableHeader.PROTEIN_NAME.getHeader().equals(columnTitle)) {
-                    columnExt.setPreferredWidth(200);
-                }
-
-                // sequence coverage column
-                if (PeptideTreeTableModel.TableHeader.PROTEIN_SEQUENCE_COVERAGE.getHeader().equals(columnTitle)) {
-                    columnExt.setCellRenderer(new SequenceCoverageRenderer());
-                }
-
-                // ptm accession hyperlink
-                if (PeptideTreeTableModel.TableHeader.PROTEIN_ACCESSION_COLUMN.getHeader().equals(columnTitle)) {
-                    columnExt.setCellRenderer(new ProteinAccessionHyperLinkCellRenderer());
-                }
-
-                // set additional column
-                if (PeptideTreeTableModel.TableHeader.ADDITIONAL.getHeader().equals(columnTitle)) {
-                    Icon icon = GUIUtilities.loadIcon(Desktop.getInstance().getDesktopContext().getProperty("view.detail.small.icon"));
-                    columnExt.setCellRenderer(new IconRenderer(icon));
-                    columnExt.setMaxWidth(50);
-                }
-            }
-        });
-
-        // add hyper link click listener
-        String protAccColumnHeader = PeptideTreeTableModel.TableHeader.PROTEIN_ACCESSION_COLUMN.getHeader();
-        table.addMouseMotionListener(new TableCellMouseMotionListener(table, protAccColumnHeader));
-        table.addMouseListener(new HyperLinkCellMouseClickListener(table, protAccColumnHeader, new ProteinAccHyperLinkGenerator()));
-
-        peptideTableModel.getTreeModelSupport().fireTreeStructureChanged(new TreePath(peptideTableModel.getRoot()));
-*/
-//        return table;
-        return null;
-    }
-
-    /**
      * Creates and configures a mouse adapter for tree table headers to display a context menu.
      *
      * @return the header mouse adapter
@@ -1060,20 +974,13 @@ public class TableFactory {
                 sortMenu.add(desChk);
                 sortMenu.add(unsChk);
 
-                // Create sub-menu containing non-leaf value aggregation functions
-//				JMenu aggrMenu = new JMenu("Aggregate Function");
-//				aggrMenu.setIcon(IconConstants.CALCULATOR_ICON);
-
                 ActionListener aggrListener = new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         TableColumnExt column = treeTbl.getColumnExt(col);
                     }
                 };
-//           TableColumnExt column = (TableColumnExt) treeTbl.getColumnExt(col);
                 popup.add(sortMenu);
-//				popup.add(aggrMenu);
-//				popup.add(hideItem);
                 return popup;
             }
 

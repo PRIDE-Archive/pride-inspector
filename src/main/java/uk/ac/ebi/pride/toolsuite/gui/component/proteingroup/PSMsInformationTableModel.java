@@ -5,7 +5,6 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -56,14 +55,11 @@ public class PSMsInformationTableModel extends AbstractTableModel {
     
     
     public void setPeptides(Collection<?> peptides) {
-        psmsList = new ArrayList<IntermediatePeptideSpectrumMatch>();
-        modificationStrings = new HashMap<Integer, String>();
+        psmsList = new ArrayList<>();
+        modificationStrings = new HashMap<>();
         
         if (peptides != null) {
-            Iterator<?> objectIterator = peptides.iterator();
-            while (objectIterator.hasNext()) {
-                Object item = objectIterator.next();
-                
+            for (Object item : peptides) {
                 if (item instanceof IntermediatePeptide) {
                     psmsList.addAll(((IntermediatePeptide) item).getAllPeptideSpectrumMatches());
                 }

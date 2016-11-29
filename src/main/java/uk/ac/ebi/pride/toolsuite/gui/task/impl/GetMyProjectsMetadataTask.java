@@ -34,7 +34,7 @@ public class GetMyProjectsMetadataTask extends Task<ProjectDetailList, String> {
      */
     public GetMyProjectsMetadataTask(String userName, char[] password) {
         final HttpHeaders headers = getHeaders(userName, password);
-        this.requestEntity = new HttpEntity<String>(headers);
+        this.requestEntity = new HttpEntity<>(headers);
         this.restTemplate = new RestTemplate();
 
         this.setName(DEFAULT_TASK_TITLE);

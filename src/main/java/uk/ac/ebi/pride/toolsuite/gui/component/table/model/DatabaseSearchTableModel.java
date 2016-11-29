@@ -37,7 +37,7 @@ public class DatabaseSearchTableModel extends ListBasedListTableModel<List<Objec
         private final String header;
         private final String toolTip;
 
-        private TableHeader(String header, String tooltip) {
+        TableHeader(String header, String tooltip) {
             this.header = header;
             this.toolTip = tooltip;
         }
@@ -87,11 +87,11 @@ public class DatabaseSearchTableModel extends ListBasedListTableModel<List<Objec
      * @return List<List<Object>>  all the actual values in the table
      */
     public List<List<String>> getAllContent() {
-        List<List<String>> results = new ArrayList<List<String>>();
+        List<List<String>> results = new ArrayList<>();
         int startIndexOfContent = getStartIndexOfContent();
         for (Object content : contents) {
             List<Object> contentList = (List<Object>) content;
-            List<String> result = new ArrayList<String>();
+            List<String> result = new ArrayList<>();
             for (int i = startIndexOfContent; i < contentList.size(); i++) {
                 result.add(contentList.get(i).toString());
             }
@@ -119,7 +119,7 @@ public class DatabaseSearchTableModel extends ListBasedListTableModel<List<Objec
      * @return List<String>    a list of headers
      */
     public List<String> getAllHeaders() {
-        List<String> headers = new ArrayList<String>();
+        List<String> headers = new ArrayList<>();
         int cnt = this.getColumnCount();
         for (int i = 1; i < cnt; i++) {
             headers.add(this.getColumnName(i));

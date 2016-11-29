@@ -35,7 +35,7 @@ public class SortableProteinTreeTableModel extends SortableTreeTableModel
     public SortableProteinTreeTableModel(TreeTableNode root, Collection<SearchEngineScoreCvTermReference> listPeptideScores) {
         super(root, listPeptideScores);
         this.random = new Random();
-        proteinGroupIdToProteinTableRow = new HashMap<Comparable, SortableProteinNode>();
+        proteinGroupIdToProteinTableRow = new HashMap<>();
     }
 
 
@@ -176,7 +176,7 @@ public class SortableProteinTreeTableModel extends SortableTreeTableModel
     public String getColumnName(int index) {
         String columnName = null;
 
-        List<Map.Entry<String, String>> entries = new LinkedList<Map.Entry<String, String>>(columnNames.entrySet());
+        List<Map.Entry<String, String>> entries = new LinkedList<>(columnNames.entrySet());
         Map.Entry<String, String> entry = entries.get(index);
         if (entry != null) {
             columnName = entry.getKey();
@@ -188,7 +188,7 @@ public class SortableProteinTreeTableModel extends SortableTreeTableModel
     public String getColumnTooltip(int index) {
         String tooltip = null;
 
-        List<Map.Entry<String, String>> entries = new LinkedList<Map.Entry<String, String>>(columnNames.entrySet());
+        List<Map.Entry<String, String>> entries = new LinkedList<>(columnNames.entrySet());
         Map.Entry<String, String> entry = entries.get(index);
         if (entry != null) {
             tooltip = entry.getValue();
@@ -200,7 +200,7 @@ public class SortableProteinTreeTableModel extends SortableTreeTableModel
     public int getColumnIndex(String header) {
         int index = -1;
 
-        List<Map.Entry<String, String>> entries = new LinkedList<Map.Entry<String, String>>(columnNames.entrySet());
+        List<Map.Entry<String, String>> entries = new LinkedList<>(columnNames.entrySet());
 
         for (Map.Entry<String, String> entry : entries) {
             if (entry.getKey().equals(header)) {

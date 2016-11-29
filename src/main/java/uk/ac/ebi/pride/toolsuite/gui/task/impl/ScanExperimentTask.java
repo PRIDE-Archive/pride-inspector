@@ -45,7 +45,7 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
 
     private int missingSpectrumLinks = 0;
 
-    private final Map<String, String> ptmMap = new HashMap<String, String>();
+    private final Map<String, String> ptmMap = new HashMap<>();
 
 
     /**
@@ -64,7 +64,7 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
     protected Void retrieve() throws Exception {
 
         try {
-            EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.IDENTIFICATION_READING, controller));
+            EventBus.publish(new ProcessingDataSourceEvent<>(controller, ProcessingDataSourceEvent.Status.IDENTIFICATION_READING, controller));
             // get quant headers
             boolean hasQuantData = controller.hasQuantData();
             if (hasQuantData) {
@@ -107,7 +107,7 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
             }
 
             missingSpectrumLinks = controller.getNumberOfMissingSpectra();
-            EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.IDENTIFICATION_READING, controller));
+            EventBus.publish(new ProcessingDataSourceEvent<>(controller, ProcessingDataSourceEvent.Status.IDENTIFICATION_READING, controller));
             if (controller.hasProteinAmbiguityGroup())
                 EventBus.publish(new SortProteinTableEvent(controller, SortProteinTableEvent.Type.ENABLE_SORT));
 
@@ -129,7 +129,7 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
         if (controller.hasProteinAmbiguityGroup()) {
             proteinGroupIds = controller.getProteinAmbiguityGroupIds();
         } else {
-            proteinGroupIds = new HashSet<Comparable>();
+            proteinGroupIds = new HashSet<>();
             proteinGroupIds.add(null);
         }
         return proteinGroupIds;
@@ -140,7 +140,7 @@ public class ScanExperimentTask extends AbstractDataAccessTask<Void, Tuple<Table
             return controller.getProteinIds();
         } else {
             ProteinGroup proteinGroup = controller.getProteinAmbiguityGroupById(proteinGroupId);
-            Collection<Comparable> proteinIds = new LinkedHashSet<Comparable>();
+            Collection<Comparable> proteinIds = new LinkedHashSet<>();
             List<Protein> proteins = proteinGroup.getProteinDetectionHypothesis();
             for (Protein protein : proteins) {
                 proteinIds.add(protein.getId());

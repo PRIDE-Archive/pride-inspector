@@ -10,6 +10,6 @@ import java.util.EventListener;
  */
 public interface ExitListener extends EventListener {
 
-    public boolean isReady();
-    public void performExit();
+    boolean isReady();
+    void performExit();
 }

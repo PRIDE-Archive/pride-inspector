@@ -12,7 +12,7 @@ import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
  */
 public class SpectrumAddEvent<T> extends AbstractEventServiceEvent {
 
-    public static enum Status {SPECTRUM_ADDED, SPECTRUM_REMOVED}
+    public enum Status {SPECTRUM_ADDED, SPECTRUM_REMOVED}
 
     private DataAccessController controller;
 

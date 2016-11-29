@@ -34,7 +34,7 @@ public class ThrowableHandler extends PropertyChangeHelper {
      * @return  List<ThrowableEntry> a list of throwables.
      */
     public List<ThrowableEntry> getAllThrowables() {
-        return new ArrayList<ThrowableEntry>(throwables);
+        return new ArrayList<>(throwables);
     }
 
     /**
@@ -45,9 +45,9 @@ public class ThrowableHandler extends PropertyChangeHelper {
     public void addThrowableEntry(ThrowableEntry entry) {
         List<ThrowableEntry> oldThrowables, newThrowables;
         synchronized (throwables) {
-            oldThrowables = new ArrayList<ThrowableEntry>(throwables);
+            oldThrowables = new ArrayList<>(throwables);
             throwables.add(entry);
-            newThrowables = new ArrayList<ThrowableEntry>(throwables);
+            newThrowables = new ArrayList<>(throwables);
         }
         // notify
         firePropertyChange(ADD_THROWABLE_PROP, oldThrowables, newThrowables);
@@ -61,9 +61,9 @@ public class ThrowableHandler extends PropertyChangeHelper {
     public void removeThrowableEntry(ThrowableEntry entry) {
         List<ThrowableEntry> oldThrowables, newThrowables;
         synchronized (throwables) {
-            oldThrowables = new ArrayList<ThrowableEntry>(throwables);
+            oldThrowables = new ArrayList<>(throwables);
             throwables.remove(entry);
-            newThrowables = new ArrayList<ThrowableEntry>(throwables);
+            newThrowables = new ArrayList<>(throwables);
         }
 
         // notify
@@ -76,9 +76,9 @@ public class ThrowableHandler extends PropertyChangeHelper {
     public void removeAllThrowableEntries() {
         List<ThrowableEntry> oldThrowables, newThrowables;
         synchronized (throwables) {
-            oldThrowables = new ArrayList<ThrowableEntry>(throwables);
+            oldThrowables = new ArrayList<>(throwables);
             throwables.clear();
-            newThrowables = new ArrayList<ThrowableEntry>(throwables);
+            newThrowables = new ArrayList<>(throwables);
         }
 
         // notify

@@ -107,6 +107,6 @@ public class ApplicationInstanceManager {
     }
 
     public interface ApplicationInstanceListener {
-        public void newInstanceCreated();
+        void newInstanceCreated();
     }
 }

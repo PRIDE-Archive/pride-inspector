@@ -26,7 +26,7 @@ public class ReferenceTableModel extends ListBasedListTableModel<Reference> {
         private final String header;
         private final String toolTip;
 
-        private TableHeader(String header, String tooltip) {
+        TableHeader(String header, String tooltip) {
             this.header = header;
             this.toolTip = tooltip;
         }
@@ -58,7 +58,7 @@ public class ReferenceTableModel extends ListBasedListTableModel<Reference> {
 
     @Override
     public void addData(Reference newData) {
-        List<Object> data = new ArrayList<Object>();
+        List<Object> data = new ArrayList<>();
         // row count
         int rowCnt = this.getRowCount();
         // add reference

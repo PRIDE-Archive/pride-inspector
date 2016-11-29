@@ -30,7 +30,7 @@ public class ContactTableModel extends ListBasedListTableModel<ParamGroup> {
         private final String header;
         private final String toolTip;
 
-        private TableHeader(String header, String tooltip) {
+        TableHeader(String header, String tooltip) {
             this.header = header;
             this.toolTip = tooltip;
         }
@@ -49,7 +49,7 @@ public class ContactTableModel extends ListBasedListTableModel<ParamGroup> {
     private List<Person> contacts;
 
     public ContactTableModel(Collection<Person> contacts) {
-        this.contacts = new ArrayList<Person>();
+        this.contacts = new ArrayList<>();
 
         // add contacts
         for (Person contact : contacts) {
@@ -67,7 +67,7 @@ public class ContactTableModel extends ListBasedListTableModel<ParamGroup> {
 
     @Override
     public void addData(ParamGroup newData) {
-        List<Object> data = new ArrayList<Object>();
+        List<Object> data = new ArrayList<>();
         String name = null;
         String institute = null;
         String info = null;

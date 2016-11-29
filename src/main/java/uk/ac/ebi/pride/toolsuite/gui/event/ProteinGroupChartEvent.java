@@ -9,7 +9,7 @@ import org.bushe.swing.event.AbstractEventServiceEvent;
  */
 public class ProteinGroupChartEvent extends AbstractEventServiceEvent {
 
-    public static enum Type {PROTEIN,
+    public enum Type {PROTEIN,
         PEPTIDE,
         PSM,
         PEPTIDE_EDGE,

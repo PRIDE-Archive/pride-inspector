@@ -29,7 +29,7 @@ public class SubmissionFileDownloadTableModel extends AbstractTreeTableModel {
         private final String header;
         private final String toolTip;
 
-        private TableHeader(String header, String tooltip) {
+        TableHeader(String header, String tooltip) {
             this.header = header;
             this.toolTip = tooltip;
         }
@@ -101,7 +101,7 @@ public class SubmissionFileDownloadTableModel extends AbstractTreeTableModel {
     }
 
     public Set<Object> getNoneRootNodes() {
-        Set<Object> leaves = new HashSet<Object>();
+        Set<Object> leaves = new HashSet<>();
 
         for (SubmissionFileDetail parent : ((SubmissionFileDetail) root).getSourceFileMappings()) {
             leaves.add(parent);

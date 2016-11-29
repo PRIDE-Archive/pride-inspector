@@ -14,8 +14,8 @@ public abstract class ListTableModel<T> extends AbstractTableModel {
     protected final List<Object> contents;
 
     public ListTableModel() {
-        columnNames = new LinkedHashMap<String, String>();
-        contents = new ArrayList<Object>();
+        columnNames = new LinkedHashMap<>();
+        contents = new ArrayList<>();
         initializeTableModel();
     }
 
@@ -111,7 +111,7 @@ public abstract class ListTableModel<T> extends AbstractTableModel {
     public int getColumnIndex(String header) {
         int index = -1;
 
-        List<Map.Entry<String, String>> entries = new LinkedList<Map.Entry<String, String>>(columnNames.entrySet());
+        List<Map.Entry<String, String>> entries = new LinkedList<>(columnNames.entrySet());
 
         for (Map.Entry<String, String> entry : entries) {
             if (entry.getKey().equals(header)) {
@@ -125,7 +125,7 @@ public abstract class ListTableModel<T> extends AbstractTableModel {
     public String getColumnName(int index) {
         String columnName = null;
 
-        List<Map.Entry<String, String>> entries = new LinkedList<Map.Entry<String, String>>(columnNames.entrySet());
+        List<Map.Entry<String, String>> entries = new LinkedList<>(columnNames.entrySet());
         Map.Entry<String, String> entry = entries.get(index);
         if (entry != null) {
             columnName = entry.getKey();
@@ -137,7 +137,7 @@ public abstract class ListTableModel<T> extends AbstractTableModel {
     public String getColumnTooltip(int index) {
         String tooltip = null;
 
-        List<Map.Entry<String, String>> entries = new LinkedList<Map.Entry<String, String>>(columnNames.entrySet());
+        List<Map.Entry<String, String>> entries = new LinkedList<>(columnNames.entrySet());
         Map.Entry<String, String> entry = entries.get(index);
         if (entry != null) {
             tooltip = entry.getValue();

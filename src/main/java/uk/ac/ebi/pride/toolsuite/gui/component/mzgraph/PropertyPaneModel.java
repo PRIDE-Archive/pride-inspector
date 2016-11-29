@@ -34,7 +34,7 @@ public class PropertyPaneModel extends PropertyChangeHelper {
      * Constructor initializes the main data structure.
      */
     protected PropertyPaneModel() {
-        this.dataContent = new LinkedHashMap<String, Map<String, Collection<Collection<Parameter>>>>();
+        this.dataContent = new LinkedHashMap<>();
     }
 
     /**
@@ -43,7 +43,7 @@ public class PropertyPaneModel extends PropertyChangeHelper {
      * @return Collection<String>   a collection of categories.
      */
     public Collection<String> getCategoryTitles() {
-        Collection<String> results = new ArrayList<String>();
+        Collection<String> results = new ArrayList<>();
         if (dataContent != null) {
             results.addAll(dataContent.keySet());
         }
@@ -57,7 +57,7 @@ public class PropertyPaneModel extends PropertyChangeHelper {
      * @return Collection<String>   a collection of sub-category names.
      */
     public Collection<String> getSubCategoryTitles(String category) {
-        Collection<String> results = new ArrayList<String>();
+        Collection<String> results = new ArrayList<>();
         if (dataContent != null && dataContent.get(category) != null) {
             results.addAll(dataContent.get(category).keySet());
         }
@@ -74,12 +74,12 @@ public class PropertyPaneModel extends PropertyChangeHelper {
     public void addData(String categoryStr, String subCategoryStr, Collection<Parameter> data) {
         Map<String, Collection<Collection<Parameter>>> subCategories = dataContent.get(categoryStr);
         if (subCategories == null) {
-            subCategories = new HashMap<String, Collection<Collection<Parameter>>>();
+            subCategories = new HashMap<>();
             dataContent.put(categoryStr, subCategories);
         }
         Collection<Collection<Parameter>> subCategory = subCategories.get(subCategoryStr);
         if (subCategory == null) {
-            subCategory = new ArrayList<Collection<Parameter>>();
+            subCategory = new ArrayList<>();
             subCategories.put(subCategoryStr, subCategory);
         }
         subCategory.add(data);
@@ -96,13 +96,13 @@ public class PropertyPaneModel extends PropertyChangeHelper {
     public void appendData(String categoryStr, String subCategoryStr, Collection<Parameter> data) {
         Map<String, Collection<Collection<Parameter>>> subCategories = dataContent.get(categoryStr);
         if (subCategories == null) {
-            subCategories = new HashMap<String, Collection<Collection<Parameter>>>();
+            subCategories = new HashMap<>();
             dataContent.put(categoryStr, subCategories);
         }
 
         Collection<Collection<Parameter>> subCategory = subCategories.get(subCategoryStr);
         if (subCategory == null) {
-            subCategory = new ArrayList<Collection<Parameter>>();
+            subCategory = new ArrayList<>();
             subCategories.put(subCategoryStr, subCategory);
         }
         // attach data
@@ -122,7 +122,7 @@ public class PropertyPaneModel extends PropertyChangeHelper {
      * @param param
      */
     public void appendData(String categoryStr, String subCategoryStr, Parameter param) {
-        Collection<Parameter> params = new ArrayList<Parameter>();
+        Collection<Parameter> params = new ArrayList<>();
         params.add(param);
         appendData(categoryStr, subCategoryStr, params);
     }
@@ -135,13 +135,13 @@ public class PropertyPaneModel extends PropertyChangeHelper {
      * @return Collection<Collection<Parameter>>    a collection of a group of parameters
      */
     public Collection<Collection<Parameter>> getDataBySubCategory(String category, String subCategory) {
-        Collection<Collection<Parameter>> result = new ArrayList<Collection<Parameter>>();
+        Collection<Collection<Parameter>> result = new ArrayList<>();
         Map<String, Collection<Collection<Parameter>>> subCategories = dataContent.get(category);
         if (subCategories != null) {
             Collection<Collection<Parameter>> dataContent = subCategories.get(subCategory);
             if (dataContent != null) {
                 for (Collection<Parameter> params : dataContent) {
-                    Collection<Parameter> newParams = new ArrayList<Parameter>(params);
+                    Collection<Parameter> newParams = new ArrayList<>(params);
                     result.add(newParams);
                 }
             }
@@ -176,7 +176,7 @@ public class PropertyPaneModel extends PropertyChangeHelper {
         private List<String> content = null;
 
         private CategoryComboBoxModel(Collection<String> content) {
-            this.content = new ArrayList<String>(content);
+            this.content = new ArrayList<>(content);
         }
 
         @Override

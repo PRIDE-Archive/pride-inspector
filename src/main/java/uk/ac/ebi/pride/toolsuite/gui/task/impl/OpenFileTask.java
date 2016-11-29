@@ -301,7 +301,7 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
 
     private List<File> unzipMSFiles(List<File> msFiles) throws Exception {
         String namePath = path.getAbsolutePath().endsWith(System.getProperty("file.separator")) ? path.getAbsolutePath() : path.getAbsolutePath() + System.getProperty("file.separator");
-        List<File> newFiles = new ArrayList<File>(msFiles.size());
+        List<File> newFiles = new ArrayList<>(msFiles.size());
         for (File inputFile : msFiles) {
             if(isGzipFile(inputFile)){
                 FileInputStream fis = null;
@@ -410,19 +410,19 @@ public class OpenFileTask<D extends DataAccessController> extends TaskAdapter<Vo
         
         // create the protein groups
         int nrGroups = piaModeller.getProteinModeller().getInferredProteins().size();
-        Map<Comparable, Map<Comparable, List<Comparable>>> prideProteinGroupMapping = new HashMap<Comparable, Map<Comparable,List<Comparable>>>(nrGroups);
+        Map<Comparable, Map<Comparable, List<Comparable>>> prideProteinGroupMapping = new HashMap<>(nrGroups);
         
         for (InferenceProteinGroup piaGroup : piaModeller.getProteinModeller().getInferredProteins()) {
             
             Map<Comparable, List<Comparable>> proteinPeptideMap;
 
-            Set<IntermediateProtein> proteinSet = new HashSet<IntermediateProtein>(piaGroup.getProteins());
+            Set<IntermediateProtein> proteinSet = new HashSet<>(piaGroup.getProteins());
             // include the subGroups
             for (InferenceProteinGroup subGroup : piaGroup.getSubGroups()) {
                 proteinSet.addAll(subGroup.getProteins());
             }
 
-            proteinPeptideMap = new HashMap<Comparable, List<Comparable>>(proteinSet.size());
+            proteinPeptideMap = new HashMap<>(proteinSet.size());
 
             for (IntermediateProtein protein : proteinSet) {
                 Comparable proteinID = ((PrideIntermediateProtein)protein).getPrideProteinID();

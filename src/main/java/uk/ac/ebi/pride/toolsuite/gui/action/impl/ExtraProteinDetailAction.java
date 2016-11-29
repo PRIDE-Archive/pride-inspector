@@ -156,7 +156,7 @@ public class ExtraProteinDetailAction extends PrideAction {
         ControllerContentPane contentPane = (ControllerContentPane) appContext.getDataContentPane(controller);
         JTable table = contentPane.getProteinTabPane().getIdentificationPane().getIdentificationTable();
 
-        List<String> accs = new ArrayList<String>();
+        List<String> accs = new ArrayList<>();
 
         int rowCount = table.getRowCount();
         int column = table.getColumnModel().getColumnIndex(PeptideTableHeader.PROTEIN_ACCESSION_COLUMN.getHeader());

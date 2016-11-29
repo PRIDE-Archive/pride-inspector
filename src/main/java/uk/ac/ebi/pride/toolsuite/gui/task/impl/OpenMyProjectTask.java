@@ -68,7 +68,7 @@ public class OpenMyProjectTask extends TaskAdapter<Void, Void> implements TaskLi
         FileDetailList fileDetailList = listTaskEvent.getValue();
 
         if (fileDetailList != null) {
-            List<SubmissionFileDetail> submissionFileDetails = new ArrayList<SubmissionFileDetail>();
+            List<SubmissionFileDetail> submissionFileDetails = new ArrayList<>();
             for (FileDetail fileDetail : fileDetailList.getList()) {
                 submissionFileDetails.add(new SubmissionFileDetail(fileDetail));
             }

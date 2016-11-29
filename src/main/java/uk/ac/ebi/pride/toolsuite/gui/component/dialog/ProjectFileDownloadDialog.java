@@ -241,7 +241,7 @@ public class ProjectFileDownloadDialog extends JDialog implements ActionListener
         AssayFileDownloadTableModel assayFileDownloadTableModel = (AssayFileDownloadTableModel) fileDownloadSelectionTable.getModel();
         java.util.List<Tuple<FileDetail, Boolean>> data = assayFileDownloadTableModel.getData();
 
-        java.util.List<FileDetail> fileDetails = new ArrayList<FileDetail>();
+        java.util.List<FileDetail> fileDetails = new ArrayList<>();
 
         for (Tuple<FileDetail, Boolean> fileDetailBooleanTuple : data) {
             if (fileDetailBooleanTuple.getValue()) {

@@ -94,7 +94,7 @@ public class RetrieveSpectrumTask extends AbstractDataAccessTask<Spectrum, Void>
             spectrum = peptide.getSpectrum();
             if (spectrum != null) {
                 // reassign peptide, this is for fragmented ions and modifications
-                List<Peptide> peptides = new ArrayList<Peptide>();
+                List<Peptide> peptides = new ArrayList<>();
                 if(spectrum.getPeptide() != null)
                     peptides = spectrum.getPeptide();
                 peptides.add(peptide);

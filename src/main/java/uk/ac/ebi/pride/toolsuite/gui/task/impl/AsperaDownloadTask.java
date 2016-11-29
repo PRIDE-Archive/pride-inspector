@@ -89,7 +89,7 @@ public class AsperaDownloadTask extends FileDownloadTask implements TransferList
     }
 
     private String[] convertToAsperaDownloadPaths() {
-        List<String> filePaths = new ArrayList<String>();
+        List<String> filePaths = new ArrayList<>();
 
         for (FileDetail fileDetail : filesToDownload) {
             URL downloadLink = fileDetail.getDownloadLink();

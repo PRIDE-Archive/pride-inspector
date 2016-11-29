@@ -140,7 +140,7 @@ public abstract class AbstractPeptideTableModel extends ProgressiveListTableMode
             PeptideTableRow peptideTableRow = (PeptideTableRow) contents.get(row);
             Comparable identId = peptideTableRow.getProteinId();
             Comparable peptideId = peptideTableRow.getPeptideId();
-            Integer peptideFit = peptideFits.get(new Tuple<Comparable, Comparable>(identId, peptideId));
+            Integer peptideFit = peptideFits.get(new Tuple<>(identId, peptideId));
             if (peptideFit != null) {
                 // set protein name
                 peptideTableRow.setPeptideFitState(peptideFit);
@@ -167,7 +167,7 @@ public abstract class AbstractPeptideTableModel extends ProgressiveListTableMode
             PeptideTableRow content = (PeptideTableRow) contents.get(row);
             Comparable identId = content.getProteinId();
             Comparable peptideId = content.getPeptideId();
-            Double deltaMz = deltaMzs.get(new Tuple<Comparable, Comparable>(identId, peptideId));
+            Double deltaMz = deltaMzs.get(new Tuple<>(identId, peptideId));
             if (deltaMz != null) {
                 // set delta mz
                 content.setDeltaMz(deltaMz);
@@ -194,7 +194,7 @@ public abstract class AbstractPeptideTableModel extends ProgressiveListTableMode
             PeptideTableRow peptideTableRow = (PeptideTableRow) contents.get(row);
             Comparable identId = peptideTableRow.getProteinId();
             Comparable peptideId = peptideTableRow.getPeptideId();
-            Double precursorMz = precursorMzs.get(new Tuple<Comparable, Comparable>(identId, peptideId));
+            Double precursorMz = precursorMzs.get(new Tuple<>(identId, peptideId));
             if (precursorMz != null) {
                 // set protein name
                 peptideTableRow.setPrecursorMz(precursorMz);

@@ -22,7 +22,7 @@ public class MetaDataHelper {
      * @return
      */
     public static Collection<Parameter> getGeneralContent(ExperimentMetaData metaData) {
-        Collection<Parameter> params = new ArrayList<Parameter>();
+        Collection<Parameter> params = new ArrayList<>();
 
         // id
         addUserParam(params, Constants.ID, metaData.getId());
@@ -46,13 +46,13 @@ public class MetaDataHelper {
     }
 
     public static Collection<Parameter> getParamGroup(ParamGroup paramGroup) {
-        Collection<Parameter> params = new ArrayList<Parameter>();
+        Collection<Parameter> params = new ArrayList<>();
         addParamGroup(params, paramGroup, Constants.EMPTY);
         return params;
     }
 
     public static Collection<Parameter> getSourceFile(SourceFile sourceFile) {
-        Collection<Parameter> params = new ArrayList<Parameter>();
+        Collection<Parameter> params = new ArrayList<>();
         // id
         addUserParam(params, Constants.ID, sourceFile.getId());
         // name
@@ -66,7 +66,7 @@ public class MetaDataHelper {
     }
 
     public static Collection<Parameter> getSample(Sample sample) {
-        Collection<Parameter> params = new ArrayList<Parameter>();
+        Collection<Parameter> params = new ArrayList<>();
 
         // id
         addUserParam(params, Constants.ID, sample.getId());
@@ -93,7 +93,7 @@ public class MetaDataHelper {
     }
 
     public static Collection<Parameter> getSoftware(Software software) {
-        Collection<Parameter> params = new ArrayList<Parameter>();
+        Collection<Parameter> params = new ArrayList<>();
         // id
         addUserParam(params, Constants.ID, software.getId());
         // name
@@ -105,7 +105,7 @@ public class MetaDataHelper {
     }
 
     public static Collection<Parameter> getScanSetting(ScanSetting scanSetting) {
-        Collection<Parameter> params = new ArrayList<Parameter>();
+        Collection<Parameter> params = new ArrayList<>();
         // id
         addUserParam(params, Constants.ID, scanSetting.getId());
         // source file id
@@ -132,7 +132,7 @@ public class MetaDataHelper {
     }
 
     public static Collection<Parameter> getInstrumentConfiguration(InstrumentConfiguration instrument) {
-        Collection<Parameter> params = new ArrayList<Parameter>();
+        Collection<Parameter> params = new ArrayList<>();
         // id
         addUserParam(params, Constants.ID, instrument.getId());
         // scan settings
@@ -177,7 +177,7 @@ public class MetaDataHelper {
     }
 
     public static Collection<Parameter> getDataProcessing(DataProcessing dataProc) {
-        Collection<Parameter> params = new ArrayList<Parameter>();
+        Collection<Parameter> params = new ArrayList<>();
         // id
         addUserParam(params, Constants.ID, dataProc.getId());
 
@@ -202,14 +202,14 @@ public class MetaDataHelper {
     }
 
     public static Collection<Parameter> getProtocol(Protocol protocol) {
-        Collection<Parameter> params = new ArrayList<Parameter>();
+        Collection<Parameter> params = new ArrayList<>();
 
         // id
         addUserParam(params, Constants.ID, protocol.getId());
         // name
         addUserParam(params, Constants.NAME, protocol.getName());
         // protocol steps
-        List<ParamGroup> steps = new ArrayList<ParamGroup>();
+        List<ParamGroup> steps = new ArrayList<>();
         steps.add(protocol.getAnalysisParam());
         for (int i = 0; i < steps.size(); i++) {
             String prefix = Constants.PROTOCOL_STEP + " " + (i + 1) + " - ";
@@ -223,7 +223,7 @@ public class MetaDataHelper {
     }
 
     public static Collection<Parameter> getReference(Reference reference) {
-        Collection<Parameter> params = new ArrayList<Parameter>();
+        Collection<Parameter> params = new ArrayList<>();
 
         // full reference
         addUserParam(params, Constants.FULL_REFERENCE, reference.getFullReference());

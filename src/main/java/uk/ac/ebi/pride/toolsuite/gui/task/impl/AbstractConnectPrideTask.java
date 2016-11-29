@@ -137,7 +137,7 @@ public abstract class AbstractConnectPrideTask extends TaskAdapter<List<Map<Stri
      */
     List<Map<String, String>> downloadMetaData(String url) {
         BufferedReader in = null;
-        List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+        List<Map<String, String>> result = new ArrayList<>();
         try {
             HttpResponse httpResponse = doHttpGet(url);
             int statusCode = httpResponse.getStatusLine().getStatusCode();
@@ -145,13 +145,13 @@ public abstract class AbstractConnectPrideTask extends TaskAdapter<List<Map<Stri
             if (statusCode == 200 && httpEntity != null) {
                 in = new BufferedReader(new InputStreamReader(httpEntity.getContent()));
 
-                Map<String, String> entry = new HashMap<String, String>();
+                Map<String, String> entry = new HashMap<>();
                 String str;
                 while ((str = in.readLine()) != null) {
                     str = str.trim();
                     if ("//".equals(str) && !entry.isEmpty()) {
                         result.add(entry);
-                        entry = new HashMap<String, String>();
+                        entry = new HashMap<>();
                     } else if (!"".equals(str)) {
                         String[] parts = str.split(Constants.TAB);
                         entry.put(parts[0], parts[1]);

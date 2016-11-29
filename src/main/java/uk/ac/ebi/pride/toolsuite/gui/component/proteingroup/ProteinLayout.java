@@ -126,14 +126,14 @@ public class ProteinLayout<E> implements Layout<VertexObject, E> {
      * Build the tree-like layout
      */
     private void buildTree() {
-        this.minimalHeight = new HashMap<VertexObject, Integer>(graph.getVertexCount());
-        this.alreadyDone = new HashSet<VertexObject>(graph.getVertexCount());
-        this.treeSize = new HashMap<VertexObject, Integer>(graph.getVertexCount());
+        this.minimalHeight = new HashMap<>(graph.getVertexCount());
+        this.alreadyDone = new HashSet<>(graph.getVertexCount());
+        this.treeSize = new HashMap<>(graph.getVertexCount());
         maxHeight = 0;
         maxWidth = 0;
         
         // list which maps from the depth of the protein-vertices to the vertex
-        TreeMap<Integer, List<VertexObject>> proteinObjects = new TreeMap<Integer, List<VertexObject>>();
+        TreeMap<Integer, List<VertexObject>> proteinObjects = new TreeMap<>();
         
         for (VertexObject vertex : graph.getVertices()) {
             if ((vertex.getObject() instanceof IntermediateProtein) ||
@@ -153,14 +153,14 @@ public class ProteinLayout<E> implements Layout<VertexObject, E> {
         }
         
         // create the "pseudo root node" with list of protein-vertices as object
-        List<VertexObject> proteins = new ArrayList<VertexObject>();
+        List<VertexObject> proteins = new ArrayList<>();
         
         for (Map.Entry<Integer, List<VertexObject>> verticesIt : proteinObjects.descendingMap().entrySet()) {
             for (VertexObject vertex : verticesIt.getValue()) {
                 int depth = verticesIt.getKey();
                 while (depth < maxHeight) {
                     // add pseudo-vertices until the deepest depth is reached
-                    List<VertexObject> interProteins = new ArrayList<VertexObject>();
+                    List<VertexObject> interProteins = new ArrayList<>();
                     interProteins.add(vertex);
                     VertexObject interVertex = new VertexObject(pseudoLabel, interProteins);
                     

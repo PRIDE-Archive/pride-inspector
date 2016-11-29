@@ -89,7 +89,7 @@ public class AttributedSequenceBuilder {
             protein.setNumOfValidPeptides(numOfValidPeptides);
 
             // keep only unique peptides
-            Set<PeptideAnnotation> uniquePeptides = new LinkedHashSet<PeptideAnnotation>();
+            Set<PeptideAnnotation> uniquePeptides = new LinkedHashSet<>();
             uniquePeptides.addAll(peptides);
             protein.setNumOfUniquePeptides(uniquePeptides.size());
 
@@ -99,7 +99,7 @@ public class AttributedSequenceBuilder {
             int[] coverageArr = new int[length];
             int[] ptmArr = new int[length];
             for (PeptideAnnotation uniquePeptide : uniquePeptides) {
-                Set<Integer> startingPos = new HashSet<Integer>();
+                Set<Integer> startingPos = new HashSet<>();
                 boolean strictValidPeptideAnnotation = protein.isStrictValidPeptideAnnotation(uniquePeptide);
                 if (strictValidPeptideAnnotation) {
                     startingPos.add(uniquePeptide.getStart() - 1);

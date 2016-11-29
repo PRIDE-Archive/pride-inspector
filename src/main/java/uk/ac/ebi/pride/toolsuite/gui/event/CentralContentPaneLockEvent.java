@@ -11,7 +11,7 @@ import org.bushe.swing.event.AbstractEventServiceEvent;
  */
 public class CentralContentPaneLockEvent extends AbstractEventServiceEvent {
 
-    public static enum Status {LOCK, UNLOCK}
+    public enum Status {LOCK, UNLOCK}
 
     private Status status;
 

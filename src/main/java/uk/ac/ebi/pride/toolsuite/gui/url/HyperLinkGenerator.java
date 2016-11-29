@@ -14,5 +14,5 @@ public interface HyperLinkGenerator<K> {
      * @param value input value
      * @return String   a url string
      */
-    public String generate(K value);
+    String generate(K value);
 }

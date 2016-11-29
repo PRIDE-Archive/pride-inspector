@@ -29,7 +29,7 @@ public class OpenGzippedFileTask extends TaskAdapter<Void, File> {
     private String path;
 
     public OpenGzippedFileTask(List<File> files, String path) {
-        this.inputFiles = new ArrayList<File>(files);
+        this.inputFiles = new ArrayList<>(files);
         this.path = path.endsWith(System.getProperty("file.separator")) ? path : path + System.getProperty("file.separator");
         String msg = "Unzipping Files";
         this.setName(msg);

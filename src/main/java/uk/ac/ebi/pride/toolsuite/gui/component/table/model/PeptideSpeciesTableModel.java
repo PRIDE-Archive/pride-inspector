@@ -27,7 +27,7 @@ public class PeptideSpeciesTableModel extends ProgressiveListTableModel<Void, Tu
         private final String header;
         private final String toolTip;
 
-        private TableHeader(String header, String tooltip) {
+        TableHeader(String header, String tooltip) {
             this.header = header;
             this.toolTip = tooltip;
         }
@@ -48,8 +48,8 @@ public class PeptideSpeciesTableModel extends ProgressiveListTableModel<Void, Tu
     private final Map<String, PeptideSpecies> peptideSequenceToPeptideSpeciesMappings;
 
     public PeptideSpeciesTableModel(int rankingThreshold, double minDeltaMz, double maxDeltaMz) {
-        this.showingPeptideSpecies = new ArrayList<PeptideSpecies>();
-        this.peptideSequenceToPeptideSpeciesMappings = new LinkedHashMap<String, PeptideSpecies>();
+        this.showingPeptideSpecies = new ArrayList<>();
+        this.peptideSequenceToPeptideSpeciesMappings = new LinkedHashMap<>();
         this.rankingThreshold = rankingThreshold;
         this.minDeltaMz = minDeltaMz;
         this.maxDeltaMz = maxDeltaMz;
@@ -180,7 +180,7 @@ public class PeptideSpeciesTableModel extends ProgressiveListTableModel<Void, Tu
 
     private static String getModifiedPeptideString(List<Modification> mods, String sequence) {
         // Map for grouping PTMs based on location
-        Map<Integer, List<Double>> locationMap = new LinkedHashMap<Integer, List<Double>>();
+        Map<Integer, List<Double>> locationMap = new LinkedHashMap<>();
 
         // Iterate over each modification
         for (Modification mod : mods) {
@@ -194,7 +194,7 @@ public class PeptideSpeciesTableModel extends ProgressiveListTableModel<Void, Tu
 
             List<Double> massDiffs = locationMap.get(location);
             if (massDiffs == null) {
-                massDiffs = new ArrayList<Double>();
+                massDiffs = new ArrayList<>();
                 locationMap.put(location, massDiffs);
                 List<Double> md = mod.getMonoisotopicMassDelta();
                 if (md != null && !md.isEmpty()) {

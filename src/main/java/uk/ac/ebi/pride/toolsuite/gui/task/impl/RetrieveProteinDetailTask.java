@@ -66,10 +66,10 @@ public class RetrieveProteinDetailTask extends AbstractDataAccessTask<Void, Tupl
 
 
         //protein identification id and accession buffer
-        Map<Comparable, String> accBuffer = new LinkedHashMap<Comparable, String>();
+        Map<Comparable, String> accBuffer = new LinkedHashMap<>();
 
         // protein map
-        Map<String, Protein> proteins = new HashMap<String, Protein>();
+        Map<String, Protein> proteins = new HashMap<>();
 
         if (controller.hasProteinAmbiguityGroup())
             EventBus.publish(new SortProteinTableEvent(controller, SortProteinTableEvent.Type.DISABLE_SORT));
@@ -102,11 +102,11 @@ public class RetrieveProteinDetailTask extends AbstractDataAccessTask<Void, Tupl
                         accBuffer.clear();
 
                         // clear protein map
-                        proteins = new HashMap<String, Protein>();
+                        proteins = new HashMap<>();
                     }
                 }
                 // clear protein map
-                proteins = new HashMap<String, Protein>();
+                proteins = new HashMap<>();
             } catch (IllegalArgumentException ex) {
                 Protein protein = new Protein(protAcc);
                 protein.setStatus(Protein.STATUS.UNKNOWN);
@@ -137,7 +137,7 @@ public class RetrieveProteinDetailTask extends AbstractDataAccessTask<Void, Tupl
      */
     private void fetchAndPublish(Map<Comparable, String> accs, Map<String, Protein> proteins) throws Exception {
 
-        Collection<String> accsToFetch = new HashSet<String>(accs.values());
+        Collection<String> accsToFetch = new HashSet<>(accs.values());
 
         accsToFetch.removeAll(proteins.keySet());
         // fetch protein details
@@ -150,9 +150,9 @@ public class RetrieveProteinDetailTask extends AbstractDataAccessTask<Void, Tupl
         publish(new Tuple<TableContentType, Object>(TableContentType.PROTEIN_DETAILS, proteins));
 
         // protein sequence coverage
-        Map<Comparable, Double> coverageMap = new HashMap<Comparable, Double>();
+        Map<Comparable, Double> coverageMap = new HashMap<>();
         // peptide fits
-        Map<Tuple<Comparable, Comparable>, Integer> peptideFits = new HashMap<Tuple<Comparable, Comparable>, Integer>();
+        Map<Tuple<Comparable, Comparable>, Integer> peptideFits = new HashMap<>();
 
         for (Comparable protIdentId : accs.keySet()) {
             // protein sequence coverage
@@ -216,7 +216,7 @@ public class RetrieveProteinDetailTask extends AbstractDataAccessTask<Void, Tupl
                     PrideInspectorCacheManager.getInstance().addPeptideFitState(controller.getUid(), protIdentId, peptideIdentId, state);
                 }
 
-                peptideFits.put(new Tuple<Comparable, Comparable>(protIdentId, peptideIdentId), state);
+                peptideFits.put(new Tuple<>(protIdentId, peptideIdentId), state);
             }
 
             checkInterruption();

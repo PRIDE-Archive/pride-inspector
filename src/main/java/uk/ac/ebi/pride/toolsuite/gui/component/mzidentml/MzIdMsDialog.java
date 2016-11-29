@@ -98,7 +98,7 @@ public class MzIdMsDialog extends JDialog {
     }
 
     private void initMzIdList(List<File> files) {
-        mzidentmlFiles = new HashMap<File, List<File>>(fileList.size());
+        mzidentmlFiles = new HashMap<>(fileList.size());
         for (File file : files) {
             mzidentmlFiles.put(file, null);
         }
@@ -366,7 +366,7 @@ public class MzIdMsDialog extends JDialog {
         private final String header;
         private final String toolTip;
 
-        private TableHeader(String header, String tooltip) {
+        TableHeader(String header, String tooltip) {
             this.header = header;
             this.toolTip = tooltip;
         }
@@ -536,13 +536,13 @@ public class MzIdMsDialog extends JDialog {
         // check the selection results from open file dialog
 
         int result = simpleFileDialog.showDialog(this, null);
-        List<File> files = new ArrayList<File>();
+        List<File> files = new ArrayList<>();
         if (result == JFileChooser.APPROVE_OPTION) {
             for (File file : simpleFileDialog.getSelectedFiles()) {
                 files = recursiveFileFolder(file, files);
             }
-            Set<File> nonRedundantFiles = new HashSet<File>(files);
-            files = new ArrayList<File>(nonRedundantFiles);
+            Set<File> nonRedundantFiles = new HashSet<>(files);
+            files = new ArrayList<>(nonRedundantFiles);
             int selectedRow = sourceTable.getSelectedRow();
             List<File> currentFiles = mzidentmlFiles.get(fileList.get(selectedRow));
             currentFiles = (currentFiles != null) ? currentFiles : new ArrayList<File>();

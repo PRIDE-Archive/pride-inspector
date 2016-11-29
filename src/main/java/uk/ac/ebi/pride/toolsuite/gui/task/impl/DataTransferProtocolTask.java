@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class DataTransferProtocolTask extends TaskAdapter<List<DataTransferProtocol>, Void> {
 
-    private final List<DataTransferConfiguration> dataTransferConfigurations = new ArrayList<DataTransferConfiguration>();
+    private final List<DataTransferConfiguration> dataTransferConfigurations = new ArrayList<>();
 
     public DataTransferProtocolTask(DataTransferConfiguration ... dataTransferConfigurations) {
         if (dataTransferConfigurations != null)
@@ -28,7 +28,7 @@ public class DataTransferProtocolTask extends TaskAdapter<List<DataTransferProto
     @Override
     protected List<DataTransferProtocol> doInBackground() throws Exception {
 
-        List<DataTransferProtocol> validProtocol = new ArrayList<DataTransferProtocol>();
+        List<DataTransferProtocol> validProtocol = new ArrayList<>();
 
         for (DataTransferConfiguration dataTransferConfiguration : dataTransferConfigurations) {
             String host = dataTransferConfiguration.getHost();

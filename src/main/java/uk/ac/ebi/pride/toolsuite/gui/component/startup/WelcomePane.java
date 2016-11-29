@@ -307,7 +307,7 @@ public class WelcomePane extends JPanel implements TaskListener<Object, Object> 
         // add try mzML sample
         c.gridy = 0;
         File mzMLExampleFile = getExampleFiles(context.getProperty("pride.inspector.mzml.example.file"));
-        List<File> mzMLFiles = new ArrayList<File>();
+        List<File> mzMLFiles = new ArrayList<>();
         if (mzMLExampleFile != null) {
             mzMLFiles.add(mzMLExampleFile);
         }
@@ -318,7 +318,7 @@ public class WelcomePane extends JPanel implements TaskListener<Object, Object> 
 
         c.gridy = 1;
         File prideXMLExampleFile = getExampleFiles(context.getProperty("pride.inspector.pride.example.file"));
-        List<File> prideXmlFiles = new ArrayList<File>();
+        List<File> prideXmlFiles = new ArrayList<>();
         if (prideXMLExampleFile != null) {
             prideXmlFiles.add(prideXMLExampleFile);
         }
@@ -330,7 +330,7 @@ public class WelcomePane extends JPanel implements TaskListener<Object, Object> 
 
         c.gridy = 2;
         File mzIdentMlExampleFile = getExampleFiles(context.getProperty("pride.inspector.mzidentml.example.file"));
-        List<File> mzIdentMlFiles = new ArrayList<File>();
+        List<File> mzIdentMlFiles = new ArrayList<>();
         if (mzIdentMlExampleFile != null) {
             mzIdentMlFiles.add(mzIdentMlExampleFile);
         }

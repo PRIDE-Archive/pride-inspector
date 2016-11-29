@@ -33,7 +33,7 @@ public class SilentSingleAssayFileOpener implements TaskListener<Void, File> {
     public void open(final List<File> inputFiles, final File workingDirectory) throws IOException {
 
         // make a copy of the file list
-        ArrayList<File> files = new ArrayList<File>(inputFiles);
+        ArrayList<File> files = new ArrayList<>(inputFiles);
 
         // find zipped files
         List<File> zippedFiles = findZippedFiles(files);
@@ -53,7 +53,7 @@ public class SilentSingleAssayFileOpener implements TaskListener<Void, File> {
 
     private List<File> findZippedFiles(List<File> files) {
         // separate files to unzipped and zipped
-        List<File> zippedFiles = new ArrayList<File>();
+        List<File> zippedFiles = new ArrayList<>();
 
         for (File file : files) {
             if (isGzipFile(file)) {
@@ -84,8 +84,8 @@ public class SilentSingleAssayFileOpener implements TaskListener<Void, File> {
 
         long fileSizeThreshold = Long.parseLong(context.getProperty("memory.mzidentml.file.threshold"));
 
-        Map<File, Class> openFiles = new HashMap<File, Class>();
-        List<File> mzIdentMLFiles = new ArrayList<File>();
+        Map<File, Class> openFiles = new HashMap<>();
+        List<File> mzIdentMLFiles = new ArrayList<>();
 
         for (File selectedFile : files) {
             // check the file type
@@ -112,8 +112,8 @@ public class SilentSingleAssayFileOpener implements TaskListener<Void, File> {
 
                 Set<File> peakFiles = openFiles.keySet();
                 OpenFileTask newTask = (isFileToBig(mzIdentML, fileSizeThreshold)) ?
-                        new OpenFileTask(mzIdentML, new ArrayList<File>(peakFiles), MzIdentMLControllerImpl.class, msg, msg, false) :
-                        new OpenFileTask(mzIdentML, new ArrayList<File>(peakFiles), MzIdentMLControllerImpl.class, msg, msg, true);
+                        new OpenFileTask(mzIdentML, new ArrayList<>(peakFiles), MzIdentMLControllerImpl.class, msg, msg, false) :
+                        new OpenFileTask(mzIdentML, new ArrayList<>(peakFiles), MzIdentMLControllerImpl.class, msg, msg, true);
 
                 TaskUtil.startBackgroundTask(newTask);
             }
@@ -129,7 +129,7 @@ public class SilentSingleAssayFileOpener implements TaskListener<Void, File> {
 
 
     private List<File> unzipFiles(List<File> zippedFiles, File outputFolder) throws IOException {
-        List<File> unzippedFiles = new ArrayList<File>();
+        List<File> unzippedFiles = new ArrayList<>();
 
         for (File inputFile : zippedFiles) {
             FileInputStream fis = null;

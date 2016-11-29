@@ -23,7 +23,7 @@ public class SummaryItemPanel extends JPanel {
     private java.util.List<SubmissionFileDetail> submissionFileDetails;
 
     public SummaryItemPanel(Collection<SubmissionFileDetail> submissionFileDetails) {
-        this.submissionFileDetails = new ArrayList<SubmissionFileDetail>(submissionFileDetails);
+        this.submissionFileDetails = new ArrayList<>(submissionFileDetails);
         populateSummaryItemPanel();
     }
 

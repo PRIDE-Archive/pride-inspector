@@ -100,7 +100,7 @@ public class ExportPeptideDescTask extends AbstractDataAccessTask<Void, Void> {
             // first, we need to create an instance of PeptideTableModel
             PeptideSpeciesPSMTableModel pepTableModel = new PeptideSpeciesPSMTableModel(controller.getAvailablePeptideLevelScores(), PeptideRankingFilter.LESS_EQUAL_THAN_ONE.getRankingThreshold());
             // a list of columns to be skipped
-            List<Integer> skipIndexes = new ArrayList<Integer>();
+            List<Integer> skipIndexes = new ArrayList<>();
 
             skipIndexes.add(pepTableModel.getColumnIndex(PeptideTableHeader.PROTEIN_NAME.getHeader()));
             skipIndexes.add(pepTableModel.getColumnIndex(PeptideTableHeader.PROTEIN_STATUS.getHeader()));

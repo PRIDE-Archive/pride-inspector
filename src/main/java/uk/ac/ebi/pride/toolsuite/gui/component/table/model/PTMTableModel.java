@@ -29,7 +29,7 @@ public class PTMTableModel extends ListBasedProgressiveListTableModel<Void, Pept
         private final String header;
         private final String toolTip;
 
-        private TableHeader(String header, String tooltip) {
+        TableHeader(String header, String tooltip) {
             this.header = header;
             this.toolTip = tooltip;
         }
@@ -60,7 +60,7 @@ public class PTMTableModel extends ListBasedProgressiveListTableModel<Void, Pept
         List<Modification> mods = peptide.getModifications();
         if (!mods.isEmpty()) {
             for (Modification mod : mods) {
-                List<Object> content = new ArrayList<Object>();
+                List<Object> content = new ArrayList<>();
                 // accession
                 content.add(mod.getId().toString());
                 // name

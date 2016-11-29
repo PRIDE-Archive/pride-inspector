@@ -15,5 +15,5 @@ public interface EventBusSubscribable {
      * Subscribe to event bus
      * @param eventBus  event buses to subscribe to
      */
-    public void subscribeToEventBus(EventService eventBus);
+    void subscribeToEventBus(EventService eventBus);
 }

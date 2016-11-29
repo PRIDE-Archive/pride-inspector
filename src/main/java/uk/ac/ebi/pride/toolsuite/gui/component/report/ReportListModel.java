@@ -40,7 +40,7 @@ public class ReportListModel extends DefaultListModel {
                 int size = size();
                 // get the message to be removed
                 Pattern pattern = ((RemovalReportMessage) msg).getPattern();
-                List<SummaryReportMessage> messageToRemove = new ArrayList<SummaryReportMessage>();
+                List<SummaryReportMessage> messageToRemove = new ArrayList<>();
                 for (int i = 0; i < size; i++) {
                     SummaryReportMessage currMsg = (SummaryReportMessage)getElementAt(i);
                     String message = currMsg.getMessage();

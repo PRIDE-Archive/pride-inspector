@@ -152,7 +152,7 @@ public class PrideChartBigPane extends PrideChartPane {
         optionPane.add(titleBar);
 
         Map<String, Tuple<Boolean, Boolean>> optionList = plot.getOptionStudyList();
-        final java.util.List<JToggleButton> jtbList = new ArrayList<JToggleButton>();
+        final java.util.List<JToggleButton> jtbList = new ArrayList<>();
         JToggleButton jtb;
         for (String dataType : optionList.keySet()) {
             jtb = new JCheckBox(dataType);
@@ -272,7 +272,7 @@ public class PrideChartBigPane extends PrideChartPane {
         optionPane.add(titleBar);
 
         Map<PrideDataType, Boolean> optionList = plot.getOptionList();
-        final java.util.List<JToggleButton> jtbList = new ArrayList<JToggleButton>();
+        final java.util.List<JToggleButton> jtbList = new ArrayList<>();
         JToggleButton jtb;
         for (PrideDataType dataType : optionList.keySet()) {
             jtb = new JCheckBox(dataType.getTitle());
@@ -311,7 +311,7 @@ public class PrideChartBigPane extends PrideChartPane {
         optionPane.add(titleBar);
 
         Map<PrideDataType, Boolean> optionList = plot.getOptionList();
-        final java.util.List<JToggleButton> jtbList = new ArrayList<JToggleButton>();
+        final java.util.List<JToggleButton> jtbList = new ArrayList<>();
         JToggleButton jtb;
         for (PrideDataType dataType : optionList.keySet()) {
             jtb = new JCheckBox(dataType.getTitle());
@@ -350,7 +350,7 @@ public class PrideChartBigPane extends PrideChartPane {
         optionPane.add(titleBar);
 
         Map<PrideDataType, Boolean> optionList = plot.getOptionList();
-        final java.util.List<JToggleButton> jtbList = new ArrayList<JToggleButton>();
+        final java.util.List<JToggleButton> jtbList = new ArrayList<>();
         JToggleButton jtb;
         for (PrideDataType dataType : optionList.keySet()) {
             jtb = new JCheckBox(dataType.getTitle());
@@ -389,7 +389,7 @@ public class PrideChartBigPane extends PrideChartPane {
         optionPane.add(titleBar);
 
         Map<PrideDataType, Boolean> optionList = plot.getOptionList();
-        final java.util.List<JToggleButton> jtbList = new ArrayList<JToggleButton>();
+        final java.util.List<JToggleButton> jtbList = new ArrayList<>();
         JToggleButton jtb;
         for (PrideDataType dataType : optionList.keySet()) {
             jtb = new JCheckBox(dataType.getTitle());

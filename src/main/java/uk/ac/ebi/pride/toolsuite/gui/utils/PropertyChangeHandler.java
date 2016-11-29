@@ -14,21 +14,21 @@ import java.io.Serializable;
  */
 public interface PropertyChangeHandler extends Serializable{
 
-    public void addPropertyChangeListener(PropertyChangeListener listener);
+    void addPropertyChangeListener(PropertyChangeListener listener);
 
-    public void addPropertyChangeListener(String propName, PropertyChangeListener listener);
+    void addPropertyChangeListener(String propName, PropertyChangeListener listener);
 
-    public void removePropertyChangeListener(PropertyChangeListener listener);
+    void removePropertyChangeListener(PropertyChangeListener listener);
 
-    public void removePropertyChangeListener(String propName, PropertyChangeListener listener);
+    void removePropertyChangeListener(String propName, PropertyChangeListener listener);
 
-    public void removeAllPropertyChangeListeners();
+    void removeAllPropertyChangeListeners();
 
-    public PropertyChangeListener[] getPropertyChangeListeners();
+    PropertyChangeListener[] getPropertyChangeListeners();
 
-    public PropertyChangeListener[] getPropertyChangeListeners(String propName);
+    PropertyChangeListener[] getPropertyChangeListeners(String propName);
 
-    public void firePropertyChange(final PropertyChangeEvent event);
+    void firePropertyChange(final PropertyChangeEvent event);
 
-    public void firePropertyChange(String propName, Object oldValue, Object newValue);
+    void firePropertyChange(String propName, Object oldValue, Object newValue);
 }

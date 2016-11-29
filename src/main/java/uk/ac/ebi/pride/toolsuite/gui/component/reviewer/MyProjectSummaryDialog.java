@@ -170,7 +170,7 @@ public class MyProjectSummaryDialog extends JDialog implements TaskListener<File
             // close the current panel
             MyProjectSummaryDialog.this.setVisible(false);
 
-            List<SubmissionFileDetail> submissionFileDetails = new ArrayList<SubmissionFileDetail>();
+            List<SubmissionFileDetail> submissionFileDetails = new ArrayList<>();
             for (FileDetail fileDetail : fileDetailList.getList()) {
                 submissionFileDetails.add(new SubmissionFileDetail(fileDetail));
             }

@@ -69,7 +69,7 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
     protected Void doInBackground() throws Exception {
         if (folder != null) {
 
-            List<File> downloadedFiles = new ArrayList<File>();
+            List<File> downloadedFiles = new ArrayList<>();
 
             for (SubmissionFileDetail submissionEntry : submissionEntries) {
                 // get output file path

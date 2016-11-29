@@ -11,7 +11,7 @@ import org.bushe.swing.event.AbstractEventServiceEvent;
  */
 public class ProcessingDataSourceEvent <T> extends AbstractEventServiceEvent {
 
-    public static enum Status {
+    public enum Status {
         IDENTIFICATION_READING,
         CHART_GENERATION,
         SPECTRA_READING,

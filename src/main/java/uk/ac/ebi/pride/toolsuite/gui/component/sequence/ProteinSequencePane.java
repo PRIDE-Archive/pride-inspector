@@ -280,7 +280,7 @@ public class ProteinSequencePane extends DataAccessControllerPane<AnnotatedProte
             boolean lineComplete = false;
 
             // stores all the text layout to be drawn and their starting horizontal position
-            List<Tuple<TextLayout, Float>> layouts = new ArrayList<Tuple<TextLayout, Float>>();
+            List<Tuple<TextLayout, Float>> layouts = new ArrayList<>();
 
 
             while (!lineComplete) {
@@ -289,7 +289,7 @@ public class ProteinSequencePane extends DataAccessControllerPane<AnnotatedProte
 
                 if (layout != null) {
                     // add an layout entry
-                    Tuple<TextLayout, Float> element = new Tuple<TextLayout, Float>(layout, xPos);
+                    Tuple<TextLayout, Float> element = new Tuple<>(layout, xPos);
                     layouts.add(element);
 
                     // increment horizontal position

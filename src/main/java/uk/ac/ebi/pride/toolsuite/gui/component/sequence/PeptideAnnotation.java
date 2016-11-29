@@ -31,7 +31,7 @@ public class PeptideAnnotation {
         this.start = start;
         this.end = end;
         this.sequence = sequence == null ? null : sequence.toUpperCase();
-        this.ptmAnnotations = new ArrayList<PTMAnnotation>();
+        this.ptmAnnotations = new ArrayList<>();
     }
 
     public int getStart() {
@@ -59,7 +59,7 @@ public class PeptideAnnotation {
     }
 
     public List<PTMAnnotation> getPtmAnnotations() {
-        return new ArrayList<PTMAnnotation>(ptmAnnotations);
+        return new ArrayList<>(ptmAnnotations);
     }
 
     public void addPtmAnnotation(PTMAnnotation ptm) {

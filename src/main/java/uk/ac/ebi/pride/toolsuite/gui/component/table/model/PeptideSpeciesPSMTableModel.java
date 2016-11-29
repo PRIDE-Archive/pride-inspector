@@ -19,7 +19,7 @@ public class PeptideSpeciesPSMTableModel extends AbstractPeptideTableModel {
     public PeptideSpeciesPSMTableModel(Collection<SearchEngineScoreCvTermReference> listPeptideScores, int rankingThreshold) {
         super(listPeptideScores);
         this.rankingThreshold = rankingThreshold;
-        this.allPeptideTableRows = new ArrayList<PeptideTableRow>();
+        this.allPeptideTableRows = new ArrayList<>();
     }
 
     @Override

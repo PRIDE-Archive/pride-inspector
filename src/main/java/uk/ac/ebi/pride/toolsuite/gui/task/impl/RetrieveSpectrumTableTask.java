@@ -90,7 +90,7 @@ public class RetrieveSpectrumTableTask extends AbstractDataAccessTask<Void, Tupl
 
             long date = System.currentTimeMillis();
 
-            EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.SPECTRA_READING, controller));
+            EventBus.publish(new ProcessingDataSourceEvent<>(controller, ProcessingDataSourceEvent.Status.SPECTRA_READING, controller));
             Collection<Comparable> specIds = controller.getSpectrumIds();
 
             int specSize = specIds.size();
@@ -99,7 +99,7 @@ public class RetrieveSpectrumTableTask extends AbstractDataAccessTask<Void, Tupl
                 stop = stop > specSize ? specSize : stop;
 
                 for (int i = start; i < stop; i++) {
-                    List<Object> content = new ArrayList<Object>();
+                    List<Object> content = new ArrayList<>();
                     // spectrum id
                     Comparable specId = CollectionUtils.getElement(specIds, i);
                     content.add(specId);
@@ -125,12 +125,12 @@ public class RetrieveSpectrumTableTask extends AbstractDataAccessTask<Void, Tupl
                     // this is important for cancelling
                     checkInterruption();
 
-                    publish(new Tuple<TableContentType, List<Object>>(TableContentType.SPECTRUM, content));
+                    publish(new Tuple<>(TableContentType.SPECTRUM, content));
                 }
 
             }
             logger.debug("SPECTRUM LOAD | All {} spectrum has been shown in: {} milliseconds", size, System.currentTimeMillis() - date);
-            EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.SPECTRA_READING,controller));
+            EventBus.publish(new ProcessingDataSourceEvent<>(controller, ProcessingDataSourceEvent.Status.SPECTRA_READING, controller));
         } catch (DataAccessException dex) {
             String msg = "Failed to retrieve spectrum related data";
             logger.error(msg, dex);

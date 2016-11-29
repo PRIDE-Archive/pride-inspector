@@ -115,7 +115,7 @@ public class SimpleMsDialog extends JDialog {
             data[i][2] = ((ReferencedIdentificationController) controller).getNumberOfSpectrabySpectraData(spectraData);
             data[i][3] = msFileName;
             List<uk.ac.ebi.pride.utilities.data.utils.Constants.SpecFileFormat> fileformats = uk.ac.ebi.pride.utilities.data.utils.Constants.getFileTypeSupported(spectraData);
-            List<String> fileStrFormats = new ArrayList<String>(fileformats.size());
+            List<String> fileStrFormats = new ArrayList<>(fileformats.size());
             for (uk.ac.ebi.pride.utilities.data.utils.Constants.SpecFileFormat specFileFormat : fileformats)
                 fileStrFormats.add(specFileFormat.toString());
             data[i][4] = (fileStrFormats.size() == 0) ? NO_SUPPORTED : fileformats.get(0);
@@ -318,7 +318,7 @@ public class SimpleMsDialog extends JDialog {
                     Constants.GZIPPED_FILE);
             int result = ofd.showDialog(this, null);
 
-            java.util.List<File> filesToOpen = new ArrayList<File>();
+            java.util.List<File> filesToOpen = new ArrayList<>();
 
             // check the selection results from open fiel dialog
             if (result == JFileChooser.APPROVE_OPTION) {
@@ -351,7 +351,7 @@ public class SimpleMsDialog extends JDialog {
 
         int result = ofd.showDialog(this, null);
 
-        java.util.List<File> filesToOpen = new ArrayList<File>();
+        java.util.List<File> filesToOpen = new ArrayList<>();
 
         // check the selection results from open fiel dialog
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -394,8 +394,8 @@ public class SimpleMsDialog extends JDialog {
     }
 
     private void setMSFilesActionPerformed(ActionEvent e) {
-        Map<Comparable, File> files = new HashMap<Comparable, File>();
-        Map<Comparable, String> fileTypes = new HashMap<Comparable, String>();
+        Map<Comparable, File> files = new HashMap<>();
+        Map<Comparable, String> fileTypes = new HashMap<>();
         for (int i = 0; i < msFileTable.getRowCount(); i++) {
             Comparable idSpectra = (Comparable) msFileTable.getValueAt(i, 0);
             String filePath = (String) msFileTable.getValueAt(i, 3);
@@ -560,7 +560,7 @@ public class SimpleMsDialog extends JDialog {
     private JButton setButton;
     private JButton cancelButton;
     private JPanel panelMessage;
-    List<TableCellEditor> editors = new ArrayList<TableCellEditor>();
+    List<TableCellEditor> editors = new ArrayList<>();
     private JPanel headerPanel;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

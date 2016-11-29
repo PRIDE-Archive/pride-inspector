@@ -98,7 +98,7 @@ public class PTMAnnotation {
     }
 
     public void setMonoMassDeltas(List<Double> monoMassDeltas) {
-        this.monoMassDeltas = (monoMassDeltas != null)?new ArrayList<Double>(monoMassDeltas): new ArrayList<Double>();
+        this.monoMassDeltas = (monoMassDeltas != null)? new ArrayList<>(monoMassDeltas): new ArrayList<Double>();
     }
 
     public List<Double> getAvgMassDeltas() {
@@ -106,7 +106,7 @@ public class PTMAnnotation {
     }
 
     public void setAvgMassDeltas(List<Double> avgMassDeltas) {
-        this.avgMassDeltas = (avgMassDeltas != null)? new ArrayList<Double>(avgMassDeltas): new ArrayList<Double>();
+        this.avgMassDeltas = (avgMassDeltas != null)? new ArrayList<>(avgMassDeltas): new ArrayList<Double>();
     }
 
     @Override

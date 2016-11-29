@@ -10,7 +10,7 @@ import org.bushe.swing.event.AbstractEventServiceEvent;
  * Time: 15:03
  */
 public class DatabaseSearchEvent<T> extends AbstractEventServiceEvent{
-    public static enum Status {SHOW,
+    public enum Status {SHOW,
                                START,
                                RESULT,
                                COMPLETE,

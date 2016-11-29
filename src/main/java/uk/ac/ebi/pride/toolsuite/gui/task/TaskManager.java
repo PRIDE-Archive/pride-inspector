@@ -70,7 +70,7 @@ public class TaskManager extends PropertyChangeHelper {
                                                new LinkedBlockingQueue<Runnable>());
 
         // a list of tasks
-        this.tasks = new CopyOnWriteArrayList<Task>();
+        this.tasks = new CopyOnWriteArrayList<>();
 
         // internal property change listener
         this.taskPropListener = new TaskPropertyListener();
@@ -99,9 +99,9 @@ public class TaskManager extends PropertyChangeHelper {
         // add task the task list
         List<Task> oldTasks, newTasks;
         synchronized (tasksLock) {
-            oldTasks = new ArrayList<Task>(tasks);
+            oldTasks = new ArrayList<>(tasks);
             tasks.add(task);
-            newTasks = new ArrayList<Task>(tasks);
+            newTasks = new ArrayList<>(tasks);
             task.addPropertyChangeListener(taskPropListener);
         }
 
@@ -128,7 +128,7 @@ public class TaskManager extends PropertyChangeHelper {
      */
     @SuppressWarnings("unchecked")
     public List<Task> getTasks(TaskListener listener) {
-        List<Task> ts = new ArrayList<Task>();
+        List<Task> ts = new ArrayList<>();
 
         synchronized (tasksLock) {
             for (Task task : tasks) {
@@ -148,7 +148,7 @@ public class TaskManager extends PropertyChangeHelper {
      * @return List<Task>   a list of tasks
      */
     public List<Task> getTasks(PropertyChangeListener listener) {
-        List<Task> ts = new ArrayList<Task>();
+        List<Task> ts = new ArrayList<>();
 
         synchronized (tasksLock) {
             for (Task task : tasks) {
@@ -168,7 +168,7 @@ public class TaskManager extends PropertyChangeHelper {
      * @return List<Task>   a list of matching tasks
      */
     public List<Task> getTasks(Class<? extends Task> taskClass) {
-        List<Task> ts = new ArrayList<Task>();
+        List<Task> ts = new ArrayList<>();
 
         synchronized (tasksLock) {
             for (Task task : tasks) {
@@ -228,10 +228,10 @@ public class TaskManager extends PropertyChangeHelper {
                 cancelTasksByOwner(task);
 
                 List<Task> oldTasks, newTasks;
-                oldTasks = new ArrayList<Task>(tasks);
+                oldTasks = new ArrayList<>(tasks);
                 tasks.remove(task);
                 canceled = task.cancel(interrupt);
-                newTasks = new ArrayList<Task>(tasks);
+                newTasks = new ArrayList<>(tasks);
                 task.removePropertyChangeListener(taskPropListener);
 
                 firePropertyChange(REMOVE_TASK_PROP, oldTasks, newTasks);
@@ -284,11 +284,11 @@ public class TaskManager extends PropertyChangeHelper {
                 List<Task> oldTasks, newTasks;
 
                 synchronized (tasksLock) {
-                    oldTasks = new ArrayList<Task>(tasks);
+                    oldTasks = new ArrayList<>(tasks);
                     tasks.remove(task);
                     // remove all the children tasks too
                     TaskManager.this.cancelTasksByOwner(task);
-                    newTasks = new ArrayList<Task>(tasks);
+                    newTasks = new ArrayList<>(tasks);
                     task.removePropertyChangeListener(taskPropListener);
                 }
 

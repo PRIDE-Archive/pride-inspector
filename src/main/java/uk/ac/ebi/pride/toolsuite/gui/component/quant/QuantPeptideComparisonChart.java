@@ -89,7 +89,7 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
 
     public QuantPeptideComparisonChart(DataAccessController controller) {
         super(controller);
-        this.idMapping = new HashMap<Comparable, Map<Comparable, List<Comparable>>>();
+        this.idMapping = new HashMap<>();
         this.noProteinSelected = true;
         this.noPeptideSelectionMessage = appContext.getProperty("no.peptide.selection.warning.message");
         if(controller.getType().equals(DataAccessController.Type.MZTAB))
@@ -393,8 +393,8 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
                             Comparable column = QuantCvTermReference.getReagentShortLabel(reagent.getAccession())
                                     + "/" + QuantCvTermReference.getReagentShortLabel(referenceReagent.getAccession());
                             dataset.addValue(value, sequence, proteinAcc, id.toString() + idPeptide.toString(), column);
-                            Map<Comparable, List<Comparable>> peptides = new HashMap<Comparable, List<Comparable>>();
-                            List<Comparable> columns = new ArrayList<Comparable>();
+                            Map<Comparable, List<Comparable>> peptides = new HashMap<>();
+                            List<Comparable> columns = new ArrayList<>();
 
                             if( idMapping.get(id) != null ){
                                 peptides = idMapping.get(id);
@@ -422,8 +422,8 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
                    for(Comparable column: quantitation.getStudyVariableScores().keySet()){
                        dataset.addValue(quantitation.getStudyVariableScores().get(column), sequence, proteinAcc, id.toString() + idPeptide.toString(), studyVariablesTitles.get(column).getDescription());
 
-                       Map<Comparable, List<Comparable>> peptides = new HashMap<Comparable, List<Comparable>>();
-                       List<Comparable> columns = new ArrayList<Comparable>();
+                       Map<Comparable, List<Comparable>> peptides = new HashMap<>();
+                       List<Comparable> columns = new ArrayList<>();
 
                        if( idMapping.get(id) != null ){
                            peptides = idMapping.get(id);
@@ -438,8 +438,8 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
                     for(Comparable column: quantitation.getAssayAbundance().keySet()){
                         dataset.addValue(quantitation.getAssayAbundance().get(column), sequence, proteinAcc, id.toString() + idPeptide.toString(), studyVariablesTitles.get(column).getDescription());
 
-                        Map<Comparable, List<Comparable>> peptides = new HashMap<Comparable, List<Comparable>>();
-                        List<Comparable> columns = new ArrayList<Comparable>();
+                        Map<Comparable, List<Comparable>> peptides = new HashMap<>();
+                        List<Comparable> columns = new ArrayList<>();
 
                         if( idMapping.get(id) != null ){
                             peptides = idMapping.get(id);
@@ -485,8 +485,8 @@ public class QuantPeptideComparisonChart extends DataAccessControllerPane implem
         private Map<Comparable, Comparable> legendMap;
 
         private QuantCategoryDataset() {
-            labelMap = new HashMap<Comparable, Comparable>();
-            legendMap = new HashMap<Comparable, Comparable>();
+            labelMap = new HashMap<>();
+            legendMap = new HashMap<>();
         }
 
         public void addValue(Number value, Comparable label, Comparable legendItem,Comparable rowKey, Comparable columnKey) {

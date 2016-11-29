@@ -18,7 +18,7 @@ public enum PTMAccessionPattern {
     private Pattern idPattern;
     private MessageFormat urlPattern;
 
-    private PTMAccessionPattern(Pattern idPattern, MessageFormat urlPattern) {
+    PTMAccessionPattern(Pattern idPattern, MessageFormat urlPattern) {
         this.idPattern = idPattern;
         this.urlPattern = urlPattern;
     }

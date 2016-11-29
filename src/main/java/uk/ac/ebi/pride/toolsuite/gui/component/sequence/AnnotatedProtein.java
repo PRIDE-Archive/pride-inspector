@@ -118,7 +118,7 @@ public class AnnotatedProtein extends Protein {
 
     public AnnotatedProtein(String accession) {
         super(accession);
-        this.annotations = new ArrayList<PeptideAnnotation>();
+        this.annotations = new ArrayList<>();
         this.propertyChangeHelper = new PropertyChangeHelper();
     }
 
@@ -151,7 +151,7 @@ public class AnnotatedProtein extends Protein {
     }
 
     public List<PeptideAnnotation> getAnnotations() {
-        return new ArrayList<PeptideAnnotation>(annotations);
+        return new ArrayList<>(annotations);
     }
 
     public PeptideAnnotation getSelectedAnnotation() {
@@ -257,7 +257,7 @@ public class AnnotatedProtein extends Protein {
             setNumOfValidPeptides(numOfValidPeptides);
 
             // keep only unique peptides
-            Set<PeptideAnnotation> uniquePeptides = new LinkedHashSet<PeptideAnnotation>();
+            Set<PeptideAnnotation> uniquePeptides = new LinkedHashSet<>();
             uniquePeptides.addAll(peptides);
             setNumOfUniquePeptides(uniquePeptides.size());
 
@@ -266,7 +266,7 @@ public class AnnotatedProtein extends Protein {
             int length = sequence == null ? 0 : sequence.length();
             int[] coverageArr = new int[length];
             for (PeptideAnnotation uniquePeptide : uniquePeptides) {
-                Set<Integer> startingPos = new HashSet<Integer>();
+                Set<Integer> startingPos = new HashSet<>();
                 boolean strictValidPeptideAnnotation = isStrictValidPeptideAnnotation(uniquePeptide);
                 if (strictValidPeptideAnnotation) {
                     startingPos.add(uniquePeptide.getStart() - 1);

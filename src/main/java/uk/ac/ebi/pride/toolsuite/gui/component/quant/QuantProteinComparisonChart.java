@@ -90,7 +90,7 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
 
     public QuantProteinComparisonChart(DataAccessController controller) {
         super(controller);
-        this.idMapping = new HashMap<Comparable, java.util.List<Comparable>>();
+        this.idMapping = new HashMap<>();
         this.noProteinSelected = true;
         this.noProteinSelectionMessage = appContext.getProperty("no.protein.selection.warning.message");
         if(controller.getType().equals(DataAccessController.Type.MZTAB))
@@ -344,7 +344,7 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
         public void onEvent(ReferenceSampleChangeEvent referenceSampleChangeEvent) {
             int newReferenceSampleIndex = referenceSampleChangeEvent.getReferenceSampleIndex();
             if (newReferenceSampleIndex != referenceSampleIndex) {
-                java.util.List<Comparable> ids = new ArrayList<Comparable>(idMapping.keySet());
+                java.util.List<Comparable> ids = new ArrayList<>(idMapping.keySet());
                 // clear dataset
                 dataset.clear();
                 // set new reference sample index
@@ -389,7 +389,7 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
                             dataset.addValue(value, proteinAcc, id, column);
                             java.util.List<Comparable> columns = idMapping.get(id);
                             if (columns == null) {
-                                columns = new ArrayList<Comparable>();
+                                columns = new ArrayList<>();
                                 idMapping.put(id, columns);
                             }
                             columns.add(column);
@@ -409,7 +409,7 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
                         dataset.addValue(quantitation.getStudyVariableScores().get(column), proteinAcc, id, studyVariablesTitles.get(column).getDescription());
                         java.util.List<Comparable> columns = idMapping.get(id);
                         if (columns == null) {
-                            columns = new ArrayList<Comparable>();
+                            columns = new ArrayList<>();
                             idMapping.put(id, columns);
                         }
                         columns.add(studyVariablesTitles.get(column).getDescription());
@@ -419,7 +419,7 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
                         dataset.addValue(quantitation.getAssayAbundance().get(column), proteinAcc, id, studyVariablesTitles.get(column).getDescription());
                         java.util.List<Comparable> columns = idMapping.get(id);
                         if (columns == null) {
-                            columns = new ArrayList<Comparable>();
+                            columns = new ArrayList<>();
                             idMapping.put(id, columns);
                         }
                         columns.add(studyVariablesTitles.get(column).getDescription());
@@ -453,7 +453,7 @@ public class QuantProteinComparisonChart extends DataAccessControllerPane implem
         private Map<Comparable, Comparable> labelMap;
 
         private QuantCategoryDataset() {
-            labelMap = new HashMap<Comparable, Comparable>();
+            labelMap = new HashMap<>();
         }
 
         public void addValue(Number value, Comparable label, Comparable rowKey, Comparable columnKey) {

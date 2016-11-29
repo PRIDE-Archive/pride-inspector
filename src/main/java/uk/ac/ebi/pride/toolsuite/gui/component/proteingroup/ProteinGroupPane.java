@@ -138,7 +138,7 @@ public class ProteinGroupPane
         
         this.visGraph = new ProteinVisualizationGraphHandler(controller, proteinId, proteinGroupId);
         this.selectedVertex = null;
-        pickedProtein = new MultiPickedState<VertexObject>();
+        pickedProtein = new MultiPickedState<>();
         pickedProtein.clear();
         
         setUpPaneComponents();
@@ -290,10 +290,10 @@ public class ProteinGroupPane
      */
     private void setUpVisualizationViewer() {
         // set up the layout
-        layout = new ProteinLayout<String>(visGraph.getGraph());
-        Layout<VertexObject, String> staticLayout = new StaticLayout<VertexObject, String>(visGraph.getGraph(), layout, layout.getSize());
+        layout = new ProteinLayout<>(visGraph.getGraph());
+        Layout<VertexObject, String> staticLayout = new StaticLayout<>(visGraph.getGraph(), layout, layout.getSize());
 
-        visualizationViewer = new VisualizationViewer<VertexObject,String>(staticLayout, layout.getSize());
+        visualizationViewer = new VisualizationViewer<>(staticLayout, layout.getSize());
         visualizationViewer.setBackground(Color.white);
 
         // listen to viewer resizing
@@ -334,7 +334,7 @@ public class ProteinGroupPane
         
         
         // define a manipulation mouse
-        graphMouse = new DefaultModalGraphMouse<VertexObject, String>();
+        graphMouse = new DefaultModalGraphMouse<>();
         // set PICKING as default mouse behaviour
         graphMouse.setMode(Mode.PICKING);
         
@@ -362,7 +362,7 @@ public class ProteinGroupPane
             scoreThresholdSlider.setPaintLabels(true);
             scoreThresholdSlider.setPaintTicks(true);
             
-            Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>(5);
+            Hashtable<Integer, JLabel> labelTable = new Hashtable<>(5);
             for (int i=0; i < 3; i++) {
                 int value = scoreThresholdSlider.getMinimum() +
                         i * (scoreThresholdSlider.getMaximum() - scoreThresholdSlider.getMinimum()) / 2;
@@ -481,7 +481,7 @@ public class ProteinGroupPane
      * @return
      */
     private Class<Layout>[] getAvailableLayoutClasses() {
-        List<Class<? extends Layout>> layouts = new ArrayList<Class<? extends Layout>>();
+        List<Class<? extends Layout>> layouts = new ArrayList<>();
         layouts.add(ProteinLayout.class);
         layouts.add(CircleLayout.class);
         layouts.add(FRLayout2.class);
@@ -563,7 +563,7 @@ public class ProteinGroupPane
                     }
                     
                     infoProteins = ((IntermediatePeptide) selectedObject).getAllProteins();
-                    infoPeptides = new HashSet<IntermediatePeptide>();
+                    infoPeptides = new HashSet<>();
                     infoPeptides.add((IntermediatePeptide)selectedObject);
                 } else if (selectedObject instanceof IntermediateGroup) {
                     IntermediateGroup connectedGroup = (IntermediateGroup)selectedObject;
@@ -591,7 +591,7 @@ public class ProteinGroupPane
                     infoPeptides = ((IntermediateGroup) selectedObject).getAllPeptides();
                 } else if (selectedObject instanceof IntermediatePeptideSpectrumMatch) {
                     infoProteins = ((IntermediatePeptideSpectrumMatch) selectedObject).getPeptide().getAllProteins();
-                    infoPeptides = new HashSet<IntermediatePeptide>();
+                    infoPeptides = new HashSet<>();
                     infoPeptides.add(((IntermediatePeptideSpectrumMatch) selectedObject).getPeptide());
                 }
             }
@@ -676,13 +676,13 @@ public class ProteinGroupPane
             Dimension dim = layout.getSize();
 
             if (layoutComboBox.getSelectedItem() == FRLayout2.class) {
-                layout = new FRLayout2<VertexObject, String>(visGraph.getGraph());
+                layout = new FRLayout2<>(visGraph.getGraph());
             } else if (layoutComboBox.getSelectedItem() == CircleLayout.class) {
-                layout = new CircleLayout<VertexObject, String>(visGraph.getGraph());
+                layout = new CircleLayout<>(visGraph.getGraph());
             } else if (layoutComboBox.getSelectedItem() == ProteinLayout.class) {
-                layout = new ProteinLayout<String>(visGraph.getGraph());
+                layout = new ProteinLayout<>(visGraph.getGraph());
             } else {
-                layout = new ProteinLayout<String>(visGraph.getGraph());
+                layout = new ProteinLayout<>(visGraph.getGraph());
             }
             
             if (!(layout instanceof ProteinLayout)) {
@@ -709,10 +709,10 @@ public class ProteinGroupPane
         }
         
         StaticLayout<VertexObject, String> staticLayout =
-                new StaticLayout<VertexObject, String>(visGraph.getGraph(), layout, layout.getSize());
+                new StaticLayout<>(visGraph.getGraph(), layout, layout.getSize());
         
         LayoutTransition<VertexObject, String> lt =
-                new LayoutTransition<VertexObject, String>(visualizationViewer,
+                new LayoutTransition<>(visualizationViewer,
                         visualizationViewer.getGraphLayout(),
                         staticLayout);
 

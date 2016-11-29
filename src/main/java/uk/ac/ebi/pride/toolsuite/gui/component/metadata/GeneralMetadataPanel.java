@@ -87,9 +87,9 @@ public class GeneralMetadataPanel extends JPanel {
         // species field
         speciesField = new JTextField();
         String species = "";
-        Set<String> speciesAcc = new HashSet<String>();
+        Set<String> speciesAcc = new HashSet<>();
         String tissues = "";
-        Set<String> tissuesAcc = new HashSet<String>();
+        Set<String> tissuesAcc = new HashSet<>();
 
         List<Sample> samples = metaData.getMetaData().getSamples();
         if (!samples.isEmpty()) {

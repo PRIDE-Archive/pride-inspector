@@ -23,7 +23,7 @@ public class ProteinAccessionHyperLinkCellRenderer extends JLabel implements Tab
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
                                                    boolean hasFocus, int row, int column) {
 
-        java.util.List<String> accessions = new ArrayList<String>();
+        java.util.List<String> accessions = new ArrayList<>();
         if (value != null) {
             if (value instanceof ProteinAccession) {
                 accessions.add(((ProteinAccession)value).getAccession());

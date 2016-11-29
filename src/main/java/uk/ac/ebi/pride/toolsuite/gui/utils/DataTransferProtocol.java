@@ -28,7 +28,7 @@ public enum DataTransferProtocol {
         @Override
         public int compare(DataTransferProtocol o1, DataTransferProtocol o2) {
             //return Integer.compare(, );
-            return Integer.valueOf(o1.getPriority()).compareTo(Integer.valueOf(o2.getPriority()));
+            return Integer.valueOf(o1.getPriority()).compareTo(o2.getPriority());
         }
     }
 }

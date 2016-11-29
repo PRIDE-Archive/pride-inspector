@@ -29,7 +29,7 @@ public class AccessionUtils {
         }
 
         // create a empty list
-        Set<Comparable> accs = new LinkedHashSet<Comparable>();
+        Set<Comparable> accs = new LinkedHashSet<>();
 
         // split the input string
         String[] parts = accStr.split(Constants.COMMA);
@@ -79,7 +79,7 @@ public class AccessionUtils {
         }
 
         // create an integer list based the input accession list
-        List<Integer> accsInt = new ArrayList<Integer>();
+        List<Integer> accsInt = new ArrayList<>();
         for (Comparable acc : accs) {
             if (!NumberUtilities.isInteger(acc.toString())) {
                 throw new NumberFormatException("String cannot be converted to integer: " + acc);

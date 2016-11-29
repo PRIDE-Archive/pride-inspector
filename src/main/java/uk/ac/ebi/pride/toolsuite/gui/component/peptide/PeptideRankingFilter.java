@@ -16,7 +16,7 @@ public enum PeptideRankingFilter {
     private String rankingFilter;
     private int rankingThreshold;
 
-    private PeptideRankingFilter(String rankingFilter, int rankingThreshold) {
+    PeptideRankingFilter(String rankingFilter, int rankingThreshold) {
         this.rankingFilter = rankingFilter;
         this.rankingThreshold = rankingThreshold;
     }
@@ -30,7 +30,7 @@ public enum PeptideRankingFilter {
     }
 
     public static java.util.List<String> getRankingFilters() {
-        java.util.List<String> filters = new ArrayList<String>();
+        java.util.List<String> filters = new ArrayList<>();
 
         for (PeptideRankingFilter peptideRankingFilter : values()) {
             filters.add(peptideRankingFilter.getRankingFilter());

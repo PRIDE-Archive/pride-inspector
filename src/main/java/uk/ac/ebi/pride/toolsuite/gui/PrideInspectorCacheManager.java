@@ -120,7 +120,7 @@ public class PrideInspectorCacheManager {
      * @return Double  sequence coverage
      */
     public Double getSequenceCoverage(String uid, Comparable identId) {
-        Element element = sequenceCoverageCache.get(new Tuple<String, Comparable>(uid, identId));
+        Element element = sequenceCoverageCache.get(new Tuple<>(uid, identId));
         Object val = null;
         if (element != null) {
             val = element.getObjectValue();
@@ -141,7 +141,7 @@ public class PrideInspectorCacheManager {
             logger.error(msg);
             throw new IllegalArgumentException(msg);
         }
-        sequenceCoverageCache.put(new Element(new Tuple<String, Comparable>(uid, identId), coverage));
+        sequenceCoverageCache.put(new Element(new Tuple<>(uid, identId), coverage));
     }
 
     /**
@@ -153,7 +153,7 @@ public class PrideInspectorCacheManager {
      * @return Integer peptide fit state
      */
     public Integer getPeptideFitState(String uid, Comparable identId, Comparable peptideId) {
-        Element element = peptideFitCache.get(new Triple<String, Comparable, Comparable>(uid, identId, peptideId));
+        Element element = peptideFitCache.get(new Triple<>(uid, identId, peptideId));
         Object val = null;
         if (element != null) {
             val = element.getObjectValue();
@@ -175,6 +175,6 @@ public class PrideInspectorCacheManager {
             logger.error(msg);
             throw new IllegalArgumentException(msg);
         }
-        peptideFitCache.put(new Element(new Triple<String, Comparable, Comparable>(uid, identId, peptideId), state));
+        peptideFitCache.put(new Element(new Triple<>(uid, identId, peptideId), state));
     }
 }

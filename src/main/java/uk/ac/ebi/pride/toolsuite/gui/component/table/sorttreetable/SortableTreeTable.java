@@ -262,7 +262,7 @@ public class SortableTreeTable extends JXTreeTable {
             // cache coordinates locally
             int[] targetIndexes = Arrays.copyOf(this.viewToModel, this.viewToModel.length);
             // initialize current positions
-            Vector<Integer> currentIndexes = new Vector<Integer>();
+            Vector<Integer> currentIndexes = new Vector<>();
             for (int i = 0; i < targetIndexes.length; i++) {
                 currentIndexes.add(i);
             }

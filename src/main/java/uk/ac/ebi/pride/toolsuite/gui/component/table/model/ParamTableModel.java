@@ -29,7 +29,7 @@ public class ParamTableModel extends ListBasedListTableModel<Parameter> {
         private final String header;
         private final String toolTip;
 
-        private TableHeader(String header, String tooltip) {
+        TableHeader(String header, String tooltip) {
             this.header = header;
             this.toolTip = tooltip;
         }
@@ -47,7 +47,7 @@ public class ParamTableModel extends ListBasedListTableModel<Parameter> {
 
     public ParamTableModel(List<ParamGroup> paramGroups) {
 
-        this.parameters = new ArrayList<Parameter>();
+        this.parameters = new ArrayList<>();
 
         for (ParamGroup paramGroup : paramGroups) {
             // cv parameters
@@ -70,7 +70,7 @@ public class ParamTableModel extends ListBasedListTableModel<Parameter> {
      * @param paramGroup given paramGroup
      */
     public ParamTableModel(ParamGroup paramGroup) {
-        this.parameters = new ArrayList<Parameter>();
+        this.parameters = new ArrayList<>();
 
         // cv parameters
         List<CvParam> cvs = paramGroup.getCvParams();
@@ -94,7 +94,7 @@ public class ParamTableModel extends ListBasedListTableModel<Parameter> {
      * @param parameters a collection of params
      */
     public ParamTableModel(Collection<Parameter> parameters) {
-        this.parameters = new ArrayList<Parameter>();
+        this.parameters = new ArrayList<>();
         parameters.addAll(parameters);
         // add all the parameters
         for (Parameter parameter : parameters) {
@@ -112,7 +112,7 @@ public class ParamTableModel extends ListBasedListTableModel<Parameter> {
 
     @Override
     public void addData(Parameter newData) {
-        List<Object> data = new ArrayList<Object>();
+        List<Object> data = new ArrayList<>();
 
         // row count
         int rowCnt = this.getRowCount();

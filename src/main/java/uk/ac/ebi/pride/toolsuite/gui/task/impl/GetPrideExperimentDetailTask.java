@@ -29,7 +29,7 @@ public class GetPrideExperimentDetailTask extends AbstractConnectPrideTask {
         this.user = user;
         this.password = password;
         if (accessions != null) {
-            this.accessions = new HashSet<Comparable>();
+            this.accessions = new HashSet<>();
             this.accessions.addAll(accessions);
         }
 

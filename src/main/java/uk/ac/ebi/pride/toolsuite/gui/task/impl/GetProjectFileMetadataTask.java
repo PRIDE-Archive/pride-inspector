@@ -48,7 +48,7 @@ public class GetProjectFileMetadataTask extends Task<Void, Tuple<FileDetail, Boo
 
             List<FileDetail> assayFiles = assayFileList.getList();
             for (FileDetail assayFile : assayFiles) {
-                publish(new Tuple<FileDetail, Boolean>(assayFile, true));
+                publish(new Tuple<>(assayFile, true));
             }
         } catch (Exception ex) {
             EDTUtils.invokeLater(new Runnable() {

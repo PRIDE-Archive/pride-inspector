@@ -43,14 +43,14 @@ public class MyProjectDownloadDialog extends JDialog implements TreeModelListene
         super(owner);
         this.userName = userName;
         this.password = password;
-        this.submissionFileDetails = new ArrayList<SubmissionFileDetail>(submissionFileDetails);
+        this.submissionFileDetails = new ArrayList<>(submissionFileDetails);
         initComponents();
         postInitComponents();
     }
 
     public MyProjectDownloadDialog(Dialog owner, Collection<SubmissionFileDetail> submissionFileDetails) {
         super(owner);
-        this.submissionFileDetails = new ArrayList<SubmissionFileDetail>(submissionFileDetails);
+        this.submissionFileDetails = new ArrayList<>(submissionFileDetails);
         initComponents();
         postInitComponents();
     }
@@ -127,7 +127,7 @@ public class MyProjectDownloadDialog extends JDialog implements TreeModelListene
     private void downloadFiles(String folderPath) {
         File path = new File(folderPath);
 
-        java.util.List<SubmissionFileDetail> submissionFileDetails = new ArrayList<SubmissionFileDetail>();
+        java.util.List<SubmissionFileDetail> submissionFileDetails = new ArrayList<>();
 
         // find all the selected px submission files
         java.util.Set<Object> leaves = fileSelectionTableModel.getNoneRootNodes();

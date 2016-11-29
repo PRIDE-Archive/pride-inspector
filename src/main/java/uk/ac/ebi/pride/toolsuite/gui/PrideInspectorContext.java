@@ -117,16 +117,16 @@ public class PrideInspectorContext extends DesktopContext {
         this.dataAccessMonitor = new DataAccessMonitor();
 
         // data content pane cache
-        this.dataContentPaneCache = new ConcurrentHashMap<DataAccessController, JComponent>();
+        this.dataContentPaneCache = new ConcurrentHashMap<>();
 
         // data summary pane cache
-        this.dataSummaryPaneCache = new ConcurrentHashMap<DataAccessController, JComponent>();
+        this.dataSummaryPaneCache = new ConcurrentHashMap<>();
 
         // action map
-        this.sharedActionCache = new ConcurrentHashMap<DataAccessController, Map<Class<? extends PrideAction>, PrideAction>>();
+        this.sharedActionCache = new ConcurrentHashMap<>();
 
         // summary report tracker
-        this.summaryReportTracker = new ConcurrentHashMap<DataAccessController, ListModel>();
+        this.summaryReportTracker = new ConcurrentHashMap<>();
 
         // by default the data source browser is invisible
         this.leftControlPaneVisible = false;
@@ -414,7 +414,7 @@ public class PrideInspectorContext extends DesktopContext {
     public final synchronized void addPrideAction(DataAccessController controller, PrideAction action) {
         Map<Class<? extends PrideAction>, PrideAction> actionMap = sharedActionCache.get(controller);
         if (actionMap == null) {
-            actionMap = new HashMap<Class<? extends PrideAction>, PrideAction>();
+            actionMap = new HashMap<>();
             sharedActionCache.put(controller, actionMap);
         }
         actionMap.put(action.getClass(), action);

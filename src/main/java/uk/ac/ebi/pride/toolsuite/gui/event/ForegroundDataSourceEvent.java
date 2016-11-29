@@ -10,7 +10,7 @@ import org.bushe.swing.event.AbstractEventServiceEvent;
  * Time: 11:30
  */
 public class ForegroundDataSourceEvent<T> extends AbstractEventServiceEvent {
-    public static enum Status {DUMMY, DUMMY_TO_DATA, DATA, EMPTY}
+    public enum Status {DUMMY, DUMMY_TO_DATA, DATA, EMPTY}
 
     private T oldForegroundDataSource, newForegroundDataSource;
 

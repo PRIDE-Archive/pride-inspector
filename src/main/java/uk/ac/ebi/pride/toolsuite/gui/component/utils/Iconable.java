@@ -11,8 +11,8 @@ import javax.swing.*;
  */
 public interface Iconable {
 
-    public void setIcon(Icon icon);
-    public Icon getLoadingIcon();
-    public Icon getIcon();
+    void setIcon(Icon icon);
+    Icon getLoadingIcon();
+    Icon getIcon();
 
 }

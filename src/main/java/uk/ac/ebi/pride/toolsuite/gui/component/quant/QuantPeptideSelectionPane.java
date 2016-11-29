@@ -96,7 +96,7 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
     public QuantPeptideSelectionPane(DataAccessController controller) {
         super(controller);
         this.currentIdentId = -1;
-        this.selectedPeptides = new HashMap<Comparable, List<Comparable>>();
+        this.selectedPeptides = new HashMap<>();
     }
 
     /**
@@ -422,7 +422,7 @@ public class QuantPeptideSelectionPane extends DataAccessControllerPane implemen
                 eventBus.publish(new QuantSelectionEvent(pepTable, identId, referenceSampleIndex, QuantSelectionEvent.Type.PEPTIDE, selected, controller, idPeptide));
                 if (selected) {
                     numOfSelectedPeptides++;
-                    List<Comparable> peptides = new ArrayList<Comparable>();
+                    List<Comparable> peptides = new ArrayList<>();
                     if(selectedPeptides.containsKey(identId)){
                         peptides = selectedPeptides.get(identId);
                     }

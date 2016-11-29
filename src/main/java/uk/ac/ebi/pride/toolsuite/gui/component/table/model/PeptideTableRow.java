@@ -36,8 +36,8 @@ public class PeptideTableRow{
 
 
     public PeptideTableRow() {
-        this.scores = new ArrayList<Double>();
-        this.quantifications = new ArrayList<Object>();
+        this.scores = new ArrayList<>();
+        this.quantifications = new ArrayList<>();
         this.comparisonState = false;
     }
 
@@ -66,7 +66,7 @@ public class PeptideTableRow{
     }
 
     public String getModificationNames() {
-        Set<String> modificationNames = new HashSet<String>();
+        Set<String> modificationNames = new HashSet<>();
         String concatenatedModificationNames = "";
 
         for (Modification mod : sequence.getModifications()) {
@@ -230,7 +230,7 @@ public class PeptideTableRow{
     }
 
     public List<Object> flatten() {
-        List<Object> flattenedPeptideTableRow = new ArrayList<Object>();
+        List<Object> flattenedPeptideTableRow = new ArrayList<>();
 
         flattenedPeptideTableRow.add(getSequence().getSequence());
         flattenedPeptideTableRow.add(getProteinAccession().getAccession());
@@ -301,9 +301,8 @@ public class PeptideTableRow{
             return false;
         if (sequenceStartPosition != null ? !sequenceStartPosition.equals(that.sequenceStartPosition) : that.sequenceStartPosition != null)
             return false;
-        if (spectrumId != null ? !spectrumId.equals(that.spectrumId) : that.spectrumId != null) return false;
+        return spectrumId != null ? spectrumId.equals(that.spectrumId) : that.spectrumId == null;
 
-        return true;
     }
 
     @Override

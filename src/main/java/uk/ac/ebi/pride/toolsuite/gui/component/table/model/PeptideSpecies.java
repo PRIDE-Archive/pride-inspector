@@ -26,9 +26,9 @@ public class PeptideSpecies {
         this.numberOfDeltaMzErrors = 0;
         this.theoreticalIsoelectricPoint = 0;
         this.length = 0;
-        this.proteinAccessions = new LinkedHashSet<ProteinAccession>();
+        this.proteinAccessions = new LinkedHashSet<>();
         this.modifications = null;
-        this.peptideTableRowData = new ArrayList<PeptideTableRow>();
+        this.peptideTableRowData = new ArrayList<>();
         setSequence(sequence);
     }
 
@@ -64,10 +64,6 @@ public class PeptideSpecies {
 
     public Set<ProteinAccession> getProteinAccessions() {
         return proteinAccessions;
-    }
-
-    public void addProteinAccessions(Collection<ProteinAccession> proteinAccessions) {
-        proteinAccessions.addAll(proteinAccessions);
     }
 
     public void addProteinAccession(ProteinAccession proteinAccession) {

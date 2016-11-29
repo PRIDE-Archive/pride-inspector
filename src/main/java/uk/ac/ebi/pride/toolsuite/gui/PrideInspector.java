@@ -221,7 +221,7 @@ public class PrideInspector extends Desktop {
                         fileNames.addAll(Arrays.asList(intermadiaNames));
                     }
                 }
-                java.util.List<File> files = new ArrayList<File>();
+                java.util.List<File> files = new ArrayList<>();
                 for(String fileName: fileNames)
                     files.add(new File(fileName));
                 OpenMyFolderProjectTask task = new OpenMyFolderProjectTask(files);
@@ -355,7 +355,7 @@ public class PrideInspector extends Desktop {
         // try pride xml sample
         String openPrideXmlExampleDesc = context.getProperty("open.pride.xml.example.title");
         File prideXmlExampleFile = getExampleFiles(context.getProperty("pride.inspector.pride.example.file"));
-        java.util.List<File> prideXmlFiles = new ArrayList<File>();
+        java.util.List<File> prideXmlFiles = new ArrayList<>();
         if (prideXmlExampleFile != null) {
             prideXmlFiles.add(prideXmlExampleFile);
         }
@@ -365,7 +365,7 @@ public class PrideInspector extends Desktop {
         // try mzml sample
         String openMzMLExampleDesc = context.getProperty("open.mzml.example.title");
         File mzMLExampleFile = getExampleFiles(context.getProperty("pride.inspector.mzml.example.file"));
-        java.util.List<File> mzMLFiles = new ArrayList<File>();
+        java.util.List<File> mzMLFiles = new ArrayList<>();
         if (mzMLExampleFile != null) {
             mzMLFiles.add(mzMLExampleFile);
         }
@@ -375,7 +375,7 @@ public class PrideInspector extends Desktop {
         // try mzidentml sample
         String openMzIdentMLExampleDesc = context.getProperty("open.mzidentml.example.title");
         File mzIdentMLExampleFile = getExampleFiles(context.getProperty("pride.inspector.mzidentml.example.file"));
-        java.util.List<File> mzIdentMLFiles = new ArrayList<File>();
+        java.util.List<File> mzIdentMLFiles = new ArrayList<>();
         if (mzMLExampleFile != null) {
             mzIdentMLFiles.add(mzIdentMLExampleFile);
         }
@@ -454,7 +454,7 @@ public class PrideInspector extends Desktop {
                 openPrideXmlExampleAction, openMzMLExampleAction, openMzIdentMLExampleAction, openMoreExampleAction);
         trySampleMenu.setMnemonic(java.awt.event.KeyEvent.VK_X);
         trySampleMenu.setIcon(openFileIcon);
-        Map<Integer, JMenu> menuMap = new HashMap<Integer, JMenu>();
+        Map<Integer, JMenu> menuMap = new HashMap<>();
         menuMap.put(4, trySampleMenu);
 
         // file menu

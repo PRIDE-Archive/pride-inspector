@@ -30,7 +30,7 @@ public class QuantSampleTableModel extends ListBasedListTableModel<QuantitativeS
         private final String header;
         private final String toolTip;
 
-        private TableHeader(String header, String tooltip) {
+        TableHeader(String header, String tooltip) {
             this.header = header;
             this.toolTip = tooltip;
         }
@@ -94,7 +94,7 @@ public class QuantSampleTableModel extends ListBasedListTableModel<QuantitativeS
 
         for (int i = 1; i < QuantitativeSample.MAX_SUB_SAMPLE_SIZE; i++) {
             if (sample.hasSubSample(i)) {
-                List<Object> content = new ArrayList<Object>();
+                List<Object> content = new ArrayList<>();
 
                 int rowCnt = getRowCount();
 

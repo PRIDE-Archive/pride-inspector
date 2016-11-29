@@ -54,7 +54,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
     public OpenFileAction(String name, Icon icon, List<File> files, boolean skipFiles) {
         super(name, icon);
         this.skipFiles = skipFiles;
-        inputFilesToOpen = files == null ? null : new ArrayList<File>(files);
+        inputFilesToOpen = files == null ? null : new ArrayList<>(files);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
     private void unzipFiles(List<File> files) {
         if (hasGzipFiles(files)) {
             // separate files to unzipped and zipped
-            List<File> zippedFiles = new ArrayList<File>();
+            List<File> zippedFiles = new ArrayList<>();
 
             for (File file : files) {
                 if (isGzipFile(file)) {
@@ -224,7 +224,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
 
         int result = ofd.showDialog(Desktop.getInstance().getMainComponent(), null);
 
-        List<File> filesToOpen = new ArrayList<File>();
+        List<File> filesToOpen = new ArrayList<>();
 
         // check the selection results from open file dialog
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -247,8 +247,8 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
 
         long fileSizeThreshold = Long.parseLong(context.getProperty("memory.mzidentml.file.threshold"));
 
-        Map<File, Class> openFiles = new HashMap<File, Class>();
-        Map<File, List<File>> mzIdentMLFiles = new HashMap<File, List<File>>();
+        Map<File, Class> openFiles = new HashMap<>();
+        Map<File, List<File>> mzIdentMLFiles = new HashMap<>();
 
         for (File selectedFile : files) {
             // check the file type
@@ -274,7 +274,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
                 for(File file : mzIdentMLFiles.keySet()){
                     List<File> msFiles = mzIdentMLFiles.get(file);
                     if(msFiles == null)
-                        msFiles = new ArrayList<File>();
+                        msFiles = new ArrayList<>();
                     msFiles.add(msFile);
                     mzIdentMLFiles.put(file, msFiles);
                 }
@@ -285,7 +285,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
         boolean runProteinInference = false;
         
         if (mzIdentMLFiles.size() > 0) {
-            List<File> mzIdentMLWithoutProteinGroups = new ArrayList<File>();
+            List<File> mzIdentMLWithoutProteinGroups = new ArrayList<>();
             for (File mzIdentMLFile : mzIdentMLFiles.keySet()) {
                 if (!hasProteinGroups(mzIdentMLFile)) {
                     mzIdentMLWithoutProteinGroups.add(mzIdentMLFile);
@@ -300,11 +300,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
                         JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                         null, options, options[1]);
 
-                if (option == 0) {
-                    runProteinInference = false;
-                } else{
-                    runProteinInference = true;
-                }
+                runProteinInference = option != 0;
             }
         }
 
@@ -314,7 +310,7 @@ public class OpenFileAction extends PrideAction implements TaskListener<Void, Fi
                     "Would you like to load spectrum files related to the mzIdentML files?", "mzIdentML", JOptionPane.YES_NO_OPTION);
 
             if (option == JOptionPane.YES_OPTION) {
-                MzIdMsDialog mzidDialog = new MzIdMsDialog(Desktop.getInstance().getMainComponent(), new ArrayList<File>(mzIdentMLFiles.keySet()));
+                MzIdMsDialog mzidDialog = new MzIdMsDialog(Desktop.getInstance().getMainComponent(), new ArrayList<>(mzIdentMLFiles.keySet()));
                 mzidDialog.setModal(true);
                 mzidDialog.setVisible(true);
                 mzIdentMLFiles.putAll(mzidDialog.getMzIdentMlMap());

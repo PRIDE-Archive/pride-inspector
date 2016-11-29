@@ -43,14 +43,14 @@ public class SortableProteinNode  extends SortableTreeTableNode{
     private final List<SortableProteinNode> childNodes;
 
     public SortableProteinNode() {
-        this.scores = new ArrayList<Double>();
-        this.quantifications = new ArrayList<Object>();
-        this.childNodes = new ArrayList<SortableProteinNode>();
+        this.scores = new ArrayList<>();
+        this.quantifications = new ArrayList<>();
+        this.childNodes = new ArrayList<>();
     }
 
     public SortableProteinNode(ProteinTableRow proteinTableRow, Map<String, String> columns, Collection<SearchEngineScoreCvTermReference> scoresNames){
         super();
-        childNodes = new ArrayList<SortableProteinNode>();
+        childNodes = new ArrayList<>();
         scores = proteinTableRow.getScores();
         proteinAccession = proteinTableRow.getProteinAccession();
         proteinName = proteinTableRow.getProteinName();
@@ -203,7 +203,7 @@ public class SortableProteinNode  extends SortableTreeTableNode{
     }
 
     private Object[] getObjectValues(Set<String> columns, Collection<SearchEngineScoreCvTermReference> proteinScores){
-        List<String> listColumns = new ArrayList<String>(columns);
+        List<String> listColumns = new ArrayList<>(columns);
         Object[] values = new Object[columns.size()];
         for(int i = 0; i < listColumns.size(); i++){
             String columnName = listColumns.get(i);

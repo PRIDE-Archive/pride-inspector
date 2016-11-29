@@ -23,7 +23,7 @@ public enum ProteinTableHeader {
     private final String header;
     private final String toolTip;
 
-    private ProteinTableHeader(String header, String tooltip) {
+    ProteinTableHeader(String header, String tooltip) {
         this.header = header;
         this.toolTip = tooltip;
     }

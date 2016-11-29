@@ -188,7 +188,7 @@ public class AboutDialog extends JDialog implements ActionListener {
          */
         private void loadAboutPaneText() {
             // list to store the text to be displayed by about panel
-            aboutText = new ArrayList<String>();
+            aboutText = new ArrayList<>();
 
             StringTokenizer st = new StringTokenizer(context.getProperty("about.text"), "\n");
             while(st.hasMoreTokens()) {

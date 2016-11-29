@@ -42,9 +42,9 @@ public class ProteinTableRow {
     private final List<ProteinTableRow> childProteinTableRows;
 
     public ProteinTableRow() {
-        this.scores = new ArrayList<Double>();
-        this.quantifications = new ArrayList<Object>();
-        this.childProteinTableRows = new ArrayList<ProteinTableRow>();
+        this.scores = new ArrayList<>();
+        this.quantifications = new ArrayList<>();
+        this.childProteinTableRows = new ArrayList<>();
     }
 
     public Boolean getComparisonState() {

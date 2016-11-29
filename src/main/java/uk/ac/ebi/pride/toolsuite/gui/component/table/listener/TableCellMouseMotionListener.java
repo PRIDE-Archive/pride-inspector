@@ -21,7 +21,7 @@ public class TableCellMouseMotionListener extends MouseAdapter {
 
     public TableCellMouseMotionListener(JTable table, String... columnHeader) {
         this.table = table;
-        this.columnHeader = new ArrayList<String>(Arrays.asList(columnHeader));
+        this.columnHeader = new ArrayList<>(Arrays.asList(columnHeader));
     }
 
     @Override

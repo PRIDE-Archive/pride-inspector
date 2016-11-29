@@ -58,7 +58,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
 
     public Task() {
         addPropertyChangeListener(new TaskStateMonitor());
-        owners = Collections.synchronizedList(new ArrayList<Object>());
+        owners = Collections.synchronizedList(new ArrayList<>());
         taskListeners = Collections.synchronizedList(new ArrayList<TaskListener<T, V>>());
     }
 
@@ -136,7 +136,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
      */
     public final List<Object> getOwners() {
         synchronized (ownersLock) {
-            return new ArrayList<Object>(owners);
+            return new ArrayList<>(owners);
         }
     }
 
@@ -216,7 +216,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
 
     public Collection<TaskListener<T, V>> getTaskListeners() {
         synchronized (taskListenersLock) {
-            return new ArrayList<TaskListener<T, V>>(taskListeners);
+            return new ArrayList<>(taskListeners);
         }
     }
 
@@ -256,7 +256,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
     protected abstract void interrupted(InterruptedException iex);
 
     private void fireStartedListeners() {
-        TaskEvent<Void> event = new TaskEvent<Void>(this, null);
+        TaskEvent<Void> event = new TaskEvent<>(this, null);
         synchronized (taskListenersLock) {
             for (TaskListener listener : taskListeners) {
                 listener.started(event);
@@ -265,7 +265,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
     }
 
     private void fireProcessListeners(List<V> values) {
-        TaskEvent<List<V>> event = new TaskEvent<List<V>>(this, values);
+        TaskEvent<List<V>> event = new TaskEvent<>(this, values);
         synchronized (taskListenersLock) {
             for (TaskListener<T, V> listener : taskListeners) {
                 listener.process(event);
@@ -289,7 +289,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
     }
 
     private void fireCancelledListeners() {
-        TaskEvent<Void> event = new TaskEvent<Void>(this, null);
+        TaskEvent<Void> event = new TaskEvent<>(this, null);
         synchronized (taskListenersLock) {
             for (TaskListener listener : taskListeners) {
                 listener.cancelled(event);
@@ -298,7 +298,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
     }
 
     private void fireInterruptedListeners(InterruptedException iex) {
-        TaskEvent<InterruptedException> event = new TaskEvent<InterruptedException>(this, iex);
+        TaskEvent<InterruptedException> event = new TaskEvent<>(this, iex);
         synchronized (taskListenersLock) {
             for (TaskListener listener : taskListeners) {
                 listener.interrupted(event);
@@ -307,7 +307,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
     }
 
     private void fireSucceedListeners(T result) {
-        TaskEvent<T> event = new TaskEvent<T>(this, result);
+        TaskEvent<T> event = new TaskEvent<>(this, result);
         synchronized (taskListenersLock) {
             for (TaskListener<T, V> listener : taskListeners) {
                 listener.succeed(event);
@@ -316,7 +316,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
     }
 
     private void fireFailedListeners(Throwable error) {
-        TaskEvent<Throwable> event = new TaskEvent<Throwable>(this, error);
+        TaskEvent<Throwable> event = new TaskEvent<>(this, error);
         synchronized (taskListenersLock) {
             for (TaskListener listener : taskListeners) {
                 listener.failed(event);
@@ -325,7 +325,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
     }
 
     private void fireFinishedListeners() {
-        TaskEvent<Void> event = new TaskEvent<Void>(this, null);
+        TaskEvent<Void> event = new TaskEvent<>(this, null);
         synchronized (taskListenersLock) {
             for (TaskListener listener : taskListeners) {
                 listener.finished(event);
@@ -334,7 +334,7 @@ public abstract class Task<T, V> extends SwingWorker<T, V> {
     }
 
     private void fireProgressListeners(int progress) {
-        TaskEvent<Integer> event = new TaskEvent<Integer>(this, progress);
+        TaskEvent<Integer> event = new TaskEvent<>(this, progress);
         synchronized (taskListenersLock) {
             for (TaskListener listener : taskListeners) {
                 listener.progress(event);

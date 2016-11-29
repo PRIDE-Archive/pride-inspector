@@ -120,7 +120,7 @@ public class FragmentationTablePane extends DataAccessControllerPane<Peptide, Vo
 
             java.util.List<Modification> mods = peptide.getModifications();
 
-            java.util.List<Double> ptmMasses = new ArrayList<Double>();
+            java.util.List<Double> ptmMasses = new ArrayList<>();
             for (Modification mod : mods) {
                 java.util.List<Double> monoMasses = mod.getMonoisotopicMassDelta();
                 if (monoMasses != null && !monoMasses.isEmpty()) {

@@ -3,7 +3,6 @@ package uk.ac.ebi.pride.toolsuite.gui.component.proteingroup;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -46,17 +45,14 @@ public class ProteinInformationTableModel extends AbstractTableModel {
      * @param proteins
      */
     public void setProteins(Collection<?> proteins) {
-        proteinList = new ArrayList<IntermediateProtein>();
-        nrPSMs = new HashMap<Integer, Integer>();
-        nrPeptides = new HashMap<Integer, Integer>();
+        proteinList = new ArrayList<>();
+        nrPSMs = new HashMap<>();
+        nrPeptides = new HashMap<>();
         
         if (proteins != null) {
-            Iterator<?> objectIterator = proteins.iterator();
-            while (objectIterator.hasNext()) {
-                Object item = objectIterator.next();
-    
+            for (Object item : proteins) {
                 if (item instanceof IntermediateProtein) {
-                    proteinList.add((IntermediateProtein)item);
+                    proteinList.add((IntermediateProtein) item);
                 }
             }
         }

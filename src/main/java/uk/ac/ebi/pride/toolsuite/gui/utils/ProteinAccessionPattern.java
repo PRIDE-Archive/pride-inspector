@@ -84,7 +84,7 @@ public enum ProteinAccessionPattern {
     private Pattern idPattern;
     private MessageFormat urlPattern;
 
-    private ProteinAccessionPattern(Pattern idPattern, MessageFormat urlPattern) {
+    ProteinAccessionPattern(Pattern idPattern, MessageFormat urlPattern) {
         this.idPattern = idPattern;
         this.urlPattern = urlPattern;
     }

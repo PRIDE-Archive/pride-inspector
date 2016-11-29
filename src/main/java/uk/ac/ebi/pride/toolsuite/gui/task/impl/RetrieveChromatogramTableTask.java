@@ -96,11 +96,11 @@ public class RetrieveChromatogramTableTask extends AbstractDataAccessTask<Void, 
 
                 for (int i = start; i < stop; i++) {
 
-                    List<Object> content = new ArrayList<Object>();
+                    List<Object> content = new ArrayList<>();
                     // spectrum id
                     Comparable chromaId = CollectionUtils.getElement(chromatogramIds, i);
                     content.add(chromaId);
-                    publish(new Tuple<TableContentType, List<Object>>(TableContentType.CHROMATOGRAM, content));
+                    publish(new Tuple<>(TableContentType.CHROMATOGRAM, content));
 
                     checkInterruption();
                 }

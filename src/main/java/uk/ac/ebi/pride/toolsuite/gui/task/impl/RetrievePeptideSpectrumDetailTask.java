@@ -42,11 +42,11 @@ public class RetrievePeptideSpectrumDetailTask extends AbstractDataAccessTask<Vo
         // protein identification id
         Collection<Comparable> protIdentIds = controller.getProteinIds();
 
-        Map<Tuple<Comparable, Comparable>, Double> peptideDeltaMap = new HashMap<Tuple<Comparable, Comparable>, Double>();
+        Map<Tuple<Comparable, Comparable>, Double> peptideDeltaMap = new HashMap<>();
 
-        Map<Tuple<Comparable, Comparable>, Double> peptidePrecursorMap = new HashMap<Tuple<Comparable, Comparable>, Double>();
+        Map<Tuple<Comparable, Comparable>, Double> peptidePrecursorMap = new HashMap<>();
 
-        EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.SPECTRA_READING, controller));
+        EventBus.publish(new ProcessingDataSourceEvent<>(controller, ProcessingDataSourceEvent.Status.SPECTRA_READING, controller));
 
         // iterate over each protein
         for (Comparable protIdentId : protIdentIds) {
@@ -54,8 +54,8 @@ public class RetrievePeptideSpectrumDetailTask extends AbstractDataAccessTask<Vo
             for (Comparable peptideId : peptideIdentIds) {
                 Double delta = computeDeltaMz(peptideId, protIdentId);
                 Double precursorMz = computePrecursorMz(peptideId, protIdentId);
-                peptideDeltaMap.put(new Tuple<Comparable, Comparable>(protIdentId, peptideId), delta);
-                peptidePrecursorMap.put(new Tuple<Comparable, Comparable>(protIdentId, peptideId), precursorMz);
+                peptideDeltaMap.put(new Tuple<>(protIdentId, peptideId), delta);
+                peptidePrecursorMap.put(new Tuple<>(protIdentId, peptideId), precursorMz);
             }
 
             checkInterruption();
@@ -63,7 +63,7 @@ public class RetrievePeptideSpectrumDetailTask extends AbstractDataAccessTask<Vo
 
         publish(new Tuple<TableContentType, Object>(TableContentType.PEPTIDE_DELTA, peptideDeltaMap));
         publish(new Tuple<TableContentType, Object>(TableContentType.PEPTIDE_PRECURSOR_MZ, peptidePrecursorMap));
-        EventBus.publish(new ProcessingDataSourceEvent<DataAccessController>(controller, ProcessingDataSourceEvent.Status.SPECTRA_READING, controller));
+        EventBus.publish(new ProcessingDataSourceEvent<>(controller, ProcessingDataSourceEvent.Status.SPECTRA_READING, controller));
 
         return null;
     }
@@ -81,7 +81,7 @@ public class RetrievePeptideSpectrumDetailTask extends AbstractDataAccessTask<Vo
     private Double computeDeltaMz(Comparable peptideId, Comparable identId) {
         Double deltaMass = null;
 
-        List<Modification> mods = new ArrayList<Modification>(controller.getPTMs(identId, peptideId));
+        List<Modification> mods = new ArrayList<>(controller.getPTMs(identId, peptideId));
         String sequence = controller.getPeptideSequence(identId, peptideId);
 
         Integer charge = controller.getPeptidePrecursorCharge(identId, peptideId);
@@ -96,7 +96,7 @@ public class RetrievePeptideSpectrumDetailTask extends AbstractDataAccessTask<Vo
 
         if (specId != null) {
             double mz = controller.getSpectrumPrecursorMz(specId);
-            List<Double> ptmMasses = new ArrayList<Double>();
+            List<Double> ptmMasses = new ArrayList<>();
             for (Modification mod : mods) {
                 List<Double> monoMasses = mod.getMonoisotopicMassDelta();
                 if (monoMasses != null && !monoMasses.isEmpty()) {

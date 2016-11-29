@@ -59,8 +59,7 @@ public class PrideInspectorBootstrap {
         arguments.add("-Xmx"+maxMem+"m");
         arguments.add(PrideInspector.class.getName());
 
-        for(String arg: args)
-                arguments.add(arg);
+        Collections.addAll(arguments, args);
 
         // call the command
         Process process;

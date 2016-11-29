@@ -71,7 +71,7 @@ abstract class FileDownloadTask extends TaskAdapter<Void, String> {
 
 
     protected void openFiles() throws IOException {
-        List<File> filesToOpen = new ArrayList<File>();
+        List<File> filesToOpen = new ArrayList<>();
 
         for (FileDetail fileDetail : filesToDownload) {
             File downloadedFile = new File(outputFolder.getAbsolutePath(), fileDetail.getFileName());

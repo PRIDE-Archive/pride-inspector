@@ -30,7 +30,7 @@ public enum PeptideTableHeader {
     private final String header;
     private final String toolTip;
 
-    private PeptideTableHeader(String header, String tooltip) {
+    PeptideTableHeader(String header, String tooltip) {
         this.header = header;
         this.toolTip = tooltip;
     }

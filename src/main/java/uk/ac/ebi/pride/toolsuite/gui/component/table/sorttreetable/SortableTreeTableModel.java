@@ -26,7 +26,7 @@ public class SortableTreeTableModel extends DefaultTreeTableModel {
 	 * The list of sort keys containing column indices and their corresponding 
 	 * sort orders
 	 */
-	private List<SortKey> sortKeys = new ArrayList<SortKey>();
+	private List<SortKey> sortKeys = new ArrayList<>();
 	
 	/**
 	 * The row filter object specifying whether certain children of a node shall
@@ -50,7 +50,7 @@ public class SortableTreeTableModel extends DefaultTreeTableModel {
 	public SortableTreeTableModel(TreeTableNode root, final Collection<SearchEngineScoreCvTermReference> listPeptideScores) {
 		super(root);
         this.proteinScores = listPeptideScores;
-        columnNames = new LinkedHashMap<String, String>();
+        columnNames = new LinkedHashMap<>();
         addAdditionalColumns(this.proteinScores);
         setColumnIdentifiers(new ArrayList<Object>(columnNames.keySet()));
 	}
@@ -70,7 +70,7 @@ public class SortableTreeTableModel extends DefaultTreeTableModel {
 	 */
 	public void setSortKeys(List<? extends SortKey> sortKeys) {
 //		if (!sortKeys.equals(this.sortKeys)) {
-			this.sortKeys = new ArrayList<SortKey>(sortKeys);
+			this.sortKeys = new ArrayList<>(sortKeys);
 			this.sort();
 //		}
 	}
@@ -219,11 +219,11 @@ public class SortableTreeTableModel extends DefaultTreeTableModel {
     }
 
     public List<String> getColumns(){
-        return new ArrayList<String>(columnNames.keySet());
+        return new ArrayList<>(columnNames.keySet());
     }
 
     public List<String> getColumnTooltips(){
-        return new ArrayList<String>(columnNames.values());
+        return new ArrayList<>(columnNames.values());
     }
 
 }

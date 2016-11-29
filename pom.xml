@@ -235,13 +235,6 @@
             <version>${httpclient.version}</version>
         </dependency>
 
-        <!--&lt;!&ndash; jsparklines for TableCellRender &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>no.uib</groupId>-->
-            <!--<artifactId>jsparklines</artifactId>-->
-            <!--<version>${jsparklines.version}</version>-->
-        <!--</dependency>-->
-
         <!-- Messages with ballontips -->
         <dependency>
             <groupId>net.java.balloontip</groupId>
@@ -292,12 +285,6 @@
             <version>${commons-net.version}</version>
         </dependency>
 
-        <!--&lt;!&ndash; mzIdentML File dependencies &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>uk.ac.ebi.jmzidml</groupId>-->
-            <!--<artifactId>jmzidentml</artifactId>-->
-            <!--<version>${jmzidentml.version}</version>-->
-        <!--</dependency>-->
     </dependencies>
 
     <build>

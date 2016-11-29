@@ -27,7 +27,7 @@ public class SpectrumTableModel extends ListBasedProgressiveListTableModel<Void,
         private final String header;
         private final String toolTip;
 
-        private TableHeader(String header, String tooltip) {
+        TableHeader(String header, String tooltip) {
             this.header = header;
             this.toolTip = tooltip;
         }

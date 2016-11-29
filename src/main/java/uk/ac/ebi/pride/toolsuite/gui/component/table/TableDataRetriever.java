@@ -20,7 +20,6 @@ import uk.ac.ebi.pride.utilities.util.NumberUtilities;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -47,7 +46,7 @@ public class TableDataRetriever {
         PeptideTableRow peptideTableRow = new PeptideTableRow();
 
         // peptide sequence with modifications
-        List<Modification> mods = new ArrayList<Modification>(controller.getPTMs(identId, peptideId));
+        List<Modification> mods = new ArrayList<>(controller.getPTMs(identId, peptideId));
         String sequence = controller.getPeptideSequence(identId, peptideId);
         peptideTableRow.setSequence(new PeptideSequence(null, null, sequence, mods, null));
 
@@ -119,7 +118,7 @@ public class TableDataRetriever {
         }
 
         if(mz != -1){
-            List<Double> ptmMasses = new ArrayList<Double>();
+            List<Double> ptmMasses = new ArrayList<>();
             for (Modification mod : mods) {
                 List<Double> monoMasses = mod.getMonoisotopicMassDelta();
                 if (monoMasses != null && !monoMasses.isEmpty()) {
@@ -181,7 +180,7 @@ public class TableDataRetriever {
         PeptideTableRow peptideTableRow = new PeptideTableRow();
 
         // peptide sequence with modifications
-        List<Modification> mods = new ArrayList<Modification>(controller.getNumberOfQuantPTMs(identId, peptideId));
+        List<Modification> mods = new ArrayList<>(controller.getNumberOfQuantPTMs(identId, peptideId));
         String sequence = controller.getQuantPeptideSequence(identId, peptideId);
         peptideTableRow.setSequence(new PeptideSequence(null, null, sequence, mods, null));
 
@@ -247,7 +246,7 @@ public class TableDataRetriever {
         if (specId != null) {
             double mz = controller.getSpectrumPrecursorMz(specId);
             mz = (mz == -1)? quantPeptide.getPrecursorMz():mz;
-            List<Double> ptmMasses = new ArrayList<Double>();
+            List<Double> ptmMasses = new ArrayList<>();
             for (Modification mod : mods) {
                 List<Double> monoMasses = mod.getMonoisotopicMassDelta();
                 if (monoMasses != null && !monoMasses.isEmpty()) {
@@ -462,7 +461,7 @@ public class TableDataRetriever {
      * @throws DataAccessException data access exception
      */
     private static List<Object> getQuantTableHeaders(DataAccessController controller, int refSampleIndex, boolean isProteinIdent) throws DataAccessException {
-        List<Object> headers = new ArrayList<Object>();
+        List<Object> headers = new ArrayList<>();
 
         // label free methods
         if (controller.hasLabelFreeQuantMethods()) {
@@ -487,14 +486,13 @@ public class TableDataRetriever {
      * @throws DataAccessException data access exception
      */
     public static List<Object> getProteinScoreHeaders(DataAccessController controller) throws DataAccessException {
-        List<Object> headers = new ArrayList<Object>();
+        List<Object> headers = new ArrayList<>();
 
         Collection<SearchEngineScoreCvTermReference> cvHeaders = controller.getAvailableProteinLevelScores();
 
         if (cvHeaders != null && !cvHeaders.isEmpty()) {
-            Iterator<SearchEngineScoreCvTermReference> cvHeader = cvHeaders.iterator();
-            while (cvHeader.hasNext()) {
-                headers.add((cvHeader.next().getName()));
+            for (SearchEngineScoreCvTermReference cvHeader1 : cvHeaders) {
+                headers.add((cvHeader1.getName()));
             }
         }
         return headers;
@@ -514,7 +512,7 @@ public class TableDataRetriever {
                                                                  DataAccessController controller,
                                                                  int refSampleIndex,
                                                                  boolean isProteinIdent) throws DataAccessException {
-        List<Object> headers = new ArrayList<Object>();
+        List<Object> headers = new ArrayList<>();
 
         if (methods.size() > 0) {
             QuantitativeSample sample = controller.getQuantSample();
@@ -550,7 +548,7 @@ public class TableDataRetriever {
      * @return List<Object>    label free method headers
      */
     private static List<Object> getLabelFreeMethodHeaders(Collection<QuantCvTermReference> methods) {
-        List<Object> headers = new ArrayList<Object>();
+        List<Object> headers = new ArrayList<>();
 
         for (QuantCvTermReference method : methods) {
             headers.add(method.getName());
@@ -566,7 +564,7 @@ public class TableDataRetriever {
      * @return List<String>    total intensity headers
      */
     private static List<Object> getTotalIntensityHeaders(QuantitativeSample sample) {
-        List<Object> headers = new ArrayList<Object>();
+        List<Object> headers = new ArrayList<>();
 
         for (int i = 1; i <= QuantitativeSample.MAX_SUB_SAMPLE_SIZE; i++) {
             CvParam reagent = sample.getReagent(i);
@@ -586,7 +584,7 @@ public class TableDataRetriever {
      * @return List<Object>    a list of headers
      */
     private static List<Object> getReagentRatioHeaders(QuantitativeSample sample, int refSampleIndex) {
-        List<Object> headers = new ArrayList<Object>();
+        List<Object> headers = new ArrayList<>();
 
         // get reference reagent
         CvParam referenceReagent = sample.getReagent(refSampleIndex);
@@ -669,7 +667,7 @@ public class TableDataRetriever {
 
     private static List<Object> getQuantTableRow(DataAccessController controller, Comparable idProtein, Comparable idPeptide) throws DataAccessException {
 
-        List<Object> contents = new ArrayList<Object>();
+        List<Object> contents = new ArrayList<>();
 
         uk.ac.ebi.pride.utilities.data.core.QuantPeptide peptide  = controller.getQuantPeptideByIndex(idProtein, idPeptide);
 
@@ -696,7 +694,7 @@ public class TableDataRetriever {
      * @throws DataAccessException data access exception
      */
     private static List<Object> getQuantTableRow(DataAccessController controller, Quantification quant, int refSampleIndex, boolean isProteinIdent) throws DataAccessException {
-        List<Object> contents = new ArrayList<Object>();
+        List<Object> contents = new ArrayList<>();
 
         // label free methods
         if (controller.hasLabelFreeQuantMethods()) {
@@ -715,7 +713,7 @@ public class TableDataRetriever {
 
 
     private static List<Object> getQuantTableRow(DataAccessController controller, Comparable idProtein) throws DataAccessException {
-        List<Object> contents = new ArrayList<Object>();
+        List<Object> contents = new ArrayList<>();
 
         uk.ac.ebi.pride.utilities.data.core.Protein protein = controller.getProteinById(idProtein);
 
@@ -755,7 +753,7 @@ public class TableDataRetriever {
     private static List<Object> getIsotopeLabellingQuantData(Collection<QuantCvTermReference> methods, DataAccessController controller,
                                                              Quantification quant, int refSampleIndex, boolean isProteinIdent) throws DataAccessException {
 
-        List<Object> contents = new ArrayList<Object>();
+        List<Object> contents = new ArrayList<>();
 
         if (methods.size() > 0) {
             QuantitativeSample sample = controller.getQuantSample();
@@ -791,7 +789,7 @@ public class TableDataRetriever {
      * @return List<Object>    a list of total intensities
      */
     private static List<Object> getTotalIntensityQuantData(QuantitativeSample sample, Quantification quant) {
-        List<Object> contents = new ArrayList<Object>();
+        List<Object> contents = new ArrayList<>();
 
         for (int i = 1; i <= QuantitativeSample.MAX_SUB_SAMPLE_SIZE; i++) {
             CvParam reagent = sample.getReagent(i);
@@ -815,7 +813,7 @@ public class TableDataRetriever {
     private static List<Object> getReagentRatioQuantData(QuantitativeSample sample,
                                                          Quantification quant,
                                                          int refSampleIndex) {
-        List<Object> contents = new ArrayList<Object>();
+        List<Object> contents = new ArrayList<>();
 
         // get reference reagent
         Double referenceReagentResult = quant.getIsotopeLabellingResult(refSampleIndex);

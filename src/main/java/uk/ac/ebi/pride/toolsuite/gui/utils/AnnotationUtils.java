@@ -23,7 +23,7 @@ import java.util.Map;
 public class AnnotationUtils {
 
     public static List<IonAnnotation> convertToIonAnnotations(List<FragmentIon> ions) {
-        List<IonAnnotation> ionAnnotations = new ArrayList<IonAnnotation>();
+        List<IonAnnotation> ionAnnotations = new ArrayList<>();
         if (ions != null) {
             for (FragmentIon ion : ions) {
                 // get the fragment ion type
@@ -83,7 +83,7 @@ public class AnnotationUtils {
 
     public static Map<Integer, List<PTModification>> createModificationMap(List<Modification> mods, int peptideLength) {
         Map<Integer, List<PTModification>> modMap
-                = new HashMap<Integer, List<PTModification>>();
+                = new HashMap<>();
         for (uk.ac.ebi.pride.utilities.data.core.Modification mod : mods) {
             int location = mod.getLocation();
             // merge the N-terminus modification to the first amino acid
@@ -93,7 +93,7 @@ public class AnnotationUtils {
 
             List<PTModification> subMods = modMap.get(location);
             if (subMods == null) {
-                subMods = new ArrayList<PTModification>();
+                subMods = new ArrayList<>();
                 modMap.put(mod.getLocation(), subMods);
             }
             subMods.add(new PTModification(mod.getName(), mod.getModDatabase(),
@@ -103,7 +103,7 @@ public class AnnotationUtils {
     }
 
     public static List<PTModification> convertModifications(List<Modification> modifications) {
-        List<PTModification> newMods = new ArrayList<PTModification>();
+        List<PTModification> newMods = new ArrayList<>();
         for (Modification mod : modifications) {
             newMods.add(new PTModification(mod.getName(), mod.getModDatabase(),
                     mod.getName(), mod.getMonoisotopicMassDelta(), mod.getAvgMassDelta()));

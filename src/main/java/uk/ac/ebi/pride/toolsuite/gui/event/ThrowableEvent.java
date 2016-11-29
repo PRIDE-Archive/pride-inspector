@@ -10,7 +10,7 @@ import org.bushe.swing.event.AbstractEventServiceEvent;
  * Time: 14:23
  */
 public class ThrowableEvent extends AbstractEventServiceEvent {
-    public static enum Type {INFO, WARNING, ERROR}
+    public enum Type {INFO, WARNING, ERROR}
 
     private Type type;
     private String title;

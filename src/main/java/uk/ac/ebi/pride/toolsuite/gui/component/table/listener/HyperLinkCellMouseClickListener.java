@@ -60,7 +60,7 @@ public class HyperLinkCellMouseClickListener extends MouseAdapter {
 
             if (val != null && clickHeader.equals(linkedHeader)) {
 
-                Set<Object> urlList = new HashSet<Object>();
+                Set<Object> urlList = new HashSet<>();
 
                 if (pattern != null) {
                     Matcher m = pattern.matcher(val.toString());

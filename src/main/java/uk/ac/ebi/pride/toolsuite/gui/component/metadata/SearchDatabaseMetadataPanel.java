@@ -46,7 +46,7 @@ public class SearchDatabaseMetadataPanel extends JPanel {
         // database Parameters
         ParamGroup nameParams = dataBase.getNameDatabase();
         List<CvParam> otherParams = dataBase.getDescription();
-        List<CvParam> allCvParams = new ArrayList<CvParam>();
+        List<CvParam> allCvParams = new ArrayList<>();
 
         if (!otherParams.isEmpty()) allCvParams.addAll(otherParams);
         if (!nameParams.getCvParams().isEmpty()) allCvParams.addAll(nameParams.getCvParams());

@@ -77,7 +77,7 @@ public class SortableTreeTableNode extends DefaultMutableTreeTableNode implement
      * @return a collection of underlying values
      */
     public Collection<?> getValuesAt(int column) {
-        List<Object> res = new ArrayList<Object>();
+        List<Object> res = new ArrayList<>();
         res.add(this.getValueAt(column));
         return res;
     }
@@ -294,7 +294,7 @@ public class SortableTreeTableNode extends DefaultMutableTreeTableNode implement
 	 */
 	public TreePath getPath() {
 		SortableTreeTableNode node = this;
-	    List<SortableTreeTableNode> list = new ArrayList<SortableTreeTableNode>();
+	    List<SortableTreeTableNode> list = new ArrayList<>();
 
 	    // Add all nodes to list
 	    while (node != null) {
@@ -551,11 +551,11 @@ public class SortableTreeTableNode extends DefaultMutableTreeTableNode implement
 
         // build view-to-model mapping
         modelToView = new int[childCount];
-        List<Row> viewToModelList = new ArrayList<Row>(childCount);
+        List<Row> viewToModelList = new ArrayList<>(childCount);
 
         for (int i = 0; i < childCount; i++) {
             MutableTreeTableNode child = children.get(i);
-            Row<TableModel, Integer> row = new Row<TableModel, Integer>(child, i, sortKeys);
+            Row<TableModel, Integer> row = new Row<>(child, i, sortKeys);
 
             // check whether the child node is eligible for filtering (only
             // leaves can be actively filtered, parent nodes will automatically
@@ -675,7 +675,7 @@ public class SortableTreeTableNode extends DefaultMutableTreeTableNode implement
 	final class PreorderEnumeration implements Enumeration<TreeNode> {
 		TreeNode next;
 
-		Stack<Enumeration<TreeNode>> childrenEnums = new Stack<Enumeration<TreeNode>>();
+		Stack<Enumeration<TreeNode>> childrenEnums = new Stack<>();
 
 		@SuppressWarnings("unchecked")
 		public PreorderEnumeration(TreeNode node) {

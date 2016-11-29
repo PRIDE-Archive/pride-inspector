@@ -62,7 +62,7 @@ public class TaskDialog extends JDialog implements PropertyChangeListener {
         this.add(scrollPane, BorderLayout.CENTER);
 
         // todo: add icon
-        this.taskPanelMap = new HashMap<Task, JPanel>();
+        this.taskPanelMap = new HashMap<>();
 
         // set display location
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();

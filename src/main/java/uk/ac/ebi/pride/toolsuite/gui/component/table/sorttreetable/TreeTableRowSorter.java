@@ -74,7 +74,7 @@ public class TreeTableRowSorter<M extends TableModel> extends RowSorter<TableMod
 			return;
 		}
 		// configure sort keys
-		List<SortKey> sortKeys = new ArrayList<SortKey>(this.getSortKeys());
+		List<SortKey> sortKeys = new ArrayList<>(this.getSortKeys());
 		// configure sort order
 		SortOrder sortOrder = SortOrder.ASCENDING;
 		if (!sortKeys.isEmpty()) {
@@ -125,7 +125,7 @@ public class TreeTableRowSorter<M extends TableModel> extends RowSorter<TableMod
 	 * @param newKey the sort key to insert
 	 */
 	private void addSortKey(SortKey newKey) {
-		List<SortKey> sortKeys = new ArrayList<SortKey>(this.getSortKeys());
+		List<SortKey> sortKeys = new ArrayList<>(this.getSortKeys());
 		// only add key if list of keys is empty or primary key differs from the specified one
 		if (sortKeys.isEmpty() || !sortKeys.get(0).equals(newKey)) {
 			// check list of sort keys for any old keys targeting the same column as the new key

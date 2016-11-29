@@ -18,7 +18,7 @@ public class EnsemblSpeciesMapper {
     private Map<String, String> mappings;
 
     private EnsemblSpeciesMapper() {
-        mappings = new HashMap<String, String>();
+        mappings = new HashMap<>();
         mappings.put("9606" , "Homo_sapiens");
         mappings.put("10090" , "Mus_musculus");
         mappings.put("7955" , "Danio_rerio");

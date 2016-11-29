@@ -44,7 +44,7 @@ public class PeptideTreeTableModel extends AbstractTreeTableModel implements Tas
         private final String header;
         private final String toolTip;
 
-        private TableHeader(String header, String tooltip) {
+        TableHeader(String header, String tooltip) {
             this.header = header;
             this.toolTip = tooltip;
         }
@@ -64,7 +64,7 @@ public class PeptideTreeTableModel extends AbstractTreeTableModel implements Tas
 
     public PeptideTreeTableModel(Collection<CvTermReference> listPeptideScores, int rankingThreshold) {
         super(new PeptideRow());
-        this.columnNames = new LinkedHashMap<String, String>();
+        this.columnNames = new LinkedHashMap<>();
         this.rankingThreshold = rankingThreshold;
         this.spectrumIdToPeptideRow = Collections.synchronizedMap(new LinkedHashMap<Tuple<String, String>, PeptideRow>());
         addAdditionalColumns(listPeptideScores);
@@ -89,7 +89,7 @@ public class PeptideTreeTableModel extends AbstractTreeTableModel implements Tas
             this.rankingThreshold = rankingThreshold;
 
             int rankingIndex = getColumnIndex(TableHeader.RANKING.getHeader());
-            List<PeptideRow> childrenToAdd = new ArrayList<PeptideRow>();
+            List<PeptideRow> childrenToAdd = new ArrayList<>();
             for (PeptideRow peptideRow : spectrumIdToPeptideRow.values()) {
                 int ranking = (Integer)peptideRow.getContentByIndex(rankingIndex);
                 if (ranking <= rankingThreshold) {
@@ -112,7 +112,7 @@ public class PeptideTreeTableModel extends AbstractTreeTableModel implements Tas
     public int getColumnIndex(String header) {
         int index = -1;
 
-        List<Map.Entry<String, String>> entries = new LinkedList<Map.Entry<String, String>>(columnNames.entrySet());
+        List<Map.Entry<String, String>> entries = new LinkedList<>(columnNames.entrySet());
 
         for (Map.Entry<String, String> entry : entries) {
             if (entry.getKey().equals(header)) {
@@ -126,7 +126,7 @@ public class PeptideTreeTableModel extends AbstractTreeTableModel implements Tas
     public String getColumnName(int index) {
         String columnName = null;
 
-        List<Map.Entry<String, String>> entries = new LinkedList<Map.Entry<String, String>>(columnNames.entrySet());
+        List<Map.Entry<String, String>> entries = new LinkedList<>(columnNames.entrySet());
         Map.Entry<String, String> entry = entries.get(index);
         if (entry != null) {
             columnName = entry.getKey();
@@ -138,7 +138,7 @@ public class PeptideTreeTableModel extends AbstractTreeTableModel implements Tas
     public String getColumnTooltip(int index) {
         String tooltip = null;
 
-        List<Map.Entry<String, String>> entries = new LinkedList<Map.Entry<String, String>>(columnNames.entrySet());
+        List<Map.Entry<String, String>> entries = new LinkedList<>(columnNames.entrySet());
         Map.Entry<String, String> entry = entries.get(index);
         if (entry != null) {
             tooltip = entry.getValue();
@@ -215,10 +215,10 @@ public class PeptideTreeTableModel extends AbstractTreeTableModel implements Tas
         int peptideIndex = getColumnIndex(TableHeader.PEPTIDE_COLUMN.getHeader());
         String peptide = peptideRow.getContentByIndex(peptideIndex).toString().trim();
 
-        PeptideRow parentPeptideRow = spectrumIdToPeptideRow.get(new Tuple<String, String>(peptide, proteinAccession));
+        PeptideRow parentPeptideRow = spectrumIdToPeptideRow.get(new Tuple<>(peptide, proteinAccession));
 
         if (parentPeptideRow == null) {
-            spectrumIdToPeptideRow.put(new Tuple<String, String>(peptide, proteinAccession), peptideRow);
+            spectrumIdToPeptideRow.put(new Tuple<>(peptide, proteinAccession), peptideRow);
             if (ranking <= rankingThreshold) {
                 ((PeptideRow) getRoot()).addChild(peptideRow);
                 int childIndex = ((PeptideRow) getRoot()).getChildIndex(peptideRow);
@@ -371,7 +371,7 @@ public class PeptideTreeTableModel extends AbstractTreeTableModel implements Tas
 
         Comparable identId = (Comparable) childPeptideRow.getContentByIndex(identIdIndex);
         Comparable peptideId = (Comparable) childPeptideRow.getContentByIndex(peptideIdIndex);
-        Integer peptideFit = peptideFits.get(new Tuple<Comparable, Comparable>(identId, peptideId));
+        Integer peptideFit = peptideFits.get(new Tuple<>(identId, peptideId));
         if (peptideFit != null) {
             // set protein name
             childPeptideRow.setContentByIndex(peptideFitIndex, peptideFit);
@@ -402,7 +402,7 @@ public class PeptideTreeTableModel extends AbstractTreeTableModel implements Tas
             for (PeptideRow childPeptideRow : parentPeptideRow.getChildren()) {
                 Comparable identId = (Comparable) childPeptideRow.getContentByIndex(identIdIndex);
                 Comparable peptideId = (Comparable) childPeptideRow.getContentByIndex(peptideIdIndex);
-                Double peptideFit = peptideFits.get(new Tuple<Comparable, Comparable>(identId, peptideId));
+                Double peptideFit = peptideFits.get(new Tuple<>(identId, peptideId));
                 if (peptideFit != null) {
                     // set protein name
                     childPeptideRow.setContentByIndex(peptideFitIndex, peptideFit);
@@ -435,7 +435,7 @@ public class PeptideTreeTableModel extends AbstractTreeTableModel implements Tas
             for (PeptideRow childPeptideRow : parentPeptideRow.getChildren()) {
                 Comparable identId = (Comparable) childPeptideRow.getContentByIndex(identIdIndex);
                 Comparable peptideId = (Comparable) childPeptideRow.getContentByIndex(peptideIdIndex);
-                Double peptideFit = peptideFits.get(new Tuple<Comparable, Comparable>(identId, peptideId));
+                Double peptideFit = peptideFits.get(new Tuple<>(identId, peptideId));
                 if (peptideFit != null) {
                     // set protein name
                     childPeptideRow.setContentByIndex(peptideFitIndex, peptideFit);
@@ -487,12 +487,12 @@ public class PeptideTreeTableModel extends AbstractTreeTableModel implements Tas
         private List<PeptideRow> childPeptideRows;
 
         private PeptideRow() {
-            this(new ArrayList<Object>());
+            this(new ArrayList<>());
         }
 
         private PeptideRow(List<Object> contents) {
-            this.contents = new ArrayList<Object>(contents);
-            this.childPeptideRows = new ArrayList<PeptideRow>();
+            this.contents = new ArrayList<>(contents);
+            this.childPeptideRows = new ArrayList<>();
         }
 
         public static PeptideRow copy(PeptideRow peptideRow) {

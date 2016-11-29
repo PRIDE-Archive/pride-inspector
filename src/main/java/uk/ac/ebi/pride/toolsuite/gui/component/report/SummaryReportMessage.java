@@ -8,7 +8,7 @@ package uk.ac.ebi.pride.toolsuite.gui.component.report;
  * Time: 12:28
  */
 public class SummaryReportMessage implements ReportMessage{
-    public static enum Type {SUCCESS, WARNING, ERROR, INFO}
+    public enum Type {SUCCESS, WARNING, ERROR, INFO}
 
     private final Type type;
     private final String message;

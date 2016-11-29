@@ -31,7 +31,7 @@ public abstract class Desktop extends PropertyChangeHelper {
      * Constructs a <code>PropertyChangeSupport</code> object.
      */
     protected Desktop() {
-        this.exitListeners = new HashSet<ExitListener>();
+        this.exitListeners = new HashSet<>();
     }
 
     public static synchronized <T extends Desktop, V extends DesktopContext> void launch(final Class<T> appClass,

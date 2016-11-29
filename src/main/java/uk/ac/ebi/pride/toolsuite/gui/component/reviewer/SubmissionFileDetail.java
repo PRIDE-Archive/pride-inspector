@@ -28,8 +28,8 @@ public class SubmissionFileDetail {
         } else {
             this.fileDetail = fileDetail;
         }
-        this.resultFileMappings = new ArrayList<SubmissionFileDetail>();
-        this.sourceFileMappings = new ArrayList<SubmissionFileDetail>();
+        this.resultFileMappings = new ArrayList<>();
+        this.sourceFileMappings = new ArrayList<>();
     }
 
 //    public Long getId() {

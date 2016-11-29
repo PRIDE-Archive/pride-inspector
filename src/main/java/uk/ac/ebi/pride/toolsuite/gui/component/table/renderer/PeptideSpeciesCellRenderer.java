@@ -25,7 +25,7 @@ public class PeptideSpeciesCellRenderer extends JLabel implements TableCellRende
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        List<String> peptideSpeciesList = new ArrayList<String>();
+        List<String> peptideSpeciesList = new ArrayList<>();
         if (value != null) {
             if (value instanceof PeptideSpecies) {
                 PeptideSpecies peptideSpecies = (PeptideSpecies) value;

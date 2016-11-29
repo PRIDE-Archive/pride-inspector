@@ -359,7 +359,7 @@ public class PeptideSelectionPane extends DataAccessControllerPane<Peptide, Void
          */
         private String generateModString(Comparable identId) throws DataAccessException {
             String modStr = "";
-            Map<String, Map<String, Double>> modMap = new HashMap<String, Map<String, Double>>();
+            Map<String, Map<String, Double>> modMap = new HashMap<>();
             Collection<Comparable> peptideIds = controller.getPeptideIds(identId);
             if (peptideIds != null) {
                 for (Comparable peptideId : peptideIds) {
@@ -370,7 +370,7 @@ public class PeptideSelectionPane extends DataAccessControllerPane<Peptide, Void
                         String accession = (mod.getId() != null) ? mod.getId().toString() : null;
                         Map<String, Double> aminoAcidMap = modMap.get(accession);
                         if (aminoAcidMap == null) {
-                            aminoAcidMap = new HashMap<String, Double>();
+                            aminoAcidMap = new HashMap<>();
                             modMap.put(accession, aminoAcidMap);
                         }
                         // get the amino acid according to the location

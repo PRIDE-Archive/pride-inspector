@@ -18,7 +18,7 @@ public enum MessageType {
 
     private Icon icon;
 
-    private MessageType(Icon icon) {
+    MessageType(Icon icon) {
         this.icon = icon;
     }
 

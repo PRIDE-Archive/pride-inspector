@@ -1,20 +1,9 @@
 package uk.ac.ebi.pride.toolsuite.gui.task.impl;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpClientErrorException;
-import uk.ac.ebi.pride.archive.web.service.model.file.FileDetail;
-import uk.ac.ebi.pride.archive.web.service.model.file.FileDetailList;
-import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
 import uk.ac.ebi.pride.toolsuite.gui.action.impl.OpenFileAction;
-import uk.ac.ebi.pride.toolsuite.gui.component.reviewer.MyProjectDownloadDialog;
-import uk.ac.ebi.pride.toolsuite.gui.component.reviewer.PrideLoginDialog;
-import uk.ac.ebi.pride.toolsuite.gui.component.reviewer.SubmissionFileDetail;
-import uk.ac.ebi.pride.toolsuite.gui.desktop.Desktop;
 import uk.ac.ebi.pride.toolsuite.gui.task.*;
 
-import javax.swing.*;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
