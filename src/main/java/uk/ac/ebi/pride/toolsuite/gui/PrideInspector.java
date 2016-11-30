@@ -107,20 +107,6 @@ public class PrideInspector extends Desktop {
     }
 
     /**
-     * Register as a Java Web Start listener
-     */
-//    private void registerJnlpListener() {
-//        try {
-//            sis = (SingleInstanceService) ServiceManager.lookup("javax.jnlp.SingleInstanceService");
-//            sisL = new SISListener();
-//            sis.addSingleInstanceListener(sisL);
-//        } catch (UnavailableServiceException e) {
-//            sis = null;
-//            logger.warn("Cannot create single instance service for web start");
-//        }
-//    }
-
-    /**
      * Method to create command line parser
      */
     private void createCmdLineParser() {
@@ -245,6 +231,8 @@ public class PrideInspector extends Desktop {
         try {
             context.loadSystemProps(this.getClass().getClassLoader().getResourceAsStream("prop/gui.prop"));
             context.loadSystemProps(this.getClass().getClassLoader().getResourceAsStream("prop/settings.prop"));
+            context.loadClusterProjectsProperties(this.getClass().getClassLoader().getResourceAsStream("prop/project-enrich.tsv"));
+            context.loadClusterAssayProperties(this.getClass().getClassLoader().getResourceAsStream("prop/project-assay-enrich.tsv"));
         } catch (IOException e) {
             logger.error("Error while loading properties", e);
         }

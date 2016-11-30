@@ -13,6 +13,7 @@ import uk.ac.ebi.pride.toolsuite.gui.component.table.listener.*;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.model.*;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.renderer.*;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.sorter.NumberTableRowSorter;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.sorter.ProjectTableSorter;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.ComponentHeaderRenderer;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.ComponentTableHeader;
 import uk.ac.ebi.pride.toolsuite.gui.component.table.sorttreetable.ProteinSortableTreeTable;
@@ -1090,6 +1091,12 @@ public class TableFactory {
         TableColumnExt publicationDateColumn = (TableColumnExt) table.getColumn(ProjectTableModel.TableHeader.PUBLICATION_DATE.getHeader());
         publicationDateColumn.setCellRenderer(new DateRenderer());
 
+
+        String clusterScore = ProjectTableModel.TableHeader.CLUSTER_SCORE.getHeader();
+        TableColumnExt clusterScoreColumn = (TableColumnExt) table.getColumn(clusterScore);
+        clusterScoreColumn.setCellRenderer(new IconScoreCellRender());
+
+
         //download column
         String downloadHeader = ProjectTableModel.TableHeader.DOWNLOAD.getHeader();
         TableColumnExt downloadColumn = (TableColumnExt) table.getColumn(downloadHeader);
@@ -1099,6 +1106,9 @@ public class TableFactory {
 
         downloadColumn.setMaxWidth(100);
         downloadColumn.setMinWidth(100);
+
+        ProjectTableSorter tableRowSorter = new ProjectTableSorter(table.getModel());
+        table.setRowSorter(tableRowSorter);
 
         return table;
     }

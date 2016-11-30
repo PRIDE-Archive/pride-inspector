@@ -8,6 +8,7 @@ import uk.ac.ebi.pride.archive.web.service.model.project.ProjectDetailList;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
 import uk.ac.ebi.pride.toolsuite.gui.desktop.DesktopContext;
 import uk.ac.ebi.pride.toolsuite.gui.task.Task;
+import uk.ac.ebi.pride.toolsuite.gui.utils.ClusterProjectProperties;
 
 import java.util.Arrays;
 
@@ -45,7 +46,6 @@ public class GetMyProjectsMetadataTask extends Task<ProjectDetailList, String> {
     protected ProjectDetailList doInBackground() throws Exception {
         DesktopContext context = PrideInspector.getInstance().getDesktopContext();
         String projectMetadataUrl = context.getProperty("prider.my.projects.metadata.url");
-
         try {
             ResponseEntity<ProjectDetailList> entity = restTemplate.exchange(projectMetadataUrl, HttpMethod.GET, requestEntity, ProjectDetailList.class);
             return entity.getBody();

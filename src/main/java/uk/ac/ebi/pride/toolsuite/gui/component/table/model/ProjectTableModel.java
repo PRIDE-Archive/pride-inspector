@@ -2,12 +2,20 @@ package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
 import org.apache.commons.lang3.StringUtils;
 import uk.ac.ebi.pride.archive.web.service.model.project.ProjectSummary;
+import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
+import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
+import uk.ac.ebi.pride.toolsuite.gui.utils.ClusterFeatures;
+import uk.ac.ebi.pride.toolsuite.gui.utils.ClusterProjectProperties;
 
 /**
  * @author Rui Wang
  * @version $Id$
  */
 public class ProjectTableModel extends ProgressiveListTableModel<Void, ProjectSummary>{
+
+
+    private final ClusterProjectProperties projects = ((PrideInspectorContext) PrideInspector.getInstance().getDesktopContext()).getProjectClusterProperties();
+
 
     public enum TableHeader {
         ACCESSION ("Accession", "Project accession"),
@@ -20,6 +28,7 @@ public class ProjectTableModel extends ProgressiveListTableModel<Void, ProjectSu
         NUM_OF_ASSAY ("#Assays", "Number of assays"),
         PUBLICATION_DATE ("Publication date", "Publication date"),
         SUBMISSION_TYPE ("Submission Type", "Submission type"),
+        CLUSTER_SCORE("PRIDE Cluster Class", "PRIDE Cluster Class"),
         DOWNLOAD("Download", "Download and open project files");
 
         private final String header;
@@ -84,6 +93,13 @@ public class ProjectTableModel extends ProgressiveListTableModel<Void, ProjectSu
             return projectDetail.getPublicationDate();
         } else if (TableHeader.SUBMISSION_TYPE.getHeader().equals(columnName)) {
             return projectDetail.getSubmissionType();
+        } else if (TableHeader.CLUSTER_SCORE.getHeader().equals(columnName)){
+            ClusterFeatures clusterProjectProperties = projects.getFeatures(projectDetail.getAccession());
+            Integer value = 0;
+            if(  clusterProjectProperties != null ){
+                value = clusterProjectProperties.getTypeCluster();
+            }
+            return value;
         }  else if (TableHeader.DOWNLOAD.getHeader().equals(columnName)) {
             return projectDetail.getAccession();
         }

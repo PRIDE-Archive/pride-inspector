@@ -18,7 +18,7 @@ import java.text.DecimalFormat;
  */
 public class SequenceCoverageRenderer extends JLabel implements TableCellRenderer {
     private Object value;
-    private Color defaultColor;
+
 
     public SequenceCoverageRenderer() {
         setOpaque(true);

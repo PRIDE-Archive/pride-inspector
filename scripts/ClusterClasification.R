@@ -61,6 +61,24 @@ dev.off()
 
 values$class <- clust$cluster
 
+current = values$class[1]
+values$NewClass[1] = 1
+class = 1
+for(count in  2:nrow(values) ){
+    if(values$class[count] == current){
+        values$NewClass[count] = class
+    }else{
+        class = class + 1
+        values$NewClass[count] = class
+        current = values$class[count]
+    }
+}
+
+values$class <- NULL
+
+names(values)[names(values)=="NewClass"] <- "class"
+
+
 png(filename = paste(opt$folderAnalysis,"/", opt$plotName, "-density.png", collapse = NULL, sep = ""))
 plotdist(values$diff, histo = TRUE, demp = TRUE)
 dev.off()

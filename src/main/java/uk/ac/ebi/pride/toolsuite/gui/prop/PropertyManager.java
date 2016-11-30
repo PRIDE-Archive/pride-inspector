@@ -1,9 +1,14 @@
 package uk.ac.ebi.pride.toolsuite.gui.prop;
 
+import uk.ac.ebi.pride.toolsuite.gui.utils.ClusterAssayProperties;
+import uk.ac.ebi.pride.toolsuite.gui.utils.ClusterProjectProperties;
+
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Properties;
+import java.util.Scanner;
 
 /**
  * PropteryManager manages all the properties for the application.
@@ -15,10 +20,14 @@ import java.util.Properties;
 public class PropertyManager {
     private final Properties system;
     private final Properties user;
+    private final ClusterProjectProperties clusterProjects;
+    private final ClusterAssayProperties clusterAssays;
 
     public PropertyManager() {
         system = new Properties();
         user = new Properties();
+        clusterProjects = new ClusterProjectProperties();
+        clusterAssays = new ClusterAssayProperties();
     }
 
     /**
@@ -30,6 +39,14 @@ public class PropertyManager {
         results.putAll(system);
         results.putAll(user);
         return results;
+    }
+
+    public ClusterProjectProperties getProjectClusters(){
+        return clusterProjects;
+    }
+
+    public ClusterAssayProperties getAssayClusters(){
+        return clusterAssays;
     }
 
     /**
@@ -116,5 +133,38 @@ public class PropertyManager {
         } finally {
             in.close();
         }
+    }
+
+    public void loadClusterProjectsProperties(InputStream in) {
+
+        Scanner sc = new Scanner(in).useDelimiter("\n");
+        boolean header = false;
+        while (sc.hasNextLine()){
+            String line = sc.next();
+            String[] lineArr = line.split("\t");
+            if(header)
+                clusterProjects.addPRIDEProject(lineArr[1], lineArr[2],
+                        lineArr[3], lineArr[4], lineArr[5], lineArr[6],
+                        lineArr[7], lineArr[8], lineArr[9], lineArr[10]
+                        );
+            header = true;
+        }
+    }
+
+    public void loadClusterAssayProperties(InputStream in) {
+
+        Scanner sc = new Scanner(in).useDelimiter("\n");
+        boolean header = false;
+        while (sc.hasNextLine()){
+            String line = sc.next();
+            String[] lineArr = line.split("\t");
+            if(header)
+                clusterAssays.addAssayProject(lineArr[1].split(";")[0],lineArr[1].split(";")[1],
+                        lineArr[2], lineArr[3], lineArr[4], lineArr[5], lineArr[6],
+                        lineArr[7], lineArr[8], lineArr[9], lineArr[10]
+                );
+            header = true;
+        }
+
     }
 }

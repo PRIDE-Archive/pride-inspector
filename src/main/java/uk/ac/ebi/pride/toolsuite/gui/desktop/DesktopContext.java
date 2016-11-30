@@ -7,6 +7,7 @@ import uk.ac.ebi.pride.toolsuite.gui.prop.PropertyManager;
 import uk.ac.ebi.pride.toolsuite.gui.task.Task;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskListener;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskManager;
+import uk.ac.ebi.pride.toolsuite.gui.utils.ClusterProjectProperties;
 import uk.ac.ebi.pride.toolsuite.gui.utils.PropertyChangeHelper;
 
 import java.beans.PropertyChangeListener;
@@ -229,14 +230,25 @@ public class DesktopContext extends PropertyChangeHelper {
     }
 
     /**
-     * Load user properties from a input stream
+     * Load system properties from a input stream
      *
      * @param in input stream
      * @throws IOException error while reading property input stream
      */
-    public final synchronized void loadUserProps(InputStream in) throws IOException {
-        getPropertyManager().loadUserProps(in);
+    public final synchronized void loadClusterProjectsProperties(InputStream in) throws IOException {
+        getPropertyManager().loadClusterProjectsProperties(in);
     }
+
+    /**
+     * Load system properties from a input stream
+     *
+     * @param in input stream
+     * @throws IOException error while reading property input stream
+     */
+    public final synchronized void loadClusterAssayProperties(InputStream in) throws IOException {
+        getPropertyManager().loadClusterAssayProperties(in);
+    }
+
 
     /**
      * Get ThrowableHandler
@@ -261,5 +273,9 @@ public class DesktopContext extends PropertyChangeHelper {
 
     public void removeAllThrowableEntries() {
         getThrowableHandler().removeAllThrowableEntries();
+    }
+
+    public ClusterProjectProperties getProjectClusterProperties() {
+        return getPropertyManager().getProjectClusters();
     }
 }
