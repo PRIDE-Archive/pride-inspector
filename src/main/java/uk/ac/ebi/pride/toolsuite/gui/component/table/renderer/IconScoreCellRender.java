@@ -43,19 +43,19 @@ public class IconScoreCellRender extends JLabel implements TableCellRenderer {
 
        Color alternate = null;
        Integer value = (Integer) valueRaw;
-       if (value == 0)
+       if (value == 100)
            this.setText("NA");
-       else if(value == 2) {
+       else if(value == 1) {
            this.setText("High-Confidence");
            alternate = new Color(0x00c000);
-       }else if(value == 3){
-            this.setText("Good");
+       }else if(value == 2){
+            this.setText("Good-Confidence");
             alternate = new Color(0xacffac);
-        }else if(value == 4){
+        }else if(value == 3){
             this.setText("Moderate");
             alternate = new Color(0xc1edff);
-        }else if(value == 1){
-            this.setText("Bad");
+        }else if(value == 4){
+            this.setText("Low-Quality");
             alternate = new Color(215, 39, 41, 100);
         }
 
