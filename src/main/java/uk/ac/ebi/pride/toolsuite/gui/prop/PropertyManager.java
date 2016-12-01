@@ -159,9 +159,9 @@ public class PropertyManager {
             String line = sc.next();
             String[] lineArr = line.split("\t");
             if(header)
-                clusterAssays.addAssayProject(lineArr[1].split(";")[0],lineArr[1].split(";")[1],
-                        lineArr[2], lineArr[3], lineArr[4], lineArr[5], lineArr[6],
-                        lineArr[7], lineArr[8], lineArr[9], lineArr[10]
+                clusterAssays.addAssayProject(lineArr[1],lineArr[2],
+                        lineArr[3], lineArr[4], lineArr[5], lineArr[6], lineArr[7],
+                        lineArr[8], lineArr[9], lineArr[10], lineArr[11]
                 );
             header = true;
         }

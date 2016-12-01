@@ -7,6 +7,7 @@ import uk.ac.ebi.pride.toolsuite.gui.prop.PropertyManager;
 import uk.ac.ebi.pride.toolsuite.gui.task.Task;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskListener;
 import uk.ac.ebi.pride.toolsuite.gui.task.TaskManager;
+import uk.ac.ebi.pride.toolsuite.gui.utils.ClusterAssayProperties;
 import uk.ac.ebi.pride.toolsuite.gui.utils.ClusterProjectProperties;
 import uk.ac.ebi.pride.toolsuite.gui.utils.PropertyChangeHelper;
 
@@ -277,5 +278,10 @@ public class DesktopContext extends PropertyChangeHelper {
 
     public ClusterProjectProperties getProjectClusterProperties() {
         return getPropertyManager().getProjectClusters();
+    }
+
+    public ClusterAssayProperties getProjectAssaysClusterProperties() {
+        return getPropertyManager().getAssayClusters();
+
     }
 }

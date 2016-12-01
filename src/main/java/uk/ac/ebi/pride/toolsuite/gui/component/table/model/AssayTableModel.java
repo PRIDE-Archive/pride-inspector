@@ -2,12 +2,22 @@ package uk.ac.ebi.pride.toolsuite.gui.component.table.model;
 
 import org.apache.commons.lang3.StringUtils;
 import uk.ac.ebi.pride.archive.web.service.model.assay.AssayDetail;
+import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
+import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
+import uk.ac.ebi.pride.toolsuite.gui.utils.ClusterAssayProperties;
+import uk.ac.ebi.pride.toolsuite.gui.utils.ClusterFeatures;
+import uk.ac.ebi.pride.toolsuite.gui.utils.ClusterProjectProperties;
+
+import java.util.AbstractMap;
+import java.util.Map;
 
 /**
  * @author Rui Wang
  * @version $Id$
  */
 public class AssayTableModel extends ProgressiveListTableModel<Void, AssayDetail>{
+
+    private final ClusterAssayProperties assays = ((PrideInspectorContext) PrideInspector.getInstance().getDesktopContext()).getProjectAssaysClusterProperties();
 
     public enum TableHeader {
         ACCESSION ("Accession", "Project accession"),
@@ -21,6 +31,7 @@ public class AssayTableModel extends ProgressiveListTableModel<Void, AssayDetail
         NUM_OF_UNIQUE_PEPTIDE ("#Unique peptides", "Number of unique peptides"),
         NUM_OF_IDENTIFIED_SPECTRA ("#Identified spectra", "Number of identified spectra"),
         NUM_OF_SPECTRA ("#Spectra", "Number of spectra"),
+        CLUSTER_SCORE("PRIDE Cluster Class", "PRIDE Cluster Class"),
         DOWNLOAD("Download", "Download and open assay files");
 
         private final String header;
@@ -87,6 +98,8 @@ public class AssayTableModel extends ProgressiveListTableModel<Void, AssayDetail
             return assayDetail.getIdentifiedSpectrumCount();
         } else if (TableHeader.NUM_OF_SPECTRA.getHeader().equals(columnName)) {
             return assayDetail.getTotalSpectrumCount();
+        } else if(TableHeader.CLUSTER_SCORE.getHeader().equals(columnName)){
+            return assays.getFeatures(assayDetail.getProjectAccession(), assayDetail.getAssayAccession());
         } else if (TableHeader.DOWNLOAD.getHeader().equals(columnName)) {
             return assayDetail.getAssayAccession();
         }

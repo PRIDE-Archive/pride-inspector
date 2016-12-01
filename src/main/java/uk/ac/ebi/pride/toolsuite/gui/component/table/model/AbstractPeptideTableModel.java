@@ -252,6 +252,8 @@ public abstract class AbstractPeptideTableModel extends ProgressiveListTableMode
             Comparable proteinId = peptideTableRow.getProteinId();
             Comparable peptideId = peptideTableRow.getPeptideId();
             return proteinId + Constants.COMMA + peptideId;
+        } else if( PeptideTableHeader.CLUSTER_DETAILS.getHeader().equals(columnName)){
+            return peptideTableRow.getSequence().getSequence();
         } else {
             return getPeptideScore(peptideTableRow, columnName);
         }

@@ -55,6 +55,8 @@ help.icon.medium=icon/24x24/help.png
 help.icon.small=icon/16x16/help.png
 help.main.set=help/MainHelp.hs
 
+shaker.icon.small=icon/16x16/peptide-shaker-small.png
+
 faq.title=PRIDE Inspector FAQ
 faq.tooltip=Open PRIDE Inspector FAQ Document
 

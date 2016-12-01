@@ -217,6 +217,11 @@ public class TableFactory {
         TableColumnExt peptideIdColumn = (TableColumnExt) table.getColumn(PeptideTableHeader.PEPTIDE_ID.getHeader());
         peptideIdColumn.setVisible(false);
 
+        // hide peptide id column
+        TableColumnExt clusterColumn = (TableColumnExt) table.getColumn(PeptideTableHeader.CLUSTER_DETAILS.getHeader());
+        clusterColumn.setCellRenderer(new IconClusterRender(GUIUtilities.loadIcon(Desktop.getInstance().getDesktopContext().getProperty("open.mzidentml.ms.icon.small"))));
+        clusterColumn.setVisible(false);
+
         // set protein name column width
         TableColumnExt proteinNameColumn = (TableColumnExt) table.getColumn(PeptideTableHeader.PROTEIN_NAME.getHeader());
         proteinNameColumn.setPreferredWidth(200);
@@ -1130,6 +1135,10 @@ public class TableFactory {
         // title column
         TableColumnExt assayTitleColumn = (TableColumnExt) table.getColumn(AssayTableModel.TableHeader.TITLE.getHeader());
         assayTitleColumn.setPreferredWidth(200);
+
+        String clusterScore = ProjectTableModel.TableHeader.CLUSTER_SCORE.getHeader();
+        TableColumnExt clusterScoreColumn = (TableColumnExt) table.getColumn(clusterScore);
+        clusterScoreColumn.setCellRenderer(new IconScoreCellRender());
 
         //download column
         String downloadHeader = AssayTableModel.TableHeader.DOWNLOAD.getHeader();

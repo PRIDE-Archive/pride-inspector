@@ -7,6 +7,7 @@ import uk.ac.ebi.pride.toolsuite.gui.GUIUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspector;
 import uk.ac.ebi.pride.toolsuite.gui.PrideInspectorContext;
 import uk.ac.ebi.pride.toolsuite.gui.access.GeneralMetaDataGroup;
+import uk.ac.ebi.pride.toolsuite.gui.action.impl.OpenUrlAction;
 import uk.ac.ebi.pride.toolsuite.gui.component.DataAccessControllerPane;
 import uk.ac.ebi.pride.toolsuite.gui.component.report.SummaryReportMessage;
 import uk.ac.ebi.pride.toolsuite.gui.event.SummaryReportEvent;
@@ -38,6 +39,7 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
     private static final String SAMPLE_PROTOCOL = "Sample & Protocol";
     private static final String INSTRUMENT_SOFTWARE = "Instrument & Processing";
     private static final String IDENTIFICATION_METADATA = "Identification Protocol";
+    private static final String PEPTIDE_SHAKER = "PeptideShaker Reanalysis";
 
     private static final String PANE_TITLE = "Overview";
     private final GeneralMetaDataGroup metaDataGroup;
@@ -185,6 +187,15 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
         buttonPanel.setBackground(Color.white);
         // Help button
         // load icon
+
+        Icon shakerIcon = GUIUtilities.loadIcon(appContext.getProperty("shaker.icon.small"));
+        JButton shakerButton = GUIUtilities.createLabelLikeButton(shakerIcon, null);
+        shakerButton.setToolTipText("Reanalysis with PeptideShaker");
+        shakerButton.setForeground(Color.blue);
+        shakerButton.addActionListener(new OpenUrlAction("PeptideShaker", shakerIcon, "http://compomics.github.io/projects/peptide-shaker.html"));
+
+        buttonPanel.add(shakerButton);
+
         Icon helpIcon = GUIUtilities.loadIcon(appContext.getProperty("help.icon.small"));
         JButton helpButton = GUIUtilities.createLabelLikeButton(helpIcon, null);
         helpButton.setToolTipText("Help");

@@ -25,6 +25,7 @@ public enum PeptideTableHeader {
     SPECTRUM_ID("Spectrum Id", "Spectrum Reference"),
     IDENTIFICATION_ID("Identification Id", "Identification Id"),
     PEPTIDE_ID("Peptide Id", "Peptide Id"),
+    CLUSTER_DETAILS("Cluster Evidences", "Cluster Evidences"),
     ADDITIONAL("More", "Additional Details");
 
     private final String header;

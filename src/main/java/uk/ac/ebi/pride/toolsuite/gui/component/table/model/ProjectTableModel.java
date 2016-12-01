@@ -94,13 +94,7 @@ public class ProjectTableModel extends ProgressiveListTableModel<Void, ProjectSu
         } else if (TableHeader.SUBMISSION_TYPE.getHeader().equals(columnName)) {
             return projectDetail.getSubmissionType();
         } else if (TableHeader.CLUSTER_SCORE.getHeader().equals(columnName)){
-            ClusterFeatures clusterProjectProperties = projects.getFeatures(projectDetail.getAccession());
-            Integer value = 100;
-            //Todo Review the sorting, for now the biggest is the one without information
-            if(  clusterProjectProperties != null ){
-                value = clusterProjectProperties.getTypeCluster();
-            }
-            return value;
+            return  projects.getFeatures(projectDetail.getAccession());
         }  else if (TableHeader.DOWNLOAD.getHeader().equals(columnName)) {
             return projectDetail.getAccession();
         }
