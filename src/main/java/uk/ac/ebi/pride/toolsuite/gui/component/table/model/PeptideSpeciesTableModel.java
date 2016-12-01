@@ -22,6 +22,7 @@ public class PeptideSpeciesTableModel extends ProgressiveListTableModel<Void, Tu
         NUMBER_OF_DELTA_MZ_ERROR_COLUMN("#Delta m/z error", "Number of delta m/z errors"),
         PEPTIDE_LENGTH_COLUMN("Length", "Peptide length"),
         THEORETICAL_ISOELECTRIC_POINT_COLUMN("pI", "Theoretical isoelectric point"),
+        CLUSTER_DETAILS("Cluster Evidences", "Cluster Evidences"),
         PEPTIDE_SPECIES_COLUMN("Peptide species", "Peptide species");
 
         private final String header;
@@ -89,7 +90,9 @@ public class PeptideSpeciesTableModel extends ProgressiveListTableModel<Void, Tu
             return peptideSpecies.getLength();
         } else if (getColumnName(columnIndex).equals(TableHeader.THEORETICAL_ISOELECTRIC_POINT_COLUMN.getHeader())) {
             return peptideSpecies.getTheoreticalIsoelectricPoint();
-        } else if (getColumnName(columnIndex).equals(TableHeader.PEPTIDE_SPECIES_COLUMN.getHeader())) {
+        } else if( getColumnName(columnIndex).equals(TableHeader.CLUSTER_DETAILS.getHeader())){
+            return peptideSpecies.getSequence().getSequence();
+        }else if (getColumnName(columnIndex).equals(TableHeader.PEPTIDE_SPECIES_COLUMN.getHeader())) {
             return peptideSpecies;
         } else {
             return null;

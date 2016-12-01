@@ -177,6 +177,13 @@ public class TableFactory {
         TableColumnExt deltaMzError = (TableColumnExt) table.getColumn(PeptideSpeciesTableModel.TableHeader.NUMBER_OF_DELTA_MZ_ERROR_COLUMN.getHeader());
         deltaMzError.setVisible(false);
 
+        TableColumnExt clusterColumn = (TableColumnExt) table.getColumn(PeptideSpeciesTableModel.TableHeader.CLUSTER_DETAILS.getHeader());
+        clusterColumn.setCellRenderer(new HyperLinkCellRenderer());
+        String assayUrl = Desktop.getInstance().getDesktopContext().getProperty("cluster.url");
+        table.addMouseMotionListener(new TableCellMouseMotionListener(table, PeptideSpeciesTableModel.TableHeader.CLUSTER_DETAILS.getHeader()));
+        table.addMouseListener(new HyperLinkCellMouseClickListener(table, PeptideSpeciesTableModel.TableHeader.CLUSTER_DETAILS.getHeader(), new PrefixedHyperLinkGenerator(assayUrl)));
+        clusterColumn.setVisible(false);
+
         // hide peptide species column
         TableColumnExt peptideSpecies = (TableColumnExt) table.getColumn(PeptideSpeciesTableModel.TableHeader.PEPTIDE_SPECIES_COLUMN.getHeader());
         peptideSpecies.setCellRenderer(new PeptideSpeciesCellRenderer());
@@ -217,11 +224,6 @@ public class TableFactory {
         TableColumnExt peptideIdColumn = (TableColumnExt) table.getColumn(PeptideTableHeader.PEPTIDE_ID.getHeader());
         peptideIdColumn.setVisible(false);
 
-        // hide peptide id column
-        TableColumnExt clusterColumn = (TableColumnExt) table.getColumn(PeptideTableHeader.CLUSTER_DETAILS.getHeader());
-        clusterColumn.setCellRenderer(new IconClusterRender(GUIUtilities.loadIcon(Desktop.getInstance().getDesktopContext().getProperty("open.mzidentml.ms.icon.small"))));
-        clusterColumn.setVisible(false);
-
         // set protein name column width
         TableColumnExt proteinNameColumn = (TableColumnExt) table.getColumn(PeptideTableHeader.PROTEIN_NAME.getHeader());
         proteinNameColumn.setPreferredWidth(200);
@@ -258,6 +260,13 @@ public class TableFactory {
         String spectrumIdHeader = PeptideTableHeader.SPECTRUM_ID.getHeader();
         TableColumnExt spectrumIdColumn = (TableColumnExt) table.getColumn(spectrumIdHeader);
         spectrumIdColumn.setVisible(false);
+
+        TableColumnExt clusterColumn = (TableColumnExt) table.getColumn(PeptideTableHeader.CLUSTER_DETAILS.getHeader());
+        clusterColumn.setCellRenderer(new HyperLinkCellRenderer());
+        String assayUrl = Desktop.getInstance().getDesktopContext().getProperty("cluster.url");
+        table.addMouseMotionListener(new TableCellMouseMotionListener(table, PeptideTableHeader.CLUSTER_DETAILS.getHeader()));
+        table.addMouseListener(new HyperLinkCellMouseClickListener(table, PeptideTableHeader.CLUSTER_DETAILS.getHeader(), new PrefixedHyperLinkGenerator(assayUrl)));
+        clusterColumn.setVisible(false);
 
         // additional column
         String additionalColHeader = PeptideTableHeader.ADDITIONAL.getHeader();
@@ -1135,10 +1144,6 @@ public class TableFactory {
         // title column
         TableColumnExt assayTitleColumn = (TableColumnExt) table.getColumn(AssayTableModel.TableHeader.TITLE.getHeader());
         assayTitleColumn.setPreferredWidth(200);
-
-        String clusterScore = ProjectTableModel.TableHeader.CLUSTER_SCORE.getHeader();
-        TableColumnExt clusterScoreColumn = (TableColumnExt) table.getColumn(clusterScore);
-        clusterScoreColumn.setCellRenderer(new IconScoreCellRender());
 
         //download column
         String downloadHeader = AssayTableModel.TableHeader.DOWNLOAD.getHeader();

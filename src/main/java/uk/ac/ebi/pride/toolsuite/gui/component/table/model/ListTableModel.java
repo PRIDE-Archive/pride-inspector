@@ -145,30 +145,4 @@ public abstract class ListTableModel<T> extends AbstractTableModel {
 
         return tooltip;
     }
-//
-//
-//    @Override
-//    public Object getValueAt(int rowIndex, int columnIndex) {
-//        Object result = null;
-//
-//        if (!contents.isEmpty() && rowIndex >= 0 && columnIndex >= 0) {
-//            List<Object> colValues = contents.get(rowIndex);
-//            if (colValues != null) {
-//                result = colValues.get(columnIndex);
-//            }
-//        }
-//
-//        return result;
-//    }
-//
-//    @Override
-//    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-//        if (!contents.isEmpty() && rowIndex >= 0 && columnIndex >= 0) {
-//            List<Object> colValues = contents.get(rowIndex);
-//            if (colValues != null) {
-//                colValues.set(columnIndex, aValue);
-//                fireTableCellUpdated(rowIndex, columnIndex);
-//            }
-//        }
-//    }
 }

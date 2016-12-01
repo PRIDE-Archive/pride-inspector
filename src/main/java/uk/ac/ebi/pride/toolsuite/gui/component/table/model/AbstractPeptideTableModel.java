@@ -8,6 +8,7 @@ import uk.ac.ebi.pride.toolsuite.gui.utils.ProteinAccession;
 import uk.ac.ebi.pride.tools.protein_details_fetcher.model.Protein;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +48,16 @@ public abstract class AbstractPeptideTableModel extends ProgressiveListTableMode
                 }
             }
         }
+    }
+
+    public int getColumnIndex(String header){
+        Integer columnName = -1;
+
+        List<Map.Entry<String, String>> entries = new LinkedList<>(columnNames.entrySet());
+        for(int i = 0; i < entries.size(); i++)
+            if(entries.get(i).getKey().equalsIgnoreCase(header))
+                columnName = i;
+        return columnName;
     }
 
     @Override

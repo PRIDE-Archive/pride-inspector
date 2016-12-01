@@ -1,14 +1,19 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.table.listener;
 
+import uk.ac.ebi.pride.toolsuite.gui.component.table.model.PeptideSpeciesPSMTableModel;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.model.PeptideSpeciesTableModel;
+import uk.ac.ebi.pride.toolsuite.gui.component.table.model.PeptideTableModel;
 import uk.ac.ebi.pride.toolsuite.gui.url.HttpUtilities;
 import uk.ac.ebi.pride.toolsuite.gui.url.HyperLinkGenerator;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,6 +33,7 @@ public class HyperLinkCellMouseClickListener extends MouseAdapter {
     private String linkedHeader;
     private HyperLinkGenerator urlGen;
     private Pattern pattern;
+    private Map<String, Integer> tableHeader = null;
 
     public HyperLinkCellMouseClickListener(JTable table, String clickHeader,
                                            HyperLinkGenerator generator) {
@@ -52,10 +58,18 @@ public class HyperLinkCellMouseClickListener extends MouseAdapter {
     public void mouseClicked(MouseEvent e) {
         int col = table.columnAtPoint(new Point(e.getX(), e.getY()));
         String header = table.getColumnName(col);
+
         if (header.equals(clickHeader)) {
             int row = table.rowAtPoint(new Point(e.getX(), e.getY()));
-
             int convertRowIndexToModel = table.convertRowIndexToModel(row);
+            TableModel model = table.getModel();
+            if(model instanceof PeptideTableModel)
+                col = ((PeptideTableModel) model).getColumnIndex(header);
+            else if(model instanceof PeptideSpeciesPSMTableModel)
+                col = ((PeptideSpeciesPSMTableModel) model).getColumnIndex(header);
+            else if(model instanceof PeptideSpeciesTableModel)
+                col = ((PeptideSpeciesTableModel) model).getColumnIndex(header);
+
             Object val = table.getModel().getValueAt(convertRowIndexToModel, col);
 
             if (val != null && clickHeader.equals(linkedHeader)) {
@@ -84,5 +98,9 @@ public class HyperLinkCellMouseClickListener extends MouseAdapter {
                 }
             }
         }
+    }
+
+    public void setTableHeader(Map<String, Integer> tableHeader) {
+        this.tableHeader = tableHeader;
     }
 }
