@@ -39,19 +39,12 @@ public class ProjectTableSorter extends TableRowSorter {
     private static class TableComparator implements Comparator, Serializable {
 
         public int compare(Object o1, Object o2) {
-            Integer value1 = null;
-            Integer value2 = null;
-            if(o1 == null)
-                value1 = 100;
-            else if(o1 instanceof ClusterFeatures)
-                value1 = ((ClusterFeatures) o1).getTypeCluster();
 
-            if(o2 == null)
-                value2 = 100;
-            else if(o2 instanceof ClusterFeatures)
-                value2 = ((ClusterFeatures) o2).getTypeCluster();
+            if(o1 instanceof ClusterFeatures || o2 instanceof ClusterFeatures){
+                return Integer.compare(((ClusterFeatures) o1).getTypeCluster(),((ClusterFeatures) o2).getTypeCluster());
+            }
 
-            return ((Comparable) value1).compareTo(value2);
+            return ((Comparable) o1).compareTo(o2);
         }
     }
 }

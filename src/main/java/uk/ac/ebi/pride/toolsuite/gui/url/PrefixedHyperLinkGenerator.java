@@ -5,7 +5,7 @@ package uk.ac.ebi.pride.toolsuite.gui.url;
  *
  * e.g. for pubmed, http://www.ncbi.nlm.nih.gov/pubmed/
  *
- * User: rwang
+ * User: ypriverol
  * Date: 24/07/2011
  * Time: 09:52
  */

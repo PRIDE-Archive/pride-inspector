@@ -29,6 +29,10 @@ public class ClusterFeatures {
     int    order;
     int typeCluster;
 
+    public ClusterFeatures() {
+        typeCluster = 100;
+    }
+
     public ClusterFeatures(int spectra, int correctSpectra, int incorrectSpectra,
                            int contaminantCorrectSpectra, int contaminantIncorrectSpectra,
                            double diff, double diffCont, int order, int typeCluster) {

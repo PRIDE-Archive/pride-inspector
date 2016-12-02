@@ -1145,12 +1145,19 @@ public class TableFactory {
         TableColumnExt assayTitleColumn = (TableColumnExt) table.getColumn(AssayTableModel.TableHeader.TITLE.getHeader());
         assayTitleColumn.setPreferredWidth(200);
 
+        String clusterScore = AssayTableModel.TableHeader.CLUSTER_SCORE.getHeader();
+        TableColumnExt clusterScoreColumn = (TableColumnExt) table.getColumn(clusterScore);
+        clusterScoreColumn.setCellRenderer(new IconScoreCellRender());
+
         //download column
         String downloadHeader = AssayTableModel.TableHeader.DOWNLOAD.getHeader();
         TableColumnExt downloadColumn = (TableColumnExt) table.getColumn(downloadHeader);
         String downloadText = "Download";
         downloadColumn.setCellRenderer(new ButtonCellRenderer(downloadText, null));
         downloadColumn.setCellEditor(new AssayDownloadButtonCellEditor(downloadText, null));
+
+        ProjectTableSorter tableRowSorter = new ProjectTableSorter(table.getModel());
+        table.setRowSorter(tableRowSorter);
 
         downloadColumn.setMaxWidth(100);
         downloadColumn.setMinWidth(100);

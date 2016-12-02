@@ -99,7 +99,10 @@ public class AssayTableModel extends ProgressiveListTableModel<Void, AssayDetail
         } else if (TableHeader.NUM_OF_SPECTRA.getHeader().equals(columnName)) {
             return assayDetail.getTotalSpectrumCount();
         } else if(TableHeader.CLUSTER_SCORE.getHeader().equals(columnName)){
-            return assays.getFeatures(assayDetail.getProjectAccession(), assayDetail.getAssayAccession());
+            ClusterFeatures clusterFeatures = assays.getFeatures(assayDetail.getProjectAccession(), assayDetail.getAssayAccession());
+            if(clusterFeatures == null)
+                clusterFeatures = new ClusterFeatures();
+            return clusterFeatures;
         } else if (TableHeader.DOWNLOAD.getHeader().equals(columnName)) {
             return assayDetail.getAssayAccession();
         }

@@ -41,11 +41,11 @@ public class IconScoreCellRender extends JLabel implements TableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object valueRaw, boolean isSelected,
                                                    boolean hasFocus, int row, int column) {
         Color alternate = null;
+        ClusterFeatures value = (ClusterFeatures) valueRaw;
 
-        if(valueRaw == null){
+        if(value.getTypeCluster() == 100){
             this.setText("NA");
         }else{
-            ClusterFeatures value = (ClusterFeatures) valueRaw;
             String tooltip = getToolTipText(value);
             if (!tooltip.trim().equals("")) {
                 this.setToolTipText(tooltip);
