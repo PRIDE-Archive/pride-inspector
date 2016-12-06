@@ -56,7 +56,7 @@ clust <- kmeans(values$diff, centers = 4, iter.max = 10, nstart = 1,
                 algorithm = c("Lloyd"), trace=FALSE)
 
 png(filename= paste(opt$folderAnalysis,"/", opt$plotName, "-cluster.png", collapse = NULL, sep = ""))
-plot(values$diff, col = clust$cluster, xlab = "Order of Projects in the Cluster", ylab = "Realiability Score")
+plot(values$diff, col = clust$cluster, xlab = "Order of Projects in the Cluster", ylab = "Realiability Score", sub = "Red: High-Confidence, Blue: Good-Confidence, Green: Moderate, Black: Low-Confidence", cex=0.6, cex.axis=0.6, cex.main=1.2, cex.sub=0.8,cex.lab=0.6)
 dev.off()
 
 values$class <- clust$cluster
