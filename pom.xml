@@ -276,6 +276,51 @@
             <version>${commons-net.version}</version>
         </dependency>
 
+        <!-- compomics-utilities -->
+        <dependency>
+            <groupId>com.compomics</groupId>
+            <artifactId>utilities</artifactId>
+            <version>4.8.6</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-math</artifactId>
+                    <groupId>commons-math</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>servlet-api</artifactId>
+                    <groupId>javax.servlet</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>swingx</artifactId>
+                    <groupId>org.swinglabs</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>swing-layout</artifactId>
+                    <groupId>org.swinglabs</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>batik-all</artifactId>
+                    <groupId>batik</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>pdf-transcoder</artifactId>
+                    <groupId>batik</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jfreechart</artifactId>
+                    <groupId>jfree</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xercesImpl</artifactId>
+                    <groupId>xerces</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>ssj</artifactId>
+                    <groupId>umontreal.iro.lecuyer.gof</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -391,6 +436,14 @@
             <id>springsource-repo</id>
             <name>SpringSource Repository</name>
             <url>http://repo.springsource.org/release</url>
+        </repository>
+        
+        <!-- UGent Genesis Maven 2 repository -->
+        <repository>
+            <id>genesis-maven2-repository</id>
+            <name>Genesis maven2 repository</name>
+            <url>http://genesis.UGent.be/maven2</url>
+            <layout>default</layout>
         </repository>
     </repositories>
 

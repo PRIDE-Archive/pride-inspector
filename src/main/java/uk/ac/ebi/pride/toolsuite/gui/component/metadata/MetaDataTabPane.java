@@ -1,5 +1,7 @@
 package uk.ac.ebi.pride.toolsuite.gui.component.metadata;
 
+import com.compomics.software.ToolFactory;
+import com.compomics.util.gui.DummyFrame;
 import org.bushe.swing.event.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,14 +24,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 /**
- * MetaDataTabPane displays all the meta data shared across the data source/experiment.
- * It listens to the following property change event:
+ * MetaDataTabPane displays all the meta data shared across the data
+ * source/experiment. It listens to the following property change event:
  * <p/>
- * User: rwang
- * Date: 05-Mar-2010
- * Time: 15:12:07
+ * User: rwang Date: 05-Mar-2010 Time: 15:12:07
  */
 public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGroup, Void> implements ActionListener {
 
@@ -53,7 +54,6 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
     private PrideInspectorContext context;
     private IdentificationMetadataPanel identificationMetadataPanel;
 
-
     public MetaDataTabPane(DataAccessController controller, JComponent component, GeneralMetaDataGroup metaDataGroup) {
         super(controller, component);
         this.metaDataGroup = metaDataGroup;
@@ -73,7 +73,6 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
         // set the loading icon
         this.setLoadingIcon(GUIUtilities.loadIcon(context.getProperty("general.tab.loading.icon.small")));
     }
-
 
     @Override
     public void populate() {
@@ -97,16 +96,13 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
         scrollPane.getVerticalScrollBar().setUnitIncrement(100);
     }
 
-
 //    @Override
 //    public void started(TaskEvent event) {
 //        parentComponent.revalidate();
 //        parentComponent.repaint();
 //    }
-
     /**
-     * Notify experiment summary for certain data
-     * Such as: FDR, Tranche Link
+     * Notify experiment summary for certain data Such as: FDR, Tranche Link
      *
      * @param metaData Experimental metadata
      */
@@ -147,7 +143,6 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
         }
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -177,7 +172,6 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
         metaDataTopPanel = new JPanel(new BorderLayout());
         metaDataTopPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
 
-
         // create tool bar
         createToolbar(metaDataGroup);
         metaDataTopPanel.add(metaDataControlBar, BorderLayout.CENTER);
@@ -192,7 +186,12 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
         JButton shakerButton = GUIUtilities.createLabelLikeButton(shakerIcon, null);
         shakerButton.setToolTipText("Reanalysis with PeptideShaker");
         shakerButton.setForeground(Color.blue);
-        shakerButton.addActionListener(new OpenUrlAction("PeptideShaker", shakerIcon, "http://compomics.github.io/projects/peptide-shaker.html"));
+        shakerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                String pxAccession = null; //@TODO: get the accession and handle exceptions
+                startReshake(pxAccession);
+            }
+        });
 
         buttonPanel.add(shakerButton);
 
@@ -209,6 +208,20 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
         metaDataContainer.add(metaDataTopPanel, BorderLayout.NORTH);
     }
 
+    /**
+     * Launches a new PeptideShaker instance in reshake mode on the given
+     * ProteomeXchange accession. The accession is ignored if null.
+     *
+     * @throws IOException if an exception occurs while reading or writing a
+     * file
+     * @throws ClassNotFoundException if an exception occurs while reading the
+     * user preferences
+     * @throws InterruptedException if a threading issue occurs
+     */
+    private void startReshake(String pxAccession) throws IOException, ClassNotFoundException, InterruptedException {
+        DummyFrame dummyParentFrame = new DummyFrame("", "/icon/16x16/peptide-shaker-small.png");
+        ToolFactory.startReshake(dummyParentFrame, pxAccession);
+    }
 
     private void createToolbar(GeneralMetaDataGroup metaDataGroup) {
         metaDataControlBar = new JPanel();
