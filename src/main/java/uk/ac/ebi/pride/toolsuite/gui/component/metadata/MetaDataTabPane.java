@@ -183,13 +183,22 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
         // load icon
 
         Icon shakerIcon = GUIUtilities.loadIcon(appContext.getProperty("shaker.icon.small"));
-        JButton shakerButton = GUIUtilities.createLabelLikeButton(shakerIcon, null);
+        //JButton shakerButton = GUIUtilities.createLabelLikeButton(shakerIcon, "ReShake");
+        JButton shakerButton = new JButton("ReShake",shakerIcon);
         shakerButton.setToolTipText("Reanalysis with PeptideShaker");
         shakerButton.setForeground(Color.blue);
         shakerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 String pxAccession = null; //@TODO: get the accession and handle exceptions
-                startReshake(pxAccession);
+                try {
+                    startReshake(pxAccession);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -229,27 +238,28 @@ public class MetaDataTabPane extends DataAccessControllerPane<GeneralMetaDataGro
         metaDataControlBar.setLayout(new FlowLayout(FlowLayout.CENTER));
         ButtonGroup buttonGroup = new ButtonGroup();
 
-        JToggleButton generalButton = new JToggleButton(GENERAL);
-        generalButton.setActionCommand(GENERAL);
-        generalButton.setPreferredSize(new Dimension(200, 25));
 
-        JToggleButton proSamButton = new JToggleButton(SAMPLE_PROTOCOL);
+        Icon icon = GUIUtilities.loadIcon(appContext.getProperty("data.source.medium.icon"));
+        JToggleButton generalButton = new JToggleButton(GENERAL, icon);
+        generalButton.setActionCommand(GENERAL);
+
+        icon = GUIUtilities.loadIcon(appContext.getProperty("summary.report.viewer.medium.icon"));
+        JToggleButton proSamButton = new JToggleButton(SAMPLE_PROTOCOL, icon);
         proSamButton.setActionCommand(SAMPLE_PROTOCOL);
-        proSamButton.setPreferredSize(new Dimension(200, 25));
         if (!metaDataGroup.hasSampleProtocolMetadata()) {
             proSamButton.setEnabled(false);
         }
 
-        JToggleButton insSofButton = new JToggleButton(INSTRUMENT_SOFTWARE);
+        icon = GUIUtilities.loadIcon(appContext.getProperty("open.mzidentml.ms.icon.medium"));
+        JToggleButton insSofButton = new JToggleButton(INSTRUMENT_SOFTWARE, icon);
         insSofButton.setActionCommand(INSTRUMENT_SOFTWARE);
-        insSofButton.setPreferredSize(new Dimension(200, 25));
         if (!metaDataGroup.hasMzGraphMetadata()) {
             insSofButton.setEnabled(false);
         }
 
-        JToggleButton identButton = new JToggleButton(IDENTIFICATION_METADATA);
+        icon = GUIUtilities.loadIcon(appContext.getProperty("open.database.icon.medium"));
+        JToggleButton identButton = new JToggleButton(IDENTIFICATION_METADATA, icon);
         identButton.setActionCommand(IDENTIFICATION_METADATA);
-        identButton.setPreferredSize(new Dimension(200, 25));
         if (!metaDataGroup.hasIdentificationMetadata()) {
             identButton.setEnabled(false);
         }

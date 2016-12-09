@@ -13,6 +13,7 @@ open.database.icon.small=icon/16x16/search_database.png
 open.database.icon.medium=icon/24x24/search_database.png
 open.database.icon.large=icon/64x64/search_database.png
 
+
 reset.search.icon.small=icon/16x16/close_data_source.gif
 
 close.source.title=Close
@@ -23,6 +24,8 @@ close.source.enable.icon.small=icon/16x16/delete_enable.gif
 close.source.disable.icon.small=icon/16x16/delete_disable.gif
 
 open.mzidentml.ms.icon.small=icon/16x16/peak.png
+open.mzidentml.ms.icon.medium=icon/16x16/peak-24.png
+
 delete.mzidentml.ms.icon.small=icon/16x16/delete_enable.gif
 delete.mzidentml.ms.icon.small.disable=icon/16x16/delete_disable.gif
 
@@ -81,6 +84,7 @@ open.more.example.title=More examples...
 
 data.source.title=Experiments
 data.source.small.icon=icon/16x16/assays.png
+data.source.medium.icon=icon/16x16/assay-24.png
 data.source.tooltip=Display data sources
 
 property.small.icon=icon/16x16/property.png
@@ -106,6 +110,7 @@ experiment.tree.viewer.find.node.small.icon=icon/16x16/find_experiment.png
 experiment.tree.viewer.tooltip=List of experiments
 
 summary.report.viewer.small.icon=icon/16x16/summary.png
+summary.report.viewer.medium.icon=icon/16x16/summary-24.png
 summary.report.viewer.title=Assay Summary
 summary.report.viewer.tooltip=Summary report on selected assay
 
