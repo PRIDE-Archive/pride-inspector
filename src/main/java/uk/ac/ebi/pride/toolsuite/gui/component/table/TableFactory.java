@@ -1109,6 +1109,7 @@ public class TableFactory {
         String clusterScore = ProjectTableModel.TableHeader.CLUSTER_SCORE.getHeader();
         TableColumnExt clusterScoreColumn = (TableColumnExt) table.getColumn(clusterScore);
         clusterScoreColumn.setCellRenderer(new IconScoreCellRender());
+        clusterScoreColumn.setMaxWidth(80);
 
 
         //download column
@@ -1148,6 +1149,7 @@ public class TableFactory {
         String clusterScore = AssayTableModel.TableHeader.CLUSTER_SCORE.getHeader();
         TableColumnExt clusterScoreColumn = (TableColumnExt) table.getColumn(clusterScore);
         clusterScoreColumn.setCellRenderer(new IconScoreCellRender());
+        clusterScoreColumn.setMaxWidth(80);
 
         //download column
         String downloadHeader = AssayTableModel.TableHeader.DOWNLOAD.getHeader();
