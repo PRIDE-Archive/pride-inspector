@@ -50,20 +50,20 @@ open.threshold.table.peptide = 200
 open.threshold.table.protein = 200
 
 # URL for accessing PRIDE Archive project and assay
-prider.project.url = http://www.ebi.ac.uk/pride/archive/projects/
-prider.assay.url = http://www.ebi.ac.uk/pride/archive/assays/
+prider.project.url = https://www.ebi.ac.uk/pride/archive/projects/
+prider.assay.url = https://www.ebi.ac.uk/pride/archive/assays/
 
 cluster.url=https://www.ebi.ac.uk/pride/cluster/#/list?q=
 
 # URL for downloading pride experiments in xml file format
-prider.assay.metadata.url=http://www.ebi.ac.uk/pride/ws/archive/assay/list/project/{accession}
-prider.assay.file.url=http://www.ebi.ac.uk/pride/ws/archive/file/list/assay/{accession}
-prider.project.file.url=http://www.ebi.ac.uk/pride/ws/archive/file/list/project/{accession}
-prider.project.count.url=http://www.ebi.ac.uk/pride/ws/archive/project/count
-prider.project.metadata.url=http://www.ebi.ac.uk/pride/ws/archive/project/list
-prider.my.projects.metadata.url=http://www.ebi.ac.uk/pride/ws/archive/project/list/user
-prider.project.file.metadata.url=http://www.ebi.ac.uk/pride/ws/archive/file/list/project/{accession}
-prider.assay.file.metadata.url=http://www.ebi.ac.uk/pride/ws/archive/file/list/assay/{accession}
+prider.assay.metadata.url=https://www.ebi.ac.uk/pride/ws/archive/assay/list/project/{accession}
+prider.assay.file.url=https://www.ebi.ac.uk/pride/ws/archive/file/list/assay/{accession}
+prider.project.file.url=https://www.ebi.ac.uk/pride/ws/archive/file/list/project/{accession}
+prider.project.count.url=https://www.ebi.ac.uk/pride/ws/archive/project/count
+prider.project.metadata.url=https://www.ebi.ac.uk/pride/ws/archive/project/list
+prider.my.projects.metadata.url=https://www.ebi.ac.uk/pride/ws/archive/project/list/user
+prider.project.file.metadata.url=https://www.ebi.ac.uk/pride/ws/archive/file/list/project/{accession}
+prider.assay.file.metadata.url=https://www.ebi.ac.uk/pride/ws/archive/file/list/assay/{accession}
 prider.file.download.url=/pride/ws/archive/file/{accession}/{file}
 prider.host.url=www.ebi.ac.uk
 prider.host.port=80

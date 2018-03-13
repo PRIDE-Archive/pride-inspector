@@ -117,7 +117,7 @@ public class GetPrideFileTask extends TaskAdapter<Void, String> {
     }
 
     private File downloadFile(String host, int port, String url, File output, String userName, String password) throws IOException {
-        HttpHost target = new HttpHost(host, port, "http");
+        HttpHost target = new HttpHost(host, port, "https");
 
         // Create an instance of HttpClient.
         CloseableHttpClient client = HttpClients.createDefault();

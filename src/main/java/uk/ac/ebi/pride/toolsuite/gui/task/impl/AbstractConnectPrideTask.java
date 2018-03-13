@@ -23,6 +23,7 @@ import java.util.*;
  * Date: 14/09/2011
  * Time: 13:46
  */
+@Deprecated
 public abstract class AbstractConnectPrideTask extends TaskAdapter<List<Map<String, String>>, String> {
     private static final Logger logger = LoggerFactory.getLogger(AbstractConnectPrideTask.class);
     private static final int BUFFER_SIZE = 1024;

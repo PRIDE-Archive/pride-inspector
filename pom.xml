@@ -13,7 +13,7 @@
         Build Note:
 
         To build desktop version, you need
-        mvn -P pi-desktop-build,env-public clean package
+        mvn clean package
 
     -->
 
@@ -74,7 +74,7 @@
         <balloontip.version>1.2</balloontip.version>
         <protein-details-fetcher.version>1.0.7</protein-details-fetcher.version>
         <accession-resolver.version>1.0.3</accession-resolver.version>
-        <prider-ws-model.version>0.2.7</prider-ws-model.version>
+        <prider-ws-model.version>1.0.2</prider-ws-model.version>
         <jackson-mapper-asl.version>1.9.9</jackson-mapper-asl.version>
         <httpcore.version>4.3.2</httpcore.version>
         <spring-web.version>3.2.3.RELEASE</spring-web.version>
@@ -317,6 +317,10 @@
                 <exclusion>
                     <artifactId>ssj</artifactId>
                     <groupId>umontreal.iro.lecuyer.gof</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>uk.ac.ebi.pride.archive</groupId>
+                    <artifactId>web-service-model</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
