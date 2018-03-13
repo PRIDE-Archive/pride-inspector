@@ -59,12 +59,11 @@
         <junit.version>4.11</junit.version>
         <slf4j-api.version>1.7.5</slf4j-api.version>
         <logback-core.version>1.0.11</logback-core.version>
-        <ms-data-core-api.version>2.0.7</ms-data-core-api.version>
-        <inspector-mzgraph-browser.version>2.0.4</inspector-mzgraph-browser.version>
+        <ms-data-core-api.version>2.0.22</ms-data-core-api.version>
         <inspector-quality-chart.version>2.0.6</inspector-quality-chart.version>
-        <inspector-mzgraph-browser.version>2.0.2</inspector-mzgraph-browser.version>
-        <inspector-swing-utils.version>2.0.2</inspector-swing-utils.version>
-
+        <inspector-mzgraph-browser.version>2.0.5</inspector-mzgraph-browser.version>
+        <inspector-swing-utils.version>2.0.3</inspector-swing-utils.version>
+        <pride-pritein-inference.version>0.0.7</pride-pritein-inference.version>
         <javahelp.version>2.0.02</javahelp.version>
         <pride-utilities.version>2.0.7</pride-utilities.version>
         <commons-cli.version>1.2</commons-cli.version>
@@ -72,7 +71,7 @@
         <swingx-all.version>1.6.5-1</swingx-all.version>
         <ehcache.version>2.7.0</ehcache.version>
         <balloontip.version>1.2</balloontip.version>
-        <protein-details-fetcher.version>1.0.7</protein-details-fetcher.version>
+        <protein-details-fetcher.version>1.0.10</protein-details-fetcher.version>
         <accession-resolver.version>1.0.3</accession-resolver.version>
         <prider-ws-model.version>0.2.7</prider-ws-model.version>
         <jackson-mapper-asl.version>1.9.9</jackson-mapper-asl.version>
@@ -145,7 +144,7 @@
         <dependency>
             <groupId>uk.ac.ebi.pride.utilities</groupId>
             <artifactId>pride-protein-inference</artifactId>
-            <version>0.0.6</version>
+            <version>${pride-pritein-inference.version}</version>
         </dependency>
 
         <dependency>
