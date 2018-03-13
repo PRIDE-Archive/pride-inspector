@@ -3,7 +3,7 @@
     <groupId>uk.ac.ebi.pride.toolsuite</groupId>
     <artifactId>pride-inspector</artifactId>
     <packaging>jar</packaging>
-    <version>2.5.4</version>
+    <version>2.5.5-SNAPSHOT</version>
     <name>pride-inspector</name>
     <url>https://github.com/PRIDE-Toolsuite/pride-inspector</url>
 
