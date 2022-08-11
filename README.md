@@ -7,7 +7,7 @@ PRIDE Inspector is a desktop application to visualise and perform first quality 
 
 # Quick Download 
 
-[<img src="https://raw.githubusercontent.com/PRIDE-Toolsuite/pride-inspector/master/wiki/download.png">](http://www.ebi.ac.uk/pride/resources/tools/inspector/latest/desktop/pride-inspector.zip)
+[<img src="https://raw.githubusercontent.com/PRIDE-Toolsuite/pride-inspector/master/wiki/download.png">](https://github.com/PRIDE-Toolsuite/pride-inspector/releases/download/pride-inspector-2.5.4/pride-inspector-2.5.4.zip)
 
 # License
 
